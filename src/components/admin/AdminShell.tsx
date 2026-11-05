@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/Logo";
 import { createContext, useContext, type ReactNode } from "react";
-import { ExportSquare } from "@/components/icons";
+import { ExportSquare, LogoutCurve } from "@/components/icons";
 import { PageLoading, useApi, useRequireUser } from "@/lib/client";
 import { formatPhoneDisplay } from "@/lib/display";
 import { AdminNav } from "./AdminNav";
@@ -33,6 +33,16 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 <Link href="/" className="inline-flex items-center gap-1.5 t-nav text-ink hover:text-maroon">
                   Saytga qaytish <ExportSquare size={15} />
                 </Link>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await fetch("/api/auth/logout", { method: "POST" });
+                    window.location.replace("/kirish/admin/");
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 t-nav text-ink transition-colors hover:border-maroon hover:text-maroon"
+                >
+                  <LogoutCurve size={15} /> Chiqish
+                </button>
               </div>
             </div>
             <AdminNav counts={{ p2p: c?.pendingP2p ?? 0, briefs: c?.newBriefs ?? 0, leads: c?.newLeads ?? 0, chats: c?.unreadChats ?? 0 }} />
