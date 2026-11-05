@@ -10,17 +10,19 @@ O‘zbek marosimlari uchun premium taklifnoma-saytlar do‘koni. Dizayn: Figma *
 - Tailwind CSS v4 — dizayn tokenlari `src/app/globals.css` (`@theme`)
 - Shriftlar `@fontsource` orqali (Cormorant Garamond, Inter, Pinyon Script, Cinzel) — tashqi CDN kerak emas
 - Ikonlar: Iconsax Linear (`src/components/icons.tsx` orqali — React 19 uchun `currentColor` bilan o‘ralgan)
-- MariaDB/MySQL + Drizzle ORM, migratsiyalar ilova ishga tushganda avtomatik (`server.js`)
+- Statik eksport (`output: "export"`) — Node.js hostingda shart emas
+- Backend: PHP 8.2 (`php/api`) + MariaDB, migratsiyalar avtomatik; API shartnomasi: [docs/API.md](docs/API.md)
+- Deploy: GitHub Actions → `deploy` branch → Plesk Git
 - To‘lov: Payme Merchant API, Click SHOP API, P2P (admin tasdig‘i); SMS: Eskiz.uz; Telegram bot
 
 ## Ishga tushirish
 
 ```bash
-cp .env.example .env.local   # DATABASE_URL va boshqalar
 npm install
-npm run db:migrate
-npm run dev                   # http://localhost:3000
-npm run build && npm start    # production (server.js)
+npm run dev          # frontend (API so‘rovlari uchun PHP server kerak)
+npm run dist         # dist/ — statik sayt + PHP (Plesk'ga shu tushadi)
+# Lokal sinov: dist/.env yarating va
+php -S localhost:8080 -t dist dist/router-dev.php
 ```
 
 SMS/Telegram sozlanmasa — xabarlar server logiga yoziladi; `PAYMENTS_SANDBOX=1` — to‘lovni test sahifasi orqali sinash.

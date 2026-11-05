@@ -5,8 +5,9 @@ To‘liq texnik topshiriq — loyiha egasidan (TZ). Figma fayli: `D0wt4iM9V6ym59
 ## Stek
 
 - Next.js 15 App Router + TypeScript, React 19, Tailwind CSS v4 (tokenlar `src/app/globals.css` → `@theme`)
-- MariaDB/MySQL + Drizzle ORM (`src/server/db/schema.ts`), migratsiyalar `drizzle/` (`npm run db:generate`)
-- Plesk (Passenger) — `server.js` ishga tushganda migratsiyalarni bajaradi, keyin Next serverini ochadi
+- **Statik eksport** (`output: "export"`, `trailingSlash: true`) — barcha sahifalar client-side, ma’lumot `/api` dan (`@/lib/client`: `useApi`, `useMe`, `useRouteParam`)
+- Backend: **PHP 8.2** `php/api` + MariaDB (migratsiyalar `php/api/migrations`). API shartnomasi: `docs/API.md`
+- Dinamik sahifalar bitta `_` qobiq sifatida eksport qilinadi; `.htaccess` `/buyurtma/<id>/...` → `/buyurtma/_/...` ga yo‘naltiradi
 
 ## Qoidalar
 
@@ -22,7 +23,7 @@ To‘liq texnik topshiriq — loyiha egasidan (TZ). Figma fayli: `D0wt4iM9V6ym59
 - Server komponentlar ma’lumotni to‘g‘ridan-to‘g‘ri `@/server/*` dan oladi; client komponentlar API'ga `api()` bilan murojaat qiladi.
 - `"use client"` modulidan server komponentga **ma’lumot** (massiv/obyekt) import qilmang — faqat komponentlar.
 
-## Server modullari
+## Server modullari (ESKI — Node versiyasi, olib tashlangan; o‘rniga docs/API.md)
 
 | Modul | Nima beradi |
 |---|---|
