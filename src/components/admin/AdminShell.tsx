@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { LogoMark } from "@/components/Logo";
 import { createContext, useContext, type ReactNode } from "react";
-import { Star8 } from "@/components/Ornament";
 import { ExportSquare } from "@/components/icons";
 import { PageLoading, useApi, useRequireUser } from "@/lib/client";
 import { formatPhoneDisplay } from "@/lib/display";
@@ -25,8 +25,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           <div className="mx-auto flex max-w-[1440px] flex-col gap-1 px-5 pt-3 lg:px-10">
             <div className="flex items-center justify-between gap-4">
               <Link href="/admin/" className="inline-flex items-center gap-2 text-ink">
-                <Star8 size={16} />
-                <span className="t-logo !text-[22px]">Shohnoma</span>
+                <LogoMark className="h-8 w-auto" />
                 <span className="rounded-full bg-bg-soft px-2 py-0.5 t-body-s text-ink-2">admin</span>
               </Link>
               <div className="flex items-center gap-4 t-body-s text-ink-2">

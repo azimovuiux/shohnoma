@@ -2,6 +2,7 @@
 
 /** Buyurtma oqimi sahifalarining brauzer tomonidagi qismi (statik eksport). Har biri FlowGate ichida. */
 import Link from "next/link";
+import { LogoMark } from "@/components/Logo";
 import { ArrowDown, ArrowRight, Call, Card, EmptyWallet, MessageQuestion, MoneySend } from "@/components/icons";
 import { PageLoading, useConfig, useMe } from "@/lib/client";
 import { isPaidStatus } from "@/lib/types";
@@ -23,7 +24,6 @@ import { Sandbox } from "./Sandbox";
 import { PrintButton } from "./PrintButton";
 import { tashkentStamp } from "./time";
 import { namesOf } from "./labels";
-import { Star8 } from "@/components/Ornament";
 
 const siteUrlFallback = typeof window !== "undefined" ? window.location.origin : "https://shohnoma.uz";
 
@@ -360,8 +360,7 @@ export function ReceiptPageClient() {
           <section className="mx-auto max-w-[560px] px-5 py-12 print:py-0">
             <div className="rounded-panel border border-line bg-bg-base p-8 print:border-0">
               <div className="flex items-center gap-2">
-                <Star8 size={18} />
-                <span className="t-logo">Shohnoma</span>
+                <LogoMark className="h-9 w-auto" />
               </div>
               <h1 className="mt-6 font-serif text-[32px] font-light text-ink">To‘lov cheki</h1>
               <dl className="mt-6 divide-y divide-line">

@@ -31,6 +31,7 @@ export const metadata: Metadata = {
   },
   description:
     "Tayyor dizaynni tanlang, ma’lumotlaringizni kiriting va to‘lovdan so‘ng mehmonlarga yuboriladigan tayyor sayt havolasini oling. Nikoh, fotiha, sunnat to‘yi va tug‘ilgan kun uchun.",
+  icons: { icon: "/logo-mark.svg" },
   openGraph: {
     siteName: "Shohnoma",
     locale: "uz_UZ",

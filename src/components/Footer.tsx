@@ -1,6 +1,6 @@
 import Link from "next/link";
+import { LogoMark } from "@/components/Logo";
 import { Call, Instagram, ShieldTick, Whatsapp } from "@/components/icons";
-import { Star8 } from "./Ornament";
 import { TelegramIcon } from "./TelegramIcon";
 import { site } from "@/lib/site";
 
@@ -49,8 +49,7 @@ export function Footer() {
         <div className="flex flex-col gap-12 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-[18px]">
             <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Shohnoma — bosh sahifa">
-              <Star8 size={20} color="#e2c48c" />
-              <span className="t-logo">Shohnoma</span>
+              <LogoMark light className="h-11 w-auto" />
             </Link>
             <p className="t-body-s w-[260px] opacity-70">Marosimlar uchun shohona taklifnoma saytlari.</p>
             <div className="flex gap-2.5">
