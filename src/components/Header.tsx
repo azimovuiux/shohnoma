@@ -2,11 +2,32 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown2, Call, CloseCircle, HambergerMenu, Instagram, Whatsapp, TickCircle, Receipt2, Heart, ProfileCircle, MessageQuestion, LogoutCurve, Setting2 } from "@/components/icons";
+import {
+  ArrowDown2,
+  Call,
+  CloseCircle,
+  HambergerMenu,
+  Instagram,
+  Whatsapp,
+  TickCircle,
+  Receipt2,
+  Heart,
+  ProfileCircle,
+  MessageQuestion,
+  LogoutCurve,
+  Setting2,
+} from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useMe } from "@/lib/client";
 
-export type HeaderUser = { name: string | null; phone: string | null; telegramUser: string | null; orders: number; favorites: number; isAdmin: boolean } | null;
+export type HeaderUser = {
+  name: string | null;
+  phone: string | null;
+  telegramUser: string | null;
+  orders: number;
+  favorites: number;
+  isAdmin: boolean;
+} | null;
 import { formatPhoneDisplay, initials } from "@/lib/display";
 import { Logo } from "./Logo";
 import { TelegramIcon } from "./TelegramIcon";
@@ -21,10 +42,13 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const saved = document.cookie.match(/(?:^|; )lang=(uz|ru)/)?.[1] as Lang | undefined;
+    const saved = document.cookie.match(/(?:^|; )lang=(uz|ru)/)?.[1] as
+      | Lang
+      | undefined;
     if (saved) setLang(saved);
     const onDoc = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     };
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
@@ -73,7 +97,9 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
             >
               {flag}
               <span className="flex-1">{label}</span>
-              {lang === code && <TickCircle size={16} color="var(--color-maroon)" />}
+              {lang === code && (
+                <TickCircle size={16} color="var(--color-maroon)" />
+              )}
             </button>
           ))}
         </div>
@@ -82,7 +108,15 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: HeaderUser; onLogout: () => void }) {
+function MobileMenu({
+  onClose,
+  user,
+  onLogout,
+}: {
+  onClose: () => void;
+  user: HeaderUser;
+  onLogout: () => void;
+}) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
@@ -100,20 +134,38 @@ function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: He
   ];
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Menyu" className="fixed inset-0 z-[60] flex flex-col bg-bg-base lg:hidden">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menyu"
+      className="fixed inset-0 z-[60] flex flex-col bg-bg-base lg:hidden"
+    >
       <div className="flex h-[69px] items-center justify-between border-b border-line px-5">
         <Logo />
-        <button type="button" onClick={onClose} className="icon-btn !h-10 !w-10" aria-label="Yopish">
+        <button
+          type="button"
+          onClick={onClose}
+          className="icon-btn !h-10 !w-10"
+          aria-label="Yopish"
+        >
           <CloseCircle size={20} />
         </button>
       </div>
       {user && (
         <div className="mx-5 mt-5 flex flex-col gap-4 rounded-panel bg-bg-soft p-4">
           <div className="flex items-center gap-3">
-            <span className="flex size-11 items-center justify-center rounded-full bg-gold-soft font-semibold text-maroon">{initials(user.name ?? "S")}</span>
+            <span className="flex size-11 items-center justify-center rounded-full bg-gold-soft font-semibold text-maroon">
+              {initials(user.name ?? "S")}
+            </span>
             <div className="flex min-w-0 flex-col">
-              <span className="truncate t-title text-ink">{user.name || "Mening kabinetim"}</span>
-              <span className="t-body-s text-ink-2">{user.phone ? formatPhoneDisplay(user.phone) : user.telegramUser}</span>
+              <span className="truncate t-title text-ink">
+                {user.name || "Mening kabinetim"}
+              </span>
+              <span className="t-body-s text-ink-2">
+                {user.phone
+                  ? formatPhoneDisplay(user.phone)
+                  : user.telegramUser}
+              </span>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-2">
@@ -122,8 +174,15 @@ function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: He
               ["/kabinet/sevimlilar/", "Sevimlilar", user.favorites],
               ["/kabinet/profil/", "Profil", null],
             ].map(([href, label, n]) => (
-              <Link key={href as string} href={href as string} onClick={onClose} className="flex flex-col items-center gap-0.5 rounded-xl bg-bg-base px-2 py-2.5 t-body-s text-ink">
-                <span className="font-serif text-[20px] font-medium leading-none text-maroon">{n ?? "·"}</span>
+              <Link
+                key={href as string}
+                href={href as string}
+                onClick={onClose}
+                className="flex flex-col items-center gap-0.5 rounded-xl bg-bg-base px-2 py-2.5 t-body-s text-ink"
+              >
+                <span className="font-serif text-[20px] font-medium leading-none text-maroon">
+                  {n ?? "·"}
+                </span>
                 {label}
               </Link>
             ))}
@@ -144,26 +203,50 @@ function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: He
       </nav>
       <div className="flex flex-col gap-5 px-5 pb-8 pt-6">
         {user ? (
-          <button type="button" onClick={onLogout} className="t-nav text-ink-2 hover:text-maroon">
+          <button
+            type="button"
+            onClick={onLogout}
+            className="t-nav text-ink-2 hover:text-maroon"
+          >
             Akkauntdan chiqish
           </button>
         ) : (
-          <Link href="/shablonlar/" onClick={onClose} className="btn btn-primary w-full">
+          <Link
+            href="/shablonlar/"
+            onClick={onClose}
+            className="btn btn-primary w-full"
+          >
             Buyurtma berish
           </Link>
         )}
         <div className="flex items-center justify-between">
           <div className="flex gap-2">
-            <a href={site.telegram} className="icon-btn !h-10 !w-10" aria-label="Telegram">
+            <a
+              href={site.telegram}
+              className="icon-btn !h-10 !w-10"
+              aria-label="Telegram"
+            >
               <TelegramIcon size={18} />
             </a>
-            <a href={site.instagram} className="icon-btn !h-10 !w-10" aria-label="Instagram">
+            <a
+              href={site.instagram}
+              className="icon-btn !h-10 !w-10"
+              aria-label="Instagram"
+            >
               <Instagram size={18} />
             </a>
-            <a href={site.whatsapp} className="icon-btn !h-10 !w-10" aria-label="WhatsApp">
+            <a
+              href={site.whatsapp}
+              className="icon-btn !h-10 !w-10"
+              aria-label="WhatsApp"
+            >
               <Whatsapp size={18} />
             </a>
-            <a href={site.phoneHref} className="icon-btn !h-10 !w-10" aria-label="Qo‘ng‘iroq">
+            <a
+              href={site.phoneHref}
+              className="icon-btn !h-10 !w-10"
+              aria-label="Qo‘ng‘iroq"
+            >
               <Call size={18} />
             </a>
           </div>
@@ -174,11 +257,18 @@ function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: He
   );
 }
 
-function AccountMenu({ user, onLogout }: { user: NonNullable<HeaderUser>; onLogout: () => void }) {
+function AccountMenu({
+  user,
+  onLogout,
+}: {
+  user: NonNullable<HeaderUser>;
+  onLogout: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const onDoc = (e: MouseEvent) => ref.current && !ref.current.contains(e.target as Node) && setOpen(false);
+    const onDoc = (e: MouseEvent) =>
+      ref.current && !ref.current.contains(e.target as Node) && setOpen(false);
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("mousedown", onDoc);
     document.addEventListener("keydown", onKey);
@@ -187,38 +277,87 @@ function AccountMenu({ user, onLogout }: { user: NonNullable<HeaderUser>; onLogo
       document.removeEventListener("keydown", onKey);
     };
   }, []);
-  const item = "flex items-center gap-3 rounded-xl px-3 py-2.5 t-body-m text-ink hover:bg-bg-soft";
+  const item =
+    "flex items-center gap-3 rounded-xl px-3 py-2.5 t-body-m text-ink hover:bg-bg-soft";
   return (
     <div ref={ref} className="relative ml-1">
-      <button type="button" onClick={() => setOpen((v) => !v)} aria-haspopup="menu" aria-expanded={open} className="btn btn-primary btn-sm !py-[9px] !pl-[9px]">
-        <span className="flex size-6 items-center justify-center rounded-full bg-ink-inverse text-[11px] font-semibold text-maroon">{initials(user.name ?? "S")}</span>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="btn btn-primary btn-sm !py-[9px] !pl-[9px]"
+      >
+        <span className="flex size-6 items-center justify-center rounded-full bg-ink-inverse text-[11px] font-semibold text-maroon">
+          {initials(user.name ?? "S")}
+        </span>
         Kabinet
       </button>
       {open && (
-        <div role="menu" className="absolute right-0 top-[calc(100%+8px)] z-50 w-64 rounded-2xl border border-line bg-bg-base p-1.5 shadow-menu">
+        <div
+          role="menu"
+          className="absolute right-0 top-[calc(100%+8px)] z-50 w-64 rounded-2xl border border-line bg-bg-base p-1.5 shadow-menu"
+        >
           <div className="px-3 pb-2.5 pt-2">
-            <p className="truncate t-title text-ink">{user.name || "Mening kabinetim"}</p>
-            <p className="t-body-s text-ink-2">{user.phone ? formatPhoneDisplay(user.phone) : user.telegramUser}</p>
+            <p className="truncate t-title text-ink">
+              {user.name || "Mening kabinetim"}
+            </p>
+            <p className="t-body-s text-ink-2">
+              {user.phone ? formatPhoneDisplay(user.phone) : user.telegramUser}
+            </p>
           </div>
-          <Link role="menuitem" href="/kabinet/" className={item} onClick={() => setOpen(false)}>
-            <Receipt2 size={18} /> <span className="flex-1">Buyurtmalarim</span> <span className="t-body-s text-ink-2">{user.orders}</span>
+          <Link
+            role="menuitem"
+            href="/kabinet/"
+            className={item}
+            onClick={() => setOpen(false)}
+          >
+            <Receipt2 size={18} /> <span className="flex-1">Buyurtmalarim</span>{" "}
+            <span className="t-body-s text-ink-2">{user.orders}</span>
           </Link>
-          <Link role="menuitem" href="/kabinet/sevimlilar/" className={item} onClick={() => setOpen(false)}>
-            <Heart size={18} /> <span className="flex-1">Sevimlilar</span> <span className="t-body-s text-ink-2">{user.favorites}</span>
+          <Link
+            role="menuitem"
+            href="/kabinet/sevimlilar/"
+            className={item}
+            onClick={() => setOpen(false)}
+          >
+            <Heart size={18} /> <span className="flex-1">Sevimlilar</span>{" "}
+            <span className="t-body-s text-ink-2">{user.favorites}</span>
           </Link>
-          <Link role="menuitem" href="/kabinet/profil/" className={item} onClick={() => setOpen(false)}>
+          <Link
+            role="menuitem"
+            href="/kabinet/profil/"
+            className={item}
+            onClick={() => setOpen(false)}
+          >
             <ProfileCircle size={18} /> Profil
           </Link>
           {user.isAdmin && (
-            <Link role="menuitem" href="/admin/" className={item} onClick={() => setOpen(false)}>
+            <Link
+              role="menuitem"
+              href="/admin/"
+              className={item}
+              onClick={() => setOpen(false)}
+            >
               <Setting2 size={18} /> Admin panel
             </Link>
           )}
           <div className="my-1 h-px bg-line" />
-          <a role="menuitem" href={site.telegram} target="_blank" rel="noopener noreferrer" className={item}>
+          <a
+            role="menuitem"
+            href={site.telegram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={item}
+          >
             <MessageQuestion size={18} /> Yordam
           </a>
-          <button role="menuitem" type="button" onClick={onLogout} className={`${item} w-full text-left`}>
+          <button
+            role="menuitem"
+            type="button"
+            onClick={onLogout}
+            className={`${item} w-full text-left`}
+          >
             <LogoutCurve size={18} /> Chiqish
           </button>
         </div>
@@ -247,48 +386,122 @@ export function Header() {
     router.push("/");
   };
   const [menuOpen, setMenuOpen] = useState(false);
+  const { compact, hidden } = useScrollHeader();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-bg-base/95 backdrop-blur supports-[backdrop-filter]:bg-bg-base/85">
-      <div className="mx-auto flex h-[69px] max-w-[1440px] items-center justify-between px-5 lg:h-[87px] lg:px-[120px]">
-        <Logo />
+    <>
+      <header
+        className={`sticky top-0 z-40 border-b bg-bg-base/95 backdrop-blur transition-[transform,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] supports-[backdrop-filter]:bg-bg-base/85 ${
+          compact
+            ? "border-line shadow-[0_8px_24px_-18px_rgba(38,20,10,0.35)]"
+            : "border-line"
+        } ${hidden && !menuOpen ? "-translate-y-full" : "translate-y-0"}`}
+      >
+        <div
+          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] lg:px-[120px] ${
+            compact ? "h-[55px] lg:h-[70px]" : "h-[69px] lg:h-[87px]"
+          }`}
+        >
+          <Logo />
 
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Asosiy">
-          {mainNav.map((l) => (
-            <Link key={l.href} href={l.href} className="t-nav text-ink transition-colors hover:text-maroon">
-              {l.label}
-            </Link>
-          ))}
-        </nav>
+          <nav
+            className="hidden items-center gap-8 lg:flex"
+            aria-label="Asosiy"
+          >
+            {mainNav.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="t-nav text-ink transition-colors hover:text-maroon"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
 
-        <div className="hidden items-center gap-2.5 lg:flex">
-          <LangSwitcher />
-          <a href={site.telegram} className="icon-btn" aria-label="Telegram">
-            <TelegramIcon size={18} />
-          </a>
-          <a href={site.phoneHref} className="icon-btn" aria-label="Qo‘ng‘iroq">
-            <Call size={18} />
-          </a>
-          {user ? (
-            <AccountMenu user={user} onLogout={logout} />
-          ) : (
-            <Link href="/shablonlar/" className="btn btn-primary btn-sm ml-1">
-              Buyurtma berish
-            </Link>
-          )}
+          <div className="hidden items-center gap-2.5 lg:flex">
+            <LangSwitcher />
+            <a href={site.telegram} className="icon-btn" aria-label="Telegram">
+              <TelegramIcon size={18} />
+            </a>
+            <a
+              href={site.phoneHref}
+              className="icon-btn"
+              aria-label="Qo‘ng‘iroq"
+            >
+              <Call size={18} />
+            </a>
+            {user ? (
+              <AccountMenu user={user} onLogout={logout} />
+            ) : (
+              <Link href="/shablonlar/" className="btn btn-primary btn-sm ml-1">
+                Buyurtma berish
+              </Link>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 lg:hidden">
+            <LangSwitcher compact />
+            <a
+              href={site.telegram}
+              className="icon-btn !h-10 !w-10"
+              aria-label="Telegram"
+            >
+              <TelegramIcon size={18} />
+            </a>
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              className="icon-btn !h-10 !w-10"
+              aria-label="Menyuni ochish"
+            >
+              <HambergerMenu size={20} />
+            </button>
+          </div>
         </div>
-
-        <div className="flex items-center gap-2 lg:hidden">
-          <LangSwitcher compact />
-          <a href={site.telegram} className="icon-btn !h-10 !w-10" aria-label="Telegram">
-            <TelegramIcon size={18} />
-          </a>
-          <button type="button" onClick={() => setMenuOpen(true)} className="icon-btn !h-10 !w-10" aria-label="Menyuni ochish">
-            <HambergerMenu size={20} />
-          </button>
-        </div>
-      </div>
-      {menuOpen && <MobileMenu onClose={() => setMenuOpen(false)} user={user} onLogout={logout} />}
-    </header>
+      </header>
+      {menuOpen && (
+        <MobileMenu
+          onClose={() => setMenuOpen(false)}
+          user={user}
+          onLogout={logout}
+        />
+      )}
+    </>
   );
+}
+
+/**
+ * Scroll holati: tepadan chiqqach header 20% pastroq (compact);
+ * pastga scrollda yashirinadi, biroz tepaga scroll qilinganda qaytadi.
+ */
+function useScrollHeader() {
+  const [state, setState] = useState({ compact: false, hidden: false });
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let upFrom = lastY; // tepaga harakat boshlangan nuqta
+    let hidden = false;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = Math.max(0, window.scrollY);
+      if (y < 140) hidden = false;
+      else if (y > lastY + 2) hidden = true;
+      else if (y < lastY && upFrom - y > 48) hidden = false;
+      if (y >= lastY) upFrom = y;
+      lastY = y;
+      const compact = y > 24;
+      setState((p) => (p.compact === compact && p.hidden === hidden ? p : { compact, hidden }));
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+  return state;
 }
