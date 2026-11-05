@@ -34,10 +34,10 @@ function unique_slug(string $base, ?string $exceptInvitationId = null): string
     for ($i = 2; ; $i++) if (!isset($taken["$root-$i"])) return "$root-$i";
 }
 
-function create_draft_order(string $templateSlug): string
+function create_draft_order(string $templateSlug, ?array $owner = null, ?int $amount = null): string
 {
     $t = template_get($templateSlug) ?? fail('Shablon topilmadi', 404);
-    $user = current_user();
+    $user = $owner ?? current_user();
     $guest = $user ? null : guest_token(true);
     for ($attempt = 0; $attempt < 5; $attempt++) {
         $next = (int)scalar('SELECT COALESCE(MAX(seq), 123) + 1 FROM orders');
@@ -45,7 +45,7 @@ function create_draft_order(string $templateSlug): string
         try {
             db()->beginTransaction();
             q('INSERT INTO orders (id, seq, code, user_id, guest_token, template_slug, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-                $id, $next, sprintf('SH-%05d', $next), $user['id'] ?? null, $guest, $templateSlug, (int)$t['price'], 'draft',
+                $id, $next, sprintf('SH-%05d', $next), $user['id'] ?? null, $guest, $templateSlug, $amount ?? (int)$t['price'], 'draft',
             ]);
             q('INSERT INTO invitations (id, order_id, slug, ceremony, message, program, photos, contact_phone, contact_tg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                 new_id(), $id, 'qoralama-' . substr($id, 0, 10), $t['ceremony'], DEFAULT_MESSAGE,

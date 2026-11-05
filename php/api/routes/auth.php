@@ -58,6 +58,7 @@ route('POST', '/auth/password', function () {
         q('INSERT INTO rate_hits (k, created_at) VALUES (?, ?)', [$key, now_utc()]);
         fail('Login yoki parol noto‘g‘ri', 401);
     }
+    if (!empty($u['is_blocked'])) fail('Hisobingiz bloklangan', 403);
     create_session($u['id']);
     json_out(['ok' => true]);
 });

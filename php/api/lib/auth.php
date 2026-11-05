@@ -46,7 +46,7 @@ function current_user(): ?array
     if ($cached !== false) return $cached;
     $token = $_COOKIE[SESSION_COOKIE] ?? '';
     if (!$token) return $cached = null;
-    $u = one('SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.id = ? AND s.expires_at > UTC_TIMESTAMP()', [hash('sha256', $token)]);
+    $u = one('SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.id = ? AND s.expires_at > UTC_TIMESTAMP() AND COALESCE(u.is_blocked, 0) = 0', [hash('sha256', $token)]);
     if ($u && !$u['is_admin'] && $u['phone'] && in_array($u['phone'], admin_phones(), true)) {
         q('UPDATE users SET is_admin = 1 WHERE id = ?', [$u['id']]);
         $u['is_admin'] = 1;
