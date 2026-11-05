@@ -42,6 +42,10 @@ export interface Palette {
   /** to‘q fon ustidagi matn */
   onDeep: string;
   accent: string;
+  /** to‘q fon ustidagi urg‘u (och shablonlarda yorqinroq) */
+  accentDeep: string;
+  /** desktopdagi ustun atrofidagi fon */
+  backdrop: string;
   /** hero ustidagi matn */
   heroInk: string;
   heroSoft: string;
@@ -63,6 +67,8 @@ export function paletteOf(t: Template): Palette {
       text: `color-mix(in srgb, ${th.bg[1]} 80%, #3a2a2a)`,
       onDeep: th.ink,
       accent: th.accent,
+      accentDeep: th.accent,
+      backdrop: `color-mix(in srgb, ${th.bg[1]} 88%, black)`,
       heroInk: th.ink,
       heroSoft: th.soft,
       script,
@@ -71,13 +77,15 @@ export function paletteOf(t: Template): Palette {
   return {
     dark,
     heroBg: `linear-gradient(to bottom, ${th.bg[0]}, ${th.bg[1]})`,
-    deep: `color-mix(in srgb, ${th.ink} 88%, black)`,
+    deep: `color-mix(in srgb, ${th.ink} 70%, #1b1813)`,
     deep2: th.ink,
     paper: th.bg[0],
     heading: th.ink,
     text: `color-mix(in srgb, ${th.ink} 82%, #2a2a2a)`,
     onDeep: th.bg[0],
     accent: th.accent,
+    accentDeep: `color-mix(in srgb, ${th.accent} 45%, #fbf3e4)`,
+    backdrop: `color-mix(in srgb, ${th.bg[1]} 86%, ${th.ink})`,
     heroInk: th.ink,
     heroSoft: th.soft,
     script,

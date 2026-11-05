@@ -45,9 +45,9 @@ export function Countdown({ date, p }: { date: string; p: Palette }) {
           <div
             key={l}
             className="flex flex-col items-center justify-center"
-            style={{ height: s(76), borderRadius: s(12), background: "rgba(255,255,255,.06)", border: `1px solid color-mix(in srgb, ${p.accent} 50%, transparent)` }}
+            style={{ height: s(76), borderRadius: s(12), background: "rgba(255,255,255,.06)", border: `1px solid color-mix(in srgb, ${p.accentDeep} 50%, transparent)` }}
           >
-            <span style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: s(30), lineHeight: 1, color: p.accent }}>
+            <span style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: s(30), lineHeight: 1, color: p.accentDeep }}>
               {v ? String(v[i]).padStart(2, "0") : "··"}
             </span>
             <span style={{ fontSize: s(9), fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: p.onDeep, opacity: 0.7, marginTop: s(8) }}>{l}</span>
@@ -206,7 +206,7 @@ export function RsvpBlock({
         </div>
       ) : (
         <div className="grid w-full grid-cols-2" style={{ gap: s(12), marginTop: s(28), maxWidth: s(292) }}>
-          <button type="button" onClick={() => onAnswer("coming")} className="rounded-full font-semibold" style={{ background: p.accent, color: p.deep, fontSize: s(12), padding: `${s(13)} ${s(10)}` }}>
+          <button type="button" onClick={() => onAnswer("coming")} className="rounded-full font-semibold" style={{ background: p.accentDeep, color: p.deep, fontSize: s(12), padding: `${s(13)} ${s(10)}` }}>
             Boraman
           </button>
           <button
@@ -229,7 +229,7 @@ export function Closing({ d, p }: { d: InvitationData; p: Palette }) {
   const sd = splitDate(d.date);
   return (
     <footer className="flex flex-col items-center text-center" style={{ background: p.deep, padding: `${s(36)} ${s(24)} ${s(40)}` }}>
-      <p style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? s(24) : s(38), color: p.accent, lineHeight: 1.2 }}>{[d.personA, d.personB].filter(Boolean).join(" & ")}</p>
+      <p style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? s(24) : s(38), color: p.accentDeep, lineHeight: 1.2 }}>{[d.personA, d.personB].filter(Boolean).join(" & ")}</p>
       {sd && <p style={{ fontFamily: "var(--font-cinzel)", fontSize: s(12), letterSpacing: "0.22em", color: p.onDeep, opacity: 0.7, marginTop: s(14) }}>{sd.dots}</p>}
       <a href="/" className="opacity-50 hover:opacity-80" style={{ fontSize: s(10), color: p.onDeep, marginTop: s(24), letterSpacing: "0.08em" }}>
         shohnoma.uz

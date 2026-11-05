@@ -230,20 +230,20 @@ export function ThankYou({
       >
         {monogram(d.personA, d.personB)}
       </div>
-      <h2 style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? 28 : 46, color: p.accent, marginTop: 18, lineHeight: 1.15 }}>Rahmat, {answer.name}!</h2>
+      <h2 style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? 28 : 46, color: p.accentDeep, marginTop: 18, lineHeight: 1.15 }}>Rahmat, {answer.name}!</h2>
       <p className="max-w-[300px] font-serif text-[17px] leading-[1.4]" style={{ opacity: 0.9, marginTop: 10 }}>
         {line}
       </p>
 
-      <div className="mt-7 flex w-full max-w-[340px] flex-col gap-3 rounded-[18px] p-5 text-left" style={{ background: "rgba(255,255,255,.07)", border: `1px solid color-mix(in srgb, ${p.accent} 45%, transparent)` }}>
+      <div className="mt-7 flex w-full max-w-[340px] flex-col gap-3 rounded-[18px] p-5 text-left" style={{ background: "rgba(255,255,255,.07)", border: `1px solid color-mix(in srgb, ${p.accentDeep} 45%, transparent)` }}>
         <span className="flex items-center gap-3 text-[14px]">
-          <Calendar size={18} color={p.accent} /> {sd?.long}
+          <Calendar size={18} color={p.accentDeep} /> {sd?.long}
         </span>
         <span className="flex items-center gap-3 text-[14px]">
-          <Clock size={18} color={p.accent} /> {sd?.time}
+          <Clock size={18} color={p.accentDeep} /> {sd?.time}
         </span>
         <span className="flex items-start gap-3 text-[14px]">
-          <Location size={18} color={p.accent} />
+          <Location size={18} color={p.accentDeep} />
           <span>
             {d.venueName}
             {d.address && <span className="block text-[12px] opacity-70">{d.address}</span>}
@@ -253,7 +253,7 @@ export function ThankYou({
 
       <div className="mt-6 flex w-full max-w-[340px] flex-col gap-2.5">
         <div className="relative">
-          <button type="button" onClick={() => setCal((v) => !v)} className={btn} style={{ background: p.accent, color: p.deep }} aria-expanded={cal}>
+          <button type="button" onClick={() => setCal((v) => !v)} className={btn} style={{ background: p.accentDeep, color: p.deep }} aria-expanded={cal}>
             <Calendar size={16} /> Taqvimga qo‘shish
           </button>
           {cal && (

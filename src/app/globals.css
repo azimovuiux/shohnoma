@@ -62,6 +62,16 @@ body {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
+/* Maydonlar fokusni o‘z chizig‘i (border) bilan ko‘rsatadi — ikki qavat ramka bo‘lmasin */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--color-gold);
+}
 
 /* ── Typography tokens ── */
 @utility t-display-hero {

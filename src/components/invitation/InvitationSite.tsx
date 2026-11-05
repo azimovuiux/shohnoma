@@ -213,7 +213,7 @@ export function InvitationSite({ template, data, mode, embedded = false }: Invit
 
   /* Desktop: markazdagi ustun + naqshli fon */
   return (
-    <div className="relative min-h-dvh" style={{ background: p.deep }}>
+    <div className="relative min-h-dvh" style={{ background: p.backdrop }}>
       <svg className="pointer-events-none fixed inset-0 hidden h-full w-full md:block" aria-hidden>
         <defs>
           <pattern id="inv-girih" width="72" height="72" patternUnits="userSpaceOnUse">

@@ -102,7 +102,6 @@ function Arch({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
             <circle cx={cx} cy={cy} r={r * 0.18} fill={p.accent} opacity="0.7" />
           </g>
         ))}
-        <path d="M70 50 C 90 45, 105 55, 118 70" stroke="#8fa17e" strokeWidth="1.5" fill="none" />
       </svg>
       <div className="absolute inset-x-0 flex flex-col items-center text-center" style={{ top: s(96) }}>
         <Star size={s(12)} color={p.accent} />
