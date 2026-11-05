@@ -1,5 +1,5 @@
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel } from "@/lib/templates";
+import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
 import type { InvitationData } from "./types";
 import { heroVariant, monogram, namesOf, s, type Palette } from "./theme";
@@ -320,7 +320,7 @@ function Crown({ d, p }: { d: InvitationData; p: Palette }) {
 
 /** Hero san’ati — shablonga qarab */
 export function HeroArt({ template, data, palette }: { template: Template; data: InvitationData; palette: Palette }) {
-  switch (heroVariant[template.slug] ?? "arch") {
+  switch (heroVariant[designSlug(template)] ?? "arch") {
     case "envelope":
       return <Envelope d={data} p={palette} />;
     case "seal":

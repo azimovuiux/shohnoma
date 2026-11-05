@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ArrowDown2, ArrowRight, Brush, CloseCircle, Filter, Mobile, SearchNormal1, Card } from "@/components/icons";
 import {
-  templates,
   ceremonyLabel,
   styleLabel,
   colorLabel,
@@ -14,6 +13,7 @@ import {
   type Template,
   type TemplateTheme,
 } from "@/lib/templates";
+import { useTemplates } from "@/lib/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
 import { QuickView } from "./QuickView";
 import { TelegramIcon } from "@/components/TelegramIcon";
@@ -23,7 +23,7 @@ const sortLabel: Record<Sort, string> = { new: "Yangilari", cheap: "Arzonroq", e
 
 const ceremonies = Object.keys(ceremonyLabel) as Ceremony[];
 const styles = Object.keys(styleLabel) as Style[];
-const colors = [...new Set(templates.map((t) => t.theme.color))] as TemplateTheme["color"][];
+const colors = Object.keys(colorLabel) as TemplateTheme["color"][];
 
 function Select<T extends string>({
   label,
@@ -97,6 +97,7 @@ export function Catalog() {
   const color = (params.get("rang") as TemplateTheme["color"] | null) ?? "";
   const sort = ((params.get("sort") as Sort | null) ?? "new") as Sort;
   const [q, setQ] = useState(params.get("q") ?? "");
+  const templates = useTemplates();
   const [quick, setQuick] = useState<Template | null>(null);
   const [sheet, setSheet] = useState(false);
 
@@ -125,7 +126,7 @@ export function Catalog() {
     else if (sort === "expensive") list.sort((a, b) => b.price - a.price);
     else list.sort((a, b) => b.number - a.number);
     return list;
-  }, [ceremony, style, color, q, sort]);
+  }, [templates, ceremony, style, color, q, sort]);
 
   const clearAll = () => {
     setQ("");
@@ -279,6 +280,7 @@ function FilterSheet({
   onClose: () => void;
   onApply: (v: { marosim: string; uslub: string; rang: string }) => void;
 }) {
+  const templates = useTemplates();
   const [v, setV] = useState({ marosim: ceremony as string, uslub: style as string, rang: color as string });
   const count = templates.filter(
     (t) => (!v.marosim || t.ceremony === v.marosim) && (!v.uslub || t.style === v.uslub) && (!v.rang || t.theme.color === v.rang),

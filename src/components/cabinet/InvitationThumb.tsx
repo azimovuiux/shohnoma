@@ -18,6 +18,7 @@ export function invitationTemplate(slug: string, inv: Inv): Template | null {
   const d = splitDate(inv.date);
   return {
     ...t,
+    isLive: true,
     sample: {
       a: inv.personA || t.sample.a,
       b: inv.personA ? inv.personB ?? undefined : t.sample.b,

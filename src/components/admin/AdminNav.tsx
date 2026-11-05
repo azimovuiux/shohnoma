@@ -8,6 +8,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
   const tabs = [
     { href: "/admin/", label: "Umumiy", n: 0 },
     { href: "/admin/buyurtmalar/", label: "Buyurtmalar", n: 0 },
+    { href: "/admin/shablonlar/", label: "Shablonlar", n: 0 },
     { href: "/admin/tolovlar/", label: "P2P cheklar", n: counts.p2p },
     { href: "/admin/briflar/", label: "Briflar", n: counts.briefs },
     { href: "/admin/xabarlar/", label: "Xabarlar", n: counts.leads },

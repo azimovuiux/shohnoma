@@ -57,6 +57,11 @@ RewriteRule ^(.*)$ /$1/ [R=301,L]
 # Dinamik sahifalar: bitta "_" qobiq sahifa, haqiqiy id brauzerda URL'dan o‘qiladi
 RewriteRule ^buyurtma/[^/]+/(.*)$ buyurtma/_/$1 [L]
 RewriteRule ^kabinet/t/[^/]+/(.*)$ kabinet/t/_/$1 [L]
+# Admin qo‘shgan shablonlar (statik sahifasi yo‘q) → qobiq
+RewriteRule ^shablonlar/[a-z0-9-]+/$ shablonlar/_/index.html [L]
+RewriteRule ^shablonlar/[a-z0-9-]+/index\.txt$ shablonlar/_/index.txt [L]
+RewriteRule ^namuna/[a-z0-9-]+/$ namuna/_/index.html [L]
+RewriteRule ^namuna/[a-z0-9-]+/index\.txt$ namuna/_/index.txt [L]
 
 
 # Mehmon taklifnomasi: /jasur-madina/ → invite.php (OG meta bilan)

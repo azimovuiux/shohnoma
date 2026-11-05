@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { templates } from "@/lib/templates";
+import { builtinTemplates as templates } from "@/lib/templates";
 
 export const dynamic = "force-static";
 

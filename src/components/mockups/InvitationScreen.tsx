@@ -1,5 +1,5 @@
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, getTemplate } from "@/lib/templates";
+import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
 import { TemplateArt } from "@/components/invitation/TemplateArt";
 
@@ -132,18 +132,14 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
   );
 }
 
-/** Namuna ma’lumotli shablon — Figma'dan eksport qilingan asl dizayn rasmi */
-function isPristine(t: Template) {
-  const o = getTemplate(t.slug);
-  return !!o && JSON.stringify(o.sample) === JSON.stringify(t.sample);
-}
 
 export function InvitationScreen({ t }: { t: Template }) {
-  if (isPristine(t)) {
+  const img = !t.isLive ? t.images?.phone : undefined;
+  if (img) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={`/templates/${t.slug}-phone.webp`}
+        src={img}
         alt=""
         draggable={false}
         loading="lazy"
@@ -155,7 +151,7 @@ export function InvitationScreen({ t }: { t: Template }) {
   }
   const { theme } = t;
   const family = scriptFamily[theme.script];
-  const isEnvelope = t.slug === "bordo-maktub";
+  const isEnvelope = designSlug(t) === "bordo-maktub";
 
   return (
     <div
@@ -169,7 +165,7 @@ export function InvitationScreen({ t }: { t: Template }) {
         </>
       ) : null}
 
-      <TemplateArt slug={t.slug} />
+      <TemplateArt slug={designSlug(t)} />
       <div className="relative flex h-full flex-col items-center text-center" style={{ paddingTop: isEnvelope ? u(54) : u(40) }}>
         {isEnvelope ? (
           <>

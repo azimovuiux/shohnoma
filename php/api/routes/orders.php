@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 route('POST', '/orders', function () {
     $slug = body()['templateSlug'] ?? '';
-    if (!is_string($slug) || !template_get($slug)) fail('Shablon topilmadi', 404);
+    if (!is_string($slug) || !template_active($slug)) fail('Shablon topilmadi', 404);
     if (rate_limited('order:' . client_ip(), 20, 3600)) fail('Juda ko‘p urinish', 429);
     json_out(['ok' => true, 'id' => create_draft_order($slug)]);
 });

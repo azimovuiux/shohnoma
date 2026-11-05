@@ -10,7 +10,7 @@ const UPLOAD_TYPES = [
     'image/heif' => 'heif',
     'application/pdf' => 'pdf',
 ];
-const UPLOAD_DIRS = ['photos', 'receipts', 'briefs'];
+const UPLOAD_DIRS = ['photos', 'receipts', 'briefs', 'templates'];
 
 function upload_root(): string { return storage_dir() . '/uploads'; }
 
@@ -47,6 +47,6 @@ function files_list(string $field): array
 
 function delete_upload(string $url): void
 {
-    if (!preg_match('#^/files/(photos|receipts|briefs)/([a-z0-9]+\.[a-z]+)$#', $url, $m)) return;
+    if (!preg_match('#^/files/(photos|receipts|briefs|templates)/([a-z0-9]+\.[a-z]+)$#', $url, $m)) return;
     @unlink(upload_root() . "/{$m[1]}/{$m[2]}");
 }

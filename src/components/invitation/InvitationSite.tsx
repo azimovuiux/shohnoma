@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CloseCircle, Music } from "@/components/icons";
 import { useToast } from "@/components/ui";
-import { ceremonyLabel } from "@/lib/templates";
+import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { splitDate } from "@/lib/display";
 import { star8Path } from "@/lib/ornament";
 import type { InvitationSiteProps } from "./types";
@@ -61,7 +61,7 @@ export function InvitationSite({ template, data, mode, embedded = false }: Invit
   const p = useMemo(() => paletteOf(template), [template]);
   const live = mode === "live";
   const toast = useToast();
-  const music = useMusic(template.slug, data.musicEnabled && mode !== "preview");
+  const music = useMusic(designSlug(template), data.musicEnabled && mode !== "preview");
   const [opened, setOpened] = useState(false);
   const [form, setForm] = useState<{ open: boolean; initial: Partial<RsvpAnswer>; token: string | null }>({ open: false, initial: {}, token: null });
   const [thanks, setThanks] = useState<RsvpAnswer | null>(null);
@@ -133,11 +133,11 @@ export function InvitationSite({ template, data, mode, embedded = false }: Invit
 
       {/* 1 — Hero */}
       <header className={`relative flex flex-col items-center text-center ${opened ? st.opened : ""}`} style={{ background: p.heroBg, minHeight: s(780), padding: `${s(70)} ${s(30)} ${s(56)}` }}>
-        <TemplateArt slug={template.slug} />
+        <TemplateArt slug={designSlug(template)} />
         <span className="pointer-events-none absolute" style={{ inset: s(14), border: `1px solid color-mix(in srgb, ${p.accent} 45%, transparent)` }} aria-hidden />
         <span className="pointer-events-none absolute" style={{ inset: s(20), border: `0.5px solid color-mix(in srgb, ${p.accent} 25%, transparent)` }} aria-hidden />
 
-        {heroShowsTitle(template.slug) ? (
+        {heroShowsTitle(designSlug(template)) ? (
           <>
             <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(18), color: p.heroSoft }}>{ceremonyLabel[data.ceremony]}</p>
             <h1 style={{ fontFamily: "var(--font-script)", fontSize: s(56), color: p.accent, lineHeight: 1.25 }}>Taklifnoma</h1>
@@ -149,7 +149,7 @@ export function InvitationSite({ template, data, mode, embedded = false }: Invit
         )}
         {sd && <p style={{ fontFamily: "var(--font-cinzel)", fontSize: s(13), letterSpacing: "0.22em", color: p.heroInk, marginTop: s(4) }}>{sd.dots}</p>}
 
-        <div style={{ marginTop: s(heroShowsTitle(template.slug) ? 24 : 28) }}>
+        <div style={{ marginTop: s(heroShowsTitle(designSlug(template)) ? 24 : 28) }}>
           <HeroArt template={template} data={data} palette={p} />
         </div>
 

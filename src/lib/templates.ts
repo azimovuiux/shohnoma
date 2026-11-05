@@ -47,11 +47,19 @@ export interface Template {
   palette: string[];
   sample: { a: string; b?: string; date: string; venue: string; time: string };
   theme: TemplateTheme;
+  /** Dizayn asosi — qaysi tayyor dizayn (hero varianti, bezaklar, musiqa) ishlatiladi. Bo‘sh bo‘lsa — slug */
+  base?: string;
+  /** Mokap rasmlari (Figma eksport yoki admin yuklagan) */
+  images?: { phone?: string; laptop?: string };
+  /** Katalogda ko‘rinadimi (admin) */
+  active?: boolean;
+  /** Mijoz ma’lumotlari bilan to‘ldirilgan nusxa — mokapda rasm emas, jonli chizma */
+  isLive?: boolean;
 }
 
 const nikohSample = { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "Oqsaroy to‘yxonasi", time: "18:00" };
 
-export const templates: Template[] = [
+const builtin: Template[] = [
   {
     number: 1,
     slug: "bordo-maktub",
@@ -222,11 +230,45 @@ export const templates: Template[] = [
   },
 ];
 
+/** Kodga kiritilgan asl shablonlar (statik sahifalar shular bilan yig‘iladi) */
+export const builtinTemplates: Template[] = builtin.map((t) => ({
+  ...t,
+  active: true,
+  images: { phone: `/templates/${t.slug}-phone.webp`, laptop: `/templates/${t.slug}-laptop.webp` },
+}));
+export const builtinSlugs = builtinTemplates.map((t) => t.slug);
+
+declare global {
+  interface Window {
+    __SHOHNOMA_TEMPLATES__?: Template[];
+  }
+}
+
+/** Brauzerda — admin boshqaradigan ro‘yxat (/api/templates.js, <head> da yuklanadi); aks holda — asl ro‘yxat */
+function loadAll(): Template[] {
+  if (typeof window !== "undefined") {
+    const w = window.__SHOHNOMA_TEMPLATES__;
+    if (Array.isArray(w) && w.length) return w;
+  }
+  return builtinTemplates;
+}
+const all: Template[] = loadAll();
+const sortByNumber = (a: Template, b: Template) => a.number - b.number;
+
+/** Barcha shablonlar (faollari), raqam bo‘yicha */
+export const templates: Template[] = all.filter((t) => t.active !== false).sort(sortByNumber);
 export const featuredTemplates = templates.filter((t) => t.featured);
 
+/** Slug bo‘yicha (nofaol shablonlar ham — eski buyurtmalar uchun) */
 export function getTemplate(slug: string) {
-  return templates.find((t) => t.slug === slug);
+  return all.find((t) => t.slug === slug);
 }
+
+/** Dizayn asosi slug'i (hero varianti, bezak rasmlari, musiqa) */
+export const designSlug = (t: Pick<Template, "slug" | "base">) => t.base || t.slug;
+
+/** Jonli ro‘yxat (hooklar uchun, src/lib/useTemplates.ts) */
+export const allTemplates = all;
 
 export const colorLabel: Record<TemplateTheme["color"], string> = {
   bordo: "Bordo",

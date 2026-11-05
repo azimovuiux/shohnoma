@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, Cake, Crown1, Gallery, Heart, Lovely } from "@/components/icons";
-import { featuredTemplates, templates, type Ceremony } from "@/lib/templates";
+import { type Ceremony } from "@/lib/templates";
+import { useTemplates } from "@/lib/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
 import { SectionTitle } from "./SectionTitle";
 
@@ -31,7 +32,12 @@ const chips: { value: Ceremony | ""; label: string; icon?: React.ReactNode }[] =
 
 export function Showcase() {
   const [ceremony, setCeremony] = useState<Ceremony | "">("");
-  const featured = order.map((s) => featuredTemplates.find((t) => t.slug === s)!).filter(Boolean);
+  const templates = useTemplates();
+  const rank = (slug: string) => (order.indexOf(slug) + 1 || 999);
+  const featured = templates
+    .filter((t) => t.featured)
+    .sort((a, b) => rank(a.slug) - rank(b.slug) || a.number - b.number)
+    .slice(0, 10);
   // Bosh sahifada 10 ta; marosim tanlansa — shu marosimning barcha shablonlari
   const list = ceremony ? templates.filter((t) => t.ceremony === ceremony) : featured;
 

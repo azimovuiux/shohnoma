@@ -6,6 +6,7 @@ export function liveTemplate(t: Template, o: Pick<FlowOrder, "personA" | "person
   const [y, m, d] = (o.day || "").split("-");
   return {
     ...t,
+    isLive: true,
     ceremony: o.ceremony,
     sample: {
       a: o.personA || t.sample.a,

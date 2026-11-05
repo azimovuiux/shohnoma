@@ -1,23 +1,19 @@
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, getTemplate } from "@/lib/templates";
+import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
 import { TemplateArt } from "@/components/invitation/TemplateArt";
 
 /** Laptop ekranidagi shablon hero'si (1280×800 asosida, cqw bilan masshtablanadi) */
 const u = (px: number) => `${((px / 1280) * 100).toFixed(3)}cqw`;
 
-/** Namuna ma’lumotli shablon — Figma'dan eksport qilingan asl dizayn rasmi */
-function isPristine(t: Template) {
-  const o = getTemplate(t.slug);
-  return !!o && JSON.stringify(o.sample) === JSON.stringify(t.sample);
-}
 
 export function InvitationDesktop({ t }: { t: Template }) {
-  if (isPristine(t)) {
+  const img = !t.isLive ? t.images?.laptop : undefined;
+  if (img) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={`/templates/${t.slug}-laptop.webp`}
+        src={img}
         alt=""
         draggable={false}
         loading="lazy"
@@ -35,7 +31,7 @@ export function InvitationDesktop({ t }: { t: Template }) {
       className="relative size-full overflow-hidden"
       style={{ containerType: "inline-size", background: `linear-gradient(135deg, ${theme.bg[0]}, ${theme.bg[1]})` }}
     >
-      <TemplateArt slug={t.slug} variant="desktop" />
+      <TemplateArt slug={designSlug(t)} variant="desktop" />
       <div className="absolute" style={{ inset: u(28), border: `1px solid ${theme.accent}`, opacity: 0.45 }} />
       <svg className="absolute" style={{ left: u(80), top: u(80), width: u(60), height: u(60) }} viewBox="0 0 40 40" aria-hidden>
         <path d={star8Path(20, 20, 19)} fill="none" stroke={theme.accent} strokeWidth="1" />

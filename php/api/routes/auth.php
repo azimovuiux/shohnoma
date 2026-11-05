@@ -49,9 +49,15 @@ route('POST', '/auth/password', function () {
     $login = strtolower(trim((string)($b['login'] ?? '')));
     $pass = (string)($b['password'] ?? '');
     if ($login === '' || $pass === '') fail('Login va parolni kiriting', 422);
-    if (rate_limited('pw:' . client_ip(), 8, 900)) fail('Juda ko‘p urinish. 15 daqiqadan so‘ng qayta urinib ko‘ring.', 429);
+    // Faqat xato urinishlar sanaladi: 15 daqiqada 8 ta xato → blok
+    $key = 'pwfail:' . client_ip();
+    $fails = (int)scalar('SELECT COUNT(*) FROM rate_hits WHERE k = ? AND created_at >= ?', [$key, gmdate('Y-m-d H:i:s', time() - 900)]);
+    if ($fails >= 8) fail('Juda ko‘p xato urinish. 15 daqiqadan so‘ng qayta urinib ko‘ring.', 429);
     $u = one('SELECT * FROM users WHERE login = ? AND password_hash IS NOT NULL', [$login]);
-    if (!$u || !password_verify($pass, $u['password_hash'])) fail('Login yoki parol noto‘g‘ri', 401);
+    if (!$u || !password_verify($pass, $u['password_hash'])) {
+        q('INSERT INTO rate_hits (k, created_at) VALUES (?, ?)', [$key, now_utc()]);
+        fail('Login yoki parol noto‘g‘ri', 401);
+    }
     create_session($u['id']);
     json_out(['ok' => true]);
 });

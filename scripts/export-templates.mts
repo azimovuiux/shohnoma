@@ -1,7 +1,6 @@
-// Shablonlar ro‘yxatini PHP uchun JSON ga eksport qiladi (narx, marosim, nom).
+// Asl shablonlarni PHP uchun JSON ga eksport qiladi — baza bo‘sh bo‘lsa, shu ro‘yxat bilan to‘ldiriladi.
 import { writeFileSync } from "node:fs";
-import { templates } from "../src/lib/templates.ts";
+import { builtinTemplates } from "../src/lib/templates.ts";
 
-const out = templates.map((t) => ({ slug: t.slug, name: t.name, ceremony: t.ceremony, style: t.style, price: t.price, priceOld: t.priceOld, number: t.number }));
-writeFileSync(new URL("../php/api/lib/templates.json", import.meta.url), JSON.stringify(out, null, 2) + "\n");
-console.log(`templates.json: ${out.length} ta shablon`);
+writeFileSync(new URL("../php/api/lib/templates.json", import.meta.url), JSON.stringify(builtinTemplates, null, 2) + "\n");
+console.log(`templates.json: ${builtinTemplates.length} ta shablon`);
