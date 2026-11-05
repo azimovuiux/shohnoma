@@ -128,7 +128,7 @@ route('POST', '/telegram/webhook', function () {
     $replyTo = (int)($msg['reply_to_message']['message_id'] ?? 0);
     $text = trim((string)($msg['text'] ?? ''));
     if (!$replyTo || $text === '') {
-        if ($text !== '' && !str_starts_with($text, '/')) tg_send($admin, 'Mijozga javob berish uchun uning xabariga Reply qiling.');
+        if ($text !== '' && !str_starts_with($text, '/') && ($msg['chat']['type'] ?? '') === 'private') tg_send($admin, 'Mijozga javob berish uchun uning xabariga Reply qiling.');
         json_out(['ok' => true]);
     }
     $orig = one('SELECT * FROM chat_messages WHERE tg_message_id = ?', [$replyTo]);

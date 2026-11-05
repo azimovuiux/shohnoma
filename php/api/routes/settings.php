@@ -53,14 +53,15 @@ route('POST', '/admin/telegram/link', function () {
     $bot = tg_bot_username() ?? fail('Avval bot tokenini saqlang', 422);
     $code = strtolower(substr(preg_replace('/[^a-zA-Z0-9]/', '', new_token(24)), 0, 20));
     setting_set('TG_ADMIN_LINK', hash('sha256', $code) . '|' . (time() + 600));
-    json_out(['ok' => true, 'url' => "https://t.me/$bot?start=admin_$code"]);
+    json_out(['ok' => true, 'url' => "https://t.me/$bot?start=admin_$code", 'groupUrl' => "https://t.me/$bot?startgroup=admin_$code"]);
 });
 
 /** Webhook'dan: /start admin_<kod> */
 function tg_admin_link_handle(array $msg): bool
 {
     $text = trim((string)($msg['text'] ?? ''));
-    if (!preg_match('/^\/start\s+admin_([a-z0-9]{8,40})$/', $text, $m)) return false;
+    // Shaxsiy chat: "/start admin_<kod>"; guruh: "/start@bot_nomi admin_<kod>"
+    if (!preg_match('/^\/start(?:@\w+)?\s+admin_([a-z0-9]{8,40})$/', $text, $m)) return false;
     $chat = (string)($msg['chat']['id'] ?? '');
     [$hash, $exp] = array_pad(explode('|', db_settings()['TG_ADMIN_LINK'] ?? ''), 2, '0');
     if (!$hash || (int)$exp < time() || !hash_equals($hash, hash('sha256', $m[1]))) {
@@ -69,6 +70,7 @@ function tg_admin_link_handle(array $msg): bool
     }
     setting_set('TELEGRAM_ADMIN_CHAT_ID', $chat);
     setting_set('TG_ADMIN_LINK', null);
-    tg_api('sendMessage', ['chat_id' => $chat, 'text' => "✅ Ulandi! Endi shu yerga keladi:\n• saytdagi chat xabarlari (javob uchun — xabarga Reply qiling)\n• yangi buyurtmalar va to‘lovlar\n• briflar va murojaatlar"]);
+    $where = ($msg['chat']['type'] ?? '') === 'private' ? 'shu chatga' : 'shu guruhga';
+    tg_api('sendMessage', ['chat_id' => $chat, 'text' => "✅ Ulandi! Endi $where keladi:\n• saytdagi chat xabarlari (javob uchun — xabarga Reply qiling)\n• yangi buyurtmalar va to‘lovlar\n• briflar va murojaatlar"]);
     return true;
 }

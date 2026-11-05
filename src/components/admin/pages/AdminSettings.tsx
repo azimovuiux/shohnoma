@@ -129,12 +129,13 @@ function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<str
     }
   };
 
-  const link = async () => {
+  const link = async (group = false) => {
     const win = window.open("", "_blank");
     try {
-      const r = await api<{ url: string }>("/api/admin/telegram/link", { method: "POST" });
-      if (win) win.location.href = r.url;
-      else window.location.href = r.url;
+      const r = await api<{ url: string; groupUrl: string }>("/api/admin/telegram/link", { method: "POST" });
+      const target = group ? r.groupUrl : r.url;
+      if (win) win.location.href = target;
+      else window.location.href = target;
       setWaiting(true);
       if (timer.current) window.clearInterval(timer.current);
       timer.current = window.setInterval(reload, 2500);
@@ -197,12 +198,18 @@ function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<str
           <span className={`flex size-8 shrink-0 items-center justify-center rounded-full t-nav ${tok.set ? "bg-maroon text-ink-inverse" : "bg-bg-soft text-ink-2"}`}>2</span>
           <div className="flex min-w-0 flex-1 flex-col gap-3">
             <p className="t-title text-ink">Xabarlar sizga kelsin</p>
-            <p className="t-body-s text-ink-2">Tugmani bosing — Telegram ochiladi, botda «Start» ni bosing. Shu Telegram hisobingiz admin sifatida ulanadi.</p>
+            <p className="t-body-s text-ink-2">
+              <b>Shaxsiy:</b> tugmani bosing — Telegram ochiladi, botda «Start» ni bosing. <br />
+              <b>Guruh</b> (bir nechta menejer uchun): «Guruhga ulash» → guruhni tanlang → bot guruhga qo‘shiladi va ulanadi. Guruhdagi istalgan a’zo mijoz xabariga Reply qilib javob bera oladi.
+            </p>
             <div className="flex flex-wrap items-center gap-3">
               {data.telegram.adminLinked && <Status ok>Ulangan</Status>}
               {waiting && !data.telegram.adminLinked && <Status ok={false}>Botda «Start» ni bosing…</Status>}
-              <button type="button" onClick={link} disabled={!tok.set} className="btn btn-sm bg-[#2AABEE] text-white hover:bg-[#229ED9]">
-                <TelegramIcon size={16} /> {data.telegram.adminLinked ? "Boshqa Telegramni ulash" : "Telegramni ulash"}
+              <button type="button" onClick={() => link(false)} disabled={!tok.set} className="btn btn-sm bg-[#2AABEE] text-white hover:bg-[#229ED9]">
+                <TelegramIcon size={16} /> {data.telegram.adminLinked ? "Shaxsiy chatga ulash" : "Telegramni ulash"}
+              </button>
+              <button type="button" onClick={() => link(true)} disabled={!tok.set} className="btn btn-secondary btn-sm">
+                Guruhga ulash
               </button>
             </div>
           </div>
