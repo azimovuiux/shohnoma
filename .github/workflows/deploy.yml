@@ -1,0 +1,42 @@
+# main ga push → statik sayt + PHP API yig‘iladi → `deploy` branchiga push qilinadi.
+# Plesk Git `deploy` branchni /shohnoma.uz ga tortadi (Node.js shart emas).
+name: Build & deploy branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_TELEGRAM_BOT_USERNAME: ${{ vars.TELEGRAM_BOT_USERNAME }}
+      - run: npm run assemble
+      - name: PHP sintaksisini tekshirish
+        run: find dist/api dist/*.php -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: deploy branchiga push
+        run: |
+          cd dist
+          git init -q -b deploy
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Deploy ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" deploy

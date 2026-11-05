@@ -18,6 +18,7 @@ import "@fontsource/pinyon-script/latin-400.css";
 import "@fontsource/cinzel/latin-400.css";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui";
+import { MeProvider } from "@/lib/client";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shohnoma.uz"),
@@ -42,7 +43,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="uz">
       <body className="min-h-dvh">
-        <ToastProvider>{children}</ToastProvider>
+        <MeProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </MeProvider>
       </body>
     </html>
   );
