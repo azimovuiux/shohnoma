@@ -16,10 +16,12 @@ import "@fontsource/inter/latin-ext-500.css";
 import "@fontsource/inter/latin-ext-600.css";
 import "@fontsource/pinyon-script/latin-400.css";
 import "@fontsource/cinzel/latin-400.css";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui";
 import { MeProvider } from "@/lib/client";
 import { RevealObserver } from "@/components/RevealObserver";
+import { SmoothScroll } from "@/components/SmoothScroll";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shohnoma.uz"),
@@ -50,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MeProvider>
           <ToastProvider>{children}</ToastProvider>
           <RevealObserver />
+          <SmoothScroll />
         </MeProvider>
       </body>
     </html>
