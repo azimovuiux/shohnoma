@@ -37,7 +37,7 @@ export function Countdown({ date, p }: { date: string; p: Palette }) {
   const labels = ["kun", "soat", "daqiqa", "soniya"];
   return (
     <section className="text-center" style={{ background: `linear-gradient(to bottom, ${p.deep}, ${p.deep2})`, padding: `${s(36)} ${s(24)} ${s(48)}` }} aria-label="To‘yga qadar">
-      <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(26), color: p.onDeep }}>
+      <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(26), color: p.onDeep }}>
         {left !== null && left <= 0 ? "Baxtli kun keldi!" : "To‘yga qadar"}
       </p>
       <div className="mx-auto grid grid-cols-4" style={{ gap: s(10), marginTop: s(20), maxWidth: s(300) }} role="timer" aria-live="off">
@@ -47,7 +47,7 @@ export function Countdown({ date, p }: { date: string; p: Palette }) {
             className="flex flex-col items-center justify-center"
             style={{ height: s(76), borderRadius: s(12), background: "rgba(255,255,255,.06)", border: `1px solid color-mix(in srgb, ${p.accentDeep} 50%, transparent)` }}
           >
-            <span style={{ fontFamily: "var(--font-serif)", fontWeight: 500, fontSize: s(30), lineHeight: 1, color: p.accentDeep }}>
+            <span style={{ fontFamily: "var(--font-cormorant)", fontWeight: 500, fontSize: s(30), lineHeight: 1, color: p.accentDeep }}>
               {v ? String(v[i]).padStart(2, "0") : "··"}
             </span>
             <span style={{ fontSize: s(9), fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: p.onDeep, opacity: 0.7, marginTop: s(8) }}>{l}</span>
@@ -73,7 +73,7 @@ export function Program({ items, p }: { items: InvitationData["program"]; p: Pal
           <li key={`${it.time}-${it.title}`} className="relative flex items-baseline" style={{ gap: s(32), padding: `${s(14)} 0` }}>
             <span style={{ fontFamily: "var(--font-cinzel)", fontSize: s(14), color: p.heading, width: s(54), flexShrink: 0 }}>{it.time}</span>
             <span className="absolute rounded-full" style={{ left: `calc(${s(76)} - ${s(4)})`, top: s(22), width: s(9), height: s(9), background: p.accent }} aria-hidden />
-            <span style={{ fontFamily: "var(--font-serif)", fontSize: s(18), color: p.text, lineHeight: 1.25 }}>{it.title}</span>
+            <span style={{ fontFamily: "var(--font-cormorant)", fontSize: s(18), color: p.text, lineHeight: 1.25 }}>{it.title}</span>
           </li>
         ))}
       </ol>
@@ -193,8 +193,8 @@ export function RsvpBlock({
   const deadline = dl ? `${Number(dl.iso.slice(8, 10))}-${monthsUz[Number(dl.iso.slice(5, 7)) - 1]}gacha` : null;
   return (
     <section className="flex flex-col items-center text-center" style={{ background: `linear-gradient(to bottom, ${p.deep2}, ${p.deep})`, padding: `${s(40)} ${s(24)} ${s(48)}` }}>
-      <h2 style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(32), color: p.onDeep }}>Kelasizmi?</h2>
-      <p style={{ fontFamily: "var(--font-serif)", fontSize: s(16), color: p.onDeep, opacity: 0.85, maxWidth: s(260), marginTop: s(12), lineHeight: 1.35 }}>
+      <h2 style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(32), color: p.onDeep }}>Kelasizmi?</h2>
+      <p style={{ fontFamily: "var(--font-cormorant)", fontSize: s(16), color: p.onDeep, opacity: 0.85, maxWidth: s(260), marginTop: s(12), lineHeight: 1.35 }}>
         {deadline ? `Iltimos, ${deadline} javob bering — joyni oldindan tayyorlaymiz.` : "Iltimos, javob bering — joyni oldindan tayyorlaymiz."}
       </p>
       {answered ? (

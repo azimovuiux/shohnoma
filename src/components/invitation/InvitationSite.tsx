@@ -139,7 +139,7 @@ export function InvitationSite({ template, data, mode, embedded = false }: Invit
 
         {heroShowsTitle(designSlug(template)) ? (
           <>
-            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(18), color: p.heroSoft }}>{ceremonyLabel[data.ceremony]}</p>
+            <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(18), color: p.heroSoft }}>{ceremonyLabel[data.ceremony]}</p>
             <h1 style={{ fontFamily: "var(--font-script)", fontSize: s(56), color: p.accent, lineHeight: 1.25 }}>Taklifnoma</h1>
           </>
         ) : (
@@ -156,9 +156,9 @@ export function InvitationSite({ template, data, mode, embedded = false }: Invit
         <div style={{ marginTop: s(30) }}>
           <Divider color={p.accent} />
         </div>
-        <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(24), color: p.heroInk, marginTop: s(12) }}>Aziz mehmonlar!</p>
+        <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(24), color: p.heroInk, marginTop: s(12) }}>Aziz mehmonlar!</p>
         {data.message && (
-          <p style={{ fontFamily: "var(--font-serif)", fontSize: s(15), lineHeight: 1.35, color: p.heroInk, opacity: 0.85, maxWidth: s(260), marginTop: s(10), whiteSpace: "pre-line" }}>
+          <p style={{ fontFamily: "var(--font-cormorant)", fontSize: s(15), lineHeight: 1.35, color: p.heroInk, opacity: 0.85, maxWidth: s(260), marginTop: s(10), whiteSpace: "pre-line" }}>
             {data.message.replace(/^Aziz mehmonlar!\s*/, "")}
           </p>
         )}

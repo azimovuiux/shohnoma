@@ -55,7 +55,7 @@ export interface Palette {
 export function paletteOf(t: Template): Palette {
   const th = t.theme;
   const dark = luminance(th.bg[0]) < 128;
-  const script = th.script === "pinyon" ? "var(--font-script)" : th.script === "cinzel" ? "var(--font-cinzel)" : "var(--font-serif)";
+  const script = th.script === "pinyon" ? "var(--font-script)" : th.script === "cinzel" ? "var(--font-cinzel)" : "var(--font-cormorant)";
   if (dark) {
     return {
       dark,

@@ -109,7 +109,7 @@ export function RsvpForm({
       </button>
       <div className="flex flex-col items-center gap-1 pr-2 text-center">
         <span style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? 22 : 34, color: p.heading, lineHeight: 1.15 }}>{namesOf(d.personA, d.personB)}</span>
-        <span className="font-serif text-[20px] text-ink">Javobingizni qoldiring</span>
+        <span className="font-cormorant text-[20px] text-ink">Javobingizni qoldiring</span>
         <span className="t-body-s text-ink-2">{[sd?.day, d.venueName].filter(Boolean).join(" · ")}</span>
       </div>
 
@@ -231,7 +231,7 @@ export function ThankYou({
         {monogram(d.personA, d.personB)}
       </div>
       <h2 style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? 28 : 46, color: p.accentDeep, marginTop: 18, lineHeight: 1.15 }}>Rahmat, {answer.name}!</h2>
-      <p className="max-w-[300px] font-serif text-[17px] leading-[1.4]" style={{ opacity: 0.9, marginTop: 10 }}>
+      <p className="max-w-[300px] font-cormorant text-[17px] leading-[1.4]" style={{ opacity: 0.9, marginTop: 10 }}>
         {line}
       </p>
 

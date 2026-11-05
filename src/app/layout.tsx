@@ -1,4 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import "@fontsource/instrument-serif/latin-400.css";
+import "@fontsource/instrument-serif/latin-400-italic.css";
+import "@fontsource/instrument-serif/latin-ext-400.css";
+import "@fontsource/instrument-serif/latin-ext-400-italic.css";
+import "@fontsource/instrument-sans/latin-400.css";
+import "@fontsource/instrument-sans/latin-500.css";
+import "@fontsource/instrument-sans/latin-600.css";
+import "@fontsource/instrument-sans/latin-700.css";
+import "@fontsource/instrument-sans/latin-ext-400.css";
+import "@fontsource/instrument-sans/latin-ext-500.css";
+import "@fontsource/instrument-sans/latin-ext-600.css";
 import "@fontsource/cormorant-garamond/latin-300.css";
 import "@fontsource/cormorant-garamond/latin-300-italic.css";
 import "@fontsource/cormorant-garamond/latin-400.css";

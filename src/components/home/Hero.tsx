@@ -1,119 +1,203 @@
 import Link from "next/link";
-import { ArrowRight, Card, Link2, Mobile, Music } from "@/components/icons";
-import { TelegramIcon } from "@/components/TelegramIcon";
-import { Star8 } from "@/components/Ornament";
-import { PhoneFrame } from "@/components/mockups/Devices";
-import { InvitationScreen } from "@/components/mockups/InvitationScreen";
-import { HeroFlowers, HeroFlowersMobile } from "@/components/home/Flowers";
-import { getTemplate } from "@/lib/templates";
-import { star8Path } from "@/lib/ornament";
+import type { CSSProperties, ReactNode } from "react";
+import { ArrowRight } from "@/components/icons";
 import { site } from "@/lib/site";
 
-/** Bordo kamar ichidagi 8-yulduz naqshi (Figma 75:4879) */
-function ArchPattern() {
-  const cell = 56;
+/*
+ * Bosh sahifa hero (Figma 208:17210, 1440×900).
+ * O‘ng kompozitsiya — «sahna»: Figma’dagi x 560…1440 oralig‘i (880×900). Barcha o‘lchamlar cqw da,
+ * shuning uchun desktopda aynan Figma’dagidek, telefonda esa ekran eniga masshtablanadi.
+ */
+const STAGE_X = 560;
+const u = (px: number) => `${((px / 880) * 100).toFixed(4)}cqw`;
+
+/** Figma relativeTransform [[a,c,tx],[b,d,ty]] bo‘yicha joylashtirilgan qatlam */
+function Layer({
+  t,
+  w,
+  h,
+  z,
+  ri,
+  delay = 0,
+  className = "",
+  blend,
+  style,
+  children,
+}: {
+  t: [[number, number, number], [number, number, number]];
+  w: number;
+  h: number;
+  z?: number;
+  ri?: string;
+  delay?: number;
+  className?: string;
+  /** mix-blend-mode — transformli tashqi qatlamga qo‘yiladi (aks holda izolyatsiyada ishlamaydi) */
+  blend?: CSSProperties["mixBlendMode"];
+  style?: CSSProperties;
+  children: ReactNode;
+}) {
+  const [[a, c, tx], [b, d, ty]] = t;
   return (
-    <svg viewBox="0 0 440 620" className="absolute inset-0 size-full" aria-hidden>
-      <defs>
-        <clipPath id="hero-arch">
-          <path d="M0 620 V220 A220 220 0 0 1 440 220 V620 Z" />
-        </clipPath>
-        <pattern id="hero-girih" width={cell} height={cell} patternUnits="userSpaceOnUse" x="10" y="6">
-          <path d={star8Path(cell / 2, cell / 2, 13)} fill="none" stroke="#c9a25e" strokeWidth="0.8" />
-        </pattern>
-        <linearGradient id="hero-arch-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#7a2335" />
-          <stop offset="1" stopColor="#5a1828" />
-        </linearGradient>
-      </defs>
-      <g clipPath="url(#hero-arch)">
-        <rect width="440" height="620" fill="url(#hero-arch-fill)" />
-        <rect width="440" height="620" fill="url(#hero-girih)" opacity="0.28" />
-      </g>
-    </svg>
+    <div
+      className="absolute origin-top-left"
+      style={{ left: u(tx - STAGE_X), top: u(ty), width: u(w), height: u(h), transform: `matrix(${a},${b},${c},${d},0,0)`, zIndex: z, mixBlendMode: blend }}
+    >
+      <div data-ri={ri} className={`size-full ${className}`} style={{ ...style, ["--rd" as string]: `${delay}ms` }}>
+        {children}
+      </div>
+    </div>
   );
 }
 
-function HandArrow({ d, className, viewBox }: { d: string; className: string; viewBox: string }) {
+function Img({ src, className = "", fit = "cover" }: { src: string; className?: string; fit?: "cover" | "contain" }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt="" draggable={false} className={`block size-full select-none ${fit === "cover" ? "object-cover" : "object-contain"} ${className}`} />;
+}
+
+/** Qog‘oz taklifnoma (Figma «Qog‘oz taklifnoma», 420×580) */
+function Paper() {
   return (
-    <svg viewBox={viewBox} className={className} fill="none" aria-hidden>
-      <path d={d} stroke="var(--color-gold)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+    <div className="flex size-full items-center justify-center border border-[#e9dcc6] bg-[#fffdf8] shadow-[0_30px_60px_rgba(77,46,26,0.2)]" style={{ paddingInline: u(40) }}>
+      <div className="flex w-full flex-col items-center border border-[#d9b97a]/70 text-center" style={{ height: u(398), paddingTop: u(44), gap: u(6) }}>
+        <span className="font-cormorant font-light italic leading-tight text-gold" style={{ fontSize: u(22) }}>
+          Nikoh to‘yi
+        </span>
+        <span className="font-script leading-[1.15] text-maroon" style={{ fontSize: u(62) }}>
+          Taklifnoma
+        </span>
+        <span className="bg-[#d9b97a]" style={{ width: u(56), height: 1 }} />
+        <span className="font-script leading-[1.1] text-ink" style={{ fontSize: u(46) }}>
+          Jasur
+        </span>
+        <span className="font-cormorant font-light italic leading-tight text-gold" style={{ fontSize: u(20) }}>
+          va
+        </span>
+        <span className="font-script leading-[1.1] text-ink" style={{ fontSize: u(46) }}>
+          Madina
+        </span>
+        <span className="font-cinzel text-maroon" style={{ fontSize: u(15), letterSpacing: "0.22em" }}>
+          12 · 09 · 2026
+        </span>
+        <span className="font-cormorant font-light text-ink-2" style={{ fontSize: u(17) }}>
+          Toshkent, «Oqsaroy» to‘yxonasi
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** Qo‘ldagi telefon ekrani (Figma «Ekran — Bordo maktub», 188.55×394) */
+function PhoneScreen() {
+  return (
+    <div
+      className="absolute flex flex-col items-center bg-maroon text-center"
+      style={{ left: u(176.74), top: u(59), width: u(188.55), height: u(394), borderRadius: u(26), paddingTop: u(30), paddingInline: u(12), gap: u(5) }}
+    >
+      <span className="font-cormorant font-light italic leading-tight text-[#d9b97a]" style={{ fontSize: u(13) }}>
+        Nikoh to‘yi
+      </span>
+      <span className="font-script leading-[1.2] text-[#fbf7f1]" style={{ fontSize: u(22) }}>
+        Jasur &amp; Madina
+      </span>
+      <span className="font-cinzel text-[#d9b97a]" style={{ fontSize: u(9), letterSpacing: "0.18em" }}>
+        12 · 09 · 2026
+      </span>
+      <span className="overflow-hidden" style={{ width: u(160), height: u(132), borderRadius: u(10) }}>
+        <Img src="/images/couple.webp" />
+      </span>
+      <span className="flex" style={{ gap: u(6) }}>
+        {[
+          ["12", "kun"],
+          ["08", "soat"],
+          ["45", "daqiqa"],
+        ].map(([n, l]) => (
+          <span key={l} className="flex flex-col items-center bg-white/10 font-inter text-[#fbf7f1]" style={{ borderRadius: u(8), paddingBlock: u(5), paddingInline: u(8) }}>
+            <span className="font-semibold leading-tight" style={{ fontSize: u(12) }}>
+              {n}
+            </span>
+            <span className="leading-tight opacity-80" style={{ fontSize: u(8) }}>
+              {l}
+            </span>
+          </span>
+        ))}
+      </span>
+      <span className="bg-[#d9b97a] font-inter font-semibold text-maroon" style={{ fontSize: u(10), borderRadius: u(20), paddingBlock: u(7), paddingInline: u(16) }}>
+        Javob qoldirish
+      </span>
+    </div>
+  );
+}
+
+/** O‘ng kompozitsiya — Figma qatlamlari tartibida */
+function Stage() {
+  return (
+    <div data-reveal="group" className="relative size-full bg-[#f7f1e7]" style={{ containerType: "inline-size" }}>
+      <Layer t={[[0.4872, -0.8733, 779.79], [0.8733, 0.4872, 450]]} w={445.93} h={595.21} ri="fade" delay={500}>
+        <Img src="/images/hero/lenta.webp" />
+      </Layer>
+      <Layer t={[[1, 0, 640], [0, 1, -40]]} w={720} h={405} ri="fade" delay={100}>
+        <Img src="/images/hero/barglar.webp" />
+      </Layer>
+      <Layer t={[[0.9703, 0.2419, 1200], [-0.2419, 0.9703, -150]]} w={380} h={380} ri="fade" delay={300} blend="multiply">
+        <Img src="/images/hero/sozana.webp" />
+      </Layer>
+      <Layer t={[[0.9962, 0.0872, 800], [-0.0872, 0.9962, 120]]} w={420} h={580} ri="up" delay={200}>
+        <Paper />
+      </Layer>
+      <Layer t={[[0.9848, 0.1736, 812.48], [-0.1736, 0.9848, 136.65]]} w={122.38} h={144.66} ri="pop" delay={900}>
+        <Img src="/images/hero/marka.webp" />
+      </Layer>
+      <Layer t={[[0.9945, -0.1045, 572.12], [0.1045, 0.9945, 601.84]]} w={705.09} h={396.61} ri="up" delay={600}>
+        <Img src="/images/hero/gul-shoxcha.webp" />
+      </Layer>
+      <Layer t={[[0.9945, 0.1045, 960], [-0.1045, 0.9945, 250]]} w={540} h={720} ri="right" delay={450}>
+        <div className="relative size-full">
+          <Img src="/images/hero/qol-telefon.webp" />
+          <PhoneScreen />
+        </div>
+      </Layer>
+    </div>
   );
 }
 
 export function Hero() {
-  const bordo = getTemplate("bordo-maktub")!;
-  const ravoq = getTemplate("oltin-ravoq")!;
-
   return (
-    <section className="relative overflow-hidden">
-      <div className="relative mx-auto grid max-w-[1440px] gap-12 px-5 pb-16 pt-10 lg:block lg:h-[900px] lg:px-[120px] lg:pb-0 lg:pt-[160px]">
+    <section className="relative overflow-hidden bg-[#f7f1e7]">
+      <div className="relative mx-auto max-w-[1440px] lg:h-[900px]">
         {/* Matn */}
-        <div data-reveal="stagger" className="relative z-10 flex flex-col items-start">
-          <h1 data-split className="flex flex-col font-serif font-light text-ink">
-            <span className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">To‘yingiz uchun</span>
-            <em className="text-[96px] italic leading-[0.86] tracking-[-0.01em] text-maroon sm:text-[130px] lg:text-[176px]">shohona</em>
-            <span className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">taklifnoma sayti</span>
+        <div data-reveal="stagger" className="relative z-10 flex flex-col items-start px-5 pt-10 lg:absolute lg:left-[120px] lg:top-[211px] lg:w-[700px] lg:px-0 lg:pt-0">
+          <h1 data-split className="flex flex-col font-serif text-[48px] font-normal leading-[0.9] tracking-[-0.02em] text-ink sm:text-[72px] lg:text-[102px]">
+            <span>Har bir to‘y —</span>
+            <span>o‘z hikoyasi.</span>
+            <em className="italic text-maroon">Taklifnomasi ham.</em>
           </h1>
-          <p className="t-body-l mt-7 max-w-[470px] text-ink-2">
-            Tayyor dizaynni tanlang, ma’lumotlaringizni kiriting va to‘lovdan so‘ng mehmonlarga yuboriladigan tayyor sayt
-            havolasini oling.
+          <p className="mt-[26px] max-w-[460px] font-sans text-[16px] leading-[1.6] text-ink-2 lg:text-[18px]">
+            Tayyor dizayn asosida 2 daqiqada yaratiladigan taklifnoma sayti. Bitta havolada — vaqt, xarita, musiqa va mehmonlar javobi.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Link href="/#shablonlar" className="btn btn-primary">
               Shablonlarni ko‘rish <ArrowRight size={16} />
             </Link>
-            <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn border border-line-dark text-ink hover:bg-bg-soft">
-              <TelegramIcon size={17} /> Telegramda yozish
+            <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+              Telegramda yozish
             </a>
           </div>
-          <ul data-split className="mt-11 flex flex-col gap-3 t-body-s text-ink-2 sm:flex-row sm:flex-wrap sm:gap-7">
-            <li className="flex items-center gap-2">
-              <Mobile size={16} color="var(--color-gold)" /> Telefon uchun moslangan
-            </li>
-            <li className="flex items-center gap-2">
-              <Link2 size={16} color="var(--color-gold)" /> Bitta havola — barcha mehmonlarga
-            </li>
-            <li className="flex items-center gap-2">
-              <Card size={16} color="var(--color-gold)" /> Payme, Click, Google Pay, P2P
-            </li>
-          </ul>
         </div>
 
-        {/* Vizual — desktopda absolut koordinatalar (Figma 1440×900) */}
-        <div data-reveal="scale" style={{ ["--d" as string]: "250ms" }} className="relative z-[2] mx-auto aspect-[560/760] w-full max-w-[420px] lg:absolute lg:left-[calc(50%+70px)] lg:top-[96px] lg:mx-0 lg:w-[560px] lg:max-w-none">
-          {/* koordinatalar 790..1350 × 96..856 → foiz */}
-          <div className="absolute left-[10.7%] top-[2.6%] h-[81.6%] w-[78.6%]">
-            <svg viewBox="0 0 440 620" className="absolute left-[6.8%] -top-[4.8%] size-full" aria-hidden>
-              <path d="M0.5 620 V220 A219.5 219.5 0 0 1 439.5 220 V620" fill="none" stroke="var(--color-gold)" strokeOpacity="0.5" />
-            </svg>
-            <ArchPattern />
+        {/* Anor — chap pastda (faqat desktop) */}
+        <div
+          className="absolute left-[70px] top-[735px] hidden h-[218px] w-[290px] origin-top-left mix-blend-multiply lg:block"
+          style={{ transform: "matrix(0.9976,0.0698,-0.0698,0.9976,0,0)" }}
+        >
+          <div data-reveal="fade" style={{ ["--d" as string]: "700ms" }} className="size-full">
+            <Img src="/images/hero/anor.webp" />
           </div>
-
-          <HeroFlowersMobile />
-
-          <PhoneFrame dark className="absolute left-[17.9%] top-[7.1%] z-[2] w-[53.5%]">
-            <InvitationScreen t={bordo} />
-          </PhoneFrame>
-          <PhoneFrame className="absolute left-[55.4%] top-[17.9%] z-[1] w-[42.5%]">
-            <InvitationScreen t={ravoq} />
-          </PhoneFrame>
-
-          <Star8 size={40} className="absolute left-0 top-0" />
-          <Star8 size={14} className="absolute right-[1%] top-[13%]" />
-          <Star8 size={10} className="absolute left-[0.4%] top-[78.2%]" />
-
-          <span className="absolute right-[1%] top-[2.1%] hidden items-center gap-2 t-annotation text-maroon sm:flex">
-            <Music size={15} /> Fon musiqasi
-          </span>
-          <HandArrow
-            viewBox="0 0 48 136"
-            className="absolute right-[4.6%] top-[5%] hidden h-[17.9%] w-[8.6%] sm:block"
-            d="M26 3 C 44 30, 40 80, 28 128 M20 118 L28 130 L36 119"
-          />
         </div>
-        <HeroFlowers />
+
+        {/* O‘ng kompozitsiya: desktopda Figma koordinatalarida, telefonda ekran eniga */}
+        <div className="relative mt-6 aspect-[880/900] w-full lg:absolute lg:left-[560px] lg:top-0 lg:mt-0 lg:h-[900px] lg:w-[880px] lg:aspect-auto">
+          <Stage />
+        </div>
       </div>
     </section>
   );

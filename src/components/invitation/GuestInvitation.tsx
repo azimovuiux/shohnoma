@@ -19,7 +19,7 @@ function Shell({ title, text, names }: { title: string; text: string; names?: st
         <path d={star8Path(100, 100, 12)} fill="var(--color-gold)" />
       </svg>
       {names && <p className="mt-6 font-script text-[40px] leading-tight text-maroon">{names}</p>}
-      <h1 className="mt-2 font-serif text-[32px] font-light text-ink">{title}</h1>
+      <h1 className="mt-2 font-cormorant text-[32px] font-light text-ink">{title}</h1>
       <p className="t-body-m mt-3 max-w-[360px] text-ink-2">{text}</p>
       <Link href="/" className="btn btn-secondary mt-8">
         Shohnoma.uz

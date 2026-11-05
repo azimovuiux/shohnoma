@@ -24,8 +24,12 @@
   --color-muted: #7a7265;
   --color-danger: #6b2436;
 
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Sayt shriftlari (Figma hero, 208:17210) */
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* Taklifnoma shablonlari dizayni shu shriftlarda chizilgan */
+  --font-cormorant: "Cormorant Garamond", Georgia, serif;
+  --font-inter: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-script: "Pinyon Script", cursive;
   --font-cinzel: "Cinzel", serif;
 

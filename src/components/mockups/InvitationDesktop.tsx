@@ -27,7 +27,7 @@ export function InvitationDesktop({ t }: { t: Template }) {
   }
   const { theme } = t;
   const family =
-    theme.script === "pinyon" ? "var(--font-script)" : theme.script === "cinzel" ? "var(--font-cinzel)" : "var(--font-serif)";
+    theme.script === "pinyon" ? "var(--font-script)" : theme.script === "cinzel" ? "var(--font-cinzel)" : "var(--font-cormorant)";
   return (
     <div
       className="relative size-full overflow-hidden"
@@ -42,7 +42,7 @@ export function InvitationDesktop({ t }: { t: Template }) {
         <path d={star8Path(20, 20, 19)} fill="none" stroke={theme.accent} strokeWidth="1" />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: u(30), color: theme.soft }}>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: u(30), color: theme.soft }}>
           {ceremonyLabel[t.ceremony]}
         </span>
         <span

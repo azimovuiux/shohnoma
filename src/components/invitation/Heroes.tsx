@@ -50,7 +50,7 @@ function Envelope({ d, p }: { d: InvitationData; p: Palette }) {
         }}
       >
         <span style={{ fontFamily: p.script, fontSize: d.personB ? s(30) : s(36), color: "#6b2436", lineHeight: 1.15 }}>{namesOf(d.personA, d.personB)}</span>
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(14), color: "#8a6a55", marginTop: s(6), padding: `0 ${s(10)}` }}>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: "#8a6a55", marginTop: s(6), padding: `0 ${s(10)}` }}>
           {invitePhrase[d.ceremony]}
         </span>
       </div>
@@ -90,7 +90,7 @@ function Arch({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
       </svg>
       <div className="absolute inset-x-0 flex flex-col items-center text-center" style={{ top: s(96) }}>
         <Star size={s(12)} color={p.accent} />
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(14), color: p.accent, marginTop: s(10) }}>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.accent, marginTop: s(10) }}>
           {ceremonyLabel[d.ceremony]} taklifnomasi
         </span>
         <span style={{ fontFamily: p.script, fontSize: d.personB ? s(40) : s(46), lineHeight: 1.1, color: p.heroSoft, marginTop: s(10) }}>
@@ -122,7 +122,7 @@ function Seal({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
         }}
       >
         <span style={{ fontFamily: p.script, fontSize: d.personB ? s(34) : s(40), color: p.heroInk, lineHeight: 1.15 }}>{namesOf(d.personA, d.personB)}</span>
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft, marginTop: s(8) }}>{invitePhrase[d.ceremony]}</span>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft, marginTop: s(8) }}>{invitePhrase[d.ceremony]}</span>
       </div>
       <div className="absolute flex" style={{ top: `calc(${s(8)} - ${s(34)})`, width: s(72), height: s(72) }}>
         {[st.sealHalfL, st.sealHalfR].map((cls, i) => (
@@ -249,7 +249,7 @@ function Gate({ d, p }: { d: InvitationData; p: Palette }) {
             </>
           )}
         </span>
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(13), color: p.heroSoft, marginTop: s(10), padding: `0 ${s(12)}` }}>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(13), color: p.heroSoft, marginTop: s(10), padding: `0 ${s(12)}` }}>
           {invitePhrase[d.ceremony]}
         </span>
       </div>
@@ -276,7 +276,7 @@ function Eastern({ d, p }: { d: InvitationData; p: Palette }) {
         })}
       </svg>
       <div className="relative flex flex-col items-center text-center" style={{ maxWidth: s(170) }}>
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft }}>{ceremonyLabel[d.ceremony]}</span>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft }}>{ceremonyLabel[d.ceremony]}</span>
         <span style={{ fontFamily: p.script, fontSize: s(d.personB ? 22 : 26), color: p.accent, letterSpacing: "0.06em", lineHeight: 1.25, marginTop: s(6) }}>
           {namesOf(d.personA, d.personB)}
         </span>
@@ -300,7 +300,7 @@ function Crown({ d, p }: { d: InvitationData; p: Palette }) {
         ))}
       </svg>
       <span style={{ fontFamily: p.script, fontSize: s(54), color: p.heroInk, lineHeight: 1.15, marginTop: s(8) }}>{namesOf(d.personA, d.personB)}</span>
-      <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(15), color: p.heroSoft, marginTop: s(6) }}>{invitePhrase[d.ceremony]}</span>
+      <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(15), color: p.heroSoft, marginTop: s(6) }}>{invitePhrase[d.ceremony]}</span>
       {/* konfetti */}
       <svg viewBox="0 0 270 160" className="pointer-events-none absolute inset-x-0 top-0 w-full" aria-hidden>
         {[

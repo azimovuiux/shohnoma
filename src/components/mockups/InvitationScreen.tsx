@@ -10,7 +10,7 @@ const u = (px: number) => `${((px / 280) * 100).toFixed(3)}cqw`;
 const scriptFamily = {
   pinyon: "var(--font-script)",
   cinzel: "var(--font-cinzel)",
-  cormorant: "var(--font-serif)",
+  cormorant: "var(--font-cormorant)",
 } as const;
 
 function Divider({ color }: { color: string }) {
@@ -47,7 +47,7 @@ function Envelope({ t }: { t: Template }) {
         <span style={{ fontFamily: "var(--font-script)", fontSize: u(23.4), color: "#6b2436", lineHeight: 1.2 }}>
           {t.sample.a}{t.sample.b ? <> &amp; {t.sample.b}</> : null}
         </span>
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: u(10.9), color: "#8a6a55" }}>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: u(10.9), color: "#8a6a55" }}>
           sizni to‘yimizga taklif qiladi
         </span>
       </div>
@@ -90,7 +90,7 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
         <svg viewBox="0 0 40 40" style={{ width: u(11), height: u(11), marginBottom: u(10) }} aria-hidden>
           <path d={star8Path(20, 20, 20)} fill={theme.accent} />
         </svg>
-        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: u(12.4), color: theme.accent }}>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: u(12.4), color: theme.accent }}>
           {ceremonyLabel[t.ceremony]} taklifnomasi
         </span>
         <span
@@ -113,7 +113,7 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
         </span>
         <span
           style={{
-            fontFamily: "var(--font-serif)",
+            fontFamily: "var(--font-cormorant)",
             fontWeight: 500,
             fontSize: u(15.5),
             color: theme.ink,
@@ -171,7 +171,7 @@ export function InvitationScreen({ t }: { t: Template }) {
       <div className="relative flex h-full flex-col items-center text-center" style={{ paddingTop: isEnvelope ? u(54) : u(40) }}>
         {isEnvelope ? (
           <>
-            <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: u(14), color: theme.soft }}>
+            <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: u(14), color: theme.soft }}>
               {ceremonyLabel[t.ceremony]}
             </span>
             <span style={{ fontFamily: family, fontSize: u(43.7), color: theme.accent, lineHeight: 1.25 }}>Taklifnoma</span>
@@ -191,7 +191,7 @@ export function InvitationScreen({ t }: { t: Template }) {
 
         <span
           style={{
-            fontFamily: "var(--font-serif)",
+            fontFamily: "var(--font-cormorant)",
             fontStyle: "italic",
             fontSize: isEnvelope ? u(18.7) : u(17),
             color: theme.ink,
@@ -202,7 +202,7 @@ export function InvitationScreen({ t }: { t: Template }) {
         </span>
         <span
           style={{
-            fontFamily: "var(--font-serif)",
+            fontFamily: "var(--font-cormorant)",
             fontSize: u(11.7),
             lineHeight: 1.3,
             color: theme.ink,

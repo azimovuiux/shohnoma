@@ -14,7 +14,7 @@ export function DemoPageClient({ slug }: { slug: string }) {
     if (slug === "_" && !fromUrl.ready) return <PageLoading className="min-h-dvh" />;
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center gap-5 px-5 text-center">
-        <h1 className="font-serif text-[40px] font-light text-ink">Shablon topilmadi</h1>
+        <h1 className="font-cormorant text-[40px] font-light text-ink">Shablon topilmadi</h1>
         <Link href="/shablonlar/" className="btn btn-primary">
           Katalogga qaytish
         </Link>
