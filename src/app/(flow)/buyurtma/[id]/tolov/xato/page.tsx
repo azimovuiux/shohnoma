@@ -8,6 +8,7 @@ import { isPaidStatus } from "@/server/orders";
 import { latestPayment } from "@/server/payments";
 import { formatPrice } from "@/lib/format";
 import type { Provider } from "@/components/order/PayChoice";
+import { site } from "@/lib/site";
 
 export const metadata = { title: "To‘lov o‘tmadi" };
 
@@ -46,7 +47,7 @@ export default async function FailedPage({ params }: { params: Promise<{ id: str
           <Card size={16} /> Boshqa usulni tanlash
         </Link>
       </div>
-      <a href="https://t.me/shohnoma" className="inline-flex items-center gap-2 t-body-s text-maroon hover:underline">
+      <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 t-body-s text-maroon hover:underline">
         <MessageQuestion size={15} /> Yordam kerakmi? Telegramda yozing
       </a>
     </StatusScreen>
