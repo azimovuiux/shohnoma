@@ -148,7 +148,8 @@ export async function getOwnedOrder(orderId: string): Promise<OrderBundle | null
   const user = await getUser();
   if (user && (b.order.userId === user.id || user.isAdmin)) return b;
   const guest = await getGuestToken();
-  if (!b.order.userId && guest && b.order.guestToken === guest) return b;
+  // Brauzer tokeni (maxfiy cookie) — to‘lovdan so‘ng akkaunt yaratilsa ham shu qurilmadan 06/21 ochiladi
+  if (guest && b.order.guestToken === guest) return b;
   return null;
 }
 

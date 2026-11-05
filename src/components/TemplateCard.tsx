@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, Eye, Heart, MonitorMobbile, PlayCircle, Tag } from "@/components/icons";
 import { GirihPattern } from "./Ornament";
+import { useToast } from "./ui";
 import type { Template } from "@/lib/templates";
 import { ceremonyLabel, styleLabel } from "@/lib/templates";
 import { discountPercent, formatPrice } from "@/lib/format";
@@ -13,22 +14,73 @@ import { InvitationDesktop } from "./mockups/InvitationDesktop";
 
 const FAV_KEY = "shohnoma:favorites";
 
-/** Sevimlilar — kirmagan foydalanuvchi uchun localStorage (spec §6.13 tavsiya) */
+/**
+ * Sevimlilar (spec §6.13). Kirmagan foydalanuvchi — localStorage;
+ * kirgan foydalanuvchi — server (/api/me/favorites). Kirgandan so‘ng localStorage serverga ko‘chiriladi.
+ */
+let serverFavs: Promise<Set<string> | null> | null = null;
+const favListeners = new Set<() => void>();
+
+function readLocal() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]") as string[]);
+  } catch {
+    return new Set<string>();
+  }
+}
+
+function loadServerFavs() {
+  serverFavs ??= fetch("/api/me/favorites")
+    .then((r) => r.json())
+    .then(async (j: { slugs: string[] | null }) => {
+      if (!j.slugs) return null;
+      const set = new Set(j.slugs);
+      const local = [...readLocal()].filter((x) => !set.has(x));
+      if (local.length) {
+        await fetch("/api/me/favorites", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slugs: local }) }).catch(() => undefined);
+        local.forEach((x) => set.add(x));
+      }
+      localStorage.removeItem(FAV_KEY);
+      return set;
+    })
+    .catch(() => null);
+  return serverFavs;
+}
+
 export function useFavorite(slug: string) {
   const [fav, setFav] = useState(false);
+  const toast = useToast();
   useEffect(() => {
-    try {
-      setFav((JSON.parse(localStorage.getItem(FAV_KEY) || "[]") as string[]).includes(slug));
-    } catch {}
+    let alive = true;
+    const sync = async () => {
+      const server = await loadServerFavs();
+      if (alive) setFav(server ? server.has(slug) : readLocal().has(slug));
+    };
+    sync();
+    favListeners.add(sync);
+    return () => {
+      alive = false;
+      favListeners.delete(sync);
+    };
   }, [slug]);
-  const toggle = () => {
-    try {
-      const list = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]") as string[]);
-      if (list.has(slug)) list.delete(slug);
-      else list.add(slug);
-      localStorage.setItem(FAV_KEY, JSON.stringify([...list]));
-      setFav(list.has(slug));
-    } catch {}
+  const toggle = async () => {
+    const next = !fav;
+    setFav(next);
+    const server = await loadServerFavs();
+    if (server) {
+      if (next) server.add(slug);
+      else server.delete(slug);
+      fetch("/api/me/favorites", { method: next ? "POST" : "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ slug }) }).catch(() => undefined);
+    } else {
+      const list = readLocal();
+      if (next) list.add(slug);
+      else list.delete(slug);
+      try {
+        localStorage.setItem(FAV_KEY, JSON.stringify([...list]));
+      } catch {}
+    }
+    favListeners.forEach((f) => f());
+    toast(next ? "Sevimlilarga qo‘shildi" : "Sevimlilardan olib tashlandi");
   };
   return [fav, toggle] as const;
 }
