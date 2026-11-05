@@ -1,0 +1,63 @@
+import type { Template } from "@/lib/templates";
+import { ceremonyLabel } from "@/lib/templates";
+import { star8Path } from "@/lib/ornament";
+
+/** Laptop ekranidagi shablon hero'si (1280×800 asosida, cqw bilan masshtablanadi) */
+const u = (px: number) => `${((px / 1280) * 100).toFixed(3)}cqw`;
+
+export function InvitationDesktop({ t }: { t: Template }) {
+  const { theme } = t;
+  const family =
+    theme.script === "pinyon" ? "var(--font-script)" : theme.script === "cinzel" ? "var(--font-cinzel)" : "var(--font-serif)";
+  return (
+    <div
+      className="relative size-full overflow-hidden"
+      style={{ containerType: "inline-size", background: `linear-gradient(135deg, ${theme.bg[0]}, ${theme.bg[1]})` }}
+    >
+      <div className="absolute" style={{ inset: u(28), border: `1px solid ${theme.accent}`, opacity: 0.45 }} />
+      <svg className="absolute" style={{ left: u(80), top: u(80), width: u(60), height: u(60) }} viewBox="0 0 40 40" aria-hidden>
+        <path d={star8Path(20, 20, 19)} fill="none" stroke={theme.accent} strokeWidth="1" />
+      </svg>
+      <svg className="absolute" style={{ right: u(80), bottom: u(80), width: u(60), height: u(60) }} viewBox="0 0 40 40" aria-hidden>
+        <path d={star8Path(20, 20, 19)} fill="none" stroke={theme.accent} strokeWidth="1" />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: u(30), color: theme.soft }}>
+          {ceremonyLabel[t.ceremony]}
+        </span>
+        <span
+          style={{
+            fontFamily: family,
+            fontSize: theme.script === "cinzel" ? u(70) : u(110),
+            lineHeight: 1.15,
+            color: theme.accent,
+            letterSpacing: theme.script === "cinzel" ? "0.05em" : undefined,
+          }}
+        >
+          {t.sample.a}
+          {t.sample.b ? ` & ${t.sample.b}` : ""}
+        </span>
+        <span style={{ fontFamily: "var(--font-cinzel)", fontSize: u(22), color: theme.ink, letterSpacing: "0.25em", marginTop: u(18) }}>
+          {t.sample.date}
+        </span>
+        <span style={{ fontSize: u(15), color: theme.ink, opacity: 0.7, letterSpacing: "0.12em", marginTop: u(14), textTransform: "uppercase" }}>
+          {t.sample.venue} · {t.sample.time}
+        </span>
+        <span
+          className="rounded-full"
+          style={{
+            border: `1px solid ${theme.accent}`,
+            color: theme.accent,
+            fontFamily: "var(--font-cinzel)",
+            fontSize: u(15),
+            letterSpacing: "0.14em",
+            padding: `${u(18)} ${u(38)}`,
+            marginTop: u(44),
+          }}
+        >
+          Taklifnomani ochish
+        </span>
+      </div>
+    </div>
+  );
+}
