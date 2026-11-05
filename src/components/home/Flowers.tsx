@@ -27,12 +27,12 @@ export function HeroFlowers() {
 export function HeroFlowersMobile() {
   return (
     <>
-      <div className="pointer-events-none absolute -left-[38%] top-[76%] z-[1] h-[22%] w-[77%] lg:hidden">
+      <div className="pointer-events-none absolute -left-[34%] top-[68%] z-0 h-[22%] w-[77%] lg:hidden">
         <div className="hero-petals-left size-full">
           <FlowerArt className="size-full -scale-x-100" />
         </div>
       </div>
-      <div className="pointer-events-none absolute left-[50%] top-[77%] z-[1] h-[21%] w-[74%] lg:hidden">
+      <div className="pointer-events-none absolute left-[46%] top-[69%] z-0 h-[21%] w-[74%] lg:hidden">
         <div className="hero-petals-right-plain size-full">
           <FlowerArt className="size-full" />
         </div>

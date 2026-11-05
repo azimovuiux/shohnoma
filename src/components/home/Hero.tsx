@@ -82,7 +82,7 @@ export function Hero() {
         </div>
 
         {/* Vizual — desktopda absolut koordinatalar (Figma 1440×900) */}
-        <div data-reveal="scale" style={{ ["--d" as string]: "450ms" }} className="relative mx-auto aspect-[560/760] w-full max-w-[420px] lg:absolute lg:left-[calc(50%+70px)] lg:top-[96px] lg:mx-0 lg:w-[560px] lg:max-w-none">
+        <div data-reveal="scale" style={{ ["--d" as string]: "250ms" }} className="relative z-[2] mx-auto aspect-[560/760] w-full max-w-[420px] lg:absolute lg:left-[calc(50%+70px)] lg:top-[96px] lg:mx-0 lg:w-[560px] lg:max-w-none">
           {/* koordinatalar 790..1350 × 96..856 → foiz */}
           <div className="absolute left-[10.7%] top-[2.6%] h-[81.6%] w-[78.6%]">
             <svg viewBox="0 0 440 620" className="absolute left-[6.8%] -top-[4.8%] size-full" aria-hidden>

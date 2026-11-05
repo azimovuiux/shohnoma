@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; leads: number } }) {
+export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; leads: number; chats: number } }) {
   const path = usePathname();
   const tabs = [
     { href: "/admin/", label: "Umumiy", n: 0 },
@@ -11,6 +11,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
     { href: "/admin/shablonlar/", label: "Shablonlar", n: 0 },
     { href: "/admin/tolovlar/", label: "P2P cheklar", n: counts.p2p },
     { href: "/admin/briflar/", label: "Briflar", n: counts.briefs },
+    { href: "/admin/chatlar/", label: "Chatlar", n: counts.chats },
     { href: "/admin/xabarlar/", label: "Xabarlar", n: counts.leads },
   ];
   return (

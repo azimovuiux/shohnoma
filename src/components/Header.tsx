@@ -390,15 +390,15 @@ export function Header() {
 
   return (
     <>
+      {/* Header fixed: balandligi o‘zgarganda sahifa siljimaydi (joy ushlagich) */}
+      <div aria-hidden className="h-[69px] lg:h-[87px]" />
       <header
-        className={`sticky top-0 z-40 border-b bg-bg-base/95 backdrop-blur transition-[transform,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] supports-[backdrop-filter]:bg-bg-base/85 ${
-          compact
-            ? "border-line shadow-[0_8px_24px_-18px_rgba(38,20,10,0.35)]"
-            : "border-line"
-        } ${hidden && !menuOpen ? "-translate-y-full" : "translate-y-0"}`}
+        className={`fixed inset-x-0 top-0 z-40 border-b border-line bg-bg-base/[0.97] will-change-transform transition-[transform,box-shadow] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          compact ? "shadow-[0_8px_24px_-18px_rgba(38,20,10,0.35)]" : ""
+        } ${hidden && !menuOpen ? "-translate-y-[calc(100%+2px)]" : "translate-y-0"}`}
       >
         <div
-          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] lg:px-[120px] ${
+          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:px-[120px] ${
             compact ? "h-[55px] lg:h-[70px]" : "h-[69px] lg:h-[87px]"
           }`}
         >

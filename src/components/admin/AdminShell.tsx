@@ -8,7 +8,7 @@ import { PageLoading, useApi, useRequireUser } from "@/lib/client";
 import { formatPhoneDisplay } from "@/lib/display";
 import { AdminNav } from "./AdminNav";
 
-type Counts = { ok: boolean; pendingP2p: number; newBriefs: number; newLeads: number };
+type Counts = { ok: boolean; pendingP2p: number; newBriefs: number; newLeads: number; unreadChats?: number };
 const CountsCtx = createContext<() => void>(() => {});
 /** Tab hisoblagichlarini yangilash (mutatsiyadan keyin) */
 export const useReloadCounts = () => useContext(CountsCtx);
@@ -35,7 +35,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 </Link>
               </div>
             </div>
-            <AdminNav counts={{ p2p: c?.pendingP2p ?? 0, briefs: c?.newBriefs ?? 0, leads: c?.newLeads ?? 0 }} />
+            <AdminNav counts={{ p2p: c?.pendingP2p ?? 0, briefs: c?.newBriefs ?? 0, leads: c?.newLeads ?? 0, chats: c?.unreadChats ?? 0 }} />
           </div>
         </header>
         <main className="mx-auto max-w-[1440px] px-5 py-8 lg:px-10">{children}</main>

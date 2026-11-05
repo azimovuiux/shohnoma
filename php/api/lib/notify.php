@@ -52,6 +52,17 @@ function tg_send(string $chatId, string $text): bool
     ]);
     return $code === 200;
 }
+/** Telegramga yuborib, xabar id sini qaytaradi (chat javoblarini bog‘lash uchun). Sozlanmagan bo‘lsa — null */
+function tg_send_id(string $chatId, string $text): ?int
+{
+    $token = env('TELEGRAM_BOT_TOKEN');
+    if (!$token || !$chatId) { error_log("[telegram→$chatId] $text"); return null; }
+    [$code, $res] = http_post("https://api.telegram.org/bot$token/sendMessage", [
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode(['chat_id' => $chatId, 'text' => $text, 'disable_web_page_preview' => true], JSON_UNESCAPED_UNICODE),
+    ]);
+    return $code === 200 ? (int)(json_decode($res, true)['result']['message_id'] ?? 0) ?: null : null;
+}
 function notify_admin(string $text): bool { return tg_send(env('TELEGRAM_ADMIN_CHAT_ID') ?? 'admin', $text); }
 function notify_user(?string $telegramId, string $text): bool { return $telegramId ? tg_send($telegramId, $text) : false; }
 

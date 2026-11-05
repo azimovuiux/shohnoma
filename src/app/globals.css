@@ -196,19 +196,19 @@ input[type="radio"]:focus-visible {
    Oynadagi nusxa ichki SVG'da (scaleX(-1)), shu sababli bu yerda faqat siljish va masshtab. */
 @keyframes petals-open-left {
   from { transform: translateX(110px) scale(0.72); opacity: 0; }
-  45% { opacity: 1; }
+  35% { opacity: 1; }
   to { transform: none; opacity: 1; }
 }
 @keyframes petals-open-right {
   from { transform: translateX(-110px) scale(0.72); opacity: 0; }
-  45% { opacity: 1; }
+  35% { opacity: 1; }
   to { transform: none; opacity: 1; }
 }
 .hero-petals-left {
-  animation: petals-open-left 2.2s ease-out 0.2s both;
+  animation: petals-open-left 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 .hero-petals-right-plain {
-  animation: petals-open-right 2.2s ease-out 0.2s both;
+  animation: petals-open-right 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 
 @keyframes part-left {

@@ -30,7 +30,8 @@ route('GET', '/admin/counts', function () {
     json_out(['ok' => true,
         'pendingP2p' => (int)scalar("SELECT COUNT(*) FROM payments WHERE provider = 'p2p' AND status = 'review'"),
         'newBriefs' => (int)scalar("SELECT COUNT(*) FROM briefs WHERE status = 'new'"),
-        'newLeads' => (int)scalar("SELECT COUNT(*) FROM leads WHERE status = 'new'")]);
+        'newLeads' => (int)scalar("SELECT COUNT(*) FROM leads WHERE status = 'new'"),
+        'unreadChats' => (int)scalar('SELECT COUNT(*) FROM chat_sessions WHERE unread_admin > 0')]);
 });
 
 route('GET', '/admin/dashboard', function () {
