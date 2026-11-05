@@ -232,7 +232,7 @@ export function P2PTransfer({
           <span className="text-gold">
             <Timer1 size={16} />
           </span>
-          Odatda 15 daqiqa ichida tasdiqlaymiz. Tasdiqlangach, taklifnoma havolasi SMS orqali keladi.
+          Odatda 15 daqiqa ichida tasdiqlaymiz. Tasdiqlangach, taklifnoma havolasi kabinetingizda va Telegramda paydo bo‘ladi.
         </p>
       </div>
       <MobileBar>

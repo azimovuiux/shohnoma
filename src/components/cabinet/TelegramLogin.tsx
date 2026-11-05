@@ -6,77 +6,65 @@ import { api, useToast } from "@/components/ui";
 import { site } from "@/lib/site";
 import { useConfig } from "@/lib/client";
 
-type TgUser = Record<string, string | number>;
-declare global {
-  interface Window {
-    __shohnomaTgAuth?: (u: TgUser) => void;
-  }
-}
-
+type Status = "idle" | "waiting" | "opened" | "expired";
 
 /**
- * Telegram Login Widget. Rasmiy vidjet ko‘rinmas holda tugma ustida turadi — tashqi ko‘rinish dizayndagidek.
- * Bot sozlanmagan bo‘lsa, tugma o‘chiq ko‘rinishda va Telegram chatiga havola beriladi.
+ * Telegram orqali kirish / ro‘yxatdan o‘tish — bot orqali.
+ * Tugma → Telegram ochiladi → botda «📱 Raqamni yuborish» → sayt o‘zi kiradi (holat har 2 soniyada tekshiriladi).
+ * Kabinetda (onDone bilan) — joriy hisobga Telegramni ulaydi.
  */
 export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }: { next?: string; label?: string; onDone?: () => void }) {
-  const box = useRef<HTMLDivElement>(null);
   const { data: cfg, loading: cfgLoading } = useConfig();
-  // Bot nomi: API sozlamasi (.env TELEGRAM_BOT_USERNAME) yoki build paytidagi qiymat
-  const BOT = cfg?.telegramBot || process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "";
   const toast = useToast();
+  const [status, setStatus] = useState<Status>("idle");
+  const [url, setUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const timer = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (!BOT || !box.current) return;
-    window.__shohnomaTgAuth = async (u) => {
-      setBusy(true);
+  useEffect(() => () => void (timer.current && window.clearInterval(timer.current)), []);
+
+  const poll = () => {
+    if (timer.current) window.clearInterval(timer.current);
+    timer.current = window.setInterval(async () => {
       try {
-        await api("/api/auth/telegram", { method: "POST", json: Object.fromEntries(Object.entries(u).map(([k, v]) => [k, String(v)])) });
-        if (onDone) onDone();
-        else window.location.replace(next || "/kabinet/");
-      } catch (e) {
-        toast((e as Error).message, "error");
-      } finally {
-        setBusy(false);
+        const r = await api<{ status: string }>("/api/auth/tg/status");
+        if (r.status === "done") {
+          window.clearInterval(timer.current!);
+          if (onDone) {
+            setStatus("idle");
+            onDone();
+          } else window.location.replace(next || "/kabinet/");
+        } else if (r.status === "expired" || r.status === "none") {
+          window.clearInterval(timer.current!);
+          setStatus("expired");
+        } else setStatus(r.status as Status);
+      } catch {
+        /* tarmoq — keyingi urinish */
       }
-    };
-    const s = document.createElement("script");
-    s.src = "https://telegram.org/js/telegram-widget.js?22";
-    s.async = true;
-    s.setAttribute("data-telegram-login", BOT);
-    s.setAttribute("data-size", "large");
-    s.setAttribute("data-radius", "999");
-    s.setAttribute("data-request-access", "write");
-    s.setAttribute("data-onauth", "__shohnomaTgAuth(user)");
-    const el = box.current;
-    el.innerHTML = "";
-    el.appendChild(s);
-    // Vidjet iframe'ini butun tugma o‘lchamiga cho‘zish
-    const fit = () => {
-      const f = el.querySelector("iframe");
-      if (!f || !f.offsetWidth) return;
-      f.style.transformOrigin = "0 0";
-      f.style.position = "absolute";
-      f.style.left = "0";
-      f.style.top = "0";
-      f.style.transform = `scale(${el.clientWidth / f.offsetWidth}, ${el.clientHeight / f.offsetHeight})`;
-    };
-    const mo = new MutationObserver(() => {
-      const f = el.querySelector("iframe");
-      if (f) f.addEventListener("load", fit);
-      fit();
-    });
-    mo.observe(el, { childList: true, subtree: true });
-    const ro = new ResizeObserver(fit);
-    ro.observe(el);
-    return () => {
-      mo.disconnect();
-      ro.disconnect();
-    };
-  }, [BOT, next, onDone, toast]);
+    }, 2000);
+  };
 
-  if (!BOT && cfgLoading) return <span className="btn btn-secondary w-full opacity-60" aria-hidden>{label}</span>;
-  if (!BOT) {
+  const start = async () => {
+    setBusy(true);
+    // Safari/iOS popup blokini chetlab o‘tish: oynani darhol ochib, keyin manzil beramiz
+    const win = window.open("", "_blank");
+    try {
+      const r = await api<{ url: string }>("/api/auth/tg/start", { method: "POST" });
+      setUrl(r.url);
+      if (win) win.location.href = r.url;
+      else window.location.href = r.url;
+      setStatus("waiting");
+      poll();
+    } catch (e) {
+      win?.close();
+      toast((e as Error).message, "error");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (cfgLoading && !cfg) return <span className="btn btn-secondary w-full opacity-60" aria-hidden>{label}</span>;
+  if (!cfg?.telegramBot) {
     return (
       <div className="flex w-full flex-col gap-2">
         <button type="button" disabled className="btn btn-secondary w-full">
@@ -93,13 +81,48 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
     );
   }
 
+  if (status === "waiting" || status === "opened") {
+    return (
+      <div className="flex w-full flex-col gap-3 rounded-[16px] border border-[#2AABEE]/40 bg-[#2AABEE]/[0.06] p-4">
+        <div className="flex items-center gap-3">
+          <span className="relative flex size-10 shrink-0 items-center justify-center rounded-full bg-[#2AABEE] text-white">
+            <TelegramIcon size={20} />
+            <span className="absolute inset-0 animate-ping rounded-full bg-[#2AABEE]/30" />
+          </span>
+          <div className="flex flex-col">
+            <span className="t-title text-ink">{status === "opened" ? "Botda raqamingizni yuboring" : "Telegram ochildi"}</span>
+            <span className="t-body-s text-ink-2">
+              {status === "opened" ? "«📱 Raqamni yuborish» tugmasini bosing — sayt o‘zi kiradi." : "Botda «Start» tugmasini bosing."}
+            </span>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          {url && (
+            <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-sm flex-1 bg-[#2AABEE] text-white hover:bg-[#229ED9]">
+              Telegramni ochish
+            </a>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              if (timer.current) window.clearInterval(timer.current);
+              setStatus("idle");
+            }}
+            className="btn btn-secondary btn-sm"
+          >
+            Bekor qilish
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full">
-      <span className="btn btn-secondary pointer-events-none w-full" aria-hidden>
-        <TelegramIcon size={18} /> {busy ? "Kirilmoqda…" : label}
-      </span>
-      {/* Rasmiy vidjet iframe'i — shaffof, butun tugmani qoplaydi */}
-      <div ref={box} className="absolute inset-0 overflow-hidden rounded-full opacity-[0.011]" aria-label={label} />
+    <div className="flex w-full flex-col gap-2">
+      <button type="button" onClick={start} disabled={busy} className="btn w-full bg-[#2AABEE] text-white hover:bg-[#229ED9]">
+        <TelegramIcon size={18} /> {busy ? "Ochilmoqda…" : label}
+      </button>
+      {status === "expired" && <p className="t-body-s text-danger">Vaqt tugadi. Qayta urinib ko‘ring.</p>}
     </div>
   );
 }

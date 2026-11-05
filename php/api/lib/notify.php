@@ -63,6 +63,36 @@ function tg_send_id(string $chatId, string $text): ?int
     ]);
     return $code === 200 ? (int)(json_decode($res, true)['result']['message_id'] ?? 0) ?: null : null;
 }
+/** Telegram Bot API chaqiruvi (JSON) → natija massivi yoki null */
+function tg_api(string $method, array $params): ?array
+{
+    $token = env('TELEGRAM_BOT_TOKEN');
+    if (!$token) return null;
+    [$code, $res] = http_post("https://api.telegram.org/bot$token/$method", [
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode($params, JSON_UNESCAPED_UNICODE),
+    ]);
+    $d = json_decode($res, true);
+    return $code === 200 && !empty($d['ok']) ? ($d['result'] ?? []) : null;
+}
+
+/** Bot username: .env (TELEGRAM_BOT_USERNAME) yoki getMe (keshlanadi) */
+function tg_bot_username(): ?string
+{
+    $u = env('TELEGRAM_BOT_USERNAME') ?? env('NEXT_PUBLIC_TELEGRAM_BOT_USERNAME');
+    if ($u) return ltrim($u, '@');
+    $token = env('TELEGRAM_BOT_TOKEN');
+    if (!$token) return null;
+    $cache = storage_dir() . '/.tg_bot_' . substr(sha1($token), 0, 10);
+    if (is_file($cache)) return trim((string)file_get_contents($cache)) ?: null;
+    $ch = curl_init("https://api.telegram.org/bot$token/getMe");
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8]);
+    $d = json_decode((string)curl_exec($ch), true);
+    curl_close($ch);
+    $name = $d['result']['username'] ?? null;
+    if ($name) @file_put_contents($cache, $name);
+    return $name;
+}
 function notify_admin(string $text): bool { return tg_send(env('TELEGRAM_ADMIN_CHAT_ID') ?? 'admin', $text); }
 function notify_user(?string $telegramId, string $text): bool { return $telegramId ? tg_send($telegramId, $text) : false; }
 

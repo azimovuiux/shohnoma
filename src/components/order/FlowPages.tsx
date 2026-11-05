@@ -289,7 +289,7 @@ export function ApprovedPageClient() {
           <StatusScreen
             kind="success"
             title="Chekingiz tasdiqlandi"
-            text="O‘tkazmangiz qabul qilindi. Taklifnomangiz ishga tushdi, havola SMS orqali ham yuborildi."
+            text="O‘tkazmangiz qabul qilindi. Taklifnomangiz ishga tushdi, havola Telegram orqali ham yuborildi."
           >
             <Timeline
               items={[

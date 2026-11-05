@@ -54,7 +54,6 @@ const budgets = ["300–500 ming", "500 ming – 1 mln", "1 mln dan yuqori", "Ma
 const contactOptions: { value: ContactVia; label: string }[] = [
   { value: "telegram", label: "Telegram" },
   { value: "call", label: "Qo‘ng‘iroq" },
-  { value: "sms", label: "SMS" },
 ];
 
 const MAX_FILES = 10;

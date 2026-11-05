@@ -110,7 +110,6 @@ export function ProfileForm({ user }: { user: U }) {
           {(
             [
               ["notifyRsvpTelegram", "Mehmon javob qoldirganda", "Telegram"],
-              ["notifyRsvpSms", "Mehmon javob qoldirganda", "SMS"],
               ["notifyDayBefore", "To‘yga 1 kun qolganda eslatma", "Telegram"],
             ] as const
           ).map(([key, title, ch]) => (

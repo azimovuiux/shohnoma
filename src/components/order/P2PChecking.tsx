@@ -61,13 +61,13 @@ export function P2PChecking({
     <StatusScreen
       kind="waiting"
       title="To‘lovingiz tekshirilmoqda"
-      text="Chekingizni oldik. Odatda 15 daqiqa ichida tasdiqlaymiz — sahifani yopsangiz ham bo‘ladi, havola SMS orqali keladi."
+      text="Chekingizni oldik. Odatda 15 daqiqa ichida tasdiqlaymiz — sahifani yopsangiz ham bo‘ladi, havola Telegram orqali keladi."
     >
       <Timeline
         items={[
           { title: "Chek yuborildi", sub: sentAt, state: "done" },
           { title: "To‘lov tekshirilmoqda", sub: "Taxminan 15 daqiqa", state: "active" },
-          { title: "Taklifnoma ishga tushadi", sub: "Havola SMS va Telegramda", state: "todo" },
+          { title: "Taklifnoma ishga tushadi", sub: "Havola kabinetda va Telegramda", state: "todo" },
         ]}
       />
       <OrderLine left={line} amount={amount} />

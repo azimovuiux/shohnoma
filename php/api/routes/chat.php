@@ -122,6 +122,7 @@ route('POST', '/telegram/webhook', function () {
     if (!hash_equals(tg_webhook_secret(), (string)($_SERVER['HTTP_X_TELEGRAM_BOT_API_SECRET_TOKEN'] ?? ''))) fail('Forbidden', 403);
     $u = json_decode((string)file_get_contents('php://input'), true) ?: [];
     $msg = $u['message'] ?? null;
+    if ($msg && tg_login_handle($msg)) json_out(['ok' => true]);
     $admin = (string)env('TELEGRAM_ADMIN_CHAT_ID');
     if (!$msg || (string)($msg['chat']['id'] ?? '') !== $admin) json_out(['ok' => true]);
     $replyTo = (int)($msg['reply_to_message']['message_id'] ?? 0);
