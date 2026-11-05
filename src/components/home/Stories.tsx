@@ -73,22 +73,39 @@ function Visual1() {
   return (
     <div className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
       <GirihPattern id="g-story1" cell={44} color="#d9b97a" opacity={0.5} className="absolute -left-[17%] -top-[8.6%] h-[53%] w-[85%]" />
+      {/* Bitta surat uch tilimga bo‘lingan (Figma 75:5173): umumiy ramka x 10–570, y 20–756 (580×700 asosida).
+          Har tilim suratning faqat o‘z joyidagi bo‘lagini ko‘rsatadi — yonma-yon yaxlit rasm bo‘lib ko‘rinadi. */}
       {[
-        { left: "1.7%", top: "12.9%", pos: "0%" },
-        { left: "34.5%", top: "2.9%", pos: "50%" },
-        { left: "67.2%", top: "19.4%", pos: "100%" },
-      ].map((s, i) => (
-        <Photo
-          key={i}
-          alt="Yosh juftlik divanda telefonga qarab tabassum qilmoqda"
-          src="/images/story-1.webp"
-          className="absolute h-[88.6%] w-[31%] rounded-[14px]"
-          reveal="clip"
-          delay={i * 160}
-          style={{ left: s.left, top: s.top, backgroundPosition: `${s.pos} 50%`, backgroundSize: "330% auto" }}
-          tone={i === 1 ? "cream" : "warm"}
-        />
-      ))}
+        { x: 10, y: 90 },
+        { x: 200, y: 20 },
+        { x: 390, y: 136 },
+      ].map((st, i) => {
+        const W = 180, H = 620, imgW = 560, imgH = 746.67, imgX = 10, imgY = 14.67;
+        return (
+          <div
+            key={i}
+            data-reveal="clip"
+            className="absolute overflow-hidden rounded-[14px] bg-[#e9dcc8]"
+            style={{ left: `${(st.x / 580) * 100}%`, top: `${(st.y / 700) * 100}%`, width: `${(W / 580) * 100}%`, height: `${(H / 700) * 100}%`, ["--d" as string]: `${i * 160}ms` }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/story-1.webp"
+              alt={i === 0 ? "Yosh juftlik divanda telefonga qarab tabassum qilmoqda" : ""}
+              aria-hidden={i !== 0}
+              loading="lazy"
+              draggable={false}
+              className="absolute max-w-none select-none"
+              style={{
+                left: `${((imgX - st.x) / W) * 100}%`,
+                top: `${((imgY - st.y) / H) * 100}%`,
+                width: `${(imgW / W) * 100}%`,
+                height: `${(imgH / H) * 100}%`,
+              }}
+            />
+          </div>
+        );
+      })}
       <UICard icon={<Edit size={17} />} title="Ma’lumotlar" className="absolute left-[30%] top-[61.4%] w-[268px] max-w-[66%] sm:left-[57%] sm:max-w-none">
         {[
           ["Ismlar", "Jasur & Madina"],
