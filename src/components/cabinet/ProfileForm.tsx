@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useMe } from "@/lib/client";
 import { useState } from "react";
 import { TickCircle } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
@@ -24,7 +24,7 @@ const card = "flex flex-col gap-5 rounded-card border border-line bg-bg-base p-5
 
 export function ProfileForm({ user }: { user: U }) {
   const toast = useToast();
-  const router = useRouter();
+  const { reload } = useMe();
   const logout = useLogout();
   const [name, setName] = useState(user.name ?? "");
   const [saving, setSaving] = useState(false);
@@ -36,7 +36,7 @@ export function ProfileForm({ user }: { user: U }) {
     try {
       await api("/api/me", { method: "PATCH", json: { name } });
       toast("Saqlandi");
-      router.refresh();
+      reload();
     } catch (err) {
       toast((err as Error).message, "error");
     } finally {
@@ -92,7 +92,7 @@ export function ProfileForm({ user }: { user: U }) {
               </span>
             ) : (
               <div className="max-w-[360px]">
-                <TelegramLogin label="Telegramni ulash" onDone={() => (toast("Telegram ulandi"), router.refresh())} />
+                <TelegramLogin label="Telegramni ulash" onDone={() => (toast("Telegram ulandi"), reload())} />
               </div>
             )}
           </Field>

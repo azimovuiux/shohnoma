@@ -80,11 +80,11 @@ export function Processing({
 
   usePollStatus(orderId, (d) => {
     if (d.status === "active" || d.status === "paid") {
-      router.replace(`${base}/tolov/qabul-qilindi`);
+      router.replace(`${base}/tolov/qabul-qilindi/`);
       return false;
     }
     if (d.status === "payment_failed") {
-      router.replace(`${base}/tolov/xato`);
+      router.replace(`${base}/tolov/xato/`);
       return false;
     }
   });
@@ -117,7 +117,7 @@ export function Processing({
         <button type="button" onClick={open} disabled={opening && autoOpen && !error} className="btn btn-primary">
           {n.open} <ArrowRight size={16} />
         </button>
-        <Link href={`${base}/tolov`} className="btn btn-secondary">
+        <Link href={`${base}/tolov/`} className="btn btn-secondary">
           {waitedLong ? "Boshqa usulni tanlash" : "Bekor qilish"}
         </Link>
       </div>

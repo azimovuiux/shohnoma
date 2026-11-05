@@ -6,16 +6,17 @@ import { usePathname } from "next/navigation";
 export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; leads: number } }) {
   const path = usePathname();
   const tabs = [
-    { href: "/admin", label: "Umumiy", n: 0 },
-    { href: "/admin/buyurtmalar", label: "Buyurtmalar", n: 0 },
-    { href: "/admin/tolovlar", label: "P2P cheklar", n: counts.p2p },
-    { href: "/admin/briflar", label: "Briflar", n: counts.briefs },
-    { href: "/admin/xabarlar", label: "Xabarlar", n: counts.leads },
+    { href: "/admin/", label: "Umumiy", n: 0 },
+    { href: "/admin/buyurtmalar/", label: "Buyurtmalar", n: 0 },
+    { href: "/admin/tolovlar/", label: "P2P cheklar", n: counts.p2p },
+    { href: "/admin/briflar/", label: "Briflar", n: counts.briefs },
+    { href: "/admin/xabarlar/", label: "Xabarlar", n: counts.leads },
   ];
   return (
     <nav aria-label="Admin" className="-mx-5 flex gap-1 overflow-x-auto px-5 lg:mx-0 lg:px-0">
       {tabs.map((t) => {
-        const active = t.href === "/admin" ? path === "/admin" : path.startsWith(t.href);
+        const p = path.replace(/\/?$/, "/");
+        const active = t.href === "/admin/" ? p === "/admin/" : p.startsWith(t.href);
         return (
           <Link
             key={t.href}

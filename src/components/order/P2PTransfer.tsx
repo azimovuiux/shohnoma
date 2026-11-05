@@ -79,7 +79,7 @@ export function P2PTransfer({
       const res = await fetch(`/api/orders/${order.id}/p2p-receipt`, { method: "POST", body: fd });
       const data = (await res.json()) as { ok?: boolean; error?: string };
       if (!res.ok || !data.ok) throw new Error(data.error || "Chek yuborilmadi");
-      router.push(`/buyurtma/${order.id}/tolov/p2p/tekshirilmoqda`);
+      router.push(`/buyurtma/${order.id}/tolov/p2p/tekshirilmoqda/`);
       router.refresh();
     } catch (e) {
       setError((e as Error).message);

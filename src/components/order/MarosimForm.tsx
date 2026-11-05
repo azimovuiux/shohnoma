@@ -55,7 +55,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
     const ok = await flush();
     setBusy(false);
     if (!ok) return;
-    router.push(editing ? `/kabinet/t/${order.invitationId}` : `/buyurtma/${order.id}/tafsilotlar`);
+    router.push(editing ? `/kabinet/t/${order.invitationId}/` : `/buyurtma/${order.id}/tafsilotlar/`);
     router.refresh();
   };
 

@@ -123,7 +123,7 @@ export function QuickView({
               </button>
             </div>
           </div>
-          <Link href={`/shablonlar/${t.slug}?view=${device}`} className="flex flex-1 items-center justify-center py-4" aria-label="Kattalashtirish">
+          <Link href={`/shablonlar/${t.slug}/?view=${device}`} className="flex flex-1 items-center justify-center py-4" aria-label="Kattalashtirish">
             <TemplatePreviewStage t={t} device={device} />
           </Link>
           <p className="t-body-s text-ink-2">Ekranni kattalashtirish uchun bosing</p>
@@ -170,11 +170,11 @@ export function QuickView({
           </div>
 
           <div className="flex flex-col gap-2.5">
-            <Link href={`/buyurtma/${t.slug}/marosim`} className="btn btn-primary w-full">
+            <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary w-full">
               Shu shablonni tanlash <ArrowRight size={16} />
             </Link>
             <div className="flex gap-2.5">
-              <Link href={`/namuna/${t.slug}`} target="_blank" className="btn btn-secondary btn-sm flex-1">
+              <Link href={`/namuna/${t.slug}/`} target="_blank" className="btn btn-secondary btn-sm flex-1">
                 <Eye size={15} /> Jonli demo
               </Link>
               <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm flex-1">

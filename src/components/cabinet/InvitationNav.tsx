@@ -31,6 +31,7 @@ const title = (it: Item) => [it.personA, it.personB].filter(Boolean).join(" & ")
 export function InvitationNav({ current, others, responses, siteUrl, paid }: { current: Item; others: Item[]; responses: number; siteUrl: string; paid: boolean }) {
   const path = usePathname();
   const base = `/kabinet/t/${current.id}`;
+  const same = (a: string, b: string) => a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -40,10 +41,10 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
   }, []);
 
   const tabs = [
-    { href: base, label: "Umumiy", short: "Umumiy", icon: Grid2, n: null },
-    { href: `${base}/mehmonlar`, label: "Mehmonlar javobi", short: "Mehmonlar", icon: Profile2User, n: responses },
-    { href: `${base}/tahrirlash`, label: "Tahrirlash", short: "Tahrirlash", icon: Edit, n: null },
-    { href: `${base}/tolov`, label: "To‘lov va chek", short: "To‘lov", icon: Receipt2, n: null },
+    { href: `${base}/`, label: "Umumiy", short: "Umumiy", icon: Grid2, n: null },
+    { href: `${base}/mehmonlar/`, label: "Mehmonlar javobi", short: "Mehmonlar", icon: Profile2User, n: responses },
+    { href: `${base}/tahrirlash/`, label: "Tahrirlash", short: "Tahrirlash", icon: Edit, n: null },
+    { href: `${base}/tolov/`, label: "To‘lov va chek", short: "To‘lov", icon: Receipt2, n: null },
   ];
   const d = splitDate(current.date);
   const row = "flex w-full items-center gap-3 rounded-xl px-3 py-[11px] text-[13px] font-medium leading-none transition-colors";
@@ -51,7 +52,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
   return (
     <>
       <aside className="hidden w-[264px] shrink-0 flex-col gap-1.5 self-start rounded-card bg-bg-soft px-4 py-5 lg:flex">
-        <Link href="/kabinet" className="flex items-center gap-2 pb-2.5 pl-1 t-nav text-ink-2 hover:text-maroon">
+        <Link href="/kabinet/" className="flex items-center gap-2 pb-2.5 pl-1 t-nav text-ink-2 hover:text-maroon">
           <ArrowLeft size={16} /> Barcha taklifnomalar
         </Link>
         <div ref={ref} className="relative">
@@ -76,7 +77,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
           {open && (
             <div role="listbox" className="absolute inset-x-0 top-[calc(100%+6px)] z-20 flex flex-col gap-1 rounded-2xl border border-line bg-bg-base p-1.5 shadow-menu">
               {others.map((o) => (
-                <Link key={o.id} href={`/kabinet/t/${o.id}`} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-xl p-1.5 hover:bg-bg-soft">
+                <Link key={o.id} href={`/kabinet/t/${o.id}/`} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-xl p-1.5 hover:bg-bg-soft">
                   <Mini it={o} />
                   <span className="flex min-w-0 flex-col">
                     <span className="truncate font-serif text-[17px] font-medium text-ink">{title(o)}</span>
@@ -92,7 +93,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
         </div>
         <span className="h-2.5" />
         {tabs.map((t) => {
-          const active = path === t.href;
+          const active = same(path, t.href);
           const Icon = t.icon;
           return (
             <Link key={t.href} href={t.href} aria-current={active ? "page" : undefined} className={`${row} ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink hover:bg-bg-base/60"}`}>
@@ -114,12 +115,12 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
 
       {/* Mobil */}
       <div className="flex flex-col gap-4 lg:hidden">
-        <Link href="/kabinet" className="flex items-center gap-2 t-nav text-ink-2">
+        <Link href="/kabinet/" className="flex items-center gap-2 t-nav text-ink-2">
           <ArrowLeft size={16} /> Barcha taklifnomalar
         </Link>
         <nav className="-mx-5 flex overflow-x-auto border-b border-line px-5" aria-label="Taklifnoma">
           {tabs.map((t) => {
-            const active = path === t.href;
+            const active = same(path, t.href);
             return (
               <Link
                 key={t.href}

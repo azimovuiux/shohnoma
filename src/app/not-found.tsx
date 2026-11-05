@@ -25,7 +25,7 @@ export default function NotFound() {
           odamdan qayta so‘rang.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/shablonlar" className="btn btn-primary">
+          <Link href="/shablonlar/" className="btn btn-primary">
             Shablonlarni ko‘rish <ArrowRight size={16} />
           </Link>
           <Link href="/" className="btn btn-secondary">

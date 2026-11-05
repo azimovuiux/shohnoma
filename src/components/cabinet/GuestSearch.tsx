@@ -17,7 +17,7 @@ export function GuestSearch() {
       else next.delete("q");
       next.delete("page");
       next.delete("ko");
-      router.replace(`${path}${next.toString() ? `?${next}` : ""}`, { scroll: false });
+      router.replace(`${path.replace(/\/?$/, "/")}${next.toString() ? `?${next}` : ""}`, { scroll: false });
     }, 350);
     return () => clearTimeout(t);
   }, [q, sp, path, router]);

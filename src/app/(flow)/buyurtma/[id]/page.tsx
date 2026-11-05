@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
+import { OrderIndexClient } from "@/components/order/FlowPages";
 
-export default async function OrderIndex({ params }: { params: Promise<{ id: string }> }) {
-  redirect(`/buyurtma/${(await params).id}/marosim`);
+export const metadata = { title: "Buyurtma" };
+
+export default function Page() {
+  return <OrderIndexClient />;
 }

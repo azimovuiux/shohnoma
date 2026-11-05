@@ -24,7 +24,7 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-8 lg:px-[120px] lg:pt-10">
-      <Link href="/shablonlar" className="inline-flex items-center gap-2 t-nav text-ink-2 hover:text-maroon">
+      <Link href="/shablonlar/" className="inline-flex items-center gap-2 t-nav text-ink-2 hover:text-maroon">
         <ArrowLeft size={16} /> Katalogga qaytish
       </Link>
       <TemplateDetail t={t} />

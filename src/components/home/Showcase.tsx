@@ -73,7 +73,7 @@ export function Showcase() {
         </div>
 
         <div className="mt-12 flex justify-center lg:mt-16">
-          <Link href="/shablonlar" className="btn border border-line-dark px-7 text-ink hover:bg-bg-soft">
+          <Link href="/shablonlar/" className="btn border border-line-dark px-7 text-ink hover:bg-bg-soft">
             <Gallery size={16} /> Barcha {templates.length} ta shablon <ArrowRight size={16} />
           </Link>
         </div>

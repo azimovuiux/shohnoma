@@ -7,7 +7,7 @@ import { demoData } from "@/components/invitation/data";
 
 type Props = { params: Promise<{ templateSlug: string }> };
 
-export const dynamic = "force-dynamic"; // sanoq va sana har safar yangilanadi
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return templates.map((t) => ({ templateSlug: t.slug }));
@@ -27,7 +27,7 @@ export default async function DemoPage({ params }: Props) {
         <span className="t-body-s text-ink-2">
           Namuna: <span className="font-medium text-ink">{t.name}</span>
         </span>
-        <Link href={`/buyurtma/${t.slug}/marosim`} className="btn btn-primary btn-sm !py-2.5">
+        <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary btn-sm !py-2.5">
           Shu shablonni tanlash
         </Link>
       </div>

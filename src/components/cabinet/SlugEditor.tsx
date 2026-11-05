@@ -1,13 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Link2 } from "@/components/icons";
 import { api, useToast } from "@/components/ui";
 
 /** Havola manzili (slug) — faqat to‘langan taklifnoma uchun */
-export function SlugEditor({ orderId, slug, host, enabled }: { orderId: string; slug: string; host: string; enabled: boolean }) {
-  const router = useRouter();
+export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId: string; slug: string; host: string; enabled: boolean; onSaved?: () => void }) {
   const toast = useToast();
   const [value, setValue] = useState(enabled ? slug : "");
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +18,7 @@ export function SlugEditor({ orderId, slug, host, enabled }: { orderId: string; 
     try {
       await api(`/api/orders/${orderId}`, { method: "PATCH", json: { slug: value } });
       toast("Havola saqlandi");
-      router.refresh();
+      onSaved?.();
     } catch (err) {
       setError((err as Error).message);
     } finally {

@@ -46,7 +46,7 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
       }
       // 20 — "Payme’ga o‘tmoqdasiz" ekrani, keyin provayder sahifasi
       sessionStorage.setItem(PAY_URL_KEY(order.id), data.url);
-      router.push(`/buyurtma/${order.id}/tolov/jarayonda?usul=${p}&ochish=1`);
+      router.push(`/buyurtma/${order.id}/tolov/jarayonda/?usul=${p}&ochish=1`);
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);

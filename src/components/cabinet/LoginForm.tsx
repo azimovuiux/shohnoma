@@ -1,11 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { PageLoading, useMe } from "@/lib/client";
 import { ArrowRight, Mobile } from "@/components/icons";
 import { PhoneInput, api, phoneDigits, phoneToLocal } from "@/components/ui";
 import { TelegramLogin } from "./TelegramLogin";
+
+/** /kirish/ dagi `next` qiymati — faqat sayt ichidagi yo‘l */
+export function safeNext(n?: string | null) {
+  return n && n.startsWith("/") && !n.startsWith("//") ? n : "/kabinet/";
+}
+
+/** /kirish/ sahifasi: kirgan foydalanuvchi darrov `next` ga o‘tadi */
+export function LoginPageClient() {
+  const sp = useSearchParams();
+  const next = safeNext(sp.get("next"));
+  const { me, loading } = useMe();
+  useEffect(() => {
+    if (!loading && me?.user) window.location.replace(next);
+  }, [loading, me, next]);
+  if (loading || me?.user) return <PageLoading className="flex-1" />;
+  return <LoginForm next={next} initialPhone={sp.get("tel") ?? undefined} />;
+}
 
 export function LoginForm({ next, initialPhone }: { next: string; initialPhone?: string }) {
   const router = useRouter();
@@ -22,11 +40,11 @@ export function LoginForm({ next, initialPhone }: { next: string; initialPhone?:
       const r = await api<{ phone: string; devCode?: string }>("/api/auth/otp", { method: "POST", json: { phone: `+998${phoneDigits(phone)}` } });
       const q = new URLSearchParams({ tel: r.phone, next });
       if (r.devCode) q.set("dev", r.devCode);
-      router.push(`/kirish/kod?${q}`);
+      router.push(`/kirish/kod/?${q}`);
     } catch (err) {
       const m = (err as Error).message;
       // Yaqinda kod yuborilgan bo‘lsa — kod sahifasiga o‘tkazamiz
-      if (/kuting/.test(m)) router.push(`/kirish/kod?${new URLSearchParams({ tel: `+998${phoneDigits(phone)}`, next, wait: "1" })}`);
+      if (/kuting/.test(m)) router.push(`/kirish/kod/?${new URLSearchParams({ tel: `+998${phoneDigits(phone)}`, next, wait: "1" })}`);
       else setError(m);
       setBusy(false);
     }
@@ -59,11 +77,11 @@ export function LoginForm({ next, initialPhone }: { next: string; initialPhone?:
       <TelegramLogin next={next} />
       <p className="t-body-s text-ink-2">
         Kirish orqali{" "}
-        <Link href="/shartlar" className="underline hover:text-maroon">
+        <Link href="/shartlar/" className="underline hover:text-maroon">
           foydalanish shartlari
         </Link>{" "}
         va{" "}
-        <Link href="/maxfiylik" className="underline hover:text-maroon">
+        <Link href="/maxfiylik/" className="underline hover:text-maroon">
           maxfiylik siyosatiga
         </Link>{" "}
         rozilik bildirasiz.

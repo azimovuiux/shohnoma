@@ -68,16 +68,16 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
       setAgreeError(true);
       return;
     }
-    router.push(`${base}/tolov`);
+    router.push(`${base}/tolov/`);
   };
 
   const checks: [string, string, string][] = [
-    ["Ismlar", namesOf(order), `${base}/marosim`],
-    ["Sana va vaqt", dayTime(order.day, order.time), `${base}/marosim`],
-    ["Manzil", order.venueName, `${base}/marosim`],
-    ["Aloqa", formatPhoneDisplay(order.contactPhone), `${base}/tafsilotlar`],
-    ["Mehmonlar javobi", order.rsvpEnabled ? "Yoqilgan" : "O‘chirilgan", `${base}/tafsilotlar`],
-    ["Fon musiqasi", order.musicEnabled ? "Yoqilgan" : "O‘chirilgan", `${base}/tafsilotlar`],
+    ["Ismlar", namesOf(order), `${base}/marosim/`],
+    ["Sana va vaqt", dayTime(order.day, order.time), `${base}/marosim/`],
+    ["Manzil", order.venueName, `${base}/marosim/`],
+    ["Aloqa", formatPhoneDisplay(order.contactPhone), `${base}/tafsilotlar/`],
+    ["Mehmonlar javobi", order.rsvpEnabled ? "Yoqilgan" : "O‘chirilgan", `${base}/tafsilotlar/`],
+    ["Fon musiqasi", order.musicEnabled ? "Yoqilgan" : "O‘chirilgan", `${base}/tafsilotlar/`],
   ];
 
   const agreeBox = (
@@ -100,11 +100,11 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
         {agree && <TickCircle size={14} />}
       </span>
       <span>
-        <Link href="/shartlar" target="_blank" className="underline-offset-2 hover:underline">
+        <Link href="/shartlar/" target="_blank" className="underline-offset-2 hover:underline">
           Foydalanish shartlari
         </Link>{" "}
         va{" "}
-        <Link href="/maxfiylik" target="_blank" className="underline-offset-2 hover:underline">
+        <Link href="/maxfiylik/" target="_blank" className="underline-offset-2 hover:underline">
           maxfiylik siyosatiga
         </Link>{" "}
         roziman.

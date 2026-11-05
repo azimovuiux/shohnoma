@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useAdminRefresh } from "./shared";
 import { useState } from "react";
 import { api, Field, Modal, Textarea, useToast } from "@/components/ui";
 import { CloseCircle, TickCircle } from "@/components/icons";
@@ -8,7 +8,7 @@ import { CloseCircle, TickCircle } from "@/components/icons";
 const reasons = ["Summa mos kelmadi", "Izohda buyurtma kodi yo‘q", "Chek o‘qilmaydi", "To‘lov kartaga tushmadi"];
 
 export function P2pActions({ paymentId, code }: { paymentId: string; code: string }) {
-  const router = useRouter();
+  const refresh = useAdminRefresh();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
   const [rejecting, setRejecting] = useState(false);
@@ -20,7 +20,7 @@ export function P2pActions({ paymentId, code }: { paymentId: string; code: strin
       await api(`/api/admin/payments/${paymentId}`, { method: "POST", json: { action, note: action === "reject" ? note : undefined } });
       toast(action === "approve" ? `${code} tasdiqlandi — taklifnoma ochildi` : `${code} rad etildi`);
       setRejecting(false);
-      router.refresh();
+      refresh();
     } catch (e) {
       toast((e as Error).message, "error");
     } finally {

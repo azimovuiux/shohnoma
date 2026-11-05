@@ -12,6 +12,7 @@ import { isDarkTheme } from "@/components/TemplateCard";
 import type { Template } from "@/lib/templates";
 import { liveTemplate } from "./live";
 import { namesOf } from "./labels";
+import { downloadQr } from "@/lib/qr";
 import type { FlowOrder } from "./types";
 
 export function ReadyView({
@@ -122,12 +123,18 @@ export function ReadyView({
                 <Copy size={16} /> Nusxalash
               </button>
             </div>
-            <a
-              href={`/api/invitations/${order.invitationId}/qr?format=png&download`}
-              className="inline-flex w-fit items-center gap-2 t-body-s text-maroon hover:underline"
-            >
-              <Scan size={15} /> QR kodni yuklab olish (bosma taklifnoma uchun)
-            </a>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 t-body-s">
+              <button
+                type="button"
+                onClick={() => downloadQr(url, "png", `qr-${order.slug}`)}
+                className="inline-flex w-fit items-center gap-2 text-maroon hover:underline"
+              >
+                <Scan size={15} /> QR kodni yuklab olish (bosma taklifnoma uchun)
+              </button>
+              <button type="button" onClick={() => downloadQr(url, "svg", `qr-${order.slug}`)} className="text-ink-2 hover:text-maroon hover:underline">
+                SVG
+              </button>
+            </div>
           </div>
 
           <div className="flex flex-col gap-2.5">
@@ -181,7 +188,7 @@ export function ReadyView({
               </div>
             ))}
             <Link
-              href={loggedIn ? `/kabinet/t/${order.invitationId}` : `/kirish?next=${encodeURIComponent(`/kabinet/t/${order.invitationId}`)}`}
+              href={loggedIn ? `/kabinet/t/${order.invitationId}/` : `/kirish/?next=${encodeURIComponent(`/kabinet/t/${order.invitationId}/`)}`}
               className="btn btn-secondary mt-1 w-full"
             >
               <ReceiptText size={17} /> Buyurtmani boshqarish

@@ -31,7 +31,7 @@ export function P2PChecking({
     orderId,
     (d) => {
       if (d.status === "active" || d.status === "paid") {
-        router.replace(`${base}/tolov/p2p/tasdiqlandi`);
+        router.replace(`${base}/tolov/p2p/tasdiqlandi/`);
         return false;
       }
       if (d.status === "p2p_rejected") {
@@ -47,7 +47,7 @@ export function P2PChecking({
       <StatusScreen kind="error" title="Chek qabul qilinmadi" text={`Sabab: ${rejected}. To‘g‘ri chekni qayta yuboring yoki Telegramda yozing.`}>
         <OrderLine left={line} amount={amount} />
         <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
-          <Link href={`${base}/tolov/p2p`} className="btn btn-primary">
+          <Link href={`${base}/tolov/p2p/`} className="btn btn-primary">
             Chekni qayta yuborish <ArrowRight size={16} />
           </Link>
           <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
@@ -72,7 +72,7 @@ export function P2PChecking({
       />
       <OrderLine left={line} amount={amount} />
       <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
-        <Link href={loggedIn ? "/kabinet" : `/kirish?next=${encodeURIComponent("/kabinet")}`} className="btn btn-primary">
+        <Link href={loggedIn ? "/kabinet/" : `/kirish/?next=${encodeURIComponent("/kabinet/")}`} className="btn btn-primary">
           Buyurtmalarimga o‘tish <ArrowRight size={16} />
         </Link>
         <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">

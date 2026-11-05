@@ -66,7 +66,7 @@ export function CustomDesign() {
             ))}
           </ul>
           <div className="flex flex-wrap items-center gap-[22px]">
-            <Link href="/maxsus-dizayn" className="btn btn-primary">
+            <Link href="/maxsus-dizayn/" className="btn btn-primary">
               <DocumentText size={17} /> Brifni to‘ldirish
             </Link>
             <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 t-nav text-maroon hover:underline">

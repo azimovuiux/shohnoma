@@ -89,7 +89,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
     const ok = await flush();
     setBusy(false);
     if (!ok) return;
-    router.push(editing ? `/kabinet/t/${order.invitationId}` : `/buyurtma/${order.id}/korib-chiqish`);
+    router.push(editing ? `/kabinet/t/${order.invitationId}/` : `/buyurtma/${order.id}/korib-chiqish/`);
     router.refresh();
   };
 

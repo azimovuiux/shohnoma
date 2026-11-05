@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useAdminRefresh } from "./shared";
 import { useState } from "react";
 import { api, useToast } from "@/components/ui";
 
@@ -16,7 +16,7 @@ export function StatusSelect({
   options: { value: string; label: string }[];
   confirmFor?: string[];
 }) {
-  const router = useRouter();
+  const refresh = useAdminRefresh();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
   return (
@@ -32,7 +32,7 @@ export function StatusSelect({
         try {
           await api(endpoint, { method: "PATCH", json: { status: next } });
           toast("Saqlandi");
-          router.refresh();
+          refresh();
         } catch (err) {
           toast((err as Error).message, "error");
         } finally {

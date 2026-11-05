@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import type { ReactNode } from "react";
+import { PageLoading, useMe, useRequireUser } from "@/lib/client";
 import { DocumentText, Heart, LogoutCurve, Messages, UserTick } from "@/components/icons";
 import { site } from "@/lib/site";
 import { formatPhoneDisplay, initials } from "@/lib/display";
@@ -9,18 +11,32 @@ import { formatPhoneDisplay, initials } from "@/lib/display";
 type Props = { name: string | null; phone: string | null; telegramUser: string | null; orders: number; favorites: number };
 
 const items = [
-  { href: "/kabinet", label: "Buyurtmalarim", icon: DocumentText, count: "orders" as const },
-  { href: "/kabinet/sevimlilar", label: "Sevimlilar", icon: Heart, count: "favorites" as const },
-  { href: "/kabinet/profil", label: "Profil", icon: UserTick, count: null },
+  { href: "/kabinet/", label: "Buyurtmalarim", icon: DocumentText, count: "orders" as const },
+  { href: "/kabinet/sevimlilar/", label: "Sevimlilar", icon: Heart, count: "favorites" as const },
+  { href: "/kabinet/profil/", label: "Profil", icon: UserTick, count: null },
 ];
 
 export function useLogout() {
-  const router = useRouter();
   return async () => {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/");
-    router.refresh();
+    window.location.assign("/");
   };
+}
+
+const samePath = (a: string, b: string) => a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
+
+/** Kabinet darajasidagi sahifalar qobig‘i: kirishni tekshiradi, chap panel + kontent */
+export function CabinetShell({ children }: { children: ReactNode }) {
+  const { user, loading } = useRequireUser();
+  const { me } = useMe();
+  if (loading || !user) return <PageLoading />;
+  const counts = me?.counts ?? { orders: 0, favorites: 0 };
+  return (
+    <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-20 pt-6 lg:flex-row lg:gap-10 lg:px-[120px] lg:pb-[100px] lg:pt-10">
+      <CabinetNav name={user.name} phone={user.phone} telegramUser={user.telegramUser} orders={counts.orders} favorites={counts.favorites} />
+      <div className="flex min-w-0 flex-1 flex-col gap-5">{children}</div>
+    </div>
+  );
 }
 
 /** Kabinet darajasidagi chap panel (desktop 264px) va mobil segment tablar — spec §5.11 (1) */
@@ -42,7 +58,7 @@ export function CabinetNav(p: Props) {
           </div>
         </div>
         {items.map((it) => {
-          const active = path === it.href;
+          const active = samePath(path, it.href);
           const Icon = it.icon;
           return (
             <Link
@@ -74,7 +90,7 @@ export function CabinetNav(p: Props) {
 
       <nav className="flex rounded-full bg-bg-soft p-1 lg:hidden" aria-label="Kabinet">
         {items.map((it) => {
-          const active = path === it.href;
+          const active = samePath(path, it.href);
           return (
             <Link
               key={it.href}

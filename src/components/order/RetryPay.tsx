@@ -23,7 +23,7 @@ export function RetryPay({ orderId, provider }: { orderId: string; provider: Pro
       if (!res.ok || !data.url) throw new Error(data.error || "To‘lovni boshlab bo‘lmadi");
       if (data.url.startsWith("/")) return router.push(data.url);
       sessionStorage.setItem(PAY_URL_KEY(orderId), data.url);
-      router.push(`/buyurtma/${orderId}/tolov/jarayonda?usul=${provider}&ochish=1`);
+      router.push(`/buyurtma/${orderId}/tolov/jarayonda/?usul=${provider}&ochish=1`);
     } catch (e) {
       setError((e as Error).message);
       setBusy(false);

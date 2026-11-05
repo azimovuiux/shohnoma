@@ -1,12 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 /** /buyurtma/<shablon>/marosim → qoralama yaratib, /buyurtma/<id>/marosim ga o‘tadi */
 export function CreateDraft({ templateSlug, name }: { templateSlug: string; name: string }) {
-  const router = useRouter();
   const started = useRef(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +18,8 @@ export function CreateDraft({ templateSlug, name }: { templateSlug: string; name
       });
       const data = (await res.json()) as { ok?: boolean; id?: string; error?: string };
       if (!res.ok || !data.id) throw new Error(data.error || "Buyurtma yaratilmadi");
-      router.replace(`/buyurtma/${data.id}/marosim`);
+      // Yangi id — to‘liq sahifa yuklanadi (statik qobiq id'ni URL'dan o‘qiydi)
+      window.location.replace(`/buyurtma/${data.id}/marosim/`);
     } catch (e) {
       setError((e as Error).message);
     }
@@ -43,7 +42,7 @@ export function CreateDraft({ templateSlug, name }: { templateSlug: string; name
             <button type="button" onClick={run} className="btn btn-primary">
               Qayta urinish
             </button>
-            <Link href="/shablonlar" className="btn btn-secondary">
+            <Link href="/shablonlar/" className="btn btn-secondary">
               Shablonlar
             </Link>
           </div>

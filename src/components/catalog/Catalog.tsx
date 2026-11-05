@@ -82,7 +82,7 @@ function CustomDesignBanner() {
           Mos dizayn topilmadimi? <em className="italic text-gold-soft">yaratib beramiz</em>
         </p>
       </div>
-      <Link href="/maxsus-dizayn" className="btn bg-bg-base text-maroon hover:bg-white">
+      <Link href="/maxsus-dizayn/" className="btn bg-bg-base text-maroon hover:bg-white">
         Brifni to‘ldirish <ArrowRight size={16} />
       </Link>
     </div>
@@ -104,7 +104,7 @@ export function Catalog() {
     const next = new URLSearchParams(params.toString());
     if (value && !(key === "sort" && value === "new")) next.set(key, value);
     else next.delete(key);
-    router.replace(`/shablonlar${next.toString() ? `?${next}` : ""}`, { scroll: false });
+    router.replace(`/shablonlar/${next.toString() ? `?${next}` : ""}`, { scroll: false });
   };
 
   const byCeremony = (c: Ceremony | "") => templates.filter((t) => !c || t.ceremony === c).length;
@@ -129,7 +129,7 @@ export function Catalog() {
 
   const clearAll = () => {
     setQ("");
-    router.replace("/shablonlar", { scroll: false });
+    router.replace("/shablonlar/", { scroll: false });
   };
 
   const quickIndex = quick ? filtered.findIndex((t) => t.slug === quick.slug) : -1;
@@ -202,7 +202,7 @@ export function Catalog() {
             <button type="button" onClick={clearAll} className="btn btn-secondary btn-sm">
               Filtrni tozalash
             </button>
-            <Link href="/maxsus-dizayn" className="btn btn-primary btn-sm">
+            <Link href="/maxsus-dizayn/" className="btn btn-primary btn-sm">
               Maxsus dizayn <ArrowRight size={15} />
             </Link>
           </div>
@@ -257,7 +257,7 @@ export function Catalog() {
           onApply={(next) => {
             const sp = new URLSearchParams(params.toString());
             (["marosim", "uslub", "rang"] as const).forEach((k) => (next[k] ? sp.set(k, next[k]) : sp.delete(k)));
-            router.replace(`/shablonlar${sp.toString() ? `?${sp}` : ""}`, { scroll: false });
+            router.replace(`/shablonlar/${sp.toString() ? `?${sp}` : ""}`, { scroll: false });
             setSheet(false);
           }}
         />

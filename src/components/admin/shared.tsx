@@ -1,4 +1,6 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { createContext, useContext, type ReactNode } from "react";
 
 export function AdminTitle({ title, sub, right }: { title: string; sub?: ReactNode; right?: ReactNode }) {
   return (
@@ -28,8 +30,34 @@ export function Empty({ children }: { children: ReactNode }) {
 }
 
 /** Toshkent vaqti bo‘yicha ko‘rsatish */
-export function fmtDateTime(d: Date | null | undefined) {
+export function fmtDateTime(d: Date | string | null | undefined) {
   if (!d) return "—";
-  const t = new Date(d.getTime() + 5 * 3600_000).toISOString();
+  const ms = typeof d === "string" ? new Date(d).getTime() : d.getTime();
+  if (isNaN(ms)) return "—";
+  const t = new Date(ms + 5 * 3600_000).toISOString();
   return `${t.slice(8, 10)}.${t.slice(5, 7)}.${t.slice(0, 4)} ${t.slice(11, 16)}`;
+}
+
+/** Admin sahifalarida o‘zgarishdan keyin ro‘yxat va tab hisoblagichlarini yangilash */
+const RefreshCtx = createContext<() => void>(() => {});
+export const AdminRefreshProvider = RefreshCtx.Provider;
+export const useAdminRefresh = () => useContext(RefreshCtx);
+
+export function AdminLoading() {
+  return (
+    <div className="flex min-h-[40vh] items-center justify-center" aria-busy="true">
+      <span className="size-8 animate-spin rounded-full border-2 border-line border-t-maroon" />
+    </div>
+  );
+}
+
+export function AdminError({ message, onRetry }: { message?: string; onRetry: () => void }) {
+  return (
+    <div className="flex flex-col items-center gap-3 rounded-panel border border-line px-6 py-12 text-center">
+      <p className="t-body-m text-ink-2">{message ?? "Ma’lumotni yuklab bo‘lmadi"}</p>
+      <button type="button" onClick={onRetry} className="btn btn-secondary btn-sm">
+        Qayta urinish
+      </button>
+    </div>
+  );
 }

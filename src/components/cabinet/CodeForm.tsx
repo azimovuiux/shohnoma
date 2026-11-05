@@ -1,12 +1,35 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { PageLoading, useMe } from "@/lib/client";
+import { safeNext } from "./LoginForm";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Sms } from "@/components/icons";
 import { api, useToast } from "@/components/ui";
 import { formatPhoneDisplay } from "@/lib/display";
 
 const LEN = 6;
+
+function normalizePhone(raw: string | null) {
+  const d = (raw ?? "").replace(/\D/g, "");
+  const n = d.length === 9 ? `998${d}` : d;
+  return /^998\d{9}$/.test(n) ? `+${n}` : null;
+}
+
+/** /kirish/kod/ sahifasi */
+export function CodePageClient() {
+  const sp = useSearchParams();
+  const next = safeNext(sp.get("next"));
+  const phone = normalizePhone(sp.get("tel"));
+  const { me, loading } = useMe();
+  useEffect(() => {
+    if (loading) return;
+    if (me?.user) window.location.replace(next);
+    else if (!phone) window.location.replace(`/kirish/?next=${encodeURIComponent(next)}`);
+  }, [loading, me, next, phone]);
+  if (loading || me?.user || !phone) return <PageLoading className="flex-1" />;
+  return <CodeForm phone={phone} next={next} devCode={sp.get("dev") ?? undefined} waitFirst={sp.get("wait") === "1"} />;
+}
 
 export function CodeForm({ phone, next, devCode, waitFirst }: { phone: string; next: string; devCode?: string; waitFirst?: boolean }) {
   const router = useRouter();
@@ -32,8 +55,8 @@ export function CodeForm({ phone, next, devCode, waitFirst }: { phone: string; n
     setError(null);
     try {
       await api("/api/auth/verify", { method: "POST", json: { phone, code } });
-      router.replace(next);
-      router.refresh();
+      // To‘liq yuklash — header va kabinet yangi sessiya bilan ochiladi
+      window.location.replace(next);
     } catch (e) {
       setError((e as Error).message);
       setDigits(Array(LEN).fill(""));
@@ -144,7 +167,7 @@ export function CodeForm({ phone, next, devCode, waitFirst }: { phone: string; n
         )}
         <button
           type="button"
-          onClick={() => router.push(`/kirish?${new URLSearchParams({ tel: phone, next })}`)}
+          onClick={() => router.push(`/kirish/?${new URLSearchParams({ tel: phone, next })}`)}
           className="inline-flex items-center gap-1.5 t-nav text-ink-2 hover:text-maroon"
         >
           <ArrowLeft size={14} /> Raqamni o‘zgartirish

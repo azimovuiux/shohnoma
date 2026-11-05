@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { api, useToast } from "@/components/ui";
 import { site } from "@/lib/site";
+import { useConfig } from "@/lib/client";
 
 type TgUser = Record<string, string | number>;
 declare global {
@@ -13,7 +13,6 @@ declare global {
   }
 }
 
-const BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME;
 
 /**
  * Telegram Login Widget. Rasmiy vidjet ko‘rinmas holda tugma ustida turadi — tashqi ko‘rinish dizayndagidek.
@@ -21,7 +20,9 @@ const BOT = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME;
  */
 export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }: { next?: string; label?: string; onDone?: () => void }) {
   const box = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const { data: cfg, loading: cfgLoading } = useConfig();
+  // Bot nomi: API sozlamasi (.env TELEGRAM_BOT_USERNAME) yoki build paytidagi qiymat
+  const BOT = cfg?.telegramBot || process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME || "";
   const toast = useToast();
   const [busy, setBusy] = useState(false);
 
@@ -32,8 +33,7 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
       try {
         await api("/api/auth/telegram", { method: "POST", json: Object.fromEntries(Object.entries(u).map(([k, v]) => [k, String(v)])) });
         if (onDone) onDone();
-        else router.replace(next || "/kabinet");
-        router.refresh();
+        else window.location.replace(next || "/kabinet/");
       } catch (e) {
         toast((e as Error).message, "error");
       } finally {
@@ -73,8 +73,9 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
       mo.disconnect();
       ro.disconnect();
     };
-  }, [next, onDone, router, toast]);
+  }, [BOT, next, onDone, toast]);
 
+  if (!BOT && cfgLoading) return <span className="btn btn-secondary w-full opacity-60" aria-hidden>{label}</span>;
   if (!BOT) {
     return (
       <div className="flex w-full flex-col gap-2">

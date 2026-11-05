@@ -11,7 +11,7 @@ export default function TermsPage() {
         <p>
           Ushbu shartlar shohnoma.uz sayti (keyingi o‘rinlarda — «Shohnoma», «biz») orqali taqdim etiladigan taklifnoma-sayt yaratish xizmatidan
           foydalanish tartibini belgilaydi. Buyurtma berish yoki to‘lovni amalga oshirish orqali siz ushbu shartlarga va{" "}
-          <Link href="/maxfiylik" className="text-maroon hover:underline">
+          <Link href="/maxfiylik/" className="text-maroon hover:underline">
             Maxfiylik siyosatiga
           </Link>{" "}
           rozilik bildirasiz.

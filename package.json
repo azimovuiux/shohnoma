@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node --experimental-strip-types scripts/export-templates.mts && next build",
+    "build": "node --experimental-strip-types scripts/export-templates.mts && node --experimental-strip-types scripts/og.mts && next build",
     "assemble": "bash scripts/assemble.sh",
     "dist": "npm run build && npm run assemble",
     "typecheck": "tsc --noEmit",

@@ -8,7 +8,7 @@ const columns = [
   {
     title: "Sahifalar",
     links: [
-      { label: "Shablonlar", href: "/shablonlar" },
+      { label: "Shablonlar", href: "/shablonlar/" },
       { label: "Qanday ishlaydi", href: "/#qanday-ishlaydi" },
       { label: "Imkoniyatlar", href: "/#imkoniyatlar" },
       { label: "Savollar", href: "/#savollar" },
@@ -18,16 +18,16 @@ const columns = [
   {
     title: "Marosimlar",
     links: [
-      { label: "Nikoh to‘yi", href: "/shablonlar?marosim=nikoh" },
-      { label: "Sunnat to‘yi", href: "/shablonlar?marosim=sunnat" },
-      { label: "Fotiha to‘yi", href: "/shablonlar?marosim=fotiha" },
-      { label: "Tug‘ilgan kun", href: "/shablonlar?marosim=tugilgan-kun" },
+      { label: "Nikoh to‘yi", href: "/shablonlar/?marosim=nikoh" },
+      { label: "Sunnat to‘yi", href: "/shablonlar/?marosim=sunnat" },
+      { label: "Fotiha to‘yi", href: "/shablonlar/?marosim=fotiha" },
+      { label: "Tug‘ilgan kun", href: "/shablonlar/?marosim=tugilgan-kun" },
     ],
   },
   {
     title: "Buyurtma",
     links: [
-      { label: "Individual brif", href: "/maxsus-dizayn" },
+      { label: "Individual brif", href: "/maxsus-dizayn/" },
       { label: "To‘lov usullari", href: "/#qanday-ishlaydi" },
       { label: "Telegram orqali", href: site.telegram },
     ],

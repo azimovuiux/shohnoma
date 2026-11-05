@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown2, Call, CloseCircle, HambergerMenu, Instagram, Whatsapp, TickCircle, Receipt2, Heart, ProfileCircle, MessageQuestion, LogoutCurve, Setting2 } from "@/components/icons";
 import { useRouter } from "next/navigation";
-import type { HeaderUser } from "@/server/header";
+import { useMe } from "@/lib/client";
+
+export type HeaderUser = { name: string | null; phone: string | null; telegramUser: string | null; orders: number; favorites: number; isAdmin: boolean } | null;
 import { formatPhoneDisplay, initials } from "@/lib/display";
 import { Logo } from "./Logo";
 import { TelegramIcon } from "./TelegramIcon";
@@ -93,7 +95,7 @@ function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: He
 
   const links = [
     ...mainNav.slice(0, 3),
-    { label: "Maxsus dizayn", href: "/maxsus-dizayn" },
+    { label: "Maxsus dizayn", href: "/maxsus-dizayn/" },
     ...mainNav.slice(3),
   ];
 
@@ -116,9 +118,9 @@ function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: He
           </div>
           <div className="grid grid-cols-3 gap-2">
             {[
-              ["/kabinet", "Buyurtmalar", user.orders],
-              ["/kabinet/sevimlilar", "Sevimlilar", user.favorites],
-              ["/kabinet/profil", "Profil", null],
+              ["/kabinet/", "Buyurtmalar", user.orders],
+              ["/kabinet/sevimlilar/", "Sevimlilar", user.favorites],
+              ["/kabinet/profil/", "Profil", null],
             ].map(([href, label, n]) => (
               <Link key={href as string} href={href as string} onClick={onClose} className="flex flex-col items-center gap-0.5 rounded-xl bg-bg-base px-2 py-2.5 t-body-s text-ink">
                 <span className="font-serif text-[20px] font-medium leading-none text-maroon">{n ?? "·"}</span>
@@ -146,7 +148,7 @@ function MobileMenu({ onClose, user, onLogout }: { onClose: () => void; user: He
             Akkauntdan chiqish
           </button>
         ) : (
-          <Link href="/shablonlar" onClick={onClose} className="btn btn-primary w-full">
+          <Link href="/shablonlar/" onClick={onClose} className="btn btn-primary w-full">
             Buyurtma berish
           </Link>
         )}
@@ -198,17 +200,17 @@ function AccountMenu({ user, onLogout }: { user: NonNullable<HeaderUser>; onLogo
             <p className="truncate t-title text-ink">{user.name || "Mening kabinetim"}</p>
             <p className="t-body-s text-ink-2">{user.phone ? formatPhoneDisplay(user.phone) : user.telegramUser}</p>
           </div>
-          <Link role="menuitem" href="/kabinet" className={item} onClick={() => setOpen(false)}>
+          <Link role="menuitem" href="/kabinet/" className={item} onClick={() => setOpen(false)}>
             <Receipt2 size={18} /> <span className="flex-1">Buyurtmalarim</span> <span className="t-body-s text-ink-2">{user.orders}</span>
           </Link>
-          <Link role="menuitem" href="/kabinet/sevimlilar" className={item} onClick={() => setOpen(false)}>
+          <Link role="menuitem" href="/kabinet/sevimlilar/" className={item} onClick={() => setOpen(false)}>
             <Heart size={18} /> <span className="flex-1">Sevimlilar</span> <span className="t-body-s text-ink-2">{user.favorites}</span>
           </Link>
-          <Link role="menuitem" href="/kabinet/profil" className={item} onClick={() => setOpen(false)}>
+          <Link role="menuitem" href="/kabinet/profil/" className={item} onClick={() => setOpen(false)}>
             <ProfileCircle size={18} /> Profil
           </Link>
           {user.isAdmin && (
-            <Link role="menuitem" href="/admin" className={item} onClick={() => setOpen(false)}>
+            <Link role="menuitem" href="/admin/" className={item} onClick={() => setOpen(false)}>
               <Setting2 size={18} /> Admin panel
             </Link>
           )}
@@ -225,13 +227,24 @@ function AccountMenu({ user, onLogout }: { user: NonNullable<HeaderUser>; onLogo
   );
 }
 
-export function Header({ user = null }: { user?: HeaderUser }) {
+export function Header() {
   const router = useRouter();
+  const { me, reload } = useMe();
+  const user: HeaderUser = me?.user
+    ? {
+        name: me.user.name,
+        phone: me.user.phone,
+        telegramUser: me.user.telegramUser,
+        orders: me.counts.orders,
+        favorites: me.counts.favorites,
+        isAdmin: me.user.isAdmin,
+      }
+    : null;
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
+    await reload();
     setMenuOpen(false);
     router.push("/");
-    router.refresh();
   };
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -259,7 +272,7 @@ export function Header({ user = null }: { user?: HeaderUser }) {
           {user ? (
             <AccountMenu user={user} onLogout={logout} />
           ) : (
-            <Link href="/shablonlar" className="btn btn-primary btn-sm ml-1">
+            <Link href="/shablonlar/" className="btn btn-primary btn-sm ml-1">
               Buyurtma berish
             </Link>
           )}

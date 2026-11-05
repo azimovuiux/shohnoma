@@ -16,7 +16,7 @@ export function Sandbox({ orderId, provider }: { orderId: string; provider: stri
       body: JSON.stringify({ result, provider }),
     });
     const data = (await res.json()) as { url?: string };
-    router.replace(data.url ?? `/buyurtma/${orderId}/tolov`);
+    router.replace(data.url ?? `/buyurtma/${orderId}/tolov/`);
   };
   return (
     <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">

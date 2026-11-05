@@ -3,7 +3,7 @@ import { ArrowRight, Clock } from "@/components/icons";
 import { StatusBadge } from "@/components/ui";
 import { getTemplate, ceremonyLabel, type Ceremony } from "@/lib/templates";
 import { orderStatusView, splitDate } from "@/lib/display";
-import type { Invitation, Order } from "@/server/db";
+import type { Invitation, Order } from "@/lib/types";
 
 export const invTitle = (inv: Pick<Invitation, "personA" | "personB">) => [inv.personA, inv.personB].filter(Boolean).join(" & ") || "Yangi taklifnoma";
 
@@ -33,11 +33,11 @@ export function InvitationHeader({ order, invitation: inv, title }: { order: Ord
             {order.status === "p2p_review" ? "Chekingiz tekshirilmoqda — tasdiqlangach sayt ochiladi." : "Qoralama · ma’lumotlar saqlangan — to‘lovdan so‘ng sayt ochiladi."}
           </p>
           {order.status === "p2p_review" ? (
-            <Link href={`/buyurtma/${order.id}/tolov/p2p/tekshirilmoqda`} className="btn btn-secondary btn-sm shrink-0 bg-bg-base">
+            <Link href={`/buyurtma/${order.id}/tolov/p2p/tekshirilmoqda/`} className="btn btn-secondary btn-sm shrink-0 bg-bg-base">
               Holatni ko‘rish
             </Link>
           ) : (
-            <Link href={`/buyurtma/${order.id}/tolov`} className="btn btn-primary btn-sm shrink-0">
+            <Link href={`/buyurtma/${order.id}/tolov/`} className="btn btn-primary btn-sm shrink-0">
               To‘lovni davom ettirish <ArrowRight size={15} />
             </Link>
           )}
