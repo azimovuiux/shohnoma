@@ -15,7 +15,21 @@ function settings_out(): array
             : ['set' => (bool)$v, 'value' => $v, 'source' => $v ? ($fromDb ? 'admin' : 'env') : null];
     }
     $bot = env('TELEGRAM_BOT_TOKEN') ? tg_bot_username() : null;
-    return ['settings' => $out, 'telegram' => ['bot' => $bot, 'adminLinked' => (bool)env('TELEGRAM_ADMIN_CHAT_ID'), 'webhook' => site_url() . '/api/telegram/webhook']];
+    $hook = site_url() . '/api/telegram/webhook';
+    $info = $bot ? tg_api('getWebhookInfo', []) : null;
+    // Webhook ulanmagan yoki boshqa manzilga qarab tursa — qayta ulaymiz
+    if ($bot && $info !== null && ($info['url'] ?? '') !== $hook) {
+        tg_api('setWebhook', ['url' => $hook, 'secret_token' => tg_webhook_secret(), 'allowed_updates' => ['message']]);
+        $info = tg_api('getWebhookInfo', []);
+    }
+    return ['settings' => $out, 'telegram' => [
+        'bot' => $bot,
+        'adminLinked' => (bool)env('TELEGRAM_ADMIN_CHAT_ID'),
+        'adminChatIsGroup' => str_starts_with((string)env('TELEGRAM_ADMIN_CHAT_ID'), '-'),
+        'webhook' => $hook,
+        'webhookOk' => $info !== null && ($info['url'] ?? '') === $hook,
+        'webhookError' => $info['last_error_message'] ?? null,
+    ]];
 }
 
 route('GET', '/admin/settings', function () {
@@ -53,7 +67,7 @@ route('POST', '/admin/telegram/link', function () {
     $bot = tg_bot_username() ?? fail('Avval bot tokenini saqlang', 422);
     $code = strtolower(substr(preg_replace('/[^a-zA-Z0-9]/', '', new_token(24)), 0, 20));
     setting_set('TG_ADMIN_LINK', hash('sha256', $code) . '|' . (time() + 600));
-    json_out(['ok' => true, 'url' => "https://t.me/$bot?start=admin_$code", 'groupUrl' => "https://t.me/$bot?startgroup=admin_$code"]);
+    json_out(['ok' => true, 'url' => "https://t.me/$bot?start=admin_$code", 'groupUrl' => "https://t.me/$bot?startgroup=admin_$code", 'command' => "/start@$bot admin_$code"]);
 });
 
 /** Webhook'dan: /start admin_<kod> */
@@ -61,7 +75,8 @@ function tg_admin_link_handle(array $msg): bool
 {
     $text = trim((string)($msg['text'] ?? ''));
     // Shaxsiy chat: "/start admin_<kod>"; guruh: "/start@bot_nomi admin_<kod>"
-    if (!preg_match('/^\/start(?:@\w+)?\s+admin_([a-z0-9]{8,40})$/', $text, $m)) return false;
+    if (!preg_match('/^\/start(?:@\w+)?\s+admin_([a-z0-9]{8,40})\s*$/i', $text, $m)) return false;
+    $m[1] = strtolower($m[1]);
     $chat = (string)($msg['chat']['id'] ?? '');
     [$hash, $exp] = array_pad(explode('|', db_settings()['TG_ADMIN_LINK'] ?? ''), 2, '0');
     if (!$hash || (int)$exp < time() || !hash_equals($hash, hash('sha256', $m[1]))) {

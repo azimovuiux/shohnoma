@@ -8,7 +8,10 @@ import { TickCircle } from "@/components/icons";
 import { AdminError, AdminLoading, AdminTitle } from "../shared";
 
 type Item = { set: boolean; value?: string | null; hint?: string | null; source: "admin" | "env" | null };
-type Resp = { settings: Record<string, Item>; telegram: { bot: string | null; adminLinked: boolean; webhook: string } };
+type Resp = {
+  settings: Record<string, Item>;
+  telegram: { bot: string | null; adminLinked: boolean; adminChatIsGroup?: boolean; webhook: string; webhookOk?: boolean; webhookError?: string | null };
+};
 
 function Card({ title, sub, children }: { title: string; sub?: ReactNode; children: ReactNode }) {
   return (
@@ -106,6 +109,7 @@ function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<str
   const [token, setToken] = useState("");
   const [busy, setBusy] = useState(false);
   const [waiting, setWaiting] = useState(false);
+  const [command, setCommand] = useState<string | null>(null);
   const timer = useRef<number | null>(null);
   useEffect(() => () => void (timer.current && window.clearInterval(timer.current)), []);
   useEffect(() => {
@@ -132,7 +136,8 @@ function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<str
   const link = async (group = false) => {
     const win = window.open("", "_blank");
     try {
-      const r = await api<{ url: string; groupUrl: string }>("/api/admin/telegram/link", { method: "POST" });
+      const r = await api<{ url: string; groupUrl: string; command: string }>("/api/admin/telegram/link", { method: "POST" });
+      setCommand(group ? r.command : null);
       const target = group ? r.groupUrl : r.url;
       if (win) win.location.href = target;
       else window.location.href = target;
@@ -203,7 +208,7 @@ function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<str
               <b>Guruh</b> (bir nechta menejer uchun): «Guruhga ulash» → guruhni tanlang → bot guruhga qo‘shiladi va ulanadi. Guruhdagi istalgan a’zo mijoz xabariga Reply qilib javob bera oladi.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              {data.telegram.adminLinked && <Status ok>Ulangan</Status>}
+              {data.telegram.adminLinked && <Status ok>{data.telegram.adminChatIsGroup ? "Guruh ulangan" : "Shaxsiy chat ulangan"}</Status>}
               {waiting && !data.telegram.adminLinked && <Status ok={false}>Botda «Start» ni bosing…</Status>}
               <button type="button" onClick={() => link(false)} disabled={!tok.set} className="btn btn-sm bg-[#2AABEE] text-white hover:bg-[#229ED9]">
                 <TelegramIcon size={16} /> {data.telegram.adminLinked ? "Shaxsiy chatga ulash" : "Telegramni ulash"}
@@ -212,9 +217,36 @@ function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<str
                 Guruhga ulash
               </button>
             </div>
+            {command && !data.telegram.adminLinked && (
+              <div className="flex flex-col gap-2 rounded-[14px] bg-bg-soft p-4">
+                <p className="t-body-s text-ink">
+                  Bot guruhda allaqachon bo‘lsa yoki Telegram guruh tanlashni ko‘rsatmasa — shu buyruqni nusxalab, <b>guruhga yozing</b> (10 daqiqa amal qiladi):
+                </p>
+                <div className="flex items-center gap-2">
+                  <code className="min-w-0 flex-1 truncate rounded-lg border border-line bg-bg-base px-3 py-2 font-mono text-[13px] text-ink">{command}</code>
+                  <button
+                    type="button"
+                    onClick={() => navigator.clipboard.writeText(command).then(() => toast("Nusxalandi"))}
+                    className="btn btn-secondary btn-sm shrink-0"
+                  >
+                    Nusxalash
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </li>
       </ol>
+      {tok.set && data.telegram.bot && (
+        <p className="t-body-s">
+          {data.telegram.webhookOk ? (
+            <span className="text-success">✓ Bot sayt bilan bog‘langan</span>
+          ) : (
+            <span className="text-danger">Bot sayt bilan bog‘lanmagan — tokenni qayta saqlang</span>
+          )}
+          {data.telegram.webhookError && <span className="text-danger"> · Telegram xatosi: {data.telegram.webhookError}</span>}
+        </p>
+      )}
       {tok.set && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
           <span className="t-body-s text-ink-2">Mijozlar saytda «Telegram orqali kirish» tugmasi bilan kiradi.</span>
