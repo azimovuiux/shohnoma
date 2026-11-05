@@ -5,6 +5,7 @@ import { CloseCircle, Messages, Send2 } from "@/components/icons";
 import { Field, Input, PhoneInput, api, phoneDigits } from "@/components/ui";
 import { useMe } from "@/lib/client";
 import { site } from "@/lib/site";
+import { ding, primeAudio } from "@/lib/ding";
 import { TelegramIcon } from "./TelegramIcon";
 
 type Msg = { id: number; sender: "user" | "admin" | "bot"; text: string; createdAt: string; pending?: boolean };
@@ -37,14 +38,18 @@ export function FloatingContact() {
 
   const poll = useCallback(async () => {
     try {
+      const first = lastId.current === 0;
       const r = await api<ChatResp>(`/api/chat?after=${lastId.current}`);
       setSession(r.session);
       merge(r.messages);
+      if (!first && r.messages.some((m) => m.sender === "admin")) ding();
       return r.messages;
     } catch {
       return [];
     }
   }, [merge]);
+
+  useEffect(() => primeAudio(), []);
 
   // Birinchi yuklash: oldingi chat bormi
   useEffect(() => {

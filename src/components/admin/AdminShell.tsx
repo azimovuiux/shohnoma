@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { LogoMark } from "@/components/Logo";
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { ding, primeAudio } from "@/lib/ding";
 import { ExportSquare, LogoutCurve } from "@/components/icons";
 import { PageLoading, useApi, useRequireUser } from "@/lib/client";
 import { formatPhoneDisplay } from "@/lib/display";
@@ -16,6 +18,22 @@ export const useReloadCounts = () => useContext(CountsCtx);
 export function AdminShell({ children }: { children: ReactNode }) {
   const { user, loading } = useRequireUser(true);
   const counts = useApi<Counts>(user ? "/api/admin/counts" : null);
+  const path = usePathname();
+  const prevUnread = useRef<number | null>(null);
+  useEffect(() => primeAudio(), []);
+  // Hisoblagichlar har 15 soniyada yangilanadi; yangi chat xabari kelsa — ovoz (Chatlar sahifasida u o‘zi chaladi)
+  useEffect(() => {
+    if (!user) return;
+    const id = window.setInterval(() => !document.hidden && counts.reload(true), 15000);
+    return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+  useEffect(() => {
+    const n = counts.data?.unreadChats;
+    if (n === undefined) return;
+    if (prevUnread.current !== null && n > prevUnread.current && !path.startsWith("/admin/chatlar")) ding();
+    prevUnread.current = n;
+  }, [counts.data?.unreadChats, path]);
   if (loading || !user) return <PageLoading className="min-h-dvh" />;
   const c = counts.data;
   return (

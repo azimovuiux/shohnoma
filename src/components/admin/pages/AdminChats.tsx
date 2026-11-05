@@ -8,6 +8,7 @@ import { Send2 } from "@/components/icons";
 import { formatPhoneDisplay } from "@/lib/display";
 import { AdminTitle, Empty, fmtDateTime } from "../shared";
 import { useReloadCounts } from "../AdminShell";
+import { ding } from "@/lib/ding";
 
 type Item = { id: string; name: string; phone: string; page: string | null; status: string; unread: number; lastAt: string; lastText: string | null };
 type Msg = { id: number; sender: "user" | "admin" | "bot"; text: string; createdAt: string };
@@ -18,9 +19,13 @@ export function AdminChats() {
   const [tg, setTg] = useState<boolean | null>(null);
   const reloadCounts = useReloadCounts();
 
+  const unreadSum = useRef<number | null>(null);
   const loadList = useCallback(async () => {
     try {
       const r = await apiGet<{ items: Item[] }>("/api/admin/chats");
+      const sum = r.items.reduce((a, i) => a + i.unread, 0);
+      if (unreadSum.current !== null && sum > unreadSum.current) ding();
+      unreadSum.current = sum;
       setItems(r.items);
     } catch {
       /* keyingi so‘rovda */
@@ -94,7 +99,9 @@ function Thread({ item, onBack, onRead }: { item: Item; onBack: () => void; onRe
 
   const load = useCallback(async () => {
     try {
+      const first = last.current === 0;
       const r = await apiGet<{ messages: Msg[] }>(`/api/admin/chats/${item.id}?after=${last.current}`);
+      if (!first && r.messages.some((m) => m.sender === "user")) ding();
       if (r.messages.length) {
         last.current = r.messages[r.messages.length - 1].id;
         setMsgs((p) => [...p, ...r.messages.filter((m) => !p.some((x) => x.id === m.id))]);
