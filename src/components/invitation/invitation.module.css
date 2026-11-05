@@ -1,0 +1,169 @@
+/* Taklifnoma sayti animatsiyalari (globals.css ga tegmaslik uchun alohida) */
+
+.root {
+  container-type: inline-size;
+  position: relative;
+  overflow-x: clip;
+}
+
+/* Hero ochilish */
+.envCard {
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.opened .envCard {
+  transform: translateY(-14%);
+}
+.envSeal {
+  transition: transform 0.7s ease, opacity 0.7s ease;
+}
+.opened .envSeal {
+  transform: scale(1.25) rotate(-12deg);
+  opacity: 0;
+}
+.sealHalfL,
+.sealHalfR {
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.8s;
+}
+.opened .sealHalfL {
+  transform: translateX(-30%) rotate(-18deg);
+  opacity: 0;
+}
+.opened .sealHalfR {
+  transform: translateX(30%) rotate(18deg);
+  opacity: 0;
+}
+.ticketStub {
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform-origin: left center;
+}
+.opened .ticketStub {
+  transform: translateX(10%) rotate(6deg);
+}
+.door {
+  transition: transform 1.2s cubic-bezier(0.3, 0.6, 0.2, 1);
+  backface-visibility: hidden;
+}
+.doorL {
+  transform-origin: left center;
+}
+.doorR {
+  transform-origin: right center;
+}
+.opened .doorL {
+  transform: perspective(600px) rotateY(-100deg);
+}
+.opened .doorR {
+  transform: perspective(600px) rotateY(100deg);
+}
+.archGlow {
+  transition: opacity 1s ease, filter 1s ease;
+  opacity: 0.55;
+}
+.opened .archGlow {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px rgba(217, 185, 122, 0.5));
+}
+.spin {
+  transition: transform 2.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.opened .spin {
+  transform: rotate(45deg);
+}
+.crown {
+  transition: transform 0.8s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.opened .crown {
+  transform: translateY(-8%) scale(1.06);
+}
+
+/* Bo‘limlar paydo bo‘lishi */
+.reveal {
+  animation: rise 0.9s ease-out both;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Pastdan chiquvchi oyna (embedded preview uchun ham) */
+.sheet {
+  animation: sheetUp 0.28s ease-out both;
+}
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+.fade {
+  animation: fade 0.25s ease both;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pulse {
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 185, 122, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(217, 185, 122, 0);
+  }
+}
+
+.eq span {
+  animation: eq 1s ease-in-out infinite;
+}
+.eq span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.eq span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envCard,
+  .envSeal,
+  .sealHalfL,
+  .sealHalfR,
+  .ticketStub,
+  .door,
+  .archGlow,
+  .spin,
+  .crown {
+    transition: none !important;
+  }
+  .reveal,
+  .sheet,
+  .fade,
+  .pulse,
+  .eq span {
+    animation: none !important;
+  }
+}

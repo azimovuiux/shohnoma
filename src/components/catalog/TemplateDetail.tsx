@@ -75,9 +75,9 @@ export function TemplateDetail({ t }: { t: Template }) {
             Shu shablonni tanlash <ArrowRight size={16} />
           </Link>
           <div className="flex gap-2.5">
-            <button type="button" onClick={() => setDevice("phone")} className="btn btn-secondary btn-sm flex-1">
+            <Link href={`/namuna/${t.slug}`} target="_blank" className="btn btn-secondary btn-sm flex-1">
               <Eye size={15} /> Jonli demo
-            </button>
+            </Link>
             <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm flex-1">
               <Messages size={15} /> Savol berish
             </a>
