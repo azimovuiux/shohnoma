@@ -1,0 +1,46 @@
+"use client";
+
+import Link from "next/link";
+import { createContext, useContext, type ReactNode } from "react";
+import { Star8 } from "@/components/Ornament";
+import { ExportSquare } from "@/components/icons";
+import { PageLoading, useApi, useRequireUser } from "@/lib/client";
+import { formatPhoneDisplay } from "@/lib/display";
+import { AdminNav } from "./AdminNav";
+
+type Counts = { ok: boolean; pendingP2p: number; newBriefs: number; newLeads: number };
+const CountsCtx = createContext<() => void>(() => {});
+/** Tab hisoblagichlarini yangilash (mutatsiyadan keyin) */
+export const useReloadCounts = () => useContext(CountsCtx);
+
+export function AdminShell({ children }: { children: ReactNode }) {
+  const { user, loading } = useRequireUser(true);
+  const counts = useApi<Counts>(user ? "/api/admin/counts" : null);
+  if (loading || !user) return <PageLoading className="min-h-dvh" />;
+  const c = counts.data;
+  return (
+    <CountsCtx.Provider value={() => counts.reload(true)}>
+      <div className="min-h-dvh bg-bg-base">
+        <header className="sticky top-0 z-30 border-b border-line bg-bg-base/95 backdrop-blur">
+          <div className="mx-auto flex max-w-[1440px] flex-col gap-1 px-5 pt-3 lg:px-10">
+            <div className="flex items-center justify-between gap-4">
+              <Link href="/admin/" className="inline-flex items-center gap-2 text-ink">
+                <Star8 size={16} />
+                <span className="t-logo !text-[22px]">Shohnoma</span>
+                <span className="rounded-full bg-bg-soft px-2 py-0.5 t-body-s text-ink-2">admin</span>
+              </Link>
+              <div className="flex items-center gap-4 t-body-s text-ink-2">
+                <span className="hidden sm:inline">{user.name || formatPhoneDisplay(user.phone) || user.telegramUser}</span>
+                <Link href="/" className="inline-flex items-center gap-1.5 t-nav text-ink hover:text-maroon">
+                  Saytga qaytish <ExportSquare size={15} />
+                </Link>
+              </div>
+            </div>
+            <AdminNav counts={{ p2p: c?.pendingP2p ?? 0, briefs: c?.newBriefs ?? 0, leads: c?.newLeads ?? 0 }} />
+          </div>
+        </header>
+        <main className="mx-auto max-w-[1440px] px-5 py-8 lg:px-10">{children}</main>
+      </div>
+    </CountsCtx.Provider>
+  );
+}

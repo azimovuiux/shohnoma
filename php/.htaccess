@@ -23,7 +23,12 @@ ErrorDocument 404 /404.html
   </FilesMatch>
 </IfModule>
 
+# Payme Basic auth sarlavhasi PHP-FPM/CGI ga yetib borishi uchun
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
 RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 # HTTPS ga yo‘naltirish
 RewriteCond %{HTTPS} off

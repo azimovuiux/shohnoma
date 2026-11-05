@@ -285,7 +285,7 @@ export function BriefForm() {
         }),
       );
       if (hp) fd.set("website", hp);
-      files.forEach((f) => fd.append("files", f));
+      files.forEach((f) => fd.append("files[]", f));
       const res = await fetch("/api/briefs", { method: "POST", body: fd });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
       if (!res.ok || data.ok === false) throw new Error(data.error || "Brif yuborilmadi. Qayta urinib ko‘ring.");
