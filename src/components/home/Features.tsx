@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Calendar, Colorfilter, Gallery, Location, Mobile, Music, Profile2User, Timer1 } from "@/components/icons";
-import { GirihPattern, Star8 } from "@/components/Ornament";
+import { GirihPattern } from "@/components/Ornament";
 import { PhoneFrame } from "@/components/mockups/Devices";
 import { Photo } from "./Photo";
 
@@ -97,8 +97,6 @@ export function Features() {
   return (
     <section id="imkoniyatlar" className="relative scroll-mt-20 overflow-hidden bg-maroon px-5 py-20 lg:px-[120px] lg:py-[120px]">
       <GirihPattern id="g-features" cell={72} color="#e2c48c" opacity={0.1} className="absolute inset-0" />
-      <Star8 size={18} color="#e2c48c" className="absolute left-[120px] top-[130px] hidden lg:block" />
-      <Star8 size={28} color="#e2c48c" className="absolute bottom-[110px] right-[122px] hidden lg:block" />
 
       <div className="relative mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:gap-[72px]">
         <div data-reveal="stagger" className="flex max-w-[725px] flex-col items-center gap-4 text-center">

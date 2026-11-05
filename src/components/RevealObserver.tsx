@@ -16,8 +16,12 @@ export function RevealObserver() {
     const items = (el: Element) => el.querySelectorAll<HTMLElement>(":scope > :not([data-split]), :scope > [data-split] > *");
     const done = (el: Element) => {
       const d = parseFloat(getComputedStyle(el).getPropertyValue("--d")) || 0;
-      const n = el.getAttribute("data-reveal") === "stagger" ? items(el).length : 1;
-      window.setTimeout(() => el.classList.add("is-done"), d + (n - 1) * 140 + 1900);
+      const kind = el.getAttribute("data-reveal");
+      const n = kind === "stagger" ? items(el).length : 1;
+      let extra = 0;
+      if (kind === "group")
+        el.querySelectorAll<HTMLElement>("[data-ri]").forEach((c) => (extra = Math.max(extra, parseFloat(c.style.getPropertyValue("--rd")) || 0)));
+      window.setTimeout(() => el.classList.add("is-done"), d + (n - 1) * 140 + extra + 1900);
     };
     const io = new IntersectionObserver(
       (entries) => {

@@ -12,6 +12,8 @@ export function Photo({
   tone = "warm",
   reveal,
   delay = 0,
+  ri,
+  riDelay = 0,
 }: {
   src?: string;
   alt: string;
@@ -20,9 +22,12 @@ export function Photo({
   tone?: "warm" | "rose" | "cream";
   reveal?: string;
   delay?: number;
+  /** "group" reveal ichidagi effekt (data-ri) va kechikish */
+  ri?: string;
+  riDelay?: number;
 }) {
-  const r = reveal ? ({ "data-reveal": reveal } as Record<string, string>) : {};
-  const st = { ...style, ...(reveal ? { ["--d" as string]: `${delay}ms` } : {}) } as React.CSSProperties;
+  const r = { ...(reveal ? { "data-reveal": reveal } : {}), ...(ri ? { "data-ri": ri } : {}) } as Record<string, string>;
+  const st = { ...style, ...(reveal ? { ["--d" as string]: `${delay}ms` } : {}), ...(ri ? { ["--rd" as string]: `${riDelay}ms` } : {}) } as React.CSSProperties;
   if (src) {
     // Fon rasmi sifatida — kesib ko‘rsatish (backgroundPosition/Size) imkoni bilan
     return (
