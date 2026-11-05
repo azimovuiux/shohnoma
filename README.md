@@ -2,7 +2,7 @@
 
 O‘zbek marosimlari uchun premium taklifnoma-saytlar do‘koni. Dizayn: Figma **Shohnoma-uz** (`D0wt4iM9V6ym59nF6npes7`).
 
-> `main` branch Plesk orqali avtomatik deploy qilinadi. Next.js versiyasi hozircha `feat/nextjs-site` branchida.
+> `main` branch Plesk orqali avtomatik deploy qilinadi — sozlash: **[docs/DEPLOY.md](docs/DEPLOY.md)**. Dasturchi qo‘llanmasi: [docs/DEV.md](docs/DEV.md).
 
 ## Texnologiyalar
 
@@ -10,16 +10,20 @@ O‘zbek marosimlari uchun premium taklifnoma-saytlar do‘koni. Dizayn: Figma *
 - Tailwind CSS v4 — dizayn tokenlari `src/app/globals.css` (`@theme`)
 - Shriftlar `@fontsource` orqali (Cormorant Garamond, Inter, Pinyon Script, Cinzel) — tashqi CDN kerak emas
 - Ikonlar: Iconsax Linear (`src/components/icons.tsx` orqali — React 19 uchun `currentColor` bilan o‘ralgan)
+- MariaDB/MySQL + Drizzle ORM, migratsiyalar ilova ishga tushganda avtomatik (`server.js`)
+- To‘lov: Payme Merchant API, Click SHOP API, P2P (admin tasdig‘i); SMS: Eskiz.uz; Telegram bot
 
 ## Ishga tushirish
 
 ```bash
+cp .env.example .env.local   # DATABASE_URL va boshqalar
 npm install
-npm run dev        # http://localhost:3000
-npm run build && npm start
+npm run db:migrate
+npm run dev                   # http://localhost:3000
+npm run build && npm start    # production (server.js)
 ```
 
-`.env.example` dan `.env.local` yarating (Telegram bot — "Xabar qoldiring" formasi uchun; sozlanmasa xabarlar server logiga yoziladi).
+SMS/Telegram sozlanmasa — xabarlar server logiga yoziladi; `PAYMENTS_SANDBOX=1` — to‘lovni test sahifasi orqali sinash.
 
 ## Tuzilma
 
