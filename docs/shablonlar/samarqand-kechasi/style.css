@@ -1,0 +1,376 @@
+/* Samarqand kechasi — lojuvard tun, oltin girih, ravoqli eshik */
+:root {
+  --navy: #0f1d3a;
+  --navy-2: #0a1530;
+  --navy-3: #16264a;
+  --gold: #c9a45c;
+  --gold-2: #e3c88d;
+  --cream: #f5ecd9;
+  --sh-accent: #c9a45c;
+  --sh-ink: #f5ecd9;
+  --sh-soft: rgba(245, 236, 217, 0.65);
+  --sh-surface: #16264a;
+  --sh-line: rgba(201, 164, 92, 0.35);
+  --sh-radius: 14px;
+  --sh-font-title: "Cormorant Garamond", serif;
+}
+
+body {
+  background: var(--navy-2);
+  color: var(--cream);
+}
+
+.sk {
+  overflow: hidden;
+  text-align: center;
+}
+
+/* ── Kirish ── */
+.sk-cover {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(201, 164, 92, 0.18), transparent 60%),
+    url("assets/girih.svg") center / 96px 96px,
+    linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+}
+.sk-cover__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 40px 24px;
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 1.2s 0.5s, transform 1.6s 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.sh-opened .sk-cover__inner {
+  opacity: 1;
+  transform: none;
+}
+.sk-kicker {
+  margin: 0;
+  font: 400 13px/1 "Cinzel", serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.sk-names {
+  margin: 6px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font: 400 68px/1.05 "Pinyon Script", cursive;
+  color: var(--gold-2);
+  text-shadow: 0 2px 30px rgba(201, 164, 92, 0.35);
+  overflow-wrap: anywhere;
+}
+.sk-amp {
+  font: italic 300 26px/1.6 "Cormorant Garamond", serif;
+  color: var(--cream);
+}
+.sk-date {
+  margin: 8px 0 0;
+  font: 400 20px/1 "Cinzel", serif;
+  letter-spacing: 0.26em;
+}
+.sk-venue {
+  margin: 0;
+  font: italic 400 19px/1.3 "Cormorant Garamond", serif;
+  color: var(--sh-soft);
+}
+.sk-scroll {
+  margin-top: 40px;
+  font: 500 11px/1 "Inter", sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--sh-soft);
+  animation: sk-bob 2.4s ease-in-out infinite;
+}
+@keyframes sk-bob {
+  50% { transform: translateY(6px); }
+}
+
+/* Eshik tabaqalari */
+.sk-doors {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  pointer-events: none;
+}
+.sk-door {
+  flex: 1;
+  background:
+    url("assets/girih.svg") center / 72px 72px,
+    linear-gradient(180deg, #13244a, #0b1631);
+  box-shadow: inset 0 0 0 1px rgba(201, 164, 92, 0.25);
+  transition: transform 1.8s cubic-bezier(0.7, 0, 0.2, 1);
+}
+.sk-door--l { border-right: 1px solid rgba(201, 164, 92, 0.6); }
+.sk-door--r { border-left: 1px solid rgba(201, 164, 92, 0.6); }
+.sh-opened .sk-door--l { transform: translateX(-101%); }
+.sh-opened .sk-door--r { transform: translateX(101%); }
+
+.sk-gate {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 34px;
+  transition: opacity 0.6s, visibility 0.6s;
+}
+.sh-opened .sk-gate {
+  opacity: 0;
+  visibility: hidden;
+}
+.sk-arch {
+  width: min(250px, 66vw);
+  aspect-ratio: 5 / 7;
+  border: 1px solid var(--gold);
+  border-radius: 999px 999px 10px 10px;
+  outline: 1px solid rgba(201, 164, 92, 0.35);
+  outline-offset: 8px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(201, 164, 92, 0.16), rgba(10, 21, 48, 0.85) 70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  animation: sk-glow 4s ease-in-out infinite;
+}
+@keyframes sk-glow {
+  50% { box-shadow: 0 0 60px rgba(201, 164, 92, 0.25); }
+}
+.sk-arch__star {
+  width: 30px;
+  animation: sk-spin 18s linear infinite;
+}
+@keyframes sk-spin {
+  to { transform: rotate(360deg); }
+}
+.sk-arch__mono {
+  margin: 0;
+  font: 400 44px/1 "Cinzel", serif;
+  letter-spacing: 0.12em;
+  color: var(--gold-2);
+}
+.sk-arch__text {
+  margin: 0;
+  font: italic 300 22px/1 "Cormorant Garamond", serif;
+  color: var(--cream);
+}
+.sk-open .sh-btn {
+  background: transparent;
+  color: var(--gold-2);
+  border-color: var(--gold);
+  font-family: "Cinzel", serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 16px 30px;
+}
+.sk-open .sh-btn:hover {
+  background: rgba(201, 164, 92, 0.12);
+}
+
+/* ── Bo‘limlar ── */
+.sk-sec {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 72px 24px;
+  background: var(--navy-2);
+}
+.sk-sec--light {
+  background: var(--cream);
+  color: #2a2116;
+  --sh-ink: #2a2116;
+  --sh-soft: #7d6b4e;
+  --sh-surface: #fffaf0;
+}
+.sk-sec > * { max-width: 520px; }
+.sk-orn { width: 26px; }
+.sk-title {
+  margin: 0;
+  font: italic 400 34px/1.15 "Cormorant Garamond", serif;
+}
+.sk-title--gold { color: var(--gold-2); font-style: normal; font-family: "Cinzel", serif; font-size: 24px; letter-spacing: 0.08em; }
+.sk-text {
+  margin: 0;
+  font: 400 20px/1.6 "Cormorant Garamond", serif;
+}
+.sk-text--soft { color: var(--sh-soft); }
+.sk-label {
+  margin: 0;
+  font: 400 12px/1.4 "Cinzel", serif;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.sk-sec--light .sk-label { color: #9a7a3e; }
+
+.sk-hosts {
+  margin-top: 12px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(154, 122, 62, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sk-host {
+  margin: 0;
+  font: 500 21px/1.4 "Cormorant Garamond", serif;
+}
+
+.sk-bigdate {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 0;
+}
+.sk-bigdate__day {
+  font: 300 104px/0.9 "Cormorant Garamond", serif;
+  color: var(--gold-2);
+}
+.sk-bigdate__rest {
+  text-align: left;
+  font: 400 22px/1.25 "Cinzel", serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-left: 1px solid var(--gold);
+  padding-left: 18px;
+}
+.sk-sec .sh-countdown__cell {
+  background: rgba(201, 164, 92, 0.08);
+  border-color: rgba(201, 164, 92, 0.4);
+}
+.sk-sec .sh-countdown__num { color: var(--gold-2); font-family: "Cinzel", serif; font-size: 26px; }
+
+/* Dastur */
+.sk-timeline {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  width: 100%;
+  position: relative;
+}
+.sk-timeline::before {
+  content: "";
+  position: absolute;
+  left: 84px;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: rgba(154, 122, 62, 0.45);
+}
+.sk-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 0;
+  text-align: left;
+}
+.sk-step__time {
+  flex: none;
+  width: 60px;
+  text-align: right;
+  font: 600 18px/1.4 "Cinzel", serif;
+  color: #9a7a3e;
+}
+.sk-step__dot {
+  flex: none;
+  position: relative;
+  z-index: 1;
+  width: 15px;
+  height: 15px;
+  margin-top: 5px;
+  transform: rotate(45deg);
+  background: var(--cream);
+  border: 1px solid #9a7a3e;
+}
+.sk-step__body { display: flex; flex-direction: column; gap: 2px; }
+.sk-step__title { font: 500 20px/1.35 "Cormorant Garamond", serif; }
+.sk-step__dur { font: 400 13px/1.3 "Inter", sans-serif; color: #7d6b4e; }
+
+.sk-dress {
+  margin: 6px 0 0;
+  padding: 14px 22px;
+  border: 1px solid var(--sh-line);
+  border-radius: 999px;
+  font: italic 400 19px/1.3 "Cormorant Garamond", serif;
+}
+.sk-dress span {
+  display: block;
+  font: 400 11px/1.6 "Cinzel", serif;
+  font-style: normal;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.sk-sec .sh-map { width: 100%; }
+.sk-sec .sh-map__frame { filter: saturate(0.6) contrast(1.05); border: 1px solid var(--sh-line); }
+.sk-sec .sh-btn--ghost { color: var(--gold-2); border-color: var(--sh-line); }
+.sk-sec--light .sh-btn--ghost { color: #8a6a2e; }
+.sk-sec sh-gallery { width: 100%; }
+
+/* Javob formasi */
+.sk-sec sh-rsvp { width: 100%; }
+.sk-sec .sh-rsvp { background: rgba(255, 255, 255, 0.04); border-color: rgba(201, 164, 92, 0.4); }
+.sk-sec .sh-rsvp__title { color: var(--gold-2); font-family: "Cinzel", serif; font-size: 22px; letter-spacing: 0.06em; }
+.sk-sec .sh-rsvp .sh-btn { color: var(--navy-2); background: var(--gold); border-color: var(--gold); }
+.sk-sec .sh-rsvp__done { color: var(--gold-2); }
+
+/* Yakun */
+.sk-end {
+  padding: 72px 24px 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  background:
+    url("assets/girih.svg") center / 96px 96px,
+    linear-gradient(0deg, var(--navy) 0%, var(--navy-2) 100%);
+}
+.sk-end__arch {
+  width: min(280px, 76vw);
+  padding: 46px 20px 34px;
+  border: 1px solid var(--gold);
+  border-radius: 999px 999px 10px 10px;
+  background: rgba(10, 21, 48, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.sk-end__names {
+  margin: 0;
+  font: 400 44px/1.1 "Pinyon Script", cursive;
+  color: var(--gold-2);
+}
+.sk-end__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.sk-end .sh-btn--ghost { color: var(--gold-2); border-color: var(--sh-line); }
+
+/* Laptop */
+@media (min-width: 1024px) {
+  .sk-names { font-size: 104px; }
+  .sk-amp { font-size: 34px; }
+  .sk-sec { padding: 110px 24px; }
+  .sk-sec > * { max-width: 640px; }
+  .sk-arch { width: 300px; }
+}

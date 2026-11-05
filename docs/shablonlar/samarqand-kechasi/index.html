@@ -1,0 +1,104 @@
+<main class="sk">
+
+  <!-- Kirish: ravoqli eshik -->
+  <section class="sk-cover">
+    <div class="sk-cover__inner">
+      <p class="sk-kicker">{{ceremonyLabel}}</p>
+      <h1 class="sk-names">
+        <span>{{personA}}</span>
+        {{#if personB}}<span class="sk-amp">va</span><span>{{personB}}</span>{{/if}}
+      </h1>
+      <p class="sk-date">{{dateShort}}</p>
+      <p class="sk-venue">{{venueName}}</p>
+      <span class="sk-scroll">pastga suring</span>
+    </div>
+
+    <div class="sk-doors" aria-hidden="true">
+      <div class="sk-door sk-door--l"></div>
+      <div class="sk-door sk-door--r"></div>
+    </div>
+    <div class="sk-gate">
+      <div class="sk-arch">
+        <img class="sk-arch__star" src="assets/star.svg" alt="">
+        <p class="sk-arch__mono">{{initials}}</p>
+        <p class="sk-arch__text">Taklifnoma</p>
+      </div>
+      <sh-open class="sk-open">Eshikni ochish</sh-open>
+    </div>
+  </section>
+
+  <!-- Taklif -->
+  <section class="sk-sec sk-sec--light" data-sh-reveal="up">
+    <img class="sk-orn" src="assets/star.svg" alt="">
+    <p class="sk-title">Aziz mehmonlar!</p>
+    <p class="sk-text">{{message}}</p>
+    {{#if parents}}
+    <div class="sk-hosts">
+      <p class="sk-label">Mezbonlar</p>
+      {{#each parents}}<p class="sk-host">{{name}}</p>{{/each}}
+    </div>
+    {{/if}}
+  </section>
+
+  <!-- Sana -->
+  <section class="sk-sec" data-sh-reveal="up">
+    <p class="sk-label">{{weekday}}</p>
+    <div class="sk-bigdate">
+      <span class="sk-bigdate__day">{{day}}</span>
+      <span class="sk-bigdate__rest">{{monthName}}<br>{{year}}</span>
+    </div>
+    <p class="sk-label">Boshlanishi — soat {{time}}</p>
+    <sh-countdown></sh-countdown>
+  </section>
+
+  {{#if program}}
+  <!-- Dastur -->
+  <section class="sk-sec sk-sec--light" data-sh-reveal="up">
+    <p class="sk-title">Kecha dasturi</p>
+    <ol class="sk-timeline">
+      {{#each program}}
+      <li class="sk-step">
+        <span class="sk-step__time">{{time}}</span>
+        <span class="sk-step__dot"></span>
+        <span class="sk-step__body">
+          <span class="sk-step__title">{{title}}</span>
+          {{#if duration}}<span class="sk-step__dur">{{duration}}</span>{{/if}}
+        </span>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+  {{/if}}
+
+  <!-- Joy -->
+  <section class="sk-sec" data-sh-reveal="up">
+    <p class="sk-label">Manzil</p>
+    <p class="sk-title sk-title--gold">{{venueName}}</p>
+    <p class="sk-text sk-text--soft">{{address}}</p>
+    {{#if dressCode}}<p class="sk-dress"><span>Kiyinish uslubi</span>{{dressCode}}</p>{{/if}}
+    <sh-map></sh-map>
+  </section>
+
+  <section class="sk-sec sk-sec--light" data-sh-reveal="up">
+    <sh-gallery></sh-gallery>
+  </section>
+
+  <!-- Javob -->
+  <section class="sk-sec" data-sh-reveal="up">
+    <p class="sk-title sk-title--gold">Kelishingizni bildiring</p>
+    <p class="sk-text sk-text--soft">Javobingiz tayyorgarlik uchun juda muhim</p>
+    <sh-rsvp title="Kelasizmi?"></sh-rsvp>
+  </section>
+
+  <footer class="sk-end" data-sh-reveal="fade">
+    <div class="sk-end__arch">
+      <img class="sk-arch__star" src="assets/star.svg" alt="">
+      <p class="sk-end__names">{{names}}</p>
+      <p class="sk-label">Sizni intiqlik bilan kutamiz</p>
+    </div>
+    <div class="sk-end__actions">
+      <sh-calendar></sh-calendar>
+      <sh-share></sh-share>
+    </div>
+  </footer>
+</main>

@@ -1,0 +1,53 @@
+{
+  "format": 1,
+  "slug": "samarqand-kechasi",
+  "name": "Samarqand kechasi",
+  "ceremony": "nikoh",
+  "style": "milliy",
+  "color": "moviy",
+  "price": 189000,
+  "priceOld": 249000,
+  "description": "Lojuvard tun, oltin girih naqshlar va ravoqli eshik — ochilganda ismlaringiz chiqadi. Samarqand saroylari ruhidagi tantanali taklifnoma.",
+  "palette": ["#0f1d3a", "#c9a45c", "#f5ecd9"],
+  "fonts": { "title": "Pinyon Script", "body": "Cormorant Garamond" },
+  "sample": {
+    "personA": "Sardor",
+    "personB": "Nilufar",
+    "date": "2026-09-19T18:00",
+    "venueName": "Registon saroyi",
+    "address": "Samarqand sh., Registon ko‘chasi 7",
+    "message": "Ikki qalb, ikki oila bir bo‘layotgan ushbu muborak kunda sizni dasturxonimizning to‘rida ko‘rishni istaymiz.",
+    "program": [
+      { "time": "18:00", "title": "Mehmonlarni kutib olish", "duration": "30 daqiqa" },
+      { "time": "18:30", "title": "Kelin-kuyov kirib kelishi" },
+      { "time": "19:00", "title": "Tantanali ziyofat", "duration": "3 soat" },
+      { "time": "22:00", "title": "To‘y raqsi va yakun" }
+    ],
+    "parents": [
+      { "name": "Karimovlar oilasi" },
+      { "name": "Rahimovlar oilasi" }
+    ],
+    "dressCode": "Kechki libos, to‘q ranglar"
+  },
+  "fields": [
+    {
+      "key": "program",
+      "type": "list",
+      "label": "Marosim dasturi",
+      "max": 12,
+      "item": {
+        "time": { "type": "time", "label": "Vaqt", "required": true },
+        "title": { "type": "text", "label": "Nomi", "required": true, "max": 60 },
+        "duration": { "type": "text", "label": "Davomiyligi", "max": 20, "placeholder": "30 daqiqa" }
+      }
+    },
+    {
+      "key": "parents",
+      "type": "list",
+      "label": "Mezbonlar (oilalar)",
+      "max": 4,
+      "item": { "name": { "type": "text", "label": "Oila yoki ism", "required": true, "max": 60, "placeholder": "Karimovlar oilasi" } }
+    },
+    { "key": "dressCode", "type": "text", "label": "Kiyinish uslubi", "max": 60, "placeholder": "Kechki libos" }
+  ]
+}
