@@ -12,6 +12,7 @@ import { liveTemplate, dayTime } from "./live";
 import { namesOf, needsPersonB, personLabels } from "./labels";
 import type { FlowOrder } from "./types";
 import { SaveIndicator } from "./SaveIndicator";
+import { ExtraFields, extraErrors, extraReady, type Extra } from "./ExtraFields";
 
 const ceremonies = (Object.keys(ceremonyLabel) as Ceremony[]).filter((c) => c in ceremonyLabel);
 
@@ -21,6 +22,14 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
   const router = useRouter();
   const [o, setO] = useState(order);
   const [errors, setErrors] = useState<Errors>({});
+  const [extraErr, setExtraErr] = useState<Record<string, string>>({});
+  const fields = template.fields ?? [];
+  const hasOwnProgram = fields.some((f) => f.key === "program");
+  const setExtra = (v: Extra) => {
+    setO((p) => ({ ...p, extra: v }));
+    setExtraErr({});
+    if (extraReady(fields, v)) queue({ extra: v });
+  };
   const [showMap, setShowMap] = useState(!!order.mapUrl);
   const [busy, setBusy] = useState(false);
   const { queue, flush, state, error: saveError } = useAutosave(order.id);
@@ -43,7 +52,9 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
     if (!o.address.trim()) e.address = "Manzilni kiriting";
     if (o.mapUrl && !/^https?:\/\//.test(o.mapUrl)) e.mapUrl = "Havola https:// bilan boshlansin";
     setErrors(e);
-    return Object.keys(e).length === 0;
+    const xe = extraErrors(fields, o.extra as Extra);
+    setExtraErr(xe);
+    return Object.keys(e).length === 0 && Object.keys(xe).length === 0;
   };
 
   const next = async () => {
@@ -234,7 +245,9 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
           )}
         </div>
 
-        {editing && (
+        {fields.length > 0 && <ExtraFields fields={fields} value={o.extra as Extra} onChange={setExtra} errors={extraErr} />}
+
+        {editing && !hasOwnProgram && (
           <div id="dastur" className="flex scroll-mt-28 flex-col gap-4">
             <SectionTitle>Marosim dasturi</SectionTitle>
             {program.map((p, i) => (

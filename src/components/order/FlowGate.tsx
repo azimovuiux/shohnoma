@@ -63,6 +63,7 @@ export function toFlowOrder(r: OrderResponse): FlowOrder {
     musicEnabled: inv.musicEnabled,
     contactPhone: inv.contactPhone ?? "",
     contactTg: inv.contactTg ?? "",
+    extra: (inv.extra as Record<string, unknown>) ?? {},
   };
 }
 

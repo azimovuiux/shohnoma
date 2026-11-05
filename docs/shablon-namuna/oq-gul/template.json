@@ -1,0 +1,41 @@
+{
+  "format": 1,
+  "slug": "oq-gul",
+  "name": "Oq gul",
+  "ceremony": "nikoh",
+  "style": "minimal",
+  "color": "krem",
+  "price": 99000,
+  "priceOld": 139000,
+  "description": "Krem fon, ingichka oltin chiziqlar va bitta oq gul. Sodda, nafis va zamonaviy.",
+  "palette": ["#fbf7f0", "#b08a4e", "#2b2620"],
+  "fonts": { "title": "Pinyon Script", "body": "Cormorant Garamond" },
+  "sample": {
+    "personA": "Aziz",
+    "personB": "Lola",
+    "date": "2026-10-03T17:00",
+    "venueName": "Navro‘z saroyi",
+    "address": "Samarqand sh., Registon ko‘chasi 1",
+    "message": "Hayotimizning eng baxtli kunida siz ham yonimizda bo‘lishingizni chin dildan istaymiz.",
+    "program": [
+      { "time": "17:00", "title": "Mehmonlarni kutib olish", "duration": "30 daqiqa" },
+      { "time": "17:30", "title": "Nikoh marosimi", "duration": "1 soat" },
+      { "time": "18:30", "title": "Tantanali kechki ziyofat" }
+    ],
+    "dressCode": "Pastel ranglar"
+  },
+  "fields": [
+    {
+      "key": "program",
+      "type": "list",
+      "label": "Marosim dasturi",
+      "max": 10,
+      "item": {
+        "time": { "type": "time", "label": "Vaqt", "required": true },
+        "title": { "type": "text", "label": "Nomi", "required": true, "max": 60 },
+        "duration": { "type": "text", "label": "Davomiyligi", "max": 20, "placeholder": "30 daqiqa" }
+      }
+    },
+    { "key": "dressCode", "type": "text", "label": "Kiyinish uslubi", "max": 60, "placeholder": "Pastel ranglar" }
+  ]
+}

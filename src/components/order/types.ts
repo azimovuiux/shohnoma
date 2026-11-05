@@ -28,4 +28,6 @@ export interface FlowOrder {
   /** +998901234567 */
   contactPhone: string;
   contactTg: string;
+  /** HTML shablonning qo‘shimcha maydonlari */
+  extra: Record<string, unknown>;
 }

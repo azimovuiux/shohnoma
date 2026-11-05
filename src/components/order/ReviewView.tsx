@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowDown2, ArrowRight, Edit, Mobile, Monitor, TickCircle } from "@/components/icons";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationDesktop } from "@/components/mockups/InvitationDesktop";
+import { HtmlFrame } from "@/components/mockups/HtmlFrame";
 import { InvitationSite } from "@/components/invitation/InvitationSite";
 import { isDarkTheme } from "@/components/TemplateCard";
 import { formatPhoneDisplay } from "@/lib/display";
@@ -48,9 +49,13 @@ function DeviceSwitch({ value, onChange }: { value: "laptop" | "phone"; onChange
 function PhonePreview({ order, template, className }: { order: FlowOrder; template: Template; className: string }) {
   return (
     <PhoneFrame dark={isDarkTheme(template)} className={className}>
+      {template.kind === "html" ? (
+        <HtmlFrame src={`/api/orders/${order.id}/preview`} interactive delay={0} />
+      ) : (
       <div className="h-full overflow-y-auto overscroll-contain [scrollbar-width:none]" tabIndex={0} aria-label="Taklifnoma ko‘rinishi — pastga suring">
         <InvitationSite template={template} data={toInvitationData(order)} mode="preview" embedded />
       </div>
+      )}
     </PhoneFrame>
   );
 }

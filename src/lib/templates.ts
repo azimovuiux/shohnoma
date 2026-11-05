@@ -34,6 +34,20 @@ export interface TemplateTheme {
   color: "bordo" | "yashil" | "oltin" | "krem" | "moviy" | "qizil" | "pushti";
 }
 
+export type FieldType = "text" | "textarea" | "time" | "date" | "number" | "select";
+export interface FieldSpec {
+  type: FieldType;
+  label: string;
+  required?: boolean;
+  max?: number;
+  placeholder?: string;
+  options?: string[];
+  hint?: string;
+}
+export type TemplateField =
+  | ({ key: string } & FieldSpec)
+  | { key: string; type: "list"; label: string; min: number; max: number; item: Record<string, FieldSpec> };
+
 export interface Template {
   number: number;
   slug: string;
@@ -55,6 +69,13 @@ export interface Template {
   active?: boolean;
   /** Mijoz ma’lumotlari bilan to‘ldirilgan nusxa — mokapda rasm emas, jonli chizma */
   isLive?: boolean;
+  /** "html" — admin ZIP orqali yuklagan shablon (docs/SHABLON-YORIQNOMA.md) */
+  kind?: "html";
+  version?: number;
+  /** HTML shablonning qo‘shimcha maydonlari (buyurtma formasi shulardan quriladi) */
+  fields?: TemplateField[];
+  /** HTML shablon: jonli ko‘rinish manzili (buyurtma oqimida — mijoz ma’lumotlari bilan) */
+  previewUrl?: string;
 }
 
 const nikohSample = { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "Oqsaroy to‘yxonasi", time: "18:00" };

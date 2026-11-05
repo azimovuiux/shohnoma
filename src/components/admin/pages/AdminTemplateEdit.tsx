@@ -11,6 +11,7 @@ import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { InvitationDesktop } from "@/components/mockups/InvitationDesktop";
 import { AdminError, AdminLoading, AdminTitle } from "../shared";
+import { ZipUpload } from "../ZipUpload";
 import type { AdminTemplate } from "./AdminTemplates";
 
 const selectClass =
@@ -120,6 +121,8 @@ export function AdminTemplateEdit() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [slugTouched, setSlugTouched] = useState(false);
+  const [zipOpen, setZipOpen] = useState(false);
+  const zipDone = useRef(false);
 
   useEffect(() => {
     if (!editSlug) return;
@@ -243,6 +246,45 @@ export function AdminTemplateEdit() {
             </Field>
           </Section>
 
+          {t.kind === "html" && (
+            <Section title="HTML shablon">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="rounded-full bg-gold-soft px-3 py-1 t-nav text-maroon">Versiya {t.version}</span>
+                <a href={`/namuna/${t.slug}/`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
+                  Namunani ochish
+                </a>
+                <button type="button" onClick={() => setZipOpen(true)} className="btn btn-secondary btn-sm">
+                  <DocumentUpload size={15} /> Yangi versiya (ZIP)
+                </button>
+              </div>
+              <div className="flex flex-col gap-2">
+                <p className="t-body-s text-ink-2">Mijoz buyurtma formasida qo‘shimcha ravishda to‘ldiradigan maydonlar:</p>
+                {(t.fields ?? []).length === 0 ? (
+                  <p className="t-body-s text-ink-2">— yo‘q (faqat asosiy maydonlar)</p>
+                ) : (
+                  <ul className="flex flex-col gap-1.5">
+                    {(t.fields ?? []).map((f) => (
+                      <li key={f.key} className="rounded-xl bg-bg-soft px-3 py-2 t-body-s text-ink">
+                        <b>{f.label}</b> <span className="text-ink-2">({f.type === "list" ? `ro‘yxat, ${f.max} tagacha: ${Object.values(f.item).map((x) => x.label).join(", ")}` : f.type}{"required" in f && f.required ? ", majburiy" : ""})</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <Field label="Rang guruhi (katalog filtri)">
+                <select className={selectClass} value={t.theme.color} onChange={(e) => setTheme({ color: e.target.value as TemplateTheme["color"] })}>
+                  {Object.entries(colorLabel).map(([v, l]) => (
+                    <option key={v} value={v}>
+                      {l}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <ZipUpload open={zipOpen} onClose={() => (setZipOpen(false), zipDone.current && location.reload())} replace={t.slug} onDone={() => (zipDone.current = true)} />
+            </Section>
+          )}
+
+          {t.kind !== "html" && (
           <Section title="Dizayn">
             <Field label="Dizayn asosi" hint="Mehmon sahifasidagi bezaklar, kirish bloki va musiqa shu dizayndan olinadi; ranglar quyidagidan.">
               <select className={selectClass} value={t.base ?? ""} onChange={(e) => set({ base: e.target.value })}>
@@ -297,6 +339,8 @@ export function AdminTemplateEdit() {
             </div>
           </Section>
 
+          )}
+
           <Section title="Mokap rasmlari">
             <p className="t-body-s text-ink-2">Katalog kartasida telefon va laptop ichida ko‘rinadi. Yuklanmasa — tanlangan ranglar bilan avtomatik chiziladi.</p>
             <div className="grid gap-5 sm:grid-cols-2">
@@ -305,6 +349,7 @@ export function AdminTemplateEdit() {
             </div>
           </Section>
 
+          {t.kind !== "html" && (
           <Section title="Namuna ma’lumotlar">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="1-ism">
@@ -324,6 +369,7 @@ export function AdminTemplateEdit() {
               </Field>
             </div>
           </Section>
+          )}
         </div>
 
         <aside className="flex flex-col gap-5 lg:sticky lg:top-[140px] lg:self-start">

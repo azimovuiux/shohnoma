@@ -59,6 +59,7 @@ export interface Invitation {
   musicEnabled: boolean;
   contactPhone: string | null;
   contactTg: string | null;
+  extra?: Record<string, unknown>;
   views: number;
   createdAt: string;
 }

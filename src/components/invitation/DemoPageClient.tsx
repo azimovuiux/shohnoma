@@ -31,7 +31,16 @@ export function DemoPageClient({ slug }: { slug: string }) {
           Shu shablonni tanlash
         </Link>
       </div>
-      <InvitationSite key={t.slug} template={t} data={demoData(t)} mode="demo" />
+      {t.kind === "html" ? (
+        <iframe
+          src={`/api/tpl/${t.slug}/preview?v=${t.version ?? 1}`}
+          title={`${t.name} — namuna`}
+          className="block h-[calc(100dvh-57px)] w-full border-0"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+        />
+      ) : (
+        <InvitationSite key={t.slug} template={t} data={demoData(t)} mode="demo" />
+      )}
     </>
   );
 }

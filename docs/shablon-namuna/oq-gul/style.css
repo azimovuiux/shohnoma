@@ -1,0 +1,41 @@
+:root {
+  --sh-accent: #b08a4e;
+  --sh-ink: #2b2620;
+  --sh-soft: #8a8170;
+  --sh-surface: #fffdf8;
+  --sh-line: rgba(176, 138, 78, 0.35);
+  --sh-radius: 18px;
+  --sh-font-title: "Cormorant Garamond", serif;
+}
+body { background: #fbf7f0; }
+.og { max-width: 520px; margin: 0 auto; padding: 0 22px 80px; text-align: center; }
+.og-cover {
+  min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  border-bottom: 1px solid var(--sh-line);
+}
+.og-flower { width: 120px; }
+.og-flower--sm { width: 64px; }
+.og-kicker { margin: 0; font: 500 12px/1 "Inter", sans-serif; letter-spacing: .28em; text-transform: uppercase; color: var(--sh-accent); }
+.og-names { margin: 0; font: 400 64px/1.05 "Pinyon Script", cursive; color: var(--sh-ink); overflow-wrap: anywhere; }
+.og-names--sm { font-size: 40px; }
+.og-amp { display: block; font-size: .55em; color: var(--sh-accent); margin: 4px 0; }
+.og-date { margin: 6px 0 18px; font: 500 20px/1 "Cormorant Garamond", serif; letter-spacing: .2em; }
+.og-block { padding: 56px 0; border-bottom: 1px solid var(--sh-line); display: flex; flex-direction: column; gap: 14px; }
+.og-title { margin: 0; font: italic 400 30px/1.2 "Cormorant Garamond", serif; color: var(--sh-ink); }
+.og-text { margin: 0; font: 400 19px/1.55 "Cormorant Garamond", serif; }
+.og-soft { color: var(--sh-soft); }
+.og-label { margin: 0; font: 500 12px/1 "Inter", sans-serif; letter-spacing: .2em; text-transform: uppercase; color: var(--sh-soft); }
+.og-big { margin: 0; font: 300 52px/1 "Cormorant Garamond", serif; color: var(--sh-accent); }
+.og-program { list-style: none; margin: 0; padding: 0; text-align: left; }
+.og-program li { display: flex; gap: 18px; padding: 14px 0; border-bottom: 1px dashed var(--sh-line); }
+.og-program li:last-child { border-bottom: 0; }
+.og-time { flex: none; width: 58px; font: 600 18px/1.4 "Cormorant Garamond", serif; color: var(--sh-accent); }
+.og-what { font: 400 19px/1.4 "Cormorant Garamond", serif; }
+.og-what small { display: block; font: 400 13px/1.4 "Inter", sans-serif; color: var(--sh-soft); }
+.og-end { padding-top: 56px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.og-open { margin-top: 8px; }
+.sh-opened .og-cover .og-flower { transform: rotate(-8deg) scale(1.05); transition: transform 1.2s; }
+@media (min-width: 1024px) {
+  .og { max-width: 680px; }
+  .og-names { font-size: 92px; }
+}

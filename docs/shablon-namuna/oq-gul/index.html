@@ -1,0 +1,66 @@
+<main class="og">
+  <section class="og-cover">
+    <img class="og-flower" src="assets/flower.svg" alt="" data-sh-reveal="scale">
+    <p class="og-kicker" data-sh-reveal="fade">{{ceremonyLabel}}</p>
+    <h1 class="og-names" data-sh-reveal="up" data-sh-delay="150">
+      {{personA}}{{#if personB}}<span class="og-amp">&amp;</span>{{personB}}{{/if}}
+    </h1>
+    <p class="og-date" data-sh-reveal="up" data-sh-delay="300">{{dateShort}}</p>
+    <sh-open class="og-open" data-sh-reveal="fade" data-sh-delay="450">Taklifnomani ochish</sh-open>
+  </section>
+
+  <section class="og-block" data-sh-reveal="up">
+    <p class="og-title">Aziz mehmonlar!</p>
+    <p class="og-text">{{message}}</p>
+    <p class="og-text og-soft">{{names}} {{invitePhrase}}</p>
+  </section>
+
+  <section class="og-block" data-sh-reveal="up">
+    <p class="og-label">{{weekday}}</p>
+    <p class="og-big">{{day}} {{monthName}}</p>
+    <p class="og-label">{{year}} · soat {{time}}</p>
+    <sh-countdown></sh-countdown>
+  </section>
+
+  {{#if program}}
+  <section class="og-block" data-sh-reveal="up">
+    <p class="og-title">Marosim dasturi</p>
+    <ol class="og-program">
+      {{#each program}}
+      <li>
+        <span class="og-time">{{time}}</span>
+        <span class="og-what">{{title}}{{#if duration}}<small>{{duration}}</small>{{/if}}</span>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+  {{/if}}
+
+  {{#if dressCode}}
+  <section class="og-block" data-sh-reveal="up">
+    <p class="og-label">Kiyinish uslubi</p>
+    <p class="og-text">{{dressCode}}</p>
+  </section>
+  {{/if}}
+
+  <section class="og-block" data-sh-reveal="up">
+    <p class="og-title">{{venueName}}</p>
+    <p class="og-text og-soft">{{address}}</p>
+    <sh-map></sh-map>
+  </section>
+
+  <section class="og-block" data-sh-reveal="up">
+    <sh-gallery></sh-gallery>
+  </section>
+
+  <section class="og-block" data-sh-reveal="up">
+    <sh-rsvp title="Kelishingizni bildiring"></sh-rsvp>
+  </section>
+
+  <footer class="og-end" data-sh-reveal="fade">
+    <img class="og-flower og-flower--sm" src="assets/flower.svg" alt="">
+    <p class="og-names og-names--sm">{{names}}</p>
+    <p class="og-soft">Sizni kutib qolamiz</p>
+    <sh-calendar></sh-calendar>
+  </footer>
+</main>

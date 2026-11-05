@@ -2,11 +2,16 @@ import type { Template } from "@/lib/templates";
 import type { FlowOrder } from "./types";
 
 /** Mokap uchun: shablon namunasini forma ma’lumotlari bilan almashtirish */
-export function liveTemplate(t: Template, o: Pick<FlowOrder, "personA" | "personB" | "day" | "time" | "venueName" | "ceremony">): Template {
+export function liveTemplate(t: Template, o: Pick<FlowOrder, "personA" | "personB" | "day" | "time" | "venueName" | "ceremony"> & Partial<Pick<FlowOrder, "id" | "address" | "message" | "extra" | "program" | "photos">>): Template {
   const [y, m, d] = (o.day || "").split("-");
+  // HTML shablon: server mijoz ma’lumotlari bilan chizadi; ma’lumot o‘zgarsa — manzil ham o‘zgaradi (iframe qayta yuklanadi)
+  const sig = JSON.stringify([o.personA, o.personB, o.day, o.time, o.venueName, o.address, o.message, o.extra, o.program, o.photos, o.ceremony]);
+  let hsh = 0;
+  for (let i = 0; i < sig.length; i++) hsh = (hsh * 31 + sig.charCodeAt(i)) | 0;
   return {
     ...t,
     isLive: true,
+    previewUrl: t.kind === "html" && o.id ? `/api/orders/${o.id}/preview?h=${(hsh >>> 0).toString(36)}` : undefined,
     ceremony: o.ceremony,
     sample: {
       a: o.personA || t.sample.a,

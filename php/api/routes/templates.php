@@ -135,7 +135,14 @@ route('PUT', '/admin/templates/:slug', function ($p) {
     require_admin();
     $cur = template_get($p['slug']) ?? fail('Shablon topilmadi', 404);
     $b = body();
-    tpl_save(tpl_clean($b, $cur['slug']), isset($b['number']) ? (int)$b['number'] : (int)$cur['number'], array_key_exists('active', $b) ? !empty($b['active']) : $cur['active'], false);
+    $clean = tpl_clean($b, $cur['slug']);
+    if (($cur['kind'] ?? '') === 'html') {
+        foreach (['kind', 'version', 'fields', 'sampleData', 'hasMusic', 'theme'] as $k) if (isset($cur[$k])) $clean[$k] = $cur[$k];
+        $clean['theme']['color'] = $clean['theme']['color'] ?? 'krem';
+        if (isset($b['theme']['color']) && in_array($b['theme']['color'], TPL_COLORS, true)) $clean['theme']['color'] = $b['theme']['color'];
+        $clean['base'] = null;
+    }
+    tpl_save($clean, isset($b['number']) ? (int)$b['number'] : (int)$cur['number'], array_key_exists('active', $b) ? !empty($b['active']) : $cur['active'], false);
     json_out(['ok' => true, 'template' => templates(true)[$cur['slug']]]);
 });
 
@@ -175,4 +182,67 @@ route('POST', '/admin/templates-image', function () {
         if (!in_array($mime, ['image/jpeg', 'image/png', 'image/webp'], true)) fail('Faqat JPG, PNG yoki WEBP rasm yuklang', 422);
     }
     json_out(['ok' => true, 'url' => save_upload($f, 'templates')]);
+});
+
+/* ── HTML shablon (ZIP) ── */
+
+/** ZIP yuklash: yangi shablon yoki ?replace=<slug> — mavjud HTML shablonni yangilash */
+route('POST', '/admin/templates-zip', function () {
+    require_admin();
+    $f = $_FILES['file'] ?? null;
+    if (!$f || ($f['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($f['tmp_name'])) {
+        $e = (int)($f['error'] ?? UPLOAD_ERR_NO_FILE);
+        fail($e === UPLOAD_ERR_INI_SIZE || $e === UPLOAD_ERR_FORM_SIZE ? 'Fayl serverning yuklash chegarasidan katta (php upload_max_filesize)' : 'ZIP fayl tanlanmagan', 422);
+    }
+    $replace = isset($_GET['replace']) && $_GET['replace'] !== '' ? (string)$_GET['replace'] : null;
+    if ($replace !== null) template_get($replace) ?? fail('Yangilanadigan shablon topilmadi', 404);
+    $r = tpl_import_zip($f['tmp_name'], $replace);
+    $cur = template_get($r['slug']);
+    if ($cur) tpl_save($r['data'], (int)$cur['number'], (bool)$cur['active'], false);
+    else tpl_save($r['data'], (int)scalar('SELECT COALESCE(MAX(sort), 0) FROM templates') + 1, false, true);
+    json_out(['ok' => true, 'template' => templates(true)[$r['slug']], 'warnings' => $r['warnings'], 'updated' => (bool)$cur]);
+});
+
+/** Namuna sahifasi (sample ma’lumotlar bilan) — katalog, namuna va admin ko‘rinishi uchun */
+route('GET', '/tpl/:slug/preview', function ($p) {
+    $t = template_get($p['slug']);
+    if (!$t || ($t['kind'] ?? '') !== 'html') { http_response_code(404); header('Content-Type: text/plain'); echo 'Not found'; exit; }
+    $d = ($t['sampleData'] ?? []) + ['ceremony' => $t['ceremony'], 'photos' => [], 'rsvpEnabled' => true, 'musicEnabled' => true, 'mapUrl' => ''];
+    $d['program'] = $d['extra']['program'] ?? [];
+    tpl_headers();
+    echo tpl_page($t, $d, 'preview');
+    exit;
+});
+
+/** Buyurtma ko‘rinishi (egasi uchun, to‘lovdan oldin ham) */
+route('GET', '/orders/:id/preview', function ($p) {
+    $b = owned_order($p['id']) ?? (current_user()['is_admin'] ?? false ? load_order($p['id']) : null);
+    if (!$b) { http_response_code(404); header('Content-Type: text/plain'); echo 'Not found'; exit; }
+    $t = template_get($b['order']['template_slug']);
+    if (!$t || ($t['kind'] ?? '') !== 'html') { http_response_code(404); header('Content-Type: text/plain'); echo 'Not found'; exit; }
+    $d = tpl_invitation_data($b['invitation']);
+    $s = $t['sampleData'] ?? [];
+    foreach (['personA', 'date', 'venueName', 'address'] as $k) if (($d[$k] ?? '') === '') $d[$k] = $s[$k] ?? '';
+    tpl_headers();
+    echo tpl_page($t, $d, 'preview');
+    exit;
+});
+
+/** Shablon fayllari: /files/tpl/<slug>/<ver>/<fayl> */
+route('GET', '/files/tpl/:slug/:ver/:name', function ($p) {
+    $mime = ['webp' => 'image/webp', 'png' => 'image/png', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'gif' => 'image/gif', 'svg' => 'image/svg+xml',
+        'woff2' => 'font/woff2', 'woff' => 'font/woff', 'mp3' => 'audio/mpeg', 'css' => 'text/css; charset=utf-8'];
+    $name = rawurldecode($p['name']);
+    if (!preg_match('/^[a-z0-9-]+$/', $p['slug']) || !ctype_digit($p['ver']) || !preg_match('/^[a-z0-9][a-z0-9._-]*\.([a-z0-9]+)$/', $name, $m) || !isset($mime[$m[1]])) {
+        http_response_code(404); exit;
+    }
+    $path = tpl_dir($p['slug'], (int)$p['ver']) . '/' . $name;
+    if (!is_file($path)) { http_response_code(404); exit; }
+    header('Content-Type: ' . $mime[$m[1]]);
+    header('Content-Length: ' . filesize($path));
+    header('Cache-Control: public, max-age=31536000, immutable');
+    header('X-Content-Type-Options: nosniff');
+    if ($m[1] === 'svg') header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'");
+    readfile($path);
+    exit;
 });

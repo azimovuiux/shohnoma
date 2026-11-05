@@ -94,6 +94,18 @@ function missing_fields(array $inv): array
     if (!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', (string)$inv['date'])) $m[] = 'date';
     if (!$inv['venue_name']) $m[] = 'venueName';
     if (!$inv['address']) $m[] = 'address';
+    // HTML shablonning majburiy qo‘shimcha maydonlari
+    $o = one('SELECT template_slug FROM orders WHERE id = ?', [$inv['order_id']]);
+    $t = $o ? template_get($o['template_slug']) : null;
+    if ($t && !empty($t['fields'])) {
+        $extra = jdec($inv['extra'] ?? null) ?: [];
+        foreach ($t['fields'] as $f) {
+            $v = $extra[$f['key']] ?? null;
+            $min = (int)($f['min'] ?? 0);
+            $missing = $f['type'] === 'list' ? ($min > 0 && count((array)$v) < $min) : (!empty($f['required']) && trim((string)$v) === '');
+            if ($missing) $m[] = 'extra.' . $f['key'];
+        }
+    }
     return $m;
 }
 
@@ -153,6 +165,10 @@ function apply_invitation_patch(array $b, array $p): array
             $prog[] = ['time' => $it['time'], 'title' => $title];
         }
         $set['program'] = json_encode($prog, JSON_UNESCAPED_UNICODE);
+    }
+    if (array_key_exists('extra', $p)) {
+        $t = template_get($b['order']['template_slug']);
+        $set['extra'] = json_encode(tpl_clean_extra($p['extra'], $t['fields'] ?? []), JSON_UNESCAPED_UNICODE);
     }
     if (array_key_exists('photos', $p)) {
         if (!is_array($p['photos']) || count($p['photos']) > 10) fail('Ko‘pi bilan 10 ta surat', 422);

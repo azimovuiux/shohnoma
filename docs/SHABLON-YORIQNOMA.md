@@ -4,8 +4,9 @@ Bu hujjat Shohnoma.uz uchun **taklifnoma shablonini** qanday tayyorlashni tushun
 Shablon — bitta ZIP fayl. Admin uni **Admin → Shablonlar → Yuklash** orqali yuklaydi, tizim tekshiradi,
 namunali ko‘rinishini ko‘rsatadi va katalogga qo‘shadi.
 
-> **Holat:** bu format bo‘yicha yuklash moduli ishlab chiqilmoqda. Shablonlarni hozirdanoq shu qoidalar
-> bo‘yicha tayyorlash mumkin — modul tayyor bo‘lganda ular o‘zgarishsiz yuklanadi.
+> **Yuklash:** Admin → Shablonlar → «HTML shablon yuklash (ZIP)». Namuna paket: `/sh/starter-kit.zip`
+> (manba — `docs/shablon-namuna/oq-gul/`). Yangi shablon yashirin holda qo‘shiladi: narxni tekshirib,
+> «Saytda ko‘rinadi» ni yoqing. Yangilash — shablon tahrir sahifasidagi «Yangi versiya (ZIP)».
 
 **Asosiy qoida: dizayn — dizaynerniki, funksiya — tizimniki.**
 Siz HTML/CSS bilan ko‘rinishni yasaysiz; mehmon javobi, sanoq, xarita, musiqa, galereya kabi
@@ -25,8 +26,8 @@ mening-shablonim.zip
 │   ├── flowers.webp
 │   ├── font.woff2
 │   └── music.mp3
-├── preview-phone.webp     ← ixtiyoriy (bo‘lmasa avtomatik yaratiladi), 600×1300
-└── preview-laptop.webp    ← ixtiyoriy (bo‘lmasa avtomatik yaratiladi), 1280×800
+├── preview-phone.webp     ← ixtiyoriy (bo‘lmasa katalogda jonli ko‘rinish chiqadi), 600×1300
+└── preview-laptop.webp    ← ixtiyoriy (bo‘lmasa katalogda jonli ko‘rinish chiqadi), 1280×800
 ```
 
 Cheklovlar:
@@ -317,7 +318,7 @@ Tizim ZIP’ni ochib quyidagilarni tekshiradi va xatoni aniq ko‘rsatadi:
 6. `assets/` dagi fayllar havolalari to‘g‘ri, hajmlar cheklovdan oshmagan
 7. Taqiqlangan narsalar yo‘q (7-bo‘lim)
 
-So‘ng `sample` ma’lumotlari bilan telefon (390 px) va laptop (1280 px) ko‘rinishi ko‘rsatiladi.
+So‘ng `sample` ma’lumotlari bilan namuna sahifasi ochiladi (`/namuna/<slug>/`), katalog kartasida jonli ko‘rinish chiqadi.
 Admin narxni tasdiqlab **«Faol»** qiladi.
 
 ---

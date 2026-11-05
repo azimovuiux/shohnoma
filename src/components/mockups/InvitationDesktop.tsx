@@ -2,6 +2,7 @@ import type { Template } from "@/lib/templates";
 import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
 import { TemplateArt } from "@/components/invitation/TemplateArt";
+import { HtmlFrame } from "./HtmlFrame";
 
 /** Laptop ekranidagi shablon hero'si (1280×800 asosida, cqw bilan masshtablanadi) */
 const u = (px: number) => `${((px / 1280) * 100).toFixed(3)}cqw`;
@@ -9,6 +10,7 @@ const u = (px: number) => `${((px / 1280) * 100).toFixed(3)}cqw`;
 
 export function InvitationDesktop({ t }: { t: Template }) {
   const img = !t.isLive ? t.images?.laptop : undefined;
+  if (t.kind === "html" && !img) return <HtmlFrame src={t.previewUrl ?? `/api/tpl/${t.slug}/preview?v=${t.version ?? 1}`} baseWidth={1280} />;
   if (img) {
     return (
       // eslint-disable-next-line @next/next/no-img-element

@@ -40,6 +40,7 @@ function invitation_out(array $i): array
         'message' => $i['message'],
         'program' => jdec($i['program']),
         'photos' => jdec($i['photos']),
+        'extra' => (object)(jdec($i['extra'] ?? null) ?: []),
         'rsvpEnabled' => (bool)$i['rsvp_enabled'],
         'rsvpDeadline' => $i['rsvp_deadline'],
         'musicEnabled' => (bool)$i['music_enabled'],
