@@ -21,30 +21,30 @@ export function Faq() {
             <TelegramIcon size={16} /> Telegramda savol berish <ArrowRight size={14} />
           </a>
         </div>
-        <div className="flex-1 border-t border-line">
+        <div data-reveal="up" style={{ ["--d" as string]: "120ms" }} className="flex-1 border-t border-line">
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
-              <div key={f.q} data-reveal="up" style={{ ["--d" as string]: `${i * 90}ms` }} className="border-b border-line py-[26px]">
+              <div key={f.q} className="border-b border-line">
                 <h3>
                   <button
                     type="button"
                     aria-expanded={isOpen}
                     aria-controls={`faq-${i}`}
                     onClick={() => setOpen(isOpen ? -1 : i)}
-                    className="flex w-full items-center gap-6 text-left"
+                    className="group flex w-full cursor-pointer items-center gap-6 py-[26px] text-left"
                   >
-                    <span className="flex-1 text-[16px] font-semibold leading-[1.35] text-ink">{f.q}</span>
+                    <span className="flex-1 text-[16px] font-semibold leading-[1.35] text-ink transition-colors group-hover:text-maroon">{f.q}</span>
                     <span
                       className={`flex size-[34px] shrink-0 items-center justify-center rounded-full transition-colors ${
-                        isOpen ? "bg-maroon text-ink-inverse" : "border border-line text-ink"
+                        isOpen ? "bg-maroon text-ink-inverse" : "border border-line text-ink group-hover:border-maroon group-hover:text-maroon"
                       }`}
                     >
                       {isOpen ? <Minus size={16} /> : <Add size={16} />}
                     </span>
                   </button>
                 </h3>
-                <div id={`faq-${i}`} hidden={!isOpen} className="t-body-m mt-3.5 max-w-[620px] text-ink-2">
+                <div id={`faq-${i}`} hidden={!isOpen} className="t-body-m -mt-2 max-w-[620px] pb-[26px] text-ink-2 animate-[fade-in_.3s]">
                   {f.a}
                 </div>
               </div>

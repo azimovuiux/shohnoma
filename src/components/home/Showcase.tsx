@@ -38,12 +38,10 @@ export function Showcase() {
   return (
     <section id="shablonlar" className="scroll-mt-20 bg-bg-base py-20 lg:py-[120px]">
       <div className="mx-auto max-w-[1440px] px-5 lg:px-[120px]">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div data-reveal="up" className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex flex-col gap-4">
-            <div data-reveal="up">
-              <SectionTitle plain="Tayyor" italic="dizaynlar" />
-            </div>
-            <p data-reveal="up" style={{ ["--d" as string]: "120ms" }} className="t-body-m max-w-[440px] text-ink-2">
+            <SectionTitle plain="Tayyor" italic="dizaynlar" />
+            <p className="t-body-m max-w-[440px] text-ink-2">
               Eng sevimli 10 ta dizayn — har biri telefon va laptopda chiroyli ochiladi. Hozir aksiya narxlarida.
             </p>
           </div>
@@ -74,7 +72,7 @@ export function Showcase() {
           ))}
         </div>
 
-        <div className="mt-12 flex justify-center lg:mt-16">
+        <div data-reveal="up" className="mt-12 flex justify-center lg:mt-16">
           <Link href="/shablonlar/" className="btn border border-line-dark px-7 text-ink hover:bg-bg-soft">
             <Gallery size={16} /> Barcha {templates.length} ta shablon <ArrowRight size={16} />
           </Link>

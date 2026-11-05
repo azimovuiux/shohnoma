@@ -50,17 +50,17 @@ export function Hero() {
     <section className="relative overflow-hidden">
       <div className="relative mx-auto grid max-w-[1440px] gap-12 px-5 pb-16 pt-10 lg:block lg:h-[900px] lg:px-[120px] lg:pb-0 lg:pt-[160px]">
         {/* Matn */}
-        <div className="relative z-10 flex flex-col items-start">
+        <div data-reveal="up" className="relative z-10 flex flex-col items-start">
           <h1 className="flex flex-col font-serif font-light text-ink">
-            <span data-reveal="up" style={{ ["--d" as string]: "80ms" }} className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">To‘yingiz uchun</span>
-            <em data-reveal="up" style={{ ["--d" as string]: "200ms" }} className="text-[96px] italic leading-[0.86] tracking-[-0.01em] text-maroon sm:text-[130px] lg:text-[176px]">shohona</em>
-            <span data-reveal="up" style={{ ["--d" as string]: "320ms" }} className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">taklifnoma sayti</span>
+            <span className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">To‘yingiz uchun</span>
+            <em className="text-[96px] italic leading-[0.86] tracking-[-0.01em] text-maroon sm:text-[130px] lg:text-[176px]">shohona</em>
+            <span className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">taklifnoma sayti</span>
           </h1>
-          <p data-reveal="up" style={{ ["--d" as string]: "460ms" }} className="t-body-l mt-7 max-w-[470px] text-ink-2">
+          <p className="t-body-l mt-7 max-w-[470px] text-ink-2">
             Tayyor dizaynni tanlang, ma’lumotlaringizni kiriting va to‘lovdan so‘ng mehmonlarga yuboriladigan tayyor sayt
             havolasini oling.
           </p>
-          <div data-reveal="up" style={{ ["--d" as string]: "580ms" }} className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-9 flex flex-wrap gap-3">
             <Link href="/#shablonlar" className="btn btn-primary">
               Shablonlarni ko‘rish <ArrowRight size={16} />
             </Link>
@@ -68,7 +68,7 @@ export function Hero() {
               <TelegramIcon size={17} /> Telegramda yozish
             </a>
           </div>
-          <ul data-reveal="fade" style={{ ["--d" as string]: "720ms" }} className="mt-11 flex flex-col gap-3 t-body-s text-ink-2 sm:flex-row sm:flex-wrap sm:gap-7">
+          <ul className="mt-11 flex flex-col gap-3 t-body-s text-ink-2 sm:flex-row sm:flex-wrap sm:gap-7">
             <li className="flex items-center gap-2">
               <Mobile size={16} color="var(--color-gold)" /> Telefon uchun moslangan
             </li>
@@ -82,9 +82,9 @@ export function Hero() {
         </div>
 
         {/* Vizual — desktopda absolut koordinatalar (Figma 1440×900) */}
-        <div className="relative mx-auto aspect-[560/760] w-full max-w-[420px] lg:absolute lg:left-[calc(50%+70px)] lg:top-[96px] lg:mx-0 lg:w-[560px] lg:max-w-none">
+        <div data-reveal="up" style={{ ["--d" as string]: "180ms" }} className="relative mx-auto aspect-[560/760] w-full max-w-[420px] lg:absolute lg:left-[calc(50%+70px)] lg:top-[96px] lg:mx-0 lg:w-[560px] lg:max-w-none">
           {/* koordinatalar 790..1350 × 96..856 → foiz */}
-          <div data-reveal="clip" style={{ ["--d" as string]: "150ms" }} className="absolute left-[10.7%] top-[2.6%] h-[81.6%] w-[78.6%]">
+          <div className="absolute left-[10.7%] top-[2.6%] h-[81.6%] w-[78.6%]">
             <svg viewBox="0 0 440 620" className="absolute left-[6.8%] -top-[4.8%] size-full" aria-hidden>
               <path d="M0.5 620 V220 A219.5 219.5 0 0 1 439.5 220 V620" fill="none" stroke="var(--color-gold)" strokeOpacity="0.5" />
             </svg>
@@ -93,10 +93,10 @@ export function Hero() {
 
           <HeroFlowersMobile />
 
-          <PhoneFrame dark className="absolute left-[17.9%] top-[7.1%] z-[2] w-[53.5%]" reveal="rise" delay={450}>
+          <PhoneFrame dark className="absolute left-[17.9%] top-[7.1%] z-[2] w-[53.5%]">
             <InvitationScreen t={bordo} />
           </PhoneFrame>
-          <PhoneFrame className="absolute left-[55.4%] top-[17.9%] z-[1] w-[42.5%]" reveal="rise" delay={650}>
+          <PhoneFrame className="absolute left-[55.4%] top-[17.9%] z-[1] w-[42.5%]">
             <InvitationScreen t={ravoq} />
           </PhoneFrame>
 

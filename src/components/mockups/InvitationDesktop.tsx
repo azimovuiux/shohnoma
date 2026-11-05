@@ -1,12 +1,32 @@
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel } from "@/lib/templates";
+import { ceremonyLabel, getTemplate } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
 import { TemplateArt } from "@/components/invitation/TemplateArt";
 
 /** Laptop ekranidagi shablon hero'si (1280×800 asosida, cqw bilan masshtablanadi) */
 const u = (px: number) => `${((px / 1280) * 100).toFixed(3)}cqw`;
 
+/** Namuna ma’lumotli shablon — Figma'dan eksport qilingan asl dizayn rasmi */
+function isPristine(t: Template) {
+  const o = getTemplate(t.slug);
+  return !!o && JSON.stringify(o.sample) === JSON.stringify(t.sample);
+}
+
 export function InvitationDesktop({ t }: { t: Template }) {
+  if (isPristine(t)) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={`/templates/${t.slug}-laptop.webp`}
+        alt=""
+        draggable={false}
+        loading="lazy"
+        decoding="async"
+        className="block size-full select-none object-cover object-top"
+        style={{ background: t.theme.bg[0] }}
+      />
+    );
+  }
   const { theme } = t;
   const family =
     theme.script === "pinyon" ? "var(--font-script)" : theme.script === "cinzel" ? "var(--font-cinzel)" : "var(--font-serif)";

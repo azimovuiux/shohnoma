@@ -12,17 +12,17 @@ export function CustomDesign() {
   return (
     <section className="bg-bg-base px-5 py-20 lg:px-[120px] lg:py-[130px]">
       <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:flex-row lg:gap-[100px]">
-        <div className="relative aspect-[520/620] w-full max-w-[520px] shrink-0">
+        <div data-reveal="up" className="relative aspect-[520/620] w-full max-w-[520px] shrink-0">
           <svg viewBox="0 0 440 560" className="absolute left-[8.5%] top-0 h-[90.3%] w-[84.6%]" fill="none" aria-hidden>
             <path d={archPath} stroke="var(--color-gold)" />
           </svg>
           <div className="absolute left-0 top-[5.5%] h-[90.3%] w-[84.6%]" style={{ clipPath: `path("${archPath}")` }}>
-            <Photo alt="Krem taklifnoma kartalari, oltin muhr va pero" src="/images/custom-design.webp" className="size-full" tone="cream" reveal="scale" />
+            <Photo alt="Krem taklifnoma kartalari, oltin muhr va pero" src="/images/custom-design.webp" className="size-full" tone="cream" />
           </div>
           <Star8 size={32} className="absolute left-[86.9%] top-[1%]" />
           <Star8 size={12} className="absolute left-[90.4%] top-[11.9%]" />
 
-          <div data-reveal="pop" style={{ ["--d" as string]: "500ms" }} className="absolute right-0 top-[64.5%] flex w-[244px] flex-col gap-3.5 rounded-[18px] border border-line bg-bg-base px-[22px] pb-[22px] pt-5 shadow-[0_8px_10px_rgba(31,15,10,0.10)] sm:left-[57%] sm:right-auto">
+          <div className="absolute right-0 top-[64.5%] flex w-[244px] flex-col gap-3.5 rounded-[18px] border border-line bg-bg-base px-[22px] pb-[22px] pt-5 shadow-[0_8px_10px_rgba(31,15,10,0.10)] sm:left-[57%] sm:right-auto">
             <div className="flex items-center gap-2.5 t-title text-ink">
               <DocumentText size={18} /> Individual brif
             </div>

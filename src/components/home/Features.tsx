@@ -21,7 +21,7 @@ const right = [
 
 function Feature({ f, side, i = 0 }: { f: (typeof left)[number]; side: "left" | "right"; i?: number }) {
   return (
-    <li data-reveal={side === "left" ? "left" : "right"} style={{ ["--d" as string]: `${250 + i * 130}ms` }} className={`relative flex items-center gap-[18px] ${side === "left" ? "lg:flex-row-reverse lg:text-right" : ""}`}>
+    <li className={`relative flex items-center gap-[18px] ${side === "left" ? "lg:flex-row-reverse lg:text-right" : ""}`}>
       <span className="flex size-[52px] shrink-0 items-center justify-center rounded-full border border-[rgba(226,196,140,0.45)] bg-maroon-deep text-[#e2c48c]">
         {f.icon}
       </span>
@@ -110,15 +110,15 @@ export function Features() {
         </div>
 
         <div className="grid w-full items-center gap-10 lg:grid-cols-[1fr_330px_1fr] lg:gap-[35px]">
-          <ul className="order-2 flex flex-col gap-8 lg:order-1 lg:gap-[108px]">
+          <ul data-reveal="up" style={{ ["--d" as string]: "200ms" }} className="order-2 flex flex-col gap-8 lg:order-1 lg:gap-[108px]">
             {left.map((f, i) => (
               <Feature key={f.title} f={f} side="left" i={i} />
             ))}
           </ul>
-          <PhoneFrame className="order-1 mx-auto w-[280px] lg:order-2 lg:w-[330px]" reveal="rise" delay={100}>
+          <PhoneFrame className="order-1 mx-auto w-[280px] lg:order-2 lg:w-[330px]" reveal="up" delay={100}>
             <InnerPage />
           </PhoneFrame>
-          <ul className="order-3 flex flex-col gap-8 lg:gap-[108px]">
+          <ul data-reveal="up" style={{ ["--d" as string]: "300ms" }} className="order-3 flex flex-col gap-8 lg:gap-[108px]">
             {right.map((f, i) => (
               <Feature key={f.title} f={f} side="right" i={i} />
             ))}

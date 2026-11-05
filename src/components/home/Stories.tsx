@@ -28,7 +28,7 @@ function StoryText({
   bullets: { icon: ReactNode; label: string }[];
 }) {
   return (
-    <div className="flex max-w-[500px] flex-col gap-[26px]" data-reveal="up">
+    <div className="flex max-w-[500px] flex-col gap-[26px]" data-reveal="up" style={{ ["--d" as string]: "120ms" }}>
       <div className="flex items-center gap-3.5">
         <span className="font-serif text-[40px] font-light italic leading-none tracking-[-0.01em] text-gold">{n}</span>
         <span className="h-px w-16 bg-gold" />
@@ -40,7 +40,7 @@ function StoryText({
       <p className="t-body-l max-w-[470px] text-ink-2">{text}</p>
       <ul className="flex flex-col gap-3.5">
         {bullets.map((b, i) => (
-          <li key={b.label} data-reveal="left" style={{ ["--d" as string]: `${300 + i * 110}ms` }} className="flex items-center gap-3.5">
+          <li key={b.label} className="flex items-center gap-3.5">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">{b.icon}</span>
             <span className="t-title text-ink">{b.label}</span>
           </li>
@@ -53,8 +53,6 @@ function StoryText({
 function UICard({ icon, title, children, className = "", delay = 650 }: { icon?: ReactNode; title?: ReactNode; children: ReactNode; className?: string; delay?: number }) {
   return (
     <div
-      data-reveal="pop"
-      style={{ ["--d" as string]: `${delay}ms` }}
       className={`flex flex-col gap-3 rounded-[18px] border border-line bg-bg-base p-[18px] shadow-[0_8px_10px_rgba(31,15,10,0.10)] ${className}`}
     >
       {title && (
@@ -71,7 +69,7 @@ function UICard({ icon, title, children, className = "", delay = 650 }: { icon?:
 /* ── Hikoya 1 ── */
 function Visual1() {
   return (
-    <div className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
+    <div data-reveal="up" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
       <GirihPattern id="g-story1" cell={44} color="#d9b97a" opacity={0.5} className="absolute -left-[17%] -top-[8.6%] h-[53%] w-[85%]" />
       {/* Bitta surat uch tilimga bo‘lingan (Figma 75:5173): umumiy ramka x 10–570, y 20–756 (580×700 asosida).
           Har tilim suratning faqat o‘z joyidagi bo‘lagini ko‘rsatadi — yonma-yon yaxlit rasm bo‘lib ko‘rinadi. */}
@@ -84,9 +82,8 @@ function Visual1() {
         return (
           <div
             key={i}
-            data-reveal="clip"
             className="absolute overflow-hidden rounded-[14px] bg-[#e9dcc8]"
-            style={{ left: `${(st.x / 580) * 100}%`, top: `${(st.y / 700) * 100}%`, width: `${(W / 580) * 100}%`, height: `${(H / 700) * 100}%`, ["--d" as string]: `${i * 160}ms` }}
+            style={{ left: `${(st.x / 580) * 100}%`, top: `${(st.y / 700) * 100}%`, width: `${(W / 580) * 100}%`, height: `${(H / 700) * 100}%`}}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -128,21 +125,18 @@ function Visual1() {
 /* ── Hikoya 2 ── */
 function Visual2() {
   return (
-    <div className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
+    <div data-reveal="up" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
       <GirihPattern id="g-story2" cell={44} color="#d9b97a" opacity={0.5} className="absolute left-[14.5%] top-[11.4%] h-[70.9%] w-[85.5%]" />
       <Photo
         alt="Krem kostyumdagi ayol telefonga qarab tabassum qilmoqda"
         src="/images/story-2.webp"
         className="absolute left-[29.3%] top-[4.3%] h-[91.4%] w-[65.5%] rounded-full"
-        reveal="scale"
         tone="cream"
       />
       <Photo
         alt="Telefon tutgan qo‘l"
         src="/images/story-2-hand.webp"
         className="absolute left-[69%] top-[71.4%] aspect-square w-[32.8%] rounded-full border-[6px] border-white shadow-[0_10px_20px_rgba(31,15,10,0.15)]"
-        reveal="pop"
-        delay={350}
         tone="rose"
       />
       <UICard className="absolute left-0 top-[17%] w-[280px] max-w-[70%]">
@@ -180,7 +174,6 @@ function Visual3() {
       <GirihPattern id="g-story3" cell={44} color="#d9b97a" opacity={0.5} className="absolute left-[43%] -top-[1.7%] h-[53%] w-[64%]" />
       {/* Pochta markasi shaklidagi rasm (tishli chet): padding hududida teshiklar, ichi to‘liq */}
       <div
-        data-reveal="scale"
         className="absolute left-[3.4%] top-[7.1%] h-[85.7%] w-[81%] p-[8px]"
         style={{
           WebkitMask:
