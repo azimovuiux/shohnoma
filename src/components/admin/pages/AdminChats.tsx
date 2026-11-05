@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apiGet } from "@/lib/client";
 import { api, useToast } from "@/components/ui";
@@ -15,7 +16,6 @@ export function AdminChats() {
   const [items, setItems] = useState<Item[] | null>(null);
   const [active, setActive] = useState<string | null>(null);
   const [tg, setTg] = useState<boolean | null>(null);
-  const toast = useToast();
   const reloadCounts = useReloadCounts();
 
   const loadList = useCallback(async () => {
@@ -34,15 +34,6 @@ export function AdminChats() {
     return () => window.clearInterval(id);
   }, [loadList]);
 
-  const setupTg = async () => {
-    try {
-      await api("/api/admin/telegram/setup", { method: "POST" });
-      toast("Telegram bot ulandi: mijoz xabariga Reply qilib javob bering");
-    } catch (e) {
-      toast((e as Error).message, "error");
-    }
-  };
-
   const current = items?.find((i) => i.id === active) ?? null;
 
   return (
@@ -51,12 +42,10 @@ export function AdminChats() {
         title="Chatlar"
         sub="Saytdagi chat orqali yozgan mijozlar. Javobingiz mijozning ekranida darhol chiqadi."
         right={
-          tg ? (
-            <button type="button" onClick={setupTg} className="btn btn-secondary btn-sm">
+          tg === false ? (
+            <Link href="/admin/sozlamalar/" className="btn btn-secondary btn-sm">
               Telegram botni ulash
-            </button>
-          ) : tg === false ? (
-            <span className="max-w-[360px] t-body-s text-ink-2">Telegram orqali javob berish uchun .env da TELEGRAM_BOT_TOKEN va TELEGRAM_ADMIN_CHAT_ID ni sozlang.</span>
+            </Link>
           ) : null
         }
       />

@@ -13,6 +13,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
     { href: "/admin/briflar/", label: "Briflar", n: counts.briefs },
     { href: "/admin/chatlar/", label: "Chatlar", n: counts.chats },
     { href: "/admin/xabarlar/", label: "Xabarlar", n: counts.leads },
+    { href: "/admin/sozlamalar/", label: "Sozlamalar", n: 0 },
   ];
   return (
     <nav aria-label="Admin" className="-mx-5 flex gap-1 overflow-x-auto px-5 lg:mx-0 lg:px-0">

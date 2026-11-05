@@ -32,10 +32,42 @@ function load_env(): void
 }
 load_env();
 
+/** Admin paneldan o‘zgartiriladigan sozlamalar (settings jadvali .env dan ustun) */
+const SETTING_KEYS = [
+    'TELEGRAM_BOT_TOKEN', 'TELEGRAM_ADMIN_CHAT_ID',
+    'P2P_CARD', 'P2P_HOLDER', 'P2P_BANK',
+    'PAYME_MERCHANT_ID', 'PAYME_KEY',
+    'CLICK_SERVICE_ID', 'CLICK_MERCHANT_ID', 'CLICK_SECRET_KEY', 'CLICK_MERCHANT_USER_ID',
+];
+
+function db_settings(bool $fresh = false): array
+{
+    static $cache = null;
+    if ($cache !== null && !$fresh) return $cache;
+    $cache = [];
+    try {
+        foreach (db()->query('SELECT k, v FROM settings')->fetchAll() as $r) $cache[$r['k']] = (string)$r['v'];
+    } catch (Throwable) {
+        // jadval hali yo‘q (migratsiyadan oldin) — .env bilan ishlaymiz
+    }
+    return $cache;
+}
+
 function env(string $key, ?string $default = null): ?string
 {
+    if (in_array($key, SETTING_KEYS, true)) {
+        $s = db_settings()[$key] ?? '';
+        if ($s !== '') return $s;
+    }
     $v = $_ENV[$key] ?? getenv($key);
     return ($v === false || $v === '') ? $default : (string)$v;
+}
+
+function setting_set(string $key, ?string $value): void
+{
+    if ($value === null || $value === '') q('DELETE FROM settings WHERE k = ?', [$key]);
+    else q('INSERT INTO settings (k, v) VALUES (?, ?) ON DUPLICATE KEY UPDATE v = VALUES(v), updated_at = UTC_TIMESTAMP()', [$key, $value]);
+    db_settings(true);
 }
 
 function site_url(): string { return rtrim(env('SITE_URL', 'https://shohnoma.uz'), '/'); }
