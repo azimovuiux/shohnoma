@@ -17,6 +17,7 @@ import "@fontsource/inter/latin-ext-600.css";
 import "@fontsource/pinyon-script/latin-400.css";
 import "@fontsource/cinzel/latin-400.css";
 import "./globals.css";
+import { ToastProvider } from "@/components/ui";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shohnoma.uz"),
@@ -40,7 +41,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uz">
-      <body className="min-h-dvh">{children}</body>
+      <body className="min-h-dvh">
+        <ToastProvider>{children}</ToastProvider>
+      </body>
     </html>
   );
 }
