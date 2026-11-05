@@ -11,8 +11,8 @@ export function Faq() {
   return (
     <section id="savollar" className="scroll-mt-20 bg-bg-soft px-5 py-20 lg:px-[120px] lg:py-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-20">
-        <div data-reveal="up" className="flex shrink-0 flex-col gap-[22px] lg:w-[400px]">
-          <h2 className="flex flex-col font-serif font-light">
+        <div data-reveal="stagger" className="flex shrink-0 flex-col gap-[22px] lg:w-[400px]">
+          <h2 data-split className="flex flex-col font-serif font-light">
             <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">Ko‘p so‘raladigan</span>
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">savollar</em>
           </h2>
@@ -21,7 +21,7 @@ export function Faq() {
             <TelegramIcon size={16} /> Telegramda savol berish <ArrowRight size={14} />
           </a>
         </div>
-        <div data-reveal="up" style={{ ["--d" as string]: "120ms" }} className="flex-1 border-t border-line">
+        <div data-reveal="stagger" style={{ ["--d" as string]: "200ms" }} className="flex-1 border-t border-line">
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (

@@ -295,42 +295,71 @@ input[type="radio"]:focus-visible {
 
 /* ── Reveal (paydo bo‘lish) animatsiyalari ──
    [data-reveal] blok ekranga kirganda RevealObserver `is-in` klassini qo‘shadi.
-   Faqat opacity + transform (GPU) — silliq. clip-path faqat "clip" variantida va animatsiyadan keyin olib tashlanadi
-   (aks holda soyalar kesiladi). JS bo‘lmasa (html.js yo‘q) — kontent darhol ko‘rinadi. */
+   "stagger" — blokning o‘zi emas, ichidagi elementlar (bevosita bolalar; [data-split] bo‘lsa uning bolalari)
+   pastdan birin-ketin chiqadi. Faqat opacity + transform (GPU). JS bo‘lmasa — kontent darhol ko‘rinadi. */
+:root {
+  --rv-ease: cubic-bezier(0.19, 1, 0.22, 1);
+  --rv-y: 90px;
+  --rv-step: 140ms;
+}
 html.js [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 28px, 0);
+  transform: translate3d(0, var(--rv-y), 0);
   transition:
-    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms),
-    transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms);
+    opacity 1.3s var(--rv-ease) var(--d, 0ms),
+    transform 1.8s var(--rv-ease) var(--d, 0ms);
   backface-visibility: hidden;
 }
-html.js [data-reveal="left"] { transform: translate3d(-28px, 0, 0); }
-html.js [data-reveal="right"] { transform: translate3d(28px, 0, 0); }
-html.js [data-reveal="scale"] { transform: scale(0.96) translate3d(0, 18px, 0); }
-html.js [data-reveal="pop"] { transform: scale(0.94) translate3d(0, 18px, 0); }
+html.js [data-reveal="left"] { transform: translate3d(-80px, 0, 0); }
+html.js [data-reveal="right"] { transform: translate3d(80px, 0, 0); }
+html.js [data-reveal="scale"] { transform: scale(0.92) translate3d(0, 50px, 0); }
+html.js [data-reveal="pop"] { transform: scale(0.9) translate3d(0, 40px, 0); }
 html.js [data-reveal="fade"] { transform: none; }
-html.js [data-reveal="rise"] { transform: translate3d(0, 56px, 0); }
+html.js [data-reveal="rise"] { transform: translate3d(0, 140px, 0); }
 html.js [data-reveal="clip"] {
   opacity: 1;
   transform: none;
   clip-path: inset(100% 0 0 0);
-  transition: clip-path 1.2s cubic-bezier(0.77, 0, 0.18, 1) var(--d, 0ms);
+  transition: clip-path 1.4s cubic-bezier(0.77, 0, 0.18, 1) var(--d, 0ms);
 }
 html.js [data-reveal].is-in {
   opacity: 1;
   transform: none;
 }
 html.js [data-reveal="clip"].is-in { clip-path: inset(0 0 0 0); }
-/* animatsiya tugagach — hech qanday clip/transform qoldirmaymiz */
-html.js [data-reveal].is-done {
+
+/* stagger: konteyner joyida, bolalari harakatlanadi */
+html.js [data-reveal="stagger"] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+html.js [data-reveal="stagger"] > :not([data-split]),
+html.js [data-reveal="stagger"] > [data-split] > * {
+  opacity: 0;
+  transform: translate3d(0, 70px, 0);
+  transition:
+    opacity 1.2s var(--rv-ease) calc(var(--d, 0ms) + var(--i, 0) * var(--rv-step)),
+    transform 1.7s var(--rv-ease) calc(var(--d, 0ms) + var(--i, 0) * var(--rv-step));
+}
+html.js [data-reveal="stagger"].is-in > :not([data-split]),
+html.js [data-reveal="stagger"].is-in > [data-split] > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* animatsiya tugagach — hech qanday clip/transform/transition qoldirmaymiz */
+html.js [data-reveal].is-done,
+html.js [data-reveal="stagger"].is-done > *,
+html.js [data-reveal="stagger"].is-done > [data-split] > * {
   transition: none;
   clip-path: none;
-  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.js [data-reveal] {
+  html.js [data-reveal],
+  html.js [data-reveal] > *,
+  html.js [data-reveal] > [data-split] > * {
     opacity: 1 !important;
     transform: none !important;
     clip-path: none !important;

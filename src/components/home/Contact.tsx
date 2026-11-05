@@ -58,8 +58,8 @@ export function Contact() {
   return (
     <section id="aloqa" className="scroll-mt-20 bg-bg-base px-5 pb-20 pt-20 lg:px-[120px] lg:pb-[130px] lg:pt-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-16">
-        <div data-reveal="up" className="flex flex-col gap-7 lg:w-[520px] lg:shrink-0">
-          <h2 className="flex flex-col font-serif font-light">
+        <div data-reveal="stagger" className="flex flex-col gap-7 lg:w-[520px] lg:shrink-0">
+          <h2 data-split className="flex flex-col font-serif font-light">
             <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">Savol yoki</span>
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">fikringiz bormi?</em>
           </h2>

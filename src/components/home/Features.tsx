@@ -101,7 +101,7 @@ export function Features() {
       <Star8 size={28} color="#e2c48c" className="absolute bottom-[110px] right-[122px] hidden lg:block" />
 
       <div className="relative mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:gap-[72px]">
-        <div data-reveal="up" className="flex max-w-[725px] flex-col items-center gap-4 text-center">
+        <div data-reveal="stagger" className="flex max-w-[725px] flex-col items-center gap-4 text-center">
           <h2 className="flex flex-wrap items-baseline justify-center gap-x-3.5 font-serif font-light text-ink-inverse">
             <span className="text-[36px] leading-[1.04] lg:text-[52px]">Har bir taklifnomada</span>
             <em className="text-[42px] italic leading-none text-[#e2c48c] lg:text-[64px]">nimalar bor?</em>
@@ -110,7 +110,7 @@ export function Features() {
         </div>
 
         <div className="grid w-full items-center gap-10 lg:grid-cols-[1fr_330px_1fr] lg:gap-[35px]">
-          <ul data-reveal="up" style={{ ["--d" as string]: "200ms" }} className="order-2 flex flex-col gap-8 lg:order-1 lg:gap-[108px]">
+          <ul data-reveal="stagger" style={{ ["--d" as string]: "300ms" }} className="order-2 flex flex-col gap-8 lg:order-1 lg:gap-[108px]">
             {left.map((f, i) => (
               <Feature key={f.title} f={f} side="left" i={i} />
             ))}
@@ -118,7 +118,7 @@ export function Features() {
           <PhoneFrame className="order-1 mx-auto w-[280px] lg:order-2 lg:w-[330px]" reveal="up" delay={100}>
             <InnerPage />
           </PhoneFrame>
-          <ul data-reveal="up" style={{ ["--d" as string]: "300ms" }} className="order-3 flex flex-col gap-8 lg:gap-[108px]">
+          <ul data-reveal="stagger" style={{ ["--d" as string]: "450ms" }} className="order-3 flex flex-col gap-8 lg:gap-[108px]">
             {right.map((f, i) => (
               <Feature key={f.title} f={f} side="right" i={i} />
             ))}

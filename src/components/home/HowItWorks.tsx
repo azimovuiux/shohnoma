@@ -40,12 +40,12 @@ export function HowItWorks() {
   return (
     <section id="qanday-ishlaydi" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-[120px] lg:py-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-14 lg:gap-[72px]">
-        <div data-reveal="up" className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div data-reveal="stagger" className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <SectionTitle plain="Qanday" italic="ishlaydi" />
           <p className="t-body-m max-w-[400px] text-ink-2 lg:text-right">Buyurtmadan tayyor havolagacha — to‘rt oddiy qadam.</p>
         </div>
 
-        <ol data-reveal="up" style={{ ["--d" as string]: "100ms" }} className="grid gap-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0">
+        <ol data-reveal="stagger" style={{ ["--d" as string]: "150ms" }} className="grid gap-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0">
           {steps.map((s, i) => (
             <li key={s.title} className="relative flex gap-5 xl:flex-col xl:gap-7">
               <ArchIcon>{s.icon}</ArchIcon>

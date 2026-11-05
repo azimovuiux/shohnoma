@@ -12,7 +12,7 @@ export function CustomDesign() {
   return (
     <section className="bg-bg-base px-5 py-20 lg:px-[120px] lg:py-[130px]">
       <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:flex-row lg:gap-[100px]">
-        <div data-reveal="up" className="relative aspect-[520/620] w-full max-w-[520px] shrink-0">
+        <div data-reveal="scale" className="relative aspect-[520/620] w-full max-w-[520px] shrink-0">
           <svg viewBox="0 0 440 560" className="absolute left-[8.5%] top-0 h-[90.3%] w-[84.6%]" fill="none" aria-hidden>
             <path d={archPath} stroke="var(--color-gold)" />
           </svg>
@@ -43,8 +43,8 @@ export function CustomDesign() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col gap-7" data-reveal="up" style={{ ["--d" as string]: "150ms" }}>
-          <h2 className="flex flex-col font-serif font-light">
+        <div className="flex flex-1 flex-col gap-7" data-reveal="stagger" style={{ ["--d" as string]: "200ms" }}>
+          <h2 data-split className="flex flex-col font-serif font-light">
             <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">O‘zingizga xos</span>
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">dizayn kerakmi?</em>
           </h2>

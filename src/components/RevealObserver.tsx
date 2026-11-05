@@ -13,9 +13,11 @@ export function RevealObserver() {
   const pathname = usePathname();
   useEffect(() => {
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const items = (el: Element) => el.querySelectorAll<HTMLElement>(":scope > :not([data-split]), :scope > [data-split] > *");
     const done = (el: Element) => {
       const d = parseFloat(getComputedStyle(el).getPropertyValue("--d")) || 0;
-      window.setTimeout(() => el.classList.add("is-done"), d + 1300);
+      const n = el.getAttribute("data-reveal") === "stagger" ? items(el).length : 1;
+      window.setTimeout(() => el.classList.add("is-done"), d + (n - 1) * 140 + 1900);
     };
     const io = new IntersectionObserver(
       (entries) => {
@@ -29,13 +31,14 @@ export function RevealObserver() {
           }),
         );
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0 },
+      { rootMargin: "0px 0px -15% 0px", threshold: 0 },
     );
     const seen = new WeakSet<Element>();
     const scan = () => {
       document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-in)").forEach((el) => {
         if (seen.has(el)) return;
         seen.add(el);
+        if (el.dataset.reveal === "stagger") items(el).forEach((c, i) => c.style.setProperty("--i", String(i)));
         if (reduce) el.classList.add("is-in", "is-done");
         else io.observe(el);
       });

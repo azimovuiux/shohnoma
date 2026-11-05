@@ -50,8 +50,8 @@ export function Hero() {
     <section className="relative overflow-hidden">
       <div className="relative mx-auto grid max-w-[1440px] gap-12 px-5 pb-16 pt-10 lg:block lg:h-[900px] lg:px-[120px] lg:pb-0 lg:pt-[160px]">
         {/* Matn */}
-        <div data-reveal="up" className="relative z-10 flex flex-col items-start">
-          <h1 className="flex flex-col font-serif font-light text-ink">
+        <div data-reveal="stagger" className="relative z-10 flex flex-col items-start">
+          <h1 data-split className="flex flex-col font-serif font-light text-ink">
             <span className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">To‘yingiz uchun</span>
             <em className="text-[96px] italic leading-[0.86] tracking-[-0.01em] text-maroon sm:text-[130px] lg:text-[176px]">shohona</em>
             <span className="text-[44px] leading-none tracking-[-0.01em] sm:text-[60px] lg:text-[84px]">taklifnoma sayti</span>
@@ -68,7 +68,7 @@ export function Hero() {
               <TelegramIcon size={17} /> Telegramda yozish
             </a>
           </div>
-          <ul className="mt-11 flex flex-col gap-3 t-body-s text-ink-2 sm:flex-row sm:flex-wrap sm:gap-7">
+          <ul data-split className="mt-11 flex flex-col gap-3 t-body-s text-ink-2 sm:flex-row sm:flex-wrap sm:gap-7">
             <li className="flex items-center gap-2">
               <Mobile size={16} color="var(--color-gold)" /> Telefon uchun moslangan
             </li>
@@ -82,7 +82,7 @@ export function Hero() {
         </div>
 
         {/* Vizual — desktopda absolut koordinatalar (Figma 1440×900) */}
-        <div data-reveal="up" style={{ ["--d" as string]: "180ms" }} className="relative mx-auto aspect-[560/760] w-full max-w-[420px] lg:absolute lg:left-[calc(50%+70px)] lg:top-[96px] lg:mx-0 lg:w-[560px] lg:max-w-none">
+        <div data-reveal="scale" style={{ ["--d" as string]: "450ms" }} className="relative mx-auto aspect-[560/760] w-full max-w-[420px] lg:absolute lg:left-[calc(50%+70px)] lg:top-[96px] lg:mx-0 lg:w-[560px] lg:max-w-none">
           {/* koordinatalar 790..1350 × 96..856 → foiz */}
           <div className="absolute left-[10.7%] top-[2.6%] h-[81.6%] w-[78.6%]">
             <svg viewBox="0 0 440 620" className="absolute left-[6.8%] -top-[4.8%] size-full" aria-hidden>

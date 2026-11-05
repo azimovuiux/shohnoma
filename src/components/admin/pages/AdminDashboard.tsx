@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useApi } from "@/lib/client";
 import type { Invitation, Order } from "@/lib/types";
 import { AdminError, AdminLoading, AdminTitle, StatCard, fmtDateTime } from "../shared";
-import { StatusBadge } from "@/components/ui";
+import { Field, Input, StatusBadge, api, useToast } from "@/components/ui";
+import { useState } from "react";
 import { formatPrice } from "@/lib/format";
 import { orderStatusView } from "@/lib/display";
 import { getTemplate } from "@/lib/templates";
@@ -63,6 +64,47 @@ export function AdminDashboard() {
           );
         })}
       </ul>
+      <PasswordCard />
     </>
+  );
+}
+
+/** Superadmin parolini almashtirish */
+function PasswordCard() {
+  const toast = useToast();
+  const [current, setCurrent] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setBusy(true);
+    try {
+      await api("/api/auth/password/change", { method: "POST", json: { current, password } });
+      setCurrent("");
+      setPassword("");
+      toast("Parol yangilandi");
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <form onSubmit={submit} className="mt-10 flex max-w-[640px] flex-col gap-4 rounded-panel border border-line p-5">
+      <h2 className="font-serif text-[22px] font-light text-ink">Admin parolini almashtirish</h2>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Joriy parol">
+          <Input type="password" value={current} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" />
+        </Field>
+        <Field label="Yangi parol (kamida 10 belgi)" error={error}>
+          <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" />
+        </Field>
+      </div>
+      <button type="submit" disabled={busy || !current || password.length < 10} className="btn btn-primary btn-sm w-fit">
+        Saqlash
+      </button>
+    </form>
   );
 }

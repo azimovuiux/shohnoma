@@ -28,17 +28,17 @@ function StoryText({
   bullets: { icon: ReactNode; label: string }[];
 }) {
   return (
-    <div className="flex max-w-[500px] flex-col gap-[26px]" data-reveal="up" style={{ ["--d" as string]: "120ms" }}>
+    <div className="flex max-w-[500px] flex-col gap-[26px]" data-reveal="stagger" style={{ ["--d" as string]: "200ms" }}>
       <div className="flex items-center gap-3.5">
         <span className="font-serif text-[40px] font-light italic leading-none tracking-[-0.01em] text-gold">{n}</span>
         <span className="h-px w-16 bg-gold" />
       </div>
-      <h2 className="flex flex-col font-serif font-light">
+      <h2 data-split className="flex flex-col font-serif font-light">
         <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">{plain}</span>
         <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{italic}</em>
       </h2>
       <p className="t-body-l max-w-[470px] text-ink-2">{text}</p>
-      <ul className="flex flex-col gap-3.5">
+      <ul data-split className="flex flex-col gap-3.5">
         {bullets.map((b, i) => (
           <li key={b.label} className="flex items-center gap-3.5">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">{b.icon}</span>
@@ -69,7 +69,7 @@ function UICard({ icon, title, children, className = "", delay = 650 }: { icon?:
 /* ── Hikoya 1 ── */
 function Visual1() {
   return (
-    <div data-reveal="up" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
+    <div data-reveal="scale" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
       <GirihPattern id="g-story1" cell={44} color="#d9b97a" opacity={0.5} className="absolute -left-[17%] -top-[8.6%] h-[53%] w-[85%]" />
       {/* Bitta surat uch tilimga bo‘lingan (Figma 75:5173): umumiy ramka x 10–570, y 20–756 (580×700 asosida).
           Har tilim suratning faqat o‘z joyidagi bo‘lagini ko‘rsatadi — yonma-yon yaxlit rasm bo‘lib ko‘rinadi. */}
@@ -125,7 +125,7 @@ function Visual1() {
 /* ── Hikoya 2 ── */
 function Visual2() {
   return (
-    <div data-reveal="up" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
+    <div data-reveal="scale" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
       <GirihPattern id="g-story2" cell={44} color="#d9b97a" opacity={0.5} className="absolute left-[14.5%] top-[11.4%] h-[70.9%] w-[85.5%]" />
       <Photo
         alt="Krem kostyumdagi ayol telefonga qarab tabassum qilmoqda"

@@ -112,7 +112,7 @@ export function useRequireUser(admin = false) {
     if (loading || !me) return;
     if (!me.user) {
       const next = window.location.pathname + window.location.search;
-      window.location.replace(`/kirish/?next=${encodeURIComponent(next)}`);
+      window.location.replace(`/kirish/${admin ? "admin/" : ""}?next=${encodeURIComponent(next)}`);
     } else if (admin && !me.user.isAdmin) {
       window.location.replace("/");
     }
