@@ -1,102 +1,72 @@
-# Plesk'ga deploy qilish
+# Plesk'ga deploy (PHP hosting, Node.js shart emas)
 
-Sayt — Next.js (Node.js) ilovasi + MariaDB. Plesk Git `main` branchni `/shohnoma.uz` papkasiga tortadi, keyin
-qo‘shimcha buyruqlar build qiladi va ilovani qayta ishga tushiradi.
+Sayt ikki qismdan iborat:
+- **Frontend** — statik HTML/JS/CSS (Next.js eksport). GitHub Actions yig‘adi.
+- **Backend** — PHP 8.2 (`api/`) + MariaDB.
 
-## 1. Node.js ni yoqish (bir marta)
+`main` ga push → GitHub Actions saytni yig‘adi → tayyor fayllarni **`deploy`** branchiga qo‘yadi → Plesk shu branchni tortadi.
 
-Plesk → **Websites & Domains → shohnoma.uz → Node.js**:
+## 1. GitHub (bir marta)
 
-| Sozlama | Qiymat |
-|---|---|
-| Node.js Version | **22.x** (kamida 20) |
-| Package Manager | npm |
-| Document Root | `/shohnoma.uz/public` |
-| Application Mode | `production` |
-| Application Root | `/shohnoma.uz` |
-| Application Startup File | `server.js` |
+- Repo → **Settings → Actions → General**: Actions yoqilgan bo‘lsin; *Workflow permissions* → **Read and write permissions** → Save.
+- `main` ga birinchi push'dan so‘ng **Actions** sahifasida "Build & deploy branch" yashil bo‘lishi va `deploy` branch paydo bo‘lishi kerak.
+- (ixtiyoriy) Telegram orqali kirish uchun: **Settings → Secrets and variables → Actions → Variables** → `TELEGRAM_BOT_USERNAME` = botning username'i.
 
-"Enable Node.js" tugmasini bosing.
+## 2. Plesk → Git (bir marta)
 
-> Agar Plesk'da "Node.js" bo‘limi bo‘lmasa — hosting provayderdan Node.js extension'ni yoqishni so‘rang.
+shohnoma.uz → **Git** → repozitoriya sozlamalari:
+- Repository URL: `https://github.com/azimovuiux/shohnoma.git`
+- **Branch: `deploy`**
+- Deployment path: `/shohnoma.uz`
+- Deployment mode: Automatic
+- Qo‘shimcha deploy buyruqlari **kerak emas** (bo‘sh qoldiring).
 
-## 2. Ma’lumotlar bazasi (bir marta)
+"Pull Updates" / "Deploy now" bosing. Har push'da avtomatik tortish uchun Plesk'dagi **Webhook URL** ni GitHub → Settings → Webhooks ga qo‘shing (Content type: `application/json`, faqat push).
 
-Plesk → **Databases → Add Database**: nomi `shohnoma`, turi MariaDB/MySQL, yangi foydalanuvchi va parol.
-Jadval va migratsiyalar ilova ishga tushganda **avtomatik** yaratiladi (`server.js`).
+## 3. `.env` (bir marta, gitga qo‘shilmaydi)
 
-## 3. `.env` fayli (bir marta, gitga qo‘shilmaydi)
-
-Plesk → **Files** → `/shohnoma.uz/.env` faylini yarating (namuna: `.env.example`). Kamida:
+`/shohnoma.uz/.env` (Plesk → Files). Kamida:
 
 ```
-DATABASE_URL=mysql://DB_USER:DB_PAROL@localhost:3306/shohnoma
+DATABASE_URL=mysql://tilirut_shohnoma_admin:PAROL@localhost:3306/tilirut_shohnoma
 SITE_URL=https://shohnoma.uz
 SESSION_SECRET=<uzun tasodifiy satr>
 ADMIN_PHONES=+99890XXXXXXX
-UPLOAD_DIR=../shohnoma-storage/uploads
 ```
 
-`UPLOAD_DIR` deploy papkasidan tashqarida bo‘lsin — yuklangan suratlar va cheklar har deployda saqlanib qoladi.
-Parolda `@ : / ?` kabi belgilar bo‘lsa, ularni URL-kodlang (masalan `@` → `%40`).
+Paroldagi `@` → `%40`, `&` → `%26`. Jadvallar birinchi so‘rovda avtomatik yaratiladi.
+Yuklangan rasm va cheklar `/var/www/vhosts/tilirus.uz/shohnoma-storage/` da saqlanadi (deploy ularni o‘chirmaydi). Boshqa joy kerak bo‘lsa — `STORAGE_DIR=`.
 
-## 4. Git — qo‘shimcha deploy buyruqlari (bir marta)
+`.env` va boshqa maxfiy fayllar `.htaccess` orqali brauzerdan yopilgan.
 
-Plesk → **Git → shohnoma.git → Repository Settings**:
+## 4. PHP sozlamalari
 
-- Deployment mode: **Automatic**, branch: `main`, path: `/shohnoma.uz`
-- ✅ **Enable additional deployment actions**:
+shohnoma.uz → **PHP** (Hosting settings):
+- Versiya **8.2** yoki yangiroq, ishlov berish: *FPM application served by Apache* (yoki FastCGI by Apache) — `.htaccess` ishlashi uchun Apache kerak
+- `upload_max_filesize = 10M`, `post_max_size = 12M`
+- Kengaytmalar: `pdo_mysql`, `curl`, `fileinfo`, `mbstring` (odatda yoqilgan)
 
-```bash
-export PATH=/opt/plesk/node/22/bin:$PATH
-npm ci --include=dev --no-audit --no-fund
-npm run build
-mkdir -p tmp && touch tmp/restart.txt
-```
+## 5. SSL
 
-Har `main` ga push → Plesk kodni tortadi → build → Passenger ilovani qayta yuklaydi.
-Birinchi marta Node.js sahifasida **Restart App** tugmasini ham bosing.
+**SSL/TLS-сертификаты → Let’s Encrypt** → shohnoma.uz va www.shohnoma.uz. Sayt avtomatik https ga yo‘naltiradi.
 
-> Build uchun ~1.5 GB RAM kerak. Server kichik bo‘lsa va build xotira yetmay to‘xtasa, `NODE_OPTIONS=--max-old-space-size=1536`
-> qo‘shing yoki provayderdan xotira limitini oshirishni so‘rang.
+## 6. To‘lov, SMS, Telegram
 
-## 5. To‘lov tizimlari
+`.env` ga kalitlarni yozing (namuna: `.env.example`):
+- **Payme**: `PAYME_MERCHANT_ID`, `PAYME_KEY` — kassada endpoint: `https://shohnoma.uz/api/payme`
+- **Click**: `CLICK_SERVICE_ID`, `CLICK_MERCHANT_ID`, `CLICK_MERCHANT_USER_ID`, `CLICK_SECRET_KEY` — Prepare: `https://shohnoma.uz/api/click/prepare`, Complete: `https://shohnoma.uz/api/click/complete`
+- **P2P**: `P2P_CARD`, `P2P_HOLDER`, `P2P_BANK`
+- **Eskiz.uz** (SMS kod): `ESKIZ_EMAIL`, `ESKIZ_PASSWORD`, `ESKIZ_FROM`
+- **Telegram**: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ADMIN_CHAT_ID` (+ BotFather → `/setdomain` → shohnoma.uz)
 
-**Payme** (business.paycom.uz → kassa sozlamalari):
-- Endpoint URL: `https://shohnoma.uz/api/payme`
-- Hisob parametri: `order_id` (buyurtma kodi, masalan `SH-00124`)
-- `.env`: `PAYME_MERCHANT_ID`, `PAYME_KEY` (test paytida test kalit va `PAYME_TEST=1`)
-
-**Click** (merchant.click.uz → servis sozlamalari):
-- Prepare URL: `https://shohnoma.uz/api/click/prepare`
-- Complete URL: `https://shohnoma.uz/api/click/complete`
-- `.env`: `CLICK_SERVICE_ID`, `CLICK_MERCHANT_ID`, `CLICK_MERCHANT_USER_ID`, `CLICK_SECRET_KEY`
-
-**P2P**: `.env` da `P2P_CARD`, `P2P_HOLDER`, `P2P_BANK`. Cheklar admin panelda tasdiqlanadi: `https://shohnoma.uz/admin/tolovlar`.
-
-Payme/Click kalitlari kiritilmaguncha bu usullar to‘lov sahifasida ko‘rinmaydi (P2P doim bor).
-
-## 6. SMS va Telegram
-
-- **Eskiz.uz**: `ESKIZ_EMAIL`, `ESKIZ_PASSWORD`, `ESKIZ_FROM`. Sozlanmasa kirish kodi yuborilmaydi (faqat server logida).
-- **Telegram bot** (@BotFather):
-  - `TELEGRAM_BOT_TOKEN`, `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` (masalan `shohnoma_bot`)
-  - BotFather → `/setdomain` → `shohnoma.uz` (Telegram orqali kirish uchun)
-  - `TELEGRAM_ADMIN_CHAT_ID` — admin guruh id (botni guruhga qo‘shib, id ni oling)
-
-`NEXT_PUBLIC_*` o‘zgaruvchilar build paytida o‘qiladi — o‘zgartirgandan so‘ng qayta deploy qiling.
+`.env` o‘zgarishi darhol kuchga kiradi (PHP — qayta ishga tushirish shart emas).
 
 ## 7. Kunlik eslatma (ixtiyoriy)
 
-Plesk → **Scheduled Tasks → Add Task** → "Fetch a URL", har kuni 10:00:
-`https://shohnoma.uz/api/cron/reminders?secret=<CRON_SECRET>`
-
-## 8. Admin
-
-`ADMIN_PHONES` dagi raqam bilan `/kirish` orqali kiring → header'dagi "Kabinet" menyusida **Admin panel** chiqadi.
+**Планировщик задач** → "Получить URL", har kuni: `https://shohnoma.uz/api/cron/reminders?secret=<CRON_SECRET>`
 
 ## Tekshirish
 
-- `https://shohnoma.uz` ochiladi
-- Plesk → Node.js → **Logs**: `[shohnoma] migratsiyalar bajarildi`, `[shohnoma] tayyor`
-- Xato bo‘lsa: Logs'dagi birinchi qizil qatorni tekshiring (ko‘pincha `DATABASE_URL` yoki build qilinmagan `.next`)
+- `https://shohnoma.uz/` — bosh sahifa
+- `https://shohnoma.uz/api/config` — JSON chiqishi kerak (`{"ok":true,...}`). Xato bo‘lsa — matnida sabab (ko‘pincha `DATABASE_URL`).
+- Plesk → **Журналы** — PHP xatolari `[shohnoma]` bilan boshlanadi.
