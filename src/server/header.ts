@@ -1,12 +1,16 @@
 import "server-only";
 import { eq, sql } from "drizzle-orm";
-import { getUser } from "./auth";
+import { cookies } from "next/headers";
+import { getUser, SESSION_COOKIE } from "./auth";
 import { db, orders, favorites } from "./db";
 
 export type HeaderUser = { name: string | null; phone: string | null; telegramUser: string | null; orders: number; favorites: number; isAdmin: boolean } | null;
 
 /** Header va mobil menyu uchun (spec §5.1, 25) */
 export async function getHeaderUser(): Promise<HeaderUser> {
+  // cookies() — sahifani dinamik qiladi (try/catch tashqarisida bo‘lishi shart)
+  const jar = await cookies();
+  if (!jar.get(SESSION_COOKIE)) return null;
   let u;
   try {
     u = await getUser();

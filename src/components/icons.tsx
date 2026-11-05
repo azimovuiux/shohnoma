@@ -119,3 +119,4 @@ export const Coffee = wrap(I.Coffee);
 export const Magicpen = wrap(I.Magicpen);
 export const Verify = wrap(I.Verify);
 export const Printer = wrap(I.Printer);
+export const ReceiptText = wrap(I.ReceiptText);

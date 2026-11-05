@@ -146,20 +146,14 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
         {/* Desktop sahna */}
         <div className="relative hidden overflow-hidden rounded-[24px] bg-bg-soft lg:block">
           {device === "laptop" ? (
-            <div className="relative h-[506px]">
-              <div className="absolute left-[38px] top-[68px] w-[620px]">
-                <LaptopFrame className="w-full">
-                  <InvitationDesktop t={live} />
-                </LaptopFrame>
-              </div>
-              <PhonePreview order={order} template={template} className="absolute left-[456px] top-[98px] w-[178px] !h-[370px] !aspect-auto" />
-              <p className="absolute bottom-6 left-10 inline-flex items-center gap-2 t-body-s text-ink-2">
-                <ArrowDown2 size={14} /> Telefonda pastga surib, butun saytni ko‘ring
-              </p>
+            <div className="flex h-[640px] items-center justify-center px-10">
+              <LaptopFrame className="w-full max-w-[680px]">
+                <InvitationDesktop t={live} />
+              </LaptopFrame>
             </div>
           ) : (
             <div className="flex h-[640px] flex-col items-center justify-center gap-4 py-8">
-              <PhonePreview order={order} template={template} className="w-[270px] !h-[560px] !aspect-auto" />
+              <PhonePreview order={order} template={template} className="w-[262px]" />
               <p className="inline-flex items-center gap-2 t-body-s text-ink-2">
                 <ArrowDown2 size={14} /> Telefonda pastga surib, butun saytni ko‘ring
               </p>
@@ -169,7 +163,7 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
 
         {/* Mobil — to‘liq sahifa telefon ichida */}
         <div className="flex flex-col items-center gap-3 rounded-[24px] bg-bg-soft px-4 py-6 lg:hidden">
-          <PhonePreview order={order} template={template} className="w-[250px] !h-[520px] !aspect-auto" />
+          <PhonePreview order={order} template={template} className="w-[250px]" />
           <p className="inline-flex items-center gap-2 t-body-s text-ink-2">
             <ArrowDown2 size={14} /> Pastga surib, butun saytni ko‘ring
           </p>

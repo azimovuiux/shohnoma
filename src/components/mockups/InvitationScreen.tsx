@@ -43,7 +43,7 @@ function Envelope({ t }: { t: Template }) {
         }}
       >
         <span style={{ fontFamily: "var(--font-script)", fontSize: u(23.4), color: "#6b2436", lineHeight: 1.2 }}>
-          {t.sample.a} &amp; {t.sample.b}
+          {t.sample.a}{t.sample.b ? <> &amp; {t.sample.b}</> : null}
         </span>
         <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: u(10.9), color: "#8a6a55" }}>
           sizni to‘yimizga taklif qiladi
