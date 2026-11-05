@@ -19,6 +19,7 @@ import "@fontsource/cinzel/latin-400.css";
 import "./globals.css";
 import { ToastProvider } from "@/components/ui";
 import { MeProvider } from "@/lib/client";
+import { RevealObserver } from "@/components/RevealObserver";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shohnoma.uz"),
@@ -41,10 +42,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="uz">
+    <html lang="uz" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body className="min-h-dvh">
         <MeProvider>
           <ToastProvider>{children}</ToastProvider>
+          <RevealObserver />
         </MeProvider>
       </body>
     </html>

@@ -209,12 +209,12 @@ export function Catalog() {
         </div>
       ) : (
         <div className="mt-6 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.slice(0, 6).map((t) => (
-            <TemplateCard key={t.slug} t={t} onQuickView={setQuick} />
+          {filtered.slice(0, 6).map((t, i) => (
+            <TemplateCard key={t.slug} t={t} onQuickView={setQuick} reveal delay={(i % 3) * 110} />
           ))}
           <CustomDesignBanner />
-          {filtered.slice(6).map((t) => (
-            <TemplateCard key={t.slug} t={t} onQuickView={setQuick} />
+          {filtered.slice(6).map((t, i) => (
+            <TemplateCard key={t.slug} t={t} onQuickView={setQuick} reveal delay={(i % 3) * 110} />
           ))}
         </div>
       )}

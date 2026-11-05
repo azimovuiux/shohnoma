@@ -41,13 +41,15 @@ export function HowItWorks() {
     <section id="qanday-ishlaydi" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-[120px] lg:py-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-14 lg:gap-[72px]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <SectionTitle plain="Qanday" italic="ishlaydi" />
+          <div data-reveal="up">
+            <SectionTitle plain="Qanday" italic="ishlaydi" />
+          </div>
           <p className="t-body-m max-w-[400px] text-ink-2 lg:text-right">Buyurtmadan tayyor havolagacha — to‘rt oddiy qadam.</p>
         </div>
 
         <ol className="grid gap-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0">
           {steps.map((s, i) => (
-            <li key={s.title} className="relative flex gap-5 xl:flex-col xl:gap-7">
+            <li key={s.title} data-reveal="up" style={{ ["--d" as string]: `${i * 140}ms` }} className="relative flex gap-5 xl:flex-col xl:gap-7">
               <ArchIcon>{s.icon}</ArchIcon>
               {i < steps.length - 1 && <Connector />}
               <div className="flex flex-col gap-2.5">
@@ -61,7 +63,7 @@ export function HowItWorks() {
           ))}
         </ol>
 
-        <div className="flex flex-col gap-6 rounded-panel bg-bg-soft p-6 lg:flex-row lg:items-center lg:justify-between lg:px-9 lg:py-7">
+        <div data-reveal="up" className="flex flex-col gap-6 rounded-panel bg-bg-soft p-6 lg:flex-row lg:items-center lg:justify-between lg:px-9 lg:py-7">
           <div className="flex items-center gap-4">
             <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">
               <WalletCheck size={22} />

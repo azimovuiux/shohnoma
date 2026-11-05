@@ -28,7 +28,7 @@ function StoryText({
   bullets: { icon: ReactNode; label: string }[];
 }) {
   return (
-    <div className="flex max-w-[500px] flex-col gap-[26px]">
+    <div className="flex max-w-[500px] flex-col gap-[26px]" data-reveal="up">
       <div className="flex items-center gap-3.5">
         <span className="font-serif text-[40px] font-light italic leading-none tracking-[-0.01em] text-gold">{n}</span>
         <span className="h-px w-16 bg-gold" />
@@ -39,8 +39,8 @@ function StoryText({
       </h2>
       <p className="t-body-l max-w-[470px] text-ink-2">{text}</p>
       <ul className="flex flex-col gap-3.5">
-        {bullets.map((b) => (
-          <li key={b.label} className="flex items-center gap-3.5">
+        {bullets.map((b, i) => (
+          <li key={b.label} data-reveal="left" style={{ ["--d" as string]: `${300 + i * 110}ms` }} className="flex items-center gap-3.5">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">{b.icon}</span>
             <span className="t-title text-ink">{b.label}</span>
           </li>
@@ -50,9 +50,11 @@ function StoryText({
   );
 }
 
-function UICard({ icon, title, children, className = "" }: { icon?: ReactNode; title?: ReactNode; children: ReactNode; className?: string }) {
+function UICard({ icon, title, children, className = "", delay = 650 }: { icon?: ReactNode; title?: ReactNode; children: ReactNode; className?: string; delay?: number }) {
   return (
     <div
+      data-reveal="pop"
+      style={{ ["--d" as string]: `${delay}ms` }}
       className={`flex flex-col gap-3 rounded-[18px] border border-line bg-bg-base p-[18px] shadow-[0_8px_10px_rgba(31,15,10,0.10)] ${className}`}
     >
       {title && (
@@ -79,8 +81,11 @@ function Visual1() {
         <Photo
           key={i}
           alt="Yosh juftlik divanda telefonga qarab tabassum qilmoqda"
+          src="/images/story-1.webp"
           className="absolute h-[88.6%] w-[31%] rounded-[14px]"
-          style={{ left: s.left, top: s.top, backgroundPosition: `${s.pos} 50%` }}
+          reveal="clip"
+          delay={i * 160}
+          style={{ left: s.left, top: s.top, backgroundPosition: `${s.pos} 50%`, backgroundSize: "330% auto" }}
           tone={i === 1 ? "cream" : "warm"}
         />
       ))}
@@ -110,12 +115,17 @@ function Visual2() {
       <GirihPattern id="g-story2" cell={44} color="#d9b97a" opacity={0.5} className="absolute left-[14.5%] top-[11.4%] h-[70.9%] w-[85.5%]" />
       <Photo
         alt="Krem kostyumdagi ayol telefonga qarab tabassum qilmoqda"
+        src="/images/story-2.webp"
         className="absolute left-[29.3%] top-[4.3%] h-[91.4%] w-[65.5%] rounded-full"
+        reveal="scale"
         tone="cream"
       />
       <Photo
         alt="Telefon tutgan qo‘l"
+        src="/images/story-2-hand.webp"
         className="absolute left-[69%] top-[71.4%] aspect-square w-[32.8%] rounded-full border-[6px] border-white shadow-[0_10px_20px_rgba(31,15,10,0.15)]"
+        reveal="pop"
+        delay={350}
         tone="rose"
       />
       <UICard className="absolute left-0 top-[17%] w-[280px] max-w-[70%]">
@@ -153,6 +163,7 @@ function Visual3() {
       <GirihPattern id="g-story3" cell={44} color="#d9b97a" opacity={0.5} className="absolute left-[43%] -top-[1.7%] h-[53%] w-[64%]" />
       {/* Pochta markasi shaklidagi rasm (tishli chet): padding hududida teshiklar, ichi to‘liq */}
       <div
+        data-reveal="scale"
         className="absolute left-[3.4%] top-[7.1%] h-[85.7%] w-[81%] p-[8px]"
         style={{
           WebkitMask:
@@ -160,7 +171,7 @@ function Visual3() {
           mask: "radial-gradient(circle 6px at center, #0000 98%, #000) -11px -11px / 22px 22px round, linear-gradient(#000 0 0) content-box",
         }}
       >
-        <Photo alt="Ikki dugona telefonga qarab kulmoqda" className="absolute inset-0" tone="cream" />
+        <Photo alt="Ikki dugona telefonga qarab kulmoqda" src="/images/story-3.webp" className="absolute inset-0" tone="cream" />
         <span className="absolute inset-[18px] border border-white/70" />
       </div>
       <UICard icon={<Profile2User size={17} />} title="Mehmonlar javobi" className="absolute left-[30%] top-[54%] w-[290px] max-w-[70%] sm:left-[50%] sm:max-w-none">

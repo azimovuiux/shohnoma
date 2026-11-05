@@ -11,16 +11,25 @@ export function PhoneFrame({
   className = "",
   dark = false,
   style,
+  reveal,
+  delay = 0,
 }: {
   children: ReactNode;
   className?: string;
   /** status bar oq bo‘lsin (to‘q fonli shablonlar) */
   dark?: boolean;
   style?: React.CSSProperties;
+  /** paydo bo‘lish animatsiyasi (data-reveal qiymati) */
+  reveal?: string;
+  delay?: number;
 }) {
   const positioned = /\b(absolute|fixed|sticky)\b/.test(className);
   return (
-    <div className={`${positioned ? "" : "relative"} ${className}`} style={{ ...style, containerType: "inline-size" }}>
+    <div
+      className={`${positioned ? "" : "relative"} ${className}`}
+      style={{ ...style, containerType: "inline-size", ...(reveal ? { ["--d" as string]: `${delay}ms` } : {}) }}
+      {...(reveal ? { "data-reveal": reveal } : {})}
+    >
       <div
         className="relative aspect-[300/627] w-full bg-[#1d1d1f]"
         style={{

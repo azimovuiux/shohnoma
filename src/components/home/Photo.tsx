@@ -10,16 +10,30 @@ export function Photo({
   className = "",
   style,
   tone = "warm",
+  reveal,
+  delay = 0,
 }: {
   src?: string;
   alt: string;
   className?: string;
   style?: React.CSSProperties;
   tone?: "warm" | "rose" | "cream";
+  reveal?: string;
+  delay?: number;
 }) {
+  const r = reveal ? ({ "data-reveal": reveal } as Record<string, string>) : {};
+  const st = { ...style, ...(reveal ? { ["--d" as string]: `${delay}ms` } : {}) } as React.CSSProperties;
   if (src) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} loading="lazy" className={`object-cover ${className}`} style={style} />;
+    // Fon rasmi sifatida — kesib ko‘rsatish (backgroundPosition/Size) imkoni bilan
+    return (
+      <div
+        {...r}
+        role="img"
+        aria-label={alt}
+        className={`bg-cover bg-center bg-no-repeat ${className}`}
+        style={{ backgroundImage: `url(${src})`, ...st }}
+      />
+    );
   }
   const bg = {
     warm: "linear-gradient(160deg, #e9dcc8 0%, #d9c3a5 55%, #c8ab88 100%)",
@@ -27,7 +41,7 @@ export function Photo({
     cream: "linear-gradient(160deg, #f6efe4 0%, #e8dccb 60%, #d8c6ad 100%)",
   }[tone];
   return (
-    <div role="img" aria-label={alt} className={`flex items-center justify-center ${className}`} style={{ background: bg, ...style }}>
+    <div {...r} role="img" aria-label={alt} className={`flex items-center justify-center ${className}`} style={{ background: bg, ...st }}>
       <Gallery size={22} color="rgba(255,255,255,.75)" />
     </div>
   );

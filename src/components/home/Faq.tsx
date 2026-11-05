@@ -11,7 +11,7 @@ export function Faq() {
   return (
     <section id="savollar" className="scroll-mt-20 bg-bg-soft px-5 py-20 lg:px-[120px] lg:py-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-20">
-        <div className="flex shrink-0 flex-col gap-[22px] lg:w-[400px]">
+        <div data-reveal="up" className="flex shrink-0 flex-col gap-[22px] lg:w-[400px]">
           <h2 className="flex flex-col font-serif font-light">
             <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">Ko‘p so‘raladigan</span>
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">savollar</em>
@@ -25,7 +25,7 @@ export function Faq() {
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
-              <div key={f.q} className="border-b border-line py-[26px]">
+              <div key={f.q} data-reveal="up" style={{ ["--d" as string]: `${i * 90}ms` }} className="border-b border-line py-[26px]">
                 <h3>
                   <button
                     type="button"

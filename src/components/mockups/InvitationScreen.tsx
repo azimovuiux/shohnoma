@@ -1,6 +1,7 @@
 import type { Template } from "@/lib/templates";
 import { ceremonyLabel } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
+import { TemplateArt } from "@/components/invitation/TemplateArt";
 
 /** 280px kenglikdagi Figma o‘lchamini konteyner kengligiga moslash (cqw) */
 const u = (px: number) => `${((px / 280) * 100).toFixed(3)}cqw`;
@@ -148,6 +149,7 @@ export function InvitationScreen({ t }: { t: Template }) {
         </>
       ) : null}
 
+      <TemplateArt slug={t.slug} />
       <div className="relative flex h-full flex-col items-center text-center" style={{ paddingTop: isEnvelope ? u(54) : u(40) }}>
         {isEnvelope ? (
           <>

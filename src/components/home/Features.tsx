@@ -19,9 +19,9 @@ const right = [
   { icon: <Mobile size={22} />, title: "Ilovasiz ochiladi", text: "Har qanday telefonda, havola orqali" },
 ];
 
-function Feature({ f, side }: { f: (typeof left)[number]; side: "left" | "right" }) {
+function Feature({ f, side, i = 0 }: { f: (typeof left)[number]; side: "left" | "right"; i?: number }) {
   return (
-    <li className={`relative flex items-center gap-[18px] ${side === "left" ? "lg:flex-row-reverse lg:text-right" : ""}`}>
+    <li data-reveal={side === "left" ? "left" : "right"} style={{ ["--d" as string]: `${250 + i * 130}ms` }} className={`relative flex items-center gap-[18px] ${side === "left" ? "lg:flex-row-reverse lg:text-right" : ""}`}>
       <span className="flex size-[52px] shrink-0 items-center justify-center rounded-full border border-[rgba(226,196,140,0.45)] bg-maroon-deep text-[#e2c48c]">
         {f.icon}
       </span>
@@ -70,7 +70,7 @@ function InnerPage() {
   return (
     <div className="flex size-full flex-col items-center bg-gradient-to-b from-[#faf4ea] to-[#f1e3d0] px-[7cqw] pt-[14cqw] text-center">
       <div className="relative h-[72cqw] w-[68cqw] overflow-hidden rounded-t-full border border-[#c9a25e]/70 p-[1.5cqw]">
-        <Photo alt="Kelin va kuyov" className="size-full rounded-t-full" tone="rose" />
+        <Photo alt="Kelin va kuyov" src="/images/couple.webp" className="size-full rounded-t-full" tone="rose" />
       </div>
       <p className="mt-[3cqw] font-script text-[8.3cqw] leading-tight text-[#8a6538]">Bekzod &amp; Malika</p>
       <p className="mb-[2.5cqw] font-serif text-[4.5cqw] italic text-[#9a7444]">To‘yga qadar</p>
@@ -101,7 +101,7 @@ export function Features() {
       <Star8 size={28} color="#e2c48c" className="absolute bottom-[110px] right-[122px] hidden lg:block" />
 
       <div className="relative mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:gap-[72px]">
-        <div className="flex max-w-[725px] flex-col items-center gap-4 text-center">
+        <div data-reveal="up" className="flex max-w-[725px] flex-col items-center gap-4 text-center">
           <h2 className="flex flex-wrap items-baseline justify-center gap-x-3.5 font-serif font-light text-ink-inverse">
             <span className="text-[36px] leading-[1.04] lg:text-[52px]">Har bir taklifnomada</span>
             <em className="text-[42px] italic leading-none text-[#e2c48c] lg:text-[64px]">nimalar bor?</em>
@@ -111,16 +111,16 @@ export function Features() {
 
         <div className="grid w-full items-center gap-10 lg:grid-cols-[1fr_330px_1fr] lg:gap-[35px]">
           <ul className="order-2 flex flex-col gap-8 lg:order-1 lg:gap-[108px]">
-            {left.map((f) => (
-              <Feature key={f.title} f={f} side="left" />
+            {left.map((f, i) => (
+              <Feature key={f.title} f={f} side="left" i={i} />
             ))}
           </ul>
-          <PhoneFrame className="order-1 mx-auto w-[280px] lg:order-2 lg:w-[330px]">
+          <PhoneFrame className="order-1 mx-auto w-[280px] lg:order-2 lg:w-[330px]" reveal="rise" delay={100}>
             <InnerPage />
           </PhoneFrame>
           <ul className="order-3 flex flex-col gap-8 lg:gap-[108px]">
-            {right.map((f) => (
-              <Feature key={f.title} f={f} side="right" />
+            {right.map((f, i) => (
+              <Feature key={f.title} f={f} side="right" i={i} />
             ))}
           </ul>
         </div>

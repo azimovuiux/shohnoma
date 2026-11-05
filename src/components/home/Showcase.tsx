@@ -40,8 +40,10 @@ export function Showcase() {
       <div className="mx-auto max-w-[1440px] px-5 lg:px-[120px]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex flex-col gap-4">
-            <SectionTitle plain="Tayyor" italic="dizaynlar" />
-            <p className="t-body-m max-w-[440px] text-ink-2">
+            <div data-reveal="up">
+              <SectionTitle plain="Tayyor" italic="dizaynlar" />
+            </div>
+            <p data-reveal="up" style={{ ["--d" as string]: "120ms" }} className="t-body-m max-w-[440px] text-ink-2">
               Eng sevimli 10 ta dizayn — har biri telefon va laptopda chiroyli ochiladi. Hozir aksiya narxlarida.
             </p>
           </div>
@@ -67,8 +69,8 @@ export function Showcase() {
         </div>
 
         <div className="mt-12 grid gap-x-6 gap-y-7 lg:mt-16 lg:grid-cols-2">
-          {list.map((t) => (
-            <TemplateCard key={t.slug} t={t} />
+          {list.map((t, i) => (
+            <TemplateCard key={t.slug} t={t} reveal delay={(i % 2) * 120} />
           ))}
         </div>
 

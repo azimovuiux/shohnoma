@@ -7,6 +7,7 @@ import { ceremonyLabel } from "@/lib/templates";
 import { splitDate } from "@/lib/display";
 import { star8Path } from "@/lib/ornament";
 import type { InvitationSiteProps } from "./types";
+import { TemplateArt } from "./TemplateArt";
 import { paletteOf, s } from "./theme";
 import { Divider, HeroArt, heroShowsTitle } from "./Heroes";
 import { Closing, Countdown, Gallery, Program, RsvpBlock, Venue } from "./Sections";
@@ -132,6 +133,7 @@ export function InvitationSite({ template, data, mode, embedded = false }: Invit
 
       {/* 1 — Hero */}
       <header className={`relative flex flex-col items-center text-center ${opened ? st.opened : ""}`} style={{ background: p.heroBg, minHeight: s(780), padding: `${s(70)} ${s(30)} ${s(56)}` }}>
+        <TemplateArt slug={template.slug} />
         <span className="pointer-events-none absolute" style={{ inset: s(14), border: `1px solid color-mix(in srgb, ${p.accent} 45%, transparent)` }} aria-hidden />
         <span className="pointer-events-none absolute" style={{ inset: s(20), border: `0.5px solid color-mix(in srgb, ${p.accent} 25%, transparent)` }} aria-hidden />
 

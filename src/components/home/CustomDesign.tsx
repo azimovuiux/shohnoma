@@ -17,12 +17,12 @@ export function CustomDesign() {
             <path d={archPath} stroke="var(--color-gold)" />
           </svg>
           <div className="absolute left-0 top-[5.5%] h-[90.3%] w-[84.6%]" style={{ clipPath: `path("${archPath}")` }}>
-            <Photo alt="Krem taklifnoma kartalari, oltin muhr va pero" className="size-full" tone="cream" />
+            <Photo alt="Krem taklifnoma kartalari, oltin muhr va pero" src="/images/custom-design.webp" className="size-full" tone="cream" reveal="scale" />
           </div>
           <Star8 size={32} className="absolute left-[86.9%] top-[1%]" />
           <Star8 size={12} className="absolute left-[90.4%] top-[11.9%]" />
 
-          <div className="absolute right-0 top-[64.5%] flex w-[244px] flex-col gap-3.5 rounded-[18px] border border-line bg-bg-base px-[22px] pb-[22px] pt-5 shadow-[0_8px_10px_rgba(31,15,10,0.10)] sm:left-[57%] sm:right-auto">
+          <div data-reveal="pop" style={{ ["--d" as string]: "500ms" }} className="absolute right-0 top-[64.5%] flex w-[244px] flex-col gap-3.5 rounded-[18px] border border-line bg-bg-base px-[22px] pb-[22px] pt-5 shadow-[0_8px_10px_rgba(31,15,10,0.10)] sm:left-[57%] sm:right-auto">
             <div className="flex items-center gap-2.5 t-title text-ink">
               <DocumentText size={18} /> Individual brif
             </div>
@@ -43,7 +43,7 @@ export function CustomDesign() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col gap-7">
+        <div className="flex flex-1 flex-col gap-7" data-reveal="up" style={{ ["--d" as string]: "150ms" }}>
           <h2 className="flex flex-col font-serif font-light">
             <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">O‘zingizga xos</span>
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">dizayn kerakmi?</em>

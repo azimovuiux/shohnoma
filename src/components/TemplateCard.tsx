@@ -108,12 +108,14 @@ export function DevicePreview({ t, className = "" }: { t: Template; className?: 
   );
 }
 
-export function TemplateCard({ t, onQuickView }: { t: Template; onQuickView?: (t: Template) => void }) {
+export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Template; onQuickView?: (t: Template) => void; reveal?: boolean; delay?: number }) {
   const [fav, toggleFav] = useFavorite(t.slug);
   const off = discountPercent(t.priceOld, t.price);
 
   return (
-    <article className="group flex flex-col gap-[18px] rounded-[26px] border border-line bg-bg-base p-3.5 pb-5 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-16px_rgba(38,20,10,0.22)]">
+    <article
+      {...(reveal ? { "data-reveal": "up", style: { ["--d" as string]: `${delay}ms` } as React.CSSProperties } : {})}
+      className="group flex flex-col gap-[18px] rounded-[26px] border border-line bg-bg-base p-3.5 pb-5 transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-16px_rgba(38,20,10,0.22)]">
       <div className="relative">
         <DevicePreview t={t} />
         {onQuickView && (

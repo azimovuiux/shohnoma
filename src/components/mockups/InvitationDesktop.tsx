@@ -1,6 +1,7 @@
 import type { Template } from "@/lib/templates";
 import { ceremonyLabel } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
+import { TemplateArt } from "@/components/invitation/TemplateArt";
 
 /** Laptop ekranidagi shablon hero'si (1280×800 asosida, cqw bilan masshtablanadi) */
 const u = (px: number) => `${((px / 1280) * 100).toFixed(3)}cqw`;
@@ -14,6 +15,7 @@ export function InvitationDesktop({ t }: { t: Template }) {
       className="relative size-full overflow-hidden"
       style={{ containerType: "inline-size", background: `linear-gradient(135deg, ${theme.bg[0]}, ${theme.bg[1]})` }}
     >
+      <TemplateArt slug={t.slug} variant="desktop" />
       <div className="absolute" style={{ inset: u(28), border: `1px solid ${theme.accent}`, opacity: 0.45 }} />
       <svg className="absolute" style={{ left: u(80), top: u(80), width: u(60), height: u(60) }} viewBox="0 0 40 40" aria-hidden>
         <path d={star8Path(20, 20, 19)} fill="none" stroke={theme.accent} strokeWidth="1" />

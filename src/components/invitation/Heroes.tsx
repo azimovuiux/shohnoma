@@ -88,21 +88,6 @@ function Arch({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
         <path d="M6 330 V124 A119 119 0 0 1 244 124 V330" fill="none" stroke={p.accent} strokeWidth="1.2" />
         <path d="M14 330 V126 A111 111 0 0 1 236 126 V330" fill="none" stroke={p.accent} strokeWidth="0.6" opacity="0.6" />
       </svg>
-      {/* gullar (dekor) */}
-      <svg viewBox="0 0 120 80" className="absolute" style={{ left: `calc(${s(-28)})`, top: s(8), width: s(120), mixBlendMode: "multiply" }} aria-hidden>
-        {[
-          [30, 40, 22],
-          [62, 28, 16],
-          [16, 64, 12],
-        ].map(([cx, cy, r], i) => (
-          <g key={i}>
-            {Array.from({ length: 6 }, (_, k) => (
-              <ellipse key={k} cx={cx} cy={cy - r * 0.45} rx={r * 0.45} ry={r * 0.55} fill={bloom} opacity={0.75 - i * 0.1} transform={`rotate(${k * 60} ${cx} ${cy})`} />
-            ))}
-            <circle cx={cx} cy={cy} r={r * 0.18} fill={p.accent} opacity="0.7" />
-          </g>
-        ))}
-      </svg>
       <div className="absolute inset-x-0 flex flex-col items-center text-center" style={{ top: s(96) }}>
         <Star size={s(12)} color={p.accent} />
         <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: s(14), color: p.accent, marginTop: s(10) }}>
