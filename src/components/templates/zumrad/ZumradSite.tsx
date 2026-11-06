@@ -180,7 +180,8 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
   const nameLines = wide ? [d.names] : d.b ? [d.a, `& ${d.b}`] : [d.a];
 
   return (
-    <div ref={wrap} className={st.gateWrap}>
+    // Ochilish sahnasi bir ekranga sig‘ishi kerak: katta/past ekranda kenglik va balandlikdan kichigiga moslanadi
+    <div ref={wrap} className={st.gateWrap} style={wide ? ({ "--u": "min(calc(100cqw / 1440), calc(100svh / 900))" } as CSSProperties) : undefined}>
       <div className={st.gate} aria-label="Taklifnoma">
         <div className={cx(st.gateBg, st.damask)} />
         {wide ? (

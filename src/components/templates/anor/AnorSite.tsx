@@ -229,7 +229,8 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
   }, []);
 
   return (
-    <div ref={wrap} className={st.gateWrap}>
+    // Ochilish sahnasi bir ekranga sig‘ishi kerak: katta/past ekranda kenglik va balandlikdan kichigiga moslanadi
+    <div ref={wrap} className={st.gateWrap} style={wide ? ({ "--u": "min(calc(100cqw / 1440), calc(100svh / 900))" } as CSSProperties) : undefined}>
       <div className={st.gate} aria-label="Taklifnoma">
         <div className={st.gateBg} />
         <div className={st.cornerL} style={{ left: v(-40, -50), top: v(-40, -50), width: v(170, 380), height: v(170, 380) }}>
