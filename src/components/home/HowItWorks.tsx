@@ -38,7 +38,7 @@ function Connector() {
 
 export function HowItWorks() {
   return (
-    <section id="qanday-ishlaydi" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-[120px] lg:py-[120px]">
+    <section id="qanday-ishlaydi" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-14 lg:gap-[72px]">
         <div data-reveal="stagger" className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <SectionTitle plain="Qanday" italic="ishlaydi" />

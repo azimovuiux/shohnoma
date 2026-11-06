@@ -109,7 +109,7 @@ function OrdersInner() {
       ) : (
         <AdminRefreshProvider value={() => (reload(true), reloadCounts())}>
         <div className="overflow-x-auto rounded-panel border border-line">
-          <table className="w-full min-w-[1080px] text-left">
+          <table className="w-full min-w-[1080px] text-left [&_td:first-child]:whitespace-nowrap">
             <thead className="bg-bg-soft t-annotation text-ink-2">
               <tr>
                 {["Kod", "Shablon", "Ismlar", "Marosim sanasi", "Holat", "Summa", "Yaratilgan", "Telefon", ""].map((h) => (

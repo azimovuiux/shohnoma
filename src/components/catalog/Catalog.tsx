@@ -136,7 +136,7 @@ export function Catalog() {
   const quickIndex = quick ? filtered.findIndex((t) => t.slug === quick.slug) : -1;
 
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-8 lg:px-[120px] lg:pt-12">
+    <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-8 lg:px-10 xl:px-[120px] lg:pt-12">
       <nav aria-label="Breadcrumb" className="t-body-s text-ink-2">
         <Link href="/" className="hover:text-maroon">
           Bosh sahifa
@@ -167,8 +167,8 @@ export function Catalog() {
       </div>
 
       {/* Filtrlar */}
-      <div className="mt-8 flex flex-col gap-4 border-b border-line pb-6 lg:flex-row lg:items-center lg:justify-between">
-        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:px-0">
+      <div className="mt-8 flex flex-col gap-4 border-b border-line pb-6 xl:flex-row xl:items-center xl:justify-between">
+        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:px-0 xl:flex-nowrap">
           <Chip active={!ceremony} onClick={() => setParam("marosim", "")}>
             Barchasi <span className="opacity-70">{byCeremony("")}</span>
           </Chip>
@@ -178,7 +178,7 @@ export function Catalog() {
             </Chip>
           ))}
         </div>
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <Select label="Uslub" value={style} options={styles.map((s) => ({ value: s, label: styleLabel[s] }))} onChange={(v) => setParam("uslub", v)} />
           <Select label="Rang" value={color} options={colors.map((c) => ({ value: c, label: colorLabel[c] }))} onChange={(v) => setParam("rang", v)} />
           <Select

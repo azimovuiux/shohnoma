@@ -95,7 +95,7 @@ function InnerPage() {
 
 export function Features() {
   return (
-    <section id="imkoniyatlar" className="relative scroll-mt-20 overflow-hidden bg-maroon px-5 py-20 lg:px-[120px] lg:py-[120px]">
+    <section id="imkoniyatlar" className="relative scroll-mt-20 overflow-hidden bg-maroon px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
       <GirihPattern id="g-features" cell={72} color="#e2c48c" opacity={0.1} className="absolute inset-0" />
 
       <div className="relative mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:gap-[72px]">

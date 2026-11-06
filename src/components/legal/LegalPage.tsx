@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
 
 export function LegalPage({ title, italic, updated, children }: { title: string; italic: string; updated: string; children: ReactNode }) {
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-8 lg:px-[120px] lg:pt-10">
+    <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-8 lg:px-10 xl:px-[120px] lg:pt-10">
       <Link href="/" className="inline-flex items-center gap-2 t-nav text-ink-2 hover:text-maroon">
         <ArrowLeft size={16} /> Bosh sahifa
       </Link>

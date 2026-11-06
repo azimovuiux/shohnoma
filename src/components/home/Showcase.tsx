@@ -43,7 +43,7 @@ export function Showcase() {
 
   return (
     <section id="shablonlar" className="scroll-mt-20 bg-bg-base py-20 lg:py-[120px]">
-      <div className="mx-auto max-w-[1440px] px-5 lg:px-[120px]">
+      <div className="mx-auto max-w-[1440px] px-5 lg:px-10 xl:px-[120px]">
         <div data-reveal="stagger" className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div data-split className="flex flex-col gap-4">
             <SectionTitle plain="Tayyor" italic="dizaynlar" />

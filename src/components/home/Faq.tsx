@@ -9,7 +9,7 @@ import { faqs } from "@/lib/faq";
 export function Faq() {
   const [open, setOpen] = useState(0);
   return (
-    <section id="savollar" className="scroll-mt-20 bg-bg-soft px-5 py-20 lg:px-[120px] lg:py-[120px]">
+    <section id="savollar" className="scroll-mt-20 bg-bg-soft px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-20">
         <div data-reveal="stagger" className="flex shrink-0 flex-col gap-[22px] lg:w-[400px]">
           <h2 data-split className="flex flex-col font-serif font-light">

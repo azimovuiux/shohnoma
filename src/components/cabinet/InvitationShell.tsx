@@ -5,7 +5,7 @@ import { isPaidStatus } from "@/lib/types";
 import { InvitationNav } from "./InvitationNav";
 import { InvitationProvider, NotFoundBox, useInvitationData, useSiteUrl, type SwitcherItem } from "./data";
 
-const wrap = "mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-20 pt-6 lg:flex-row lg:gap-10 lg:px-[120px] lg:pb-[100px] lg:pt-10";
+const wrap = "mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-20 pt-6 lg:flex-row lg:gap-10 lg:px-10 xl:px-[120px] lg:pb-[100px] lg:pt-10";
 
 function toItem(x: SwitcherItem) {
   const [a, b] = x.names ? x.names.split(" & ") : [x.personA ?? "", x.personB ?? null];

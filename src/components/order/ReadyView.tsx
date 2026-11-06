@@ -46,14 +46,14 @@ export function ReadyView({
   const shareBtn = "flex h-11 items-center justify-center gap-2 rounded-full border border-line-dark/30 t-nav text-ink transition-colors hover:bg-bg-soft";
 
   return (
-    <div className="mx-auto max-w-[1440px] px-5 pb-20 pt-6 lg:px-[120px] lg:pb-24 lg:pt-9">
+    <div className="mx-auto max-w-[1440px] px-5 pb-20 pt-6 lg:px-10 xl:px-[120px] lg:pb-24 lg:pt-9">
       <Link href="/" className="inline-flex items-center gap-2 t-nav text-ink-2 hover:text-maroon">
         <ArrowLeft size={16} /> Bosh sahifaga
       </Link>
 
-      <div className="mt-6 flex flex-col-reverse gap-10 lg:mt-8 lg:flex-row lg:items-center lg:gap-16">
+      <div className="mt-6 flex flex-col-reverse gap-10 lg:mt-8 lg:flex-row lg:items-center lg:gap-10 xl:gap-16">
         {/* Ko‘rinish */}
-        <div className="flex flex-col items-center gap-5 rounded-[24px] bg-gradient-to-b from-[#f4ece0] to-bg-soft px-4 pb-6 pt-5 lg:w-[634px] lg:shrink-0 lg:px-0">
+        <div className="flex flex-col items-center gap-5 rounded-[24px] bg-gradient-to-b from-[#f4ece0] to-bg-soft px-4 pb-6 pt-5 lg:w-[56%] lg:shrink-0 lg:px-0 xl:w-[634px]">
           <div className="inline-flex rounded-full bg-bg-base p-1 shadow-soft" role="tablist" aria-label="Ko‘rinish">
             {(
               [

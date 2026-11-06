@@ -237,8 +237,8 @@ function Visual3() {
 export function Stories() {
   return (
     <>
-      <section className="bg-bg-soft px-5 py-20 lg:px-[120px] lg:py-[120px]">
-        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:flex-row lg:justify-between">
+      <section className="overflow-x-clip bg-bg-soft px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-28 sm:gap-36 lg:flex-row lg:justify-between lg:gap-14">
           <Visual1 />
           <StoryText
             n="01"
@@ -253,7 +253,7 @@ export function Stories() {
           />
         </div>
       </section>
-      <section className="bg-bg-base px-5 py-20 lg:px-[120px] lg:py-[120px]">
+      <section className="overflow-x-clip bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
         <div className="mx-auto flex max-w-[1200px] flex-col-reverse items-center gap-14 lg:flex-row lg:justify-between">
           <StoryText
             n="02"
@@ -269,8 +269,8 @@ export function Stories() {
           <Visual2 />
         </div>
       </section>
-      <section className="bg-bg-soft px-5 py-20 lg:px-[120px] lg:py-[120px]">
-        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:flex-row lg:justify-between">
+      <section className="overflow-x-clip bg-bg-soft px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-36 sm:gap-48 lg:flex-row lg:justify-between lg:gap-14">
           <Visual3 />
           <StoryText
             n="03"

@@ -10,7 +10,7 @@ const archPath = "M0 560 V210 C0 120 80 60 160 30 C190 18 210 8 220 0 C230 8 250
 
 export function CustomDesign() {
   return (
-    <section className="bg-bg-base px-5 py-20 lg:px-[120px] lg:py-[130px]">
+    <section className="bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[130px]">
       <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-14 lg:flex-row lg:gap-[100px]">
         <div data-reveal="scale" className="relative aspect-[520/620] w-full max-w-[520px] shrink-0">
           <svg viewBox="0 0 440 560" className="absolute left-[8.5%] top-0 h-[90.3%] w-[84.6%]" fill="none" aria-hidden>

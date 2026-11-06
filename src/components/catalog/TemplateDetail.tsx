@@ -24,7 +24,7 @@ export function TemplateDetail({ t }: { t: Template }) {
             <Heart size={18} variant={fav ? "Bold" : "Linear"} />
           </button>
         </div>
-        <div className="flex min-h-[420px] w-full flex-1 items-center justify-center lg:min-h-[560px]">
+        <div className={`flex w-full flex-1 items-center justify-center lg:min-h-[560px] ${device === "laptop" ? "min-h-[220px] sm:min-h-[380px]" : "min-h-[420px]"}`}>
           <TemplatePreviewStage t={t} device={device} large />
         </div>
       </div>

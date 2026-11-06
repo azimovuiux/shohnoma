@@ -398,14 +398,14 @@ export function Header() {
         } ${hidden && !menuOpen ? "-translate-y-[calc(100%+2px)]" : "translate-y-0"}`}
       >
         <div
-          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:px-[120px] ${
+          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:px-10 xl:px-[120px] ${
             compact ? "h-[55px] lg:h-[70px]" : "h-[69px] lg:h-[87px]"
           }`}
         >
           <Logo />
 
           <nav
-            className="hidden items-center gap-8 lg:flex"
+            className="hidden items-center gap-6 lg:flex xl:gap-8"
             aria-label="Asosiy"
           >
             {mainNav.map((l) => (
@@ -426,7 +426,7 @@ export function Header() {
             </a>
             <a
               href={site.phoneHref}
-              className="icon-btn"
+              className="icon-btn max-xl:!hidden"
               aria-label="Qo‘ng‘iroq"
             >
               <Call size={18} />

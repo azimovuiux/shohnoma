@@ -56,7 +56,7 @@ export function Contact() {
   };
 
   return (
-    <section id="aloqa" className="scroll-mt-20 bg-bg-base px-5 pb-20 pt-20 lg:px-[120px] lg:pb-[130px] lg:pt-[120px]">
+    <section id="aloqa" className="scroll-mt-20 bg-bg-base px-5 pb-20 pt-20 lg:px-10 xl:px-[120px] lg:pb-[130px] lg:pt-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-16">
         <div data-reveal="stagger" className="flex flex-col gap-7 lg:w-[520px] lg:shrink-0">
           <h2 data-split className="flex flex-col font-serif font-light">
@@ -163,7 +163,7 @@ export function Contact() {
               {/* honeypot */}
               <input value={hp} onChange={(e) => setHp(e.target.value)} name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="t-body-s text-ink-2">Qanday javob beraylik?</span>
+                <span className="w-full t-body-s text-ink-2 sm:w-auto">Qanday javob beraylik?</span>
                 {(Object.keys(replyLabel) as ReplyVia[]).map((r) => (
                   <button
                     key={r}

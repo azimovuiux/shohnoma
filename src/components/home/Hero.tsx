@@ -128,6 +128,12 @@ function PhoneScreen() {
   );
 }
 
+/* So‘zana 1440 dan keng ekranlarda kanvasdan chiqib qoladi — o‘ng chetini yumshoq so‘ndiramiz (1440 da bu qism ko‘rinmaydi) */
+const sozanaFade: CSSProperties = {
+  maskImage: "linear-gradient(to right, #000 62%, transparent 96%)",
+  WebkitMaskImage: "linear-gradient(to right, #000 62%, transparent 96%)",
+};
+
 /** O‘ng kompozitsiya — Figma qatlamlari tartibida */
 function Stage() {
   return (
@@ -138,7 +144,7 @@ function Stage() {
       <Layer t={[[1, 0, 640], [0, 1, -40]]} w={720} h={405} ri="fade" delay={100}>
         <Img src="/images/hero/barglar.webp" />
       </Layer>
-      <Layer t={[[0.9703, 0.2419, 1200], [-0.2419, 0.9703, -150]]} w={380} h={380} ri="fade" delay={300} blend="multiply">
+      <Layer t={[[0.9703, 0.2419, 1200], [-0.2419, 0.9703, -150]]} w={380} h={380} ri="fade" delay={300} blend="multiply" style={sozanaFade}>
         <Img src="/images/hero/sozana.webp" />
       </Layer>
       <Layer t={[[0.9962, 0.0872, 800], [-0.0872, 0.9962, 120]]} w={420} h={580} ri="up" delay={200}>
@@ -163,18 +169,19 @@ function Stage() {
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#f7f1e7]">
-      <div className="relative mx-auto max-w-[1440px] lg:h-[900px]">
+      {/* lg+: butun kompozitsiya 1440×900 Figma kanvasi, ekran eniga proporsional (cqw) masshtablanadi */}
+      <div className="relative mx-auto max-w-[1440px] lg:aspect-[1440/900] lg:[container-type:inline-size]">
         {/* Matn */}
-        <div data-reveal="stagger" className="relative z-10 flex flex-col items-start px-5 pt-10 lg:absolute lg:left-[120px] lg:top-[211px] lg:w-[700px] lg:px-0 lg:pt-0">
-          <h1 data-split className="flex flex-col font-serif text-[48px] font-normal leading-[0.9] tracking-[-0.02em] text-ink sm:text-[72px] lg:text-[102px]">
+        <div data-reveal="stagger" className="relative z-10 flex flex-col items-start px-5 pt-10 lg:absolute lg:left-[8.3333%] lg:top-[23.4444%] lg:w-[48.6111%] lg:px-0 lg:pt-0">
+          <h1 data-split className="flex flex-col font-serif text-[48px] font-normal leading-[0.9] tracking-[-0.02em] text-ink sm:text-[72px] lg:text-[7.0833cqw]">
             <span>Har bir to‘y —</span>
             <span>o‘z hikoyasi.</span>
             <em className="italic text-maroon">Taklifnomasi ham.</em>
           </h1>
-          <p className="mt-[26px] max-w-[460px] font-sans text-[16px] leading-[1.6] text-ink-2 lg:text-[18px]">
+          <p className="mt-[26px] max-w-[460px] font-sans text-[16px] leading-[1.6] text-ink-2 lg:mt-[1.8cqw] lg:max-w-[max(400px,31.94cqw)] lg:text-[max(15px,1.25cqw)]">
             Tayyor dizayn asosida 2 daqiqada yaratiladigan taklifnoma sayti. Bitta havolada — vaqt, xarita, musiqa va mehmonlar javobi.
           </p>
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-9 flex flex-wrap gap-3 lg:mt-[max(24px,2.5cqw)]">
             <Link href="/#shablonlar" className="btn btn-primary">
               Shablonlarni ko‘rish <ArrowRight size={16} />
             </Link>
@@ -186,7 +193,7 @@ export function Hero() {
 
         {/* Anor — chap pastda (faqat desktop) */}
         <div
-          className="absolute left-[70px] top-[735px] hidden h-[218px] w-[290px] origin-top-left mix-blend-multiply lg:block"
+          className="absolute left-[4.8611%] top-[81.6667%] hidden h-[15.1389cqw] w-[20.1389%] origin-top-left mix-blend-multiply lg:block"
           style={{ transform: "matrix(0.9976,0.0698,-0.0698,0.9976,0,0)" }}
         >
           <div data-reveal="fade" style={{ ["--d" as string]: "700ms" }} className="size-full">
@@ -195,7 +202,7 @@ export function Hero() {
         </div>
 
         {/* O‘ng kompozitsiya: desktopda Figma koordinatalarida, telefonda ekran eniga */}
-        <div className="relative mt-6 aspect-[880/900] w-full lg:absolute lg:left-[560px] lg:top-0 lg:mt-0 lg:h-[900px] lg:w-[880px] lg:aspect-auto">
+        <div className="relative mt-6 aspect-[880/900] w-full lg:absolute lg:left-[38.8889%] lg:top-0 lg:mt-0 lg:h-full lg:w-[61.1111%] lg:aspect-auto">
           <Stage />
         </div>
       </div>

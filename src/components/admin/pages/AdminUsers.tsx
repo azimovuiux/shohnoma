@@ -89,7 +89,7 @@ export function AdminUsers() {
         <Empty>Foydalanuvchi topilmadi</Empty>
       ) : (
         <div className="overflow-x-auto rounded-panel border border-line">
-          <table className="w-full min-w-[820px] text-left">
+          <table className="w-full min-w-[820px] text-left [&_td:first-child]:whitespace-nowrap">
             <thead className="bg-bg-soft t-body-s text-ink-2">
               <tr>
                 <th className="px-4 py-3 font-medium">Foydalanuvchi</th>

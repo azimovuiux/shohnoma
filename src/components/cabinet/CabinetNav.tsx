@@ -32,7 +32,7 @@ export function CabinetShell({ children }: { children: ReactNode }) {
   if (loading || !user) return <PageLoading />;
   const counts = me?.counts ?? { orders: 0, favorites: 0 };
   return (
-    <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-20 pt-6 lg:flex-row lg:gap-10 lg:px-[120px] lg:pb-[100px] lg:pt-10">
+    <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-20 pt-6 lg:flex-row lg:gap-10 lg:px-10 xl:px-[120px] lg:pb-[100px] lg:pt-10">
       <CabinetNav name={user.name} phone={user.phone} telegramUser={user.telegramUser} orders={counts.orders} favorites={counts.favorites} />
       <div className="flex min-w-0 flex-1 flex-col gap-5">{children}</div>
     </div>

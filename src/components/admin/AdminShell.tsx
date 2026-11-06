@@ -46,10 +46,10 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 <LogoMark className="h-8 w-auto" />
                 <span className="rounded-full bg-bg-soft px-2 py-0.5 t-body-s text-ink-2">admin</span>
               </Link>
-              <div className="flex items-center gap-4 t-body-s text-ink-2">
+              <div className="flex items-center gap-3 t-body-s text-ink-2 sm:gap-4">
                 <span className="hidden sm:inline">{user.name || formatPhoneDisplay(user.phone) || user.telegramUser}</span>
-                <Link href="/" className="inline-flex items-center gap-1.5 t-nav text-ink hover:text-maroon">
-                  Saytga qaytish <ExportSquare size={15} />
+                <Link href="/" aria-label="Saytga qaytish" className="inline-flex items-center gap-1.5 t-nav text-ink hover:text-maroon">
+                  <span className="hidden sm:inline">Saytga qaytish</span> <ExportSquare size={15} />
                 </Link>
                 <button
                   type="button"

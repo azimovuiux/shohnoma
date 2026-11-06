@@ -300,7 +300,7 @@ export function BriefForm() {
   if (done) return <Success name={name.trim()} via={via} />;
 
   return (
-    <div className="mx-auto max-w-[1440px] px-5 lg:px-[120px]">
+    <div className="mx-auto max-w-[1440px] px-5 lg:px-10 xl:px-[120px]">
       <div className="flex flex-col gap-7 pb-2 pt-8 lg:pt-9">
         <Link href="/" className="inline-flex w-fit items-center gap-2 t-nav text-ink-2 hover:text-maroon">
           <ArrowLeft size={16} /> Bosh sahifa
@@ -311,14 +311,14 @@ export function BriefForm() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-12 pb-24 pt-8 lg:flex-row lg:items-start lg:gap-[72px]">
+      <div className="flex flex-col gap-12 pb-24 pt-8 lg:flex-row lg:items-start lg:gap-10 xl:gap-[72px]">
         <form
           noValidate
           onSubmit={(e) => {
             e.preventDefault();
             submit();
           }}
-          className="flex min-w-0 flex-col gap-10 lg:w-[720px] lg:shrink-0"
+          className="flex min-w-0 flex-col gap-10 lg:flex-1 xl:w-[720px] xl:flex-none"
         >
           <Section id="brif-01" n="01" title="Qaysi marosim?" error={errors.ceremony}>
             <div className="flex flex-wrap gap-2">
@@ -491,7 +491,7 @@ export function BriefForm() {
           </div>
         </form>
 
-        <aside className="lg:sticky lg:top-[110px] lg:flex-1">
+        <aside className="lg:sticky lg:top-[110px] lg:w-[300px] lg:shrink-0 xl:w-auto xl:flex-1">
           <div className="hidden lg:block">
             <HowItWorksPanel sending={sending} onSubmit={submit} />
           </div>
