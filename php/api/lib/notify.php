@@ -73,7 +73,10 @@ function tg_api(string $method, array $params): ?array
         CURLOPT_POSTFIELDS => json_encode($params, JSON_UNESCAPED_UNICODE),
     ]);
     $d = json_decode($res, true);
-    return $code === 200 && !empty($d['ok']) ? ($d['result'] ?? []) : null;
+    if ($code !== 200 || empty($d['ok'])) return null;
+    // setWebhook/deleteMessage kabi metodlar `result: true` qaytaradi — massivga aylantiramiz (strict_types TypeError bermasin)
+    $r = $d['result'] ?? [];
+    return is_array($r) ? $r : ['value' => $r];
 }
 
 /** Bot username: .env (TELEGRAM_BOT_USERNAME) yoki getMe (keshlanadi) */
