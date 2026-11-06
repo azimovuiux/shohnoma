@@ -10,9 +10,10 @@ import { splitDate, tashkentDate } from "@/lib/display";
 import { musicSrc } from "@/lib/music";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "./hooks";
+import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
 import { A, ANOR_DEMO, DRESS, MONTHS, MONTHS_LOWER, WEEK, WEEKDAY, coordsFrom, downloadIcs, programIcon, weekOf, type ProgramItem, type StoryItem } from "./data";
 import st from "./anor.module.css";
+import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 
 /* ── Birliklar: mobil 390, laptop 1440 kanvas ── */
 const U = (n: number) => `calc(var(--u) * ${n})`;
@@ -1020,125 +1021,21 @@ function Final({ d, wide, ready, onSeen }: { d: D; wide: boolean; ready: boolean
   );
 }
 
-/* ═════════════ Musiqa ═════════════ */
-function useMusic(url: string | null, slug: string, enabled: boolean) {
-  const audio = useRef<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
-  const fade = useRef(0);
-  const key = `shohnoma:music:${slug}`;
-  const ramp = (to: number, ms: number, then?: () => void) => {
-    const a = audio.current;
-    if (!a) return;
-    cancelAnimationFrame(fade.current);
-    const from = a.volume;
-    const t0 = performance.now();
-    const step = (t: number) => {
-      const k = Math.min(1, (t - t0) / ms);
-      a.volume = Math.max(0, Math.min(1, from + (to - from) * k));
-      if (k < 1) fade.current = requestAnimationFrame(step);
-      else then?.();
-    };
-    fade.current = requestAnimationFrame(step);
-  };
-  useEffect(
-    () => () => {
-      audio.current?.pause();
-      cancelAnimationFrame(fade.current);
-    },
-    [],
-  );
-  const play = useCallback(
-    (fromGate = false) => {
-      if (!url || !enabled) return;
-      if (fromGate) {
-        try {
-          if (localStorage.getItem(key) === "off") return;
-        } catch {}
-      }
-      if (!audio.current) {
-        audio.current = new Audio(url);
-        audio.current.loop = true;
-        audio.current.volume = 0;
-        audio.current.onplay = () => setPlaying(true);
-        audio.current.onpause = () => setPlaying(false);
-      }
-      audio.current.play().then(() => ramp(0.6, 2000)).catch(() => {});
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [url, enabled, key],
-  );
-  const toggle = () => {
-    const a = audio.current;
-    if (a && !a.paused) {
-      ramp(0, 600, () => a.pause());
-      setPlaying(false);
-      try {
-        localStorage.setItem(key, "off");
-      } catch {}
-    } else {
-      try {
-        localStorage.removeItem(key);
-      } catch {}
-      play();
-    }
-  };
-  const dim = useCallback(() => {
-    const a = audio.current;
-    if (a && !a.paused) ramp(a.volume * 0.8, 3000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return { available: !!url && enabled, playing, play, toggle, dim };
-}
-
-function MusicButton({ m, wide, embedded }: { m: ReturnType<typeof useMusic>; wide: boolean; embedded: boolean }) {
-  if (!m.available) return null;
-  const size = wide ? 60 : 52;
-  const btn = (
-    <button
-      type="button"
-      onClick={m.toggle}
-      aria-label={m.playing ? "Musiqani o‘chirish" : "Musiqani yoqish"}
-      aria-pressed={m.playing}
-      className={cx(st.music, embedded && st.musicEmbedded, m.playing && st.playing)}
-      style={{ width: size, height: size, right: wide ? 32 : 16, top: wide ? 28 : 16 }}
-    >
-      <svg viewBox="0 0 24 24" width={wide ? 24 : 22} height={wide ? 24 : 22} fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-        <g className={st.note}>
-          <path d="M9 18V6l10-2v12" />
-          <circle cx="6.5" cy="18" r="2.5" />
-          <circle cx="16.5" cy="16" r="2.5" />
-        </g>
-        <path d="M4 4l16 16" className={st.strike} />
-      </svg>
-    </button>
-  );
-  return embedded ? <div style={{ position: "sticky", top: 0, height: 0, zIndex: 70 }}>{btn}</div> : btn;
-}
-
-/* ═════════════ Oldindan yuklash ═════════════ */
-const loadImg = (src: string) =>
-  new Promise<void>((res) => {
-    const im = new Image();
-    im.decoding = "async";
-    im.onload = () => (im.decode ? im.decode().catch(() => {}).then(() => res()) : res());
-    im.onerror = () => res();
-    im.src = src;
-  });
-
-/**
- * Birinchi ekran rasmlari (baxmal, qo‘llar, muhr, gulchambar) yuklanguncha — yuklovchi;
- * keyin qolgan bo‘lim fonlari va rasmlari orqa fonda navbat bilan yuklanadi (scrollda kechikmasin).
- */
-function usePreload(wide: boolean, d: D, enabled: boolean) {
-  const [ready, setReady] = useState(!enabled);
-  useEffect(() => {
-    if (!enabled) return;
-    let alive = true;
-    const sfx = wide ? "l" : "m";
-    const critical = [`${A}/v-ochilish-${sfx}.webp`, `${A}/qollar.webp`, `${A}/muhr.webp`, `${A}/gulchambar.webp`, `${A}/paper.webp`];
-    const rest = [
+/* ═════════════ Sahifa ═════════════ */
+export function AnorSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
+  const root = useRef<HTMLDivElement>(null);
+  const wide = useWide(root);
+  const d = useAnorData({ template, data, mode });
+  const withGate = !embedded && mode !== "preview";
+  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && mode !== "preview");
+  const [revealed, setRevealed] = useState(!withGate);
+  const ready = revealed;
+  const sfx = wide ? "l" : "m";
+  const loaded = usePreload(
+    [`${A}/v-ochilish-${sfx}.webp`, `${A}/qollar.webp`, `${A}/muhr.webp`, `${A}/gulchambar.webp`, `${A}/paper.webp`],
+    [
       d.cover,
-      ...(wide ? [d.coverRight] : []),
+      wide ? d.coverRight : "",
       `${A}/bant.webp`,
       `${A}/shox.webp`,
       `${A}/v-taymer-${sfx}.webp`,
@@ -1150,45 +1047,10 @@ function usePreload(wide: boolean, d: D, enabled: boolean) {
       `${A}/v-javob-${sfx}.webp`,
       `${A}/v-final-${sfx}.webp`,
       d.final,
-    ];
-    const timeout = new Promise<void>((r) => setTimeout(r, 7000));
-    Promise.race([Promise.all(critical.map(loadImg)), timeout]).then(async () => {
-      if (!alive) return;
-      setReady(true);
-      for (const src of [...new Set(rest)]) {
-        if (!alive) return;
-        await loadImg(src);
-      }
-    });
-    return () => {
-      alive = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wide, enabled]);
-  return ready;
-}
-
-function Loader({ done }: { done: boolean }) {
-  return (
-    <div className={cx(st.loader, done && st.loaderDone)} aria-hidden={done} role="status" aria-label="Taklifnoma yuklanmoqda">
-      <span className={st.loaderRing} />
-      <span className={st.loaderSeal}>
-        <Img src={`${A}/muhr.webp`} eager />
-      </span>
-    </div>
+    ],
+    withGate,
+    sfx,
   );
-}
-
-/* ═════════════ Sahifa ═════════════ */
-export function AnorSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
-  const root = useRef<HTMLDivElement>(null);
-  const wide = useWide(root);
-  const d = useAnorData({ template, data, mode });
-  const withGate = !embedded && mode !== "preview";
-  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && mode !== "preview");
-  const [revealed, setRevealed] = useState(!withGate);
-  const ready = revealed;
-  const loaded = usePreload(wide, d, withGate);
   const [loaderGone, setLoaderGone] = useState(!withGate);
   useEffect(() => {
     if (!loaded || loaderGone) return;
@@ -1227,7 +1089,7 @@ export function AnorSite({ template, data, mode, embedded = false }: InvitationS
       <div className={st.page} style={vars({ "--u": wide ? "min(1px, calc(100cqw / 1440))" : "min(1.15px, calc(100cqw / 390))" })}>
         <div className={st.paperBg} />
         <MusicButton m={music} wide={wide} embedded={embedded} />
-        {withGate && !loaderGone && <Loader done={loaded} />}
+        {withGate && !loaderGone && <Loader done={loaded} seal={`${A}/muhr.webp`} />}
         {withGate && (loaded ? <Gate d={d} wide={wide} onReveal={() => setRevealed(true)} onStart={() => music.play(true)} /> : <div style={{ height: "250svh", marginBottom: "-100svh", width: "100%" }} />)}
         <Cover d={d} wide={wide} ready={ready} />
         <Invite d={d} wide={wide} ready={ready} />

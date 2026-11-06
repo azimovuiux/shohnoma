@@ -150,7 +150,7 @@ export function Catalog() {
             Barcha <em className="italic text-maroon">shablonlar</em>
           </h1>
           <p className="t-body-l mt-3 max-w-[520px] text-ink-2">
-            12 ta tayyor dizayn — har biri telefon va laptopda birdek chiroyli ochiladi.
+            {templates.length} ta tayyor dizayn — har biri telefon va laptopda birdek chiroyli ochiladi.
           </p>
         </div>
         <label className="relative flex w-full items-center lg:w-[380px]">

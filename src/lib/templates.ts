@@ -124,6 +124,39 @@ const builtin: Template[] = [
       },
     ],
   },
+  {
+    number: 2,
+    slug: "zumrad",
+    name: "Zumrad",
+    ceremony: "nikoh",
+    style: "milliy",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Zumrad yashil damask, oltin muhrli konvert va bog‘ manzarasi. Konvert ochilgach — madrasa ravog‘i, parda ortidagi bog‘, ravoqli suratlar va konvert-javob.",
+    palette: ["#123C2E", "#0C2A20", "#C6A15B", "#F7F3EA"],
+    sample: { a: "Azizbek", b: "Sevara", date: "12 · 09 · 2026", venue: "«Navro‘z» saroyi", time: "17:00" },
+    theme: { bg: ["#123c2e", "#0c2a20"], ink: "#f7f3ea", accent: "#c6a15b", soft: "#e2c88e", script: "cormorant", color: "yashil" },
+    fields: [
+      { key: "hosts", type: "text", label: "Mezbonlar", placeholder: "Karimovlar va Rahimovlar oilasi", max: 120, hint: "Taklif matni ostida «Hurmat bilan» deb chiqadi" },
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Kutib olish", max: 60 },
+          note: { type: "text", label: "Izoh", placeholder: "Sharbat va jonli musiqa", max: 80 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Tanlanmasa — bo‘lim ko‘rinmaydi" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi", max: 160 },
+      { key: "storyText", type: "textarea", label: "Bizning hikoyamiz", placeholder: "Universitet kutubxonasida boshlangan hikoya — endi bir umrlik.", max: 400, hint: "Bo‘sh qolsa — matn chiqmaydi" },
+      { key: "caption", type: "text", label: "Polaroid yozuvi", placeholder: "Bir umrga", max: 24, hint: "1-surat polaroid bo‘lib chiqadi, 2–3-suratlar — ravoq ichida" },
+    ],
+  },
 ];
 
 /** Kodga kiritilgan asl shablonlar (statik sahifalar shular bilan yig‘iladi) */

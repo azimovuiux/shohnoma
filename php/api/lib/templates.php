@@ -7,12 +7,22 @@ declare(strict_types=1);
  */
 function templates_seed(): void
 {
-    if ((int)scalar('SELECT COUNT(*) FROM templates') > 0) return;
+    static $done = false;
+    if ($done) return;
+    $done = true;
     $file = __DIR__ . '/templates.json';
     $list = is_file($file) ? (json_decode((string)file_get_contents($file), true) ?: []) : [];
+    // Koddagi har bir shablon bazaga bir marta qo‘shiladi (admin o‘chirsa — qaytib kelmaydi)
+    $raw = db_settings()['tpl_seeded'] ?? '';
+    $seeded = $raw !== '' ? (json_decode($raw, true) ?: []) : array_column(all('SELECT slug FROM templates'), 'slug');
+    $changed = $raw === '';
     foreach ($list as $row) {
+        if (!isset($row['slug']) || in_array($row['slug'], $seeded, true)) continue;
         q('INSERT IGNORE INTO templates (slug, data, sort, is_active) VALUES (?, ?, ?, 1)', [$row['slug'], json_encode($row, JSON_UNESCAPED_UNICODE), (int)($row['number'] ?? 0)]);
+        $seeded[] = $row['slug'];
+        $changed = true;
     }
+    if ($changed) setting_set('tpl_seeded', json_encode(array_values($seeded)));
 }
 
 /** slug => shablon (nofaol ham; `active` maydoni bilan) */

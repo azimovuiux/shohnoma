@@ -15,6 +15,7 @@ import { Closing, Countdown, Gallery, Program, RsvpBlock, Venue } from "./Sectio
 import { Layer, RsvpForm, ThankYou, fetchSavedAnswer, loadSavedRsvp, useSavedAnswer, type RsvpAnswer, type RsvpStatus } from "./Rsvp";
 import st from "./invitation.module.css";
 import { AnorSite } from "@/components/templates/anor/AnorSite";
+import { ZumradSite } from "@/components/templates/zumrad/ZumradSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -42,7 +43,9 @@ function useMusic(url: string | null, enabled: boolean) {
 
 /** Shablon dizayniga qarab: maxsus (kodda yozilgan) dizayn yoki umumiy sahifa */
 export function InvitationSite(props: InvitationSiteProps) {
-  if (designSlug(props.template) === "anor") return <AnorSite {...props} />;
+  const ds = designSlug(props.template);
+  if (ds === "anor") return <AnorSite {...props} />;
+  if (ds === "zumrad") return <ZumradSite {...props} />;
   return <GenericSite {...props} />;
 }
 
