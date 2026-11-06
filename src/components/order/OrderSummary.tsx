@@ -1,11 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { LiveDevices } from "./LiveDevices";
+import type { FlowOrder } from "./types";
 import { Eye } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
-import { PhoneFrame } from "@/components/mockups/Devices";
-import { InvitationScreen } from "@/components/mockups/InvitationScreen";
-import { isDarkTheme } from "@/components/TemplateCard";
 import { ceremonyLabel, styleLabel, type Template } from "@/lib/templates";
 import { formatPrice } from "@/lib/format";
 import { site } from "@/lib/site";
@@ -16,6 +15,7 @@ export type SummaryRow = [label: string, value: ReactNode];
 export function OrderSummary({
   template,
   live,
+  order,
   rows,
   amount,
   action,
@@ -24,6 +24,8 @@ export function OrderSummary({
   /** Jonli ko‘rinish uchun (liveTemplate bilan) */
   template: Template;
   live: Template;
+  /** Formaning joriy holati — mokapda shablon shu ma’lumotlar bilan chiziladi */
+  order?: FlowOrder;
   rows: SummaryRow[];
   amount: number;
   action: ReactNode;
@@ -31,20 +33,18 @@ export function OrderSummary({
 }) {
   return (
     <div className="flex flex-col gap-5 rounded-[24px] bg-bg-soft p-6">
-      <div className="flex items-center gap-[18px]">
-        <PhoneFrame dark={isDarkTheme(template)} className="w-[112px] shrink-0">
-          <InvitationScreen t={live} />
-        </PhoneFrame>
-        <div className="flex min-w-0 flex-col gap-1.5">
+      <LiveDevices template={template} live={live} order={order} />
+      <div className="flex items-end justify-between gap-3">
+        <div className="flex min-w-0 flex-col gap-1">
           <span className="t-body-s text-ink-2">Tanlangan shablon</span>
           <span className="font-serif text-[26px] font-medium leading-[1.2] text-ink">{template.name}</span>
           <span className="t-body-s text-ink-2">
             {ceremonyLabel[live.ceremony]} · {styleLabel[template.style]}
           </span>
-          <span className="inline-flex items-center gap-1.5 t-body-s text-gold">
-            <Eye size={14} /> Ko‘rinish jonli yangilanadi
-          </span>
         </div>
+        <span className="inline-flex shrink-0 items-center gap-1.5 pb-0.5 t-body-s text-gold">
+          <Eye size={14} /> Jonli ko‘rinish
+        </span>
       </div>
       <div className="h-px bg-line" />
       <dl className="flex flex-col gap-3">
@@ -80,16 +80,19 @@ export function HelpLink() {
   );
 }
 
-/** Mobil: tanlangan shablon kartasi (forma tepasida) */
-export function MobileTemplateCard({ template, live }: { template: Template; live: Template }) {
+/** Mobil: tanlangan shablon kartasi (forma tepasida) — jonli laptop + telefon mokapi bilan */
+export function MobileTemplateCard({ template, live, order }: { template: Template; live: Template; order?: FlowOrder }) {
   return (
-    <div className="flex items-center gap-3.5 rounded-panel bg-bg-soft p-3.5 lg:hidden">
-      <PhoneFrame dark={isDarkTheme(template)} className="w-[40px] shrink-0">
-        <InvitationScreen t={live} />
-      </PhoneFrame>
-      <div className="flex flex-col gap-0.5">
-        <span className="t-body-s text-ink-2">Tanlangan shablon</span>
-        <span className="font-serif text-[24px] font-medium leading-[1.2] text-ink">{template.name}</span>
+    <div className="flex flex-col gap-3 rounded-panel bg-bg-soft p-3.5 lg:hidden">
+      <LiveDevices template={template} live={live} order={order} />
+      <div className="flex items-center justify-between gap-3 px-1">
+        <div className="flex flex-col gap-0.5">
+          <span className="t-body-s text-ink-2">Tanlangan shablon</span>
+          <span className="font-serif text-[24px] font-medium leading-[1.2] text-ink">{template.name}</span>
+        </div>
+        <span className="inline-flex shrink-0 items-center gap-1.5 t-body-s text-gold">
+          <Eye size={14} /> Jonli
+        </span>
       </div>
     </div>
   );

@@ -111,6 +111,7 @@ export function P2PTransfer({
         <OrderSummary
           template={template}
           live={live}
+          order={order}
           amount={order.amount}
           rows={[
             ["Buyurtma", `№ ${order.code}`],
@@ -127,7 +128,7 @@ export function P2PTransfer({
       }
     >
       <div className="flex flex-col gap-8">
-        <MobileTemplateCard template={template} live={live} />
+        <MobileTemplateCard template={template} live={live} order={order} />
         {rejectedNote && (
           <div role="alert" className="rounded-xl px-4 py-3.5 t-body-m" style={{ background: "var(--danger-bg)", color: "var(--color-danger)" }}>
             <b className="font-semibold">Oldingi chek qabul qilinmadi:</b> {rejectedNote}. Iltimos, to‘g‘ri chekni qayta yuboring.

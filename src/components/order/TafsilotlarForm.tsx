@@ -111,6 +111,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
         <OrderSummary
           template={template}
           live={live}
+          order={o}
           amount={o.amount}
           rows={[
             ["Ismlar", namesOf(o)],
@@ -125,7 +126,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
       }
     >
       <div className="flex flex-col gap-[26px]">
-        <MobileTemplateCard template={template} live={live} />
+        <MobileTemplateCard template={template} live={live} order={o} />
 
         <FlowField label="Taklif matni" error={errors.message} hint="Tayyor matnni o‘zingizga moslab o‘zgartirishingiz mumkin." htmlFor="f-msg">
           <textarea

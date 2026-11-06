@@ -157,6 +157,7 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
         <OrderSummary
           template={template}
           live={live}
+          order={order}
           amount={order.amount}
           rows={[
             ["Ismlar", namesOf(order)],
@@ -170,7 +171,7 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
       }
     >
       <div className="flex flex-col gap-6">
-        <MobileTemplateCard template={template} live={live} />
+        <MobileTemplateCard template={template} live={live} order={order} />
         <div className="hidden lg:block">
           <DeviceSwitch value={device} onChange={setDevice} />
         </div>

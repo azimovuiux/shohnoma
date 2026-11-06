@@ -89,6 +89,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
         <OrderSummary
           template={template}
           live={live}
+          order={o}
           amount={o.amount}
           rows={[
             ["Ismlar", namesOf(o)],
@@ -101,7 +102,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
       }
     >
       <div className="flex flex-col gap-[26px]">
-        <MobileTemplateCard template={template} live={live} />
+        <MobileTemplateCard template={template} live={live} order={o} />
 
         <FlowField label="Marosim turi" required htmlFor="f-ceremony">
           <span className="relative">

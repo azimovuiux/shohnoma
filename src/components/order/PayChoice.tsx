@@ -70,6 +70,7 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
         <OrderSummary
           template={template}
           live={live}
+          order={order}
           amount={order.amount}
           rows={[
             ["Buyurtma", `№ ${order.code}`],
@@ -86,7 +87,7 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
       }
     >
       <div className="flex flex-col gap-4">
-        <MobileTemplateCard template={template} live={live} />
+        <MobileTemplateCard template={template} live={live} order={order} />
         <SectionTitle>Qanday to‘lamoqchisiz?</SectionTitle>
         <div role="radiogroup" aria-label="To‘lov usuli" className="flex flex-col gap-3">
           {providers.map((k) => {
