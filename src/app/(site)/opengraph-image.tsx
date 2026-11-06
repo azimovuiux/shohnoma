@@ -1,55 +1,57 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { star8Path } from "@/lib/ornament";
 
 export const dynamic = "force-static";
-export const alt = "Shohnoma — to‘yingiz uchun shohona taklifnoma sayti";
+export const alt = "Shohnoma — har bir to‘y o‘z hikoyasi, taklifnomasi ham";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const font = (pkg: string, file: string) => readFile(path.join(process.cwd(), "node_modules", "@fontsource", pkg, "files", file));
+const root = process.cwd();
+const font = (pkg: string, file: string) => readFile(path.join(root, "node_modules", "@fontsource", pkg, "files", file));
+const dataUrl = async (file: string, mime: string) => `data:${mime};base64,${(await readFile(path.join(root, file))).toString("base64")}`;
 
+/** Bosh sahifa OG — hero uslubida: krem fon, Instrument Serif, ravoq ichida kelin-kuyov surati va gul shoxchasi */
 export default async function OgImage() {
-  const [light, italic, semibold, inter] = await Promise.all([
-    font("cormorant-garamond", "cormorant-garamond-latin-300-normal.woff"),
-    font("cormorant-garamond", "cormorant-garamond-latin-300-italic.woff"),
-    font("cormorant-garamond", "cormorant-garamond-latin-600-normal.woff"),
-    font("inter", "inter-latin-500-normal.woff"),
+  const [serif, serifItalic, sans, couple, bouquet, logo] = await Promise.all([
+    font("instrument-serif", "instrument-serif-latin-400-normal.woff"),
+    font("instrument-serif", "instrument-serif-latin-400-italic.woff"),
+    font("instrument-sans", "instrument-sans-latin-500-normal.woff"),
+    dataUrl("src/og-assets/couple.jpg", "image/jpeg"),
+    dataUrl("src/og-assets/bouquet.png", "image/png"),
+    dataUrl("public/logo.svg", "image/svg+xml"),
   ]);
-  const star = (r: number) => `data:image/svg+xml;utf8,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${r * 2} ${r * 2}"><path d="${star8Path(r, r, r - 1)}" fill="none" stroke="#AD7F3C" stroke-opacity="0.45"/><path d="${star8Path(r, r, r * 0.82)}" fill="none" stroke="#AD7F3C" stroke-opacity="0.25"/></svg>`,
-  )}`;
-  const solid = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path d="${star8Path(20, 20, 20)}" fill="#AD7F3C"/></svg>`)}`;
 
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "#FFFDF9", position: "relative", fontFamily: "Cormorant" }}>
-        <div style={{ position: "absolute", right: -40, top: 40, width: 560, height: 700, borderRadius: "280px 280px 0 0", background: "linear-gradient(180deg, #7A2335, #5A1828)", display: "flex" }} />
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "#F7F1E7", position: "relative", fontFamily: "Instrument Serif" }}>
+        {/* Ravoq: ingichka oltin ramka + surat */}
+        <div style={{ position: "absolute", left: 696, top: 46, width: 440, height: 620, borderRadius: "220px 220px 0 0", border: "1.5px solid rgba(173,127,60,0.55)", display: "flex" }} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={star(150)} width={300} height={300} style={{ position: "absolute", right: 90, top: 150, opacity: 0.9 }} alt="" />
-        <div style={{ display: "flex", flexDirection: "column", padding: "72px 80px", justifyContent: "space-between", width: "100%" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={solid} width={30} height={30} alt="" />
-            <span style={{ fontSize: 40, fontWeight: 600, color: "#1B1813", letterSpacing: 1 }}>Shohnoma</span>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: 78, fontWeight: 300, color: "#1B1813", lineHeight: 1 }}>To‘yingiz uchun</span>
-            <span style={{ fontSize: 150, fontWeight: 300, fontStyle: "italic", color: "#6B2436", lineHeight: 0.95 }}>shohona</span>
-            <span style={{ fontSize: 78, fontWeight: 300, color: "#1B1813", lineHeight: 1 }}>taklifnoma sayti</span>
-          </div>
-          <span style={{ fontFamily: "Inter", fontSize: 24, color: "#7A7265" }}>Nikoh · Fotiha · Sunnat to‘yi · Tug‘ilgan kun — shohnoma.uz</span>
+        <img src={couple} width={440} height={590} alt="" style={{ position: "absolute", left: 712, top: 62, borderRadius: "220px 220px 0 0", objectFit: "cover" }} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={bouquet} width={560} height={315} alt="" style={{ position: "absolute", left: 560, top: 400, transform: "rotate(-6deg)" }} />
+
+        <div style={{ position: "absolute", left: 80, top: 64, display: "flex" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={logo} width={207} height={50} alt="" />
         </div>
+        <div style={{ position: "absolute", left: 80, top: 176, display: "flex", flexDirection: "column", letterSpacing: "-0.02em" }}>
+          <span style={{ fontSize: 84, lineHeight: 0.95, color: "#1B1813" }}>Har bir to‘y —</span>
+          <span style={{ fontSize: 84, lineHeight: 0.95, color: "#1B1813" }}>o‘z hikoyasi.</span>
+          <span style={{ fontSize: 84, lineHeight: 1.05, color: "#6B2436", fontStyle: "italic" }}>Taklifnomasi ham.</span>
+        </div>
+        <span style={{ position: "absolute", left: 80, top: 476, fontFamily: "Instrument Sans", fontSize: 24, color: "#6E6458" }}>
+          Taklifnoma sayti — 2 daqiqada · shohnoma.uz
+        </span>
       </div>
     ),
     {
       ...size,
       fonts: [
-        { name: "Cormorant", data: light, weight: 300, style: "normal" },
-        { name: "Cormorant", data: italic, weight: 300, style: "italic" },
-        { name: "Cormorant", data: semibold, weight: 600, style: "normal" },
-        { name: "Inter", data: inter, weight: 500, style: "normal" },
+        { name: "Instrument Serif", data: serif, weight: 400, style: "normal" },
+        { name: "Instrument Serif", data: serifItalic, weight: 400, style: "italic" },
+        { name: "Instrument Sans", data: sans, weight: 500, style: "normal" },
       ],
     },
   );

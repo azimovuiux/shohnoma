@@ -42,7 +42,17 @@ export const metadata: Metadata = {
   },
   description:
     "Tayyor dizaynni tanlang, ma’lumotlaringizni kiriting va to‘lovdan so‘ng mehmonlarga yuboriladigan tayyor sayt havolasini oling. Nikoh, fotiha, sunnat to‘yi va tug‘ilgan kun uchun.",
-  icons: { icon: "/logo-mark.svg" },
+  /* Tizim mavzusiga mos: yorug‘da to‘q bordo, qorong‘ida oq belgi (SVG ichida prefers-color-scheme; PNG — SVG’ni qo‘llamaydigan brauzerlar uchun) */
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon-light-32.png", sizes: "32x32", type: "image/png", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-dark-32.png", sizes: "32x32", type: "image/png", media: "(prefers-color-scheme: dark)" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     siteName: "Shohnoma",
     locale: "uz_UZ",

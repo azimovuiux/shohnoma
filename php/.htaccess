@@ -21,7 +21,12 @@ ErrorDocument 404 /404.html
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache"
   </FilesMatch>
+  # Favicon/OG nomlari o‘zgarmaydi — yangilanishi ko‘rinishi uchun qisqa kesh
+  <FilesMatch "^(favicon\.ico|favicon-(light|dark)-32\.png|icon\.svg|icon-(192|512)\.png|apple-touch-icon\.png|manifest\.webmanifest|opengraph-image.*)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
 </IfModule>
+AddType application/manifest+json .webmanifest
 
 # Payme Basic auth sarlavhasi PHP-FPM/CGI ga yetib borishi uchun
 SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
