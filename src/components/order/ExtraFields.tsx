@@ -1,6 +1,7 @@
 "use client";
 
 import { Add, Trash } from "@/components/icons";
+import { SelectField, TimeField } from "./pickers";
 import type { FieldSpec, TemplateField } from "@/lib/templates";
 import { SectionTitle, flowInput } from "./fields";
 
@@ -29,17 +30,9 @@ function Input({ spec, value, onChange, label }: { spec: FieldSpec; value: strin
   const common = { "aria-label": label, value, placeholder: spec.placeholder, onChange: (e: { target: { value: string } }) => onChange(e.target.value) };
   if (spec.type === "textarea") return <textarea {...common} rows={3} maxLength={spec.max ?? 1000} className={`${flowInput} !h-auto py-3`} />;
   if (spec.type === "select")
-    return (
-      <select {...common} className={flowInput}>
-        <option value="">Tanlang</option>
-        {(spec.options ?? []).map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
-    );
-  const type = spec.type === "time" ? "time" : spec.type === "date" ? "date" : spec.type === "number" ? "number" : "text";
+    return <SelectField label={label} value={value} onChange={onChange} options={(spec.options ?? []).map((o) => ({ value: o, label: o }))} />;
+  if (spec.type === "time") return <TimeField label={label} value={value} onChange={onChange} />;
+  const type = spec.type === "date" ? "date" : spec.type === "number" ? "number" : "text";
   return <input {...common} type={type} maxLength={spec.max ?? 160} className={flowInput} />;
 }
 
@@ -60,7 +53,7 @@ export function ExtraFields({ fields, value, onChange, errors = {} }: { fields: 
               <SectionTitle>{f.label}</SectionTitle>
               {rows.map((r, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <div className={`grid flex-1 gap-2 ${cols.length > 2 ? "sm:grid-cols-[110px_1fr_1fr]" : cols.length === 2 ? "sm:grid-cols-[110px_1fr]" : ""}`}>
+                  <div className={`grid flex-1 gap-2 ${cols.length > 2 ? "sm:grid-cols-[124px_1fr_1fr]" : cols.length === 2 ? "sm:grid-cols-[124px_1fr]" : ""}`}>
                     {cols.map(([k, s]) => (
                       <Input
                         key={k}

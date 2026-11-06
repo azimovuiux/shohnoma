@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Add, ArrowDown2, ArrowRight, Calendar, Clock, CloseCircle, Location, Trash } from "@/components/icons";
+import { Add, ArrowRight, Calendar, CloseCircle, Location, Trash } from "@/components/icons";
 import { ceremonyLabel, type Ceremony, type Template } from "@/lib/templates";
 import { FlowField, IconInput, bareInput, flowInput, SectionTitle } from "./fields";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
@@ -12,6 +12,7 @@ import { liveTemplate, dayTime } from "./live";
 import { namesOf, needsPersonB, personLabels } from "./labels";
 import type { FlowOrder } from "./types";
 import { SaveIndicator } from "./SaveIndicator";
+import { SelectField, TimeField } from "./pickers";
 import { ExtraFields, extraErrors, extraReady, type Extra } from "./ExtraFields";
 
 const ceremonies = (Object.keys(ceremonyLabel) as Ceremony[]).filter((c) => c in ceremonyLabel);
@@ -105,21 +106,13 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
         <MobileTemplateCard template={template} live={live} order={o} />
 
         <FlowField label="Marosim turi" required htmlFor="f-ceremony">
-          <span className="relative">
-            <select
-              id="f-ceremony"
-              value={o.ceremony}
-              onChange={(e) => set("ceremony", e.target.value as Ceremony)}
-              className={`${flowInput} appearance-none pr-10`}
-            >
-              {ceremonies.map((c) => (
-                <option key={c} value={c}>
-                  {ceremonyLabel[c]}
-                </option>
-              ))}
-            </select>
-            <ArrowDown2 size={18} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-ink-2" />
-          </span>
+          <SelectField
+            id="f-ceremony"
+            label="Marosim turi"
+            value={o.ceremony}
+            onChange={(v) => set("ceremony", v)}
+            options={ceremonies.map((c) => ({ value: c, label: ceremonyLabel[c] }))}
+          />
         </FlowField>
 
         <div className="grid grid-cols-2 gap-3">
@@ -166,16 +159,13 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
             </IconInput>
           </FlowField>
           <FlowField label="Boshlanishi" required error={errors.time} htmlFor="f-time">
-            <IconInput icon={<Clock size={18} />} invalid={!!errors.time}>
-              <input
-                id="f-time"
-                type="time"
-                value={o.time}
-                onChange={(e) => set("time", e.target.value, o.day ? { day: o.day, time: e.target.value } : { time: e.target.value })}
-                aria-invalid={!!errors.time}
-                className={`${bareInput} [&::-webkit-calendar-picker-indicator]:opacity-0`}
-              />
-            </IconInput>
+            <TimeField
+              id="f-time"
+              value={o.time}
+              invalid={!!errors.time}
+              label="Boshlanish vaqti"
+              onChange={(v) => set("time", v, o.day ? { day: o.day, time: v } : { time: v })}
+            />
           </FlowField>
         </div>
 
@@ -253,13 +243,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
             <SectionTitle>Marosim dasturi</SectionTitle>
             {program.map((p, i) => (
               <div key={i} className="flex items-center gap-2">
-                <input
-                  type="time"
-                  value={p.time}
-                  aria-label="Vaqt"
-                  onChange={(e) => setProgram(program.map((x, j) => (j === i ? { ...x, time: e.target.value } : x)))}
-                  className={`${flowInput} !w-[110px] shrink-0`}
-                />
+                <TimeField compact value={p.time} onChange={(v) => setProgram(program.map((x, j) => (j === i ? { ...x, time: v } : x)))} />
                 <input
                   value={p.title}
                   aria-label="Bosqich nomi"
