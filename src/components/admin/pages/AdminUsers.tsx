@@ -67,7 +67,7 @@ export function AdminUsers() {
           <SearchNormal1 size={17} className="text-ink-2" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ism, telefon, @username yoki login" className="h-full flex-1 bg-transparent t-body-m outline-none" />
         </label>
-        <div className="flex gap-1.5 overflow-x-auto">
+        <div className="no-scrollbar flex gap-1.5 overflow-x-auto">
           {roles.map((r) => (
             <button
               key={r.value}

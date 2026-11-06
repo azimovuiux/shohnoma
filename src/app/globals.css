@@ -440,3 +440,27 @@ html.js [data-reveal="stagger"].is-done > [data-split] > * {
   color: var(--color-maroon);
   transform: translateY(-1px);
 }
+
+/* Gorizontal suriladigan qatorlar (chiplar, tablar) — scroll chizig‘isiz, barmoq/trackpad bilan suriladi */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Kartadagi qurilma ekrani: uzun sahifa rasmi pastga suriladi va boshiga qaytadi */
+@keyframes shotScroll {
+  0%,
+  6% {
+    transform: translateY(0);
+  }
+  88%,
+  94% {
+    transform: translateY(var(--shot));
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

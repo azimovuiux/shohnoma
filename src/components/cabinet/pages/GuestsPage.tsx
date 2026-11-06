@@ -94,7 +94,7 @@ function GuestsInner() {
 
       <section className="flex flex-col gap-4 rounded-card border border-line bg-bg-base p-4 lg:p-5">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:px-0">
+          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:px-0">
             {chips.map((c) => {
               const active = c.key === status;
               return (

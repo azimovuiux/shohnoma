@@ -100,7 +100,7 @@ function tpl_clean(array $b, string $slug): array
         'sample' => $sample,
         'theme' => $theme,
         'base' => preg_match('/^[a-z0-9-]{2,80}$/', $base) ? $base : null,
-        'images' => array_filter(['phone' => tpl_image($img['phone'] ?? null), 'laptop' => tpl_image($img['laptop'] ?? null)]),
+        'images' => array_filter(['phone' => tpl_image($img['phone'] ?? null), 'laptop' => tpl_image($img['laptop'] ?? null), 'phoneScroll' => tpl_image($img['phoneScroll'] ?? null), 'laptopScroll' => tpl_image($img['laptopScroll'] ?? null)]),
         'musicId' => tpl_music($b['musicId'] ?? null),
     ];
 }

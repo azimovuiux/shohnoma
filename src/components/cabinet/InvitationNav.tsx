@@ -118,7 +118,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
         <Link href="/kabinet/" className="flex items-center gap-2 t-nav text-ink-2">
           <ArrowLeft size={16} /> Barcha taklifnomalar
         </Link>
-        <nav className="-mx-5 flex overflow-x-auto border-b border-line px-5" aria-label="Taklifnoma">
+        <nav className="no-scrollbar -mx-5 flex overflow-x-auto border-b border-line px-5" aria-label="Taklifnoma">
           {tabs.map((t) => {
             const active = same(path, t.href);
             return (

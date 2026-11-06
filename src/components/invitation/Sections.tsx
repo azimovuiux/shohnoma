@@ -154,7 +154,7 @@ export function Gallery({ photos, p, onOpen }: { photos: string[]; p: Palette; o
       <div className="text-center">
         <h2 style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? s(28) : s(44), color: p.heading, lineHeight: 1.2 }}>Lahzalar</h2>
       </div>
-      <div className="flex snap-x snap-mandatory overflow-x-auto" style={{ gap: s(10), padding: `${s(20)} ${s(24)} ${s(4)}`, scrollbarWidth: "none" }}>
+      <div className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto" style={{ gap: s(10), padding: `${s(20)} ${s(24)} ${s(4)}`, scrollbarWidth: "none" }}>
         {photos.map((src, i) => (
           <button
             key={src}

@@ -33,7 +33,7 @@ export function Showcase() {
               Har biri telefon va laptopda chiroyli ochiladi — muhr, musiqa va jonli animatsiyalar bilan.
             </p>
           </div>
-          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:px-0 lg:pb-0">
+          <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:px-0 lg:pb-0">
             {chips.map((c) => {
               const active = ceremony === c.value;
               return (

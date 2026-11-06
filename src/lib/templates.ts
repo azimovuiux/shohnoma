@@ -64,7 +64,7 @@ export interface Template {
   /** Dizayn asosi — qaysi tayyor dizayn (hero varianti, bezaklar, musiqa) ishlatiladi. Bo‘sh bo‘lsa — slug */
   base?: string;
   /** Mokap rasmlari (Figma eksport yoki admin yuklagan) */
-  images?: { phone?: string; laptop?: string };
+  images?: { phone?: string; laptop?: string; phoneScroll?: string; laptopScroll?: string };
   /** Katalogda ko‘rinadimi (admin) */
   active?: boolean;
   /** Mijoz ma’lumotlari bilan to‘ldirilgan nusxa — mokapda rasm emas, jonli chizma */
@@ -130,7 +130,13 @@ const builtin: Template[] = [
 export const builtinTemplates: Template[] = builtin.map((t) => ({
   ...t,
   active: true,
-  images: { phone: `/templates/${t.slug}-phone.webp`, laptop: `/templates/${t.slug}-laptop.webp` },
+  images: {
+    phone: `/templates/${t.slug}-phone.webp`,
+    laptop: `/templates/${t.slug}-laptop.webp`,
+    // Kartada scroll bo‘ladigan butun sahifa rasmlari (scripts orqali yoki qo‘lda tayyorlanadi)
+    phoneScroll: `/templates/${t.slug}-phone-long.webp`,
+    laptopScroll: `/templates/${t.slug}-laptop-long.webp`,
+  },
 }));
 export const builtinSlugs = builtinTemplates.map((t) => t.slug);
 

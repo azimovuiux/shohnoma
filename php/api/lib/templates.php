@@ -28,7 +28,11 @@ function templates(bool $fresh = false): array
     foreach ((is_file($file) ? (json_decode((string)file_get_contents($file), true) ?: []) : []) as $row) if (isset($row['slug'])) $code[$row['slug']] = $row;
     foreach (all('SELECT * FROM templates ORDER BY sort, created_at') as $r) {
         $d = json_decode($r['data'], true) ?: [];
-        if (($d['kind'] ?? '') !== 'html' && isset($code[$r['slug']]['fields'])) $d['fields'] = $code[$r['slug']]['fields'];
+        if (($d['kind'] ?? '') !== 'html' && isset($code[$r['slug']])) {
+            if (isset($code[$r['slug']]['fields'])) $d['fields'] = $code[$r['slug']]['fields'];
+            // Koddagi rasmlar (masalan, kartadagi scroll preview) bazada bo‘lmasa — qo‘shiladi
+            $d['images'] = ($d['images'] ?? []) + ($code[$r['slug']]['images'] ?? []);
+        }
         $d['slug'] = $r['slug'];
         $d['number'] = (int)$r['sort'];
         $d['active'] = (bool)$r['is_active'];

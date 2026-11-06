@@ -11,6 +11,7 @@ import { discountPercent, formatPrice } from "@/lib/format";
 import { LaptopFrame, PhoneFrame } from "./mockups/Devices";
 import { InvitationScreen } from "./mockups/InvitationScreen";
 import { InvitationDesktop } from "./mockups/InvitationDesktop";
+import { ScrollShot, useShotActive } from "./mockups/ScrollShot";
 
 const FAV_KEY = "shohnoma:favorites";
 
@@ -91,18 +92,19 @@ export function isDarkTheme(t: Template) {
   return 0.299 * r + 0.587 * g + 0.114 * b < 128;
 }
 
-/** Kartadagi sahna: girih fonida laptop + telefon (Figma 95:11492: 560×380) */
+/** Kartadagi sahna: girih fonida laptop + telefon (Figma 95:11492: 560×380). Uzun rasm bo‘lsa — ekranlar scroll bo‘ladi */
 export function DevicePreview({ t, className = "" }: { t: Template; className?: string }) {
+  const shot = useShotActive<HTMLDivElement>();
+  const im = !t.isLive ? t.images : undefined;
+  const scroll = !!(im?.phoneScroll && im?.laptopScroll && im.phone && im.laptop);
   return (
-    <div className={`relative aspect-[560/380] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#efe4d3] to-[#f8f3eb] ${className}`}>
+    <div ref={shot.ref} className={`relative aspect-[560/380] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#efe4d3] to-[#f8f3eb] ${className}`}>
       <GirihPattern id={`girih-${t.slug}`} cell={62} color="#c9a25e" opacity={0.22} className="absolute inset-0" />
       <div className="absolute left-[0.7%] top-[12.6%] w-[89.3%]">
-        <LaptopFrame className="w-full">
-          <InvitationDesktop t={t} />
-        </LaptopFrame>
+        <LaptopFrame className="w-full">{scroll ? <ScrollShot poster={im!.laptop!} long={im!.laptopScroll!} active={shot.active} warm={shot.warm} /> : <InvitationDesktop t={t} />}</LaptopFrame>
       </div>
       <PhoneFrame dark={isDarkTheme(t)} className="absolute left-[72.1%] top-[21.6%] w-[23.6%]">
-        <InvitationScreen t={t} />
+        {scroll ? <ScrollShot poster={im!.phone!} long={im!.phoneScroll!} active={shot.active} warm={shot.warm} speed={0.9} /> : <InvitationScreen t={t} />}
       </PhoneFrame>
     </div>
   );

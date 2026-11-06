@@ -18,7 +18,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
     { href: "/admin/sozlamalar/", label: "Sozlamalar", n: 0 },
   ];
   return (
-    <nav aria-label="Admin" className="-mx-5 flex gap-1 overflow-x-auto px-5 lg:mx-0 lg:px-0">
+    <nav aria-label="Admin" className="no-scrollbar -mx-5 flex gap-1 overflow-x-auto px-5 lg:mx-0 lg:px-0">
       {tabs.map((t) => {
         const p = path.replace(/\/?$/, "/");
         const active = t.href === "/admin/" ? p === "/admin/" : p.startsWith(t.href);

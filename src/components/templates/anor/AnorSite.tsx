@@ -93,7 +93,7 @@ function Velvet({ name, wide, inset }: { name: string; wide: boolean; inset: [nu
   return (
     <div className={st.velvet} style={{ top: `${-inset[0]}%`, bottom: `${-inset[1]}%`, left: wide ? "-0.86%" : "-3.13%", right: wide ? "-0.86%" : "-3.13%" }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={`${A}/v-${name}-${wide ? "l" : "m"}.webp`} alt="" loading="lazy" decoding="async" />
+      <img src={`${A}/v-${name}-${wide ? "l" : "m"}.webp`} alt="" decoding="async" />
     </div>
   );
 }
@@ -137,80 +137,143 @@ function PhotoArch({ src, w, h, border, left, top, z, style, zoom = 1.25 }: { sr
   );
 }
 
-/* ═════════════ 00 · Ochilish ═════════════ */
-function Gate({ d, wide, embedded, onOpen, state }: { d: D; wide: boolean; embedded: boolean; onOpen: () => void; state: "closed" | "opening" }) {
-  const ptr = usePointer(wide && state === "closed");
+/* ═════════════ 00 · Ochilish (scroll bilan) ═════════════ */
+const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
+const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
+const ease = (x: number) => 1 - Math.pow(1 - x, 3);
+
+/**
+ * Hech qanday bosish yo‘q — sahna scrollga bog‘langan (sticky, ~1.5 ekran):
+ * muhr yoriladi → qo‘llar konvert bilan pastga suzib ketadi → baxmal yirtiq chekka bo‘ylab
+ * yuqoridan pastga yirtilib, ostidagi muqova ochiladi. Orqaga scroll — hammasi teskari qaytadi.
+ */
+function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: () => void; onStart: () => void }) {
+  const wrap = useRef<HTMLDivElement>(null);
+  const ptr = usePointer(wide);
   const title = wide ? ["Sizga maktub bor"] : ["Sizga", "maktub bor"];
   let k = 0;
   const v: V = (m, l) => U(wide ? l : m);
-  // Qo‘llar kompozitsiyasi: mobil 500×667 (pastdan -62), laptop 600×800 (pastdan -86); muhr markazi — 49.4% / 28%
   const hw = wide ? 600 : 500;
   const hh = wide ? 800 : 666.667;
   const ring = wide ? [260, 204, 156] : [210, 166, 126];
-  return (
-    <div className={cx(st.gate, embedded && st.gateEmbedded, state === "opening" && st.opening)} role="dialog" aria-label="Taklifnoma">
-      <div className={st.gateBg} />
-      <div className={st.gateCorner} style={vars({ left: v(-40, -50), top: v(-40, -50), width: v(170, 380), height: v(170, 380), "--cx": "-60px", "--cr": "-8deg" })}>
-        <Img src={`${A}/gulchambar.webp`} eager />
-      </div>
-      <div
-        className={st.gateCorner}
-        style={vars({ right: v(-40, -50), top: v(-40, -50), width: v(170, 380), height: v(170, 380), transform: "scaleX(-1)", "--cx": "60px", "--cr": "8deg", "--sx": -1, animationDelay: "0.15s" })}
-      >
-        <Img src={`${A}/gulchambar.webp`} eager />
-      </div>
+  const cb = useRef({ onReveal, onStart });
+  cb.current = { onReveal, onStart };
 
-      <h1 className={cx(st.gateTitle, st.italic)} style={{ marginTop: v(84, 90), fontSize: v(66, 76) }}>
-        {title.map((line, li) => (
-          <span key={li} style={{ display: "block" }}>
-            {[...line].map((ch, i) => (
-              <span key={i} className={st.char} style={{ animationDelay: `${0.2 + 0.03 * k++}s` }}>
-                {ch}
+  useEffect(() => {
+    const el = wrap.current;
+    if (!el) return;
+    let raf = 0;
+    let cur = 0;
+    let target = 0;
+    let revealed = false;
+    let started = false;
+    const read = () => {
+      const r = el.getBoundingClientRect();
+      const range = Math.max(1, r.height - window.innerHeight);
+      target = clamp01(-r.top / range);
+    };
+    const apply = (p: number) => {
+      const sp = ease(seg(p, 0.04, 0.3)); // muhr yoriladi
+      const hp = ease(seg(p, 0.06, 0.6)); // qo‘llar pastga suziladi
+      const tp = ease(seg(p, 0.03, 0.34)); // sarlavha yuqoriga eriydi
+      const rp = seg(p, 0.32, 0.96); // baxmal yirtiladi
+      const fp = Math.sin(Math.PI * seg(p, 0.12, 0.42)); // oltin yorqinlik
+      el.style.setProperty("--s", sp.toFixed(4));
+      el.style.setProperty("--h", hp.toFixed(4));
+      el.style.setProperty("--t", tp.toFixed(4));
+      el.style.setProperty("--r", (rp * rp * (3 - 2 * rp)).toFixed(4));
+      el.style.setProperty("--f", fp.toFixed(4));
+      el.style.pointerEvents = rp > 0.85 ? "none" : "";
+      if (!started && p > 0.02) {
+        started = true;
+        cb.current.onStart();
+      }
+      if (!revealed && p > 0.36) {
+        revealed = true;
+        cb.current.onReveal();
+      }
+    };
+    // Scroll qiymatiga yumshoq yaqinlashish — telefonda ham silliq (Lenis ustidan qo‘shimcha lerp)
+    const loop = () => {
+      cur += (target - cur) * 0.14;
+      if (Math.abs(target - cur) < 0.0005) cur = target;
+      apply(cur);
+      raf = cur === target ? 0 : requestAnimationFrame(loop);
+    };
+    const on = () => {
+      read();
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
+    read();
+    cur = target;
+    apply(cur);
+    window.addEventListener("scroll", on, { passive: true });
+    window.addEventListener("resize", on);
+    return () => {
+      window.removeEventListener("scroll", on);
+      window.removeEventListener("resize", on);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  return (
+    <div ref={wrap} className={st.gateWrap}>
+      <div className={st.gate} aria-label="Taklifnoma">
+        <div className={st.gateBg} />
+        <div className={st.cornerL} style={{ left: v(-40, -50), top: v(-40, -50), width: v(170, 380), height: v(170, 380) }}>
+          <div className={st.gateCorner} style={vars({ width: "100%", height: "100%", "--cx": "-60px", "--cr": "-8deg" })}>
+            <Img src={`${A}/gulchambar.webp`} eager />
+          </div>
+        </div>
+        <div className={st.cornerR} style={{ right: v(-40, -50), top: v(-40, -50), width: v(170, 380), height: v(170, 380) }}>
+          <div className={st.gateCorner} style={vars({ width: "100%", height: "100%", "--cx": "60px", "--cr": "8deg", animationDelay: "0.15s" })}>
+            <Img src={`${A}/gulchambar.webp`} eager style={{ transform: "scaleX(-1)" }} />
+          </div>
+        </div>
+
+        <div className={st.gateText}>
+          <h1 className={cx(st.gateTitle, st.italic)} style={{ marginTop: v(84, 90), fontSize: v(66, 76) }}>
+            {title.map((line, li) => (
+              <span key={li} style={{ display: "block" }}>
+                {[...line].map((ch, i) => (
+                  <span key={i} className={st.char} style={{ animationDelay: `${0.2 + 0.03 * k++}s` }}>
+                    {ch}
+                  </span>
+                ))}
               </span>
             ))}
-          </span>
-        ))}
-      </h1>
-      <p className={st.gateSub} style={{ marginTop: v(18, 14), fontSize: U(18), maxWidth: v(340, 900) }}>
-        {d.guest ? (
-          <>
-            Hurmatli {d.guest},{wide ? " " : <br />}ushbu maktub siz uchun
-          </>
-        ) : (
-          <>
-            Aziz mehmon,{wide ? " " : <br />}ushbu maktub siz uchun
-          </>
-        )}
-      </p>
+          </h1>
+          <p className={st.gateSub} style={{ marginTop: v(18, 14), fontSize: U(18), maxWidth: v(340, 900) }}>
+            {d.guest ? `Hurmatli ${d.guest},` : "Aziz mehmon,"}
+            {wide ? " " : <br />}ushbu maktub siz uchun
+          </p>
+        </div>
 
-      <div className={st.hands} style={{ width: U(hw), height: U(hh), left: `calc(50% - ${U(hw / 2)})`, bottom: v(-62, -86) }}>
-        <Img src={`${A}/qollar.webp`} eager />
-        <button
-          type="button"
-          className={st.sealBtn}
-          onClick={onOpen}
-          aria-label="Muhrni ochish"
-          style={{
-            left: `calc(49.4% - ${U(ring[2] / 2)})`,
-            top: `calc(28% - ${U(ring[2] / 2)})`,
-            width: U(ring[2]),
-            height: U(ring[2]),
-            transform: wide ? `translate(${ptr.x * 10}px, ${ptr.y * 8}px)` : undefined,
-          }}
-        >
-          {ring.map((r, i) => (
-            <span key={r} className={st.ring} style={{ width: U(r), height: U(r), animationDelay: `${i * 0.5}s` }} />
-          ))}
-          <span className="absolute" style={{ left: "50%", top: "50%", width: v(64, 78), height: v(64, 78), transform: "translate(-50%,-50%)" }}>
-            <span className={st.sealHalf}>
-              <Img src={`${A}/muhr.webp`} eager />
-            </span>
-            <span className={st.sealHalf}>
-              <Img src={`${A}/muhr.webp`} eager />
-            </span>
-          </span>
-          <span className={st.flash} style={{ left: "50%", top: "50%", width: U(260), height: U(260) }} />
-        </button>
+        <div className={st.handsMove} style={{ width: U(hw), height: U(hh), left: `calc(50% - ${U(hw / 2)})`, bottom: v(-62, -86) }}>
+          <div className={st.hands}>
+            <Img src={`${A}/qollar.webp`} eager />
+            <div
+              className="absolute"
+              aria-hidden
+              style={{ left: `calc(49.4% - ${U(ring[2] / 2)})`, top: `calc(28% - ${U(ring[2] / 2)})`, width: U(ring[2]), height: U(ring[2]), transform: wide ? `translate(${ptr.x * 10}px, ${ptr.y * 8}px)` : undefined, transition: "transform .6s var(--ease)" }}
+            >
+              <div className={st.rings}>
+                {ring.map((r, i) => (
+                  <span key={r} className={st.ring} style={{ width: U(r), height: U(r), animationDelay: `${i * 0.5}s` }} />
+                ))}
+              </div>
+              <span className="absolute" style={{ left: "50%", top: "50%", width: v(64, 78), height: v(64, 78), transform: "translate(-50%,-50%)" }}>
+                <span className={cx(st.sealHalf, st.sealL)}>
+                  <Img src={`${A}/muhr.webp`} eager />
+                </span>
+                <span className={cx(st.sealHalf, st.sealR)}>
+                  <Img src={`${A}/muhr.webp`} eager />
+                </span>
+              </span>
+            </div>
+          </div>
+          <span className={st.flash} style={{ left: "49.4%", top: "28%", width: U(260), height: U(260) }} />
+        </div>
       </div>
     </div>
   );
@@ -1059,46 +1122,120 @@ function MusicButton({ m, wide, embedded }: { m: ReturnType<typeof useMusic>; wi
   return embedded ? <div style={{ position: "sticky", top: 0, height: 0, zIndex: 70 }}>{btn}</div> : btn;
 }
 
+/* ═════════════ Oldindan yuklash ═════════════ */
+const loadImg = (src: string) =>
+  new Promise<void>((res) => {
+    const im = new Image();
+    im.decoding = "async";
+    im.onload = () => (im.decode ? im.decode().catch(() => {}).then(() => res()) : res());
+    im.onerror = () => res();
+    im.src = src;
+  });
+
+/**
+ * Birinchi ekran rasmlari (baxmal, qo‘llar, muhr, gulchambar) yuklanguncha — yuklovchi;
+ * keyin qolgan bo‘lim fonlari va rasmlari orqa fonda navbat bilan yuklanadi (scrollda kechikmasin).
+ */
+function usePreload(wide: boolean, d: D, enabled: boolean) {
+  const [ready, setReady] = useState(!enabled);
+  useEffect(() => {
+    if (!enabled) return;
+    let alive = true;
+    const sfx = wide ? "l" : "m";
+    const critical = [`${A}/v-ochilish-${sfx}.webp`, `${A}/qollar.webp`, `${A}/muhr.webp`, `${A}/gulchambar.webp`, `${A}/paper.webp`];
+    const rest = [
+      d.cover,
+      ...(wide ? [d.coverRight] : []),
+      `${A}/bant.webp`,
+      `${A}/shox.webp`,
+      `${A}/v-taymer-${sfx}.webp`,
+      d.venuePhoto,
+      `${A}/marka.webp`,
+      ...d.program.map((it, i) => programIcon(it, i)),
+      ...(d.dress ? [`${A}/v-dress-${sfx}.webp`, ...d.dress.imgs.map((x) => x.src)] : []),
+      ...d.storyPhotos,
+      `${A}/v-javob-${sfx}.webp`,
+      `${A}/v-final-${sfx}.webp`,
+      d.final,
+    ];
+    const timeout = new Promise<void>((r) => setTimeout(r, 7000));
+    Promise.race([Promise.all(critical.map(loadImg)), timeout]).then(async () => {
+      if (!alive) return;
+      setReady(true);
+      for (const src of [...new Set(rest)]) {
+        if (!alive) return;
+        await loadImg(src);
+      }
+    });
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wide, enabled]);
+  return ready;
+}
+
+function Loader({ done }: { done: boolean }) {
+  return (
+    <div className={cx(st.loader, done && st.loaderDone)} aria-hidden={done} role="status" aria-label="Taklifnoma yuklanmoqda">
+      <span className={st.loaderRing} />
+      <span className={st.loaderSeal}>
+        <Img src={`${A}/muhr.webp`} eager />
+      </span>
+    </div>
+  );
+}
+
 /* ═════════════ Sahifa ═════════════ */
 export function AnorSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
   const root = useRef<HTMLDivElement>(null);
   const wide = useWide(root);
   const d = useAnorData({ template, data, mode });
   const withGate = !embedded && mode !== "preview";
-  const [gate, setGate] = useState<"closed" | "opening" | "open">(withGate ? "closed" : "open");
   const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && mode !== "preview");
   const [revealed, setRevealed] = useState(!withGate);
   const ready = revealed;
-
-  // Darvoza ochiq turganda sahifa scroll qilinmaydi
+  const loaded = usePreload(wide, d, withGate);
+  const [loaderGone, setLoaderGone] = useState(!withGate);
   useEffect(() => {
-    if (gate === "open" || embedded) return;
+    if (!loaded || loaderGone) return;
+    const t = setTimeout(() => setLoaderGone(true), 900);
+    return () => clearTimeout(t);
+  }, [loaded, loaderGone]);
+  // Yuklanguncha sahifa surilmaydi
+  useEffect(() => {
+    if (loaded || !withGate) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [gate, embedded]);
+  }, [loaded, withGate]);
 
-  const open = () => {
-    if (gate !== "closed") return;
-    try {
-      navigator.vibrate?.(10);
-    } catch {}
-    music.play(true);
-    setGate("opening");
-    window.scrollTo(0, 0);
-    const reduce = typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setTimeout(() => setRevealed(true), reduce ? 0 : 1000);
-    setTimeout(() => setGate("open"), reduce ? 50 : 2150);
-  };
+  // Brauzer musiqani faqat foydalanuvchi teginishidan keyin chaladi — birinchi teginish/tugma bosilishida yoqamiz
+  useEffect(() => {
+    if (!withGate) return;
+    const go = () => {
+      music.play(true);
+      off();
+    };
+    const off = () => {
+      window.removeEventListener("pointerup", go);
+      window.removeEventListener("keydown", go);
+    };
+    window.addEventListener("pointerup", go, { passive: true });
+    window.addEventListener("keydown", go);
+    return off;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [withGate, d.musicUrl]);
 
   return (
     <div ref={root} className={cx(st.root, wide && st.wide)}>
       <div className={st.page} style={vars({ "--u": wide ? "min(1px, calc(100cqw / 1440))" : "min(1.15px, calc(100cqw / 390))" })}>
         <div className={st.paperBg} />
         <MusicButton m={music} wide={wide} embedded={embedded} />
-        {gate !== "open" && <Gate d={d} wide={wide} embedded={embedded} state={gate} onOpen={open} />}
+        {withGate && !loaderGone && <Loader done={loaded} />}
+        {withGate && (loaded ? <Gate d={d} wide={wide} onReveal={() => setRevealed(true)} onStart={() => music.play(true)} /> : <div style={{ height: "250svh", marginBottom: "-100svh", width: "100%" }} />)}
         <Cover d={d} wide={wide} ready={ready} />
         <Invite d={d} wide={wide} ready={ready} />
         <Timer d={d} wide={wide} ready={ready} />

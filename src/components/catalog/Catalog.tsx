@@ -168,7 +168,7 @@ export function Catalog() {
 
       {/* Filtrlar */}
       <div className="mt-8 flex flex-col gap-4 border-b border-line pb-6 xl:flex-row xl:items-center xl:justify-between">
-        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:px-0 xl:flex-nowrap">
+        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:px-0 xl:flex-nowrap">
           <Chip active={!ceremony} onClick={() => setParam("marosim", "")}>
             Barchasi <span className="opacity-70">{byCeremony("")}</span>
           </Chip>
