@@ -41,8 +41,12 @@ export function FavoriteCard({ slug, onChange }: { slug: string; onChange?: () =
         </div>
         <div className="flex items-baseline gap-2">
           <span className="font-serif text-[22px] font-medium leading-none text-maroon">{formatPrice(t.price)}</span>
-          <s className="t-body-s text-ink-2">{formatPrice(t.priceOld, false)}</s>
-          <span className="t-body-s text-ink-2">−{off}%</span>
+          {off > 0 && (
+            <>
+              <s className="t-body-s text-ink-2">{formatPrice(t.priceOld, false)}</s>
+              <span className="t-body-s text-ink-2">−{off}%</span>
+            </>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary btn-sm !py-3">

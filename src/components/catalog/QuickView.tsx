@@ -139,7 +139,7 @@ export function QuickView({
             <div className="mt-1 flex flex-wrap gap-1.5">
               <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{ceremonyLabel[t.ceremony]}</span>
               <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{styleLabel[t.style]}</span>
-              <span className="rounded-full bg-maroon px-2.5 py-1 t-body-s text-ink-inverse">Aksiya −{off}%</span>
+              {off > 0 && <span className="rounded-full bg-maroon px-2.5 py-1 t-body-s text-ink-inverse">Aksiya −{off}%</span>}
             </div>
           </div>
           <p className="t-body-m text-ink-2">{t.description}</p>
@@ -166,7 +166,7 @@ export function QuickView({
 
           <div className="flex items-baseline gap-3 border-t border-line pt-5">
             <span className="font-serif text-[30px] font-medium leading-none text-maroon">{formatPrice(t.price)}</span>
-            <s className="t-body-m text-ink-2">{formatPrice(t.priceOld, false)}</s>
+            {off > 0 && <s className="t-body-m text-ink-2">{formatPrice(t.priceOld, false)}</s>}
           </div>
 
           <div className="flex flex-col gap-2.5">

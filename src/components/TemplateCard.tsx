@@ -130,9 +130,11 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
           </button>
         )}
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-maroon px-3 py-1.5 text-[12px] font-medium leading-none text-[#e2c48c]">
-            <Tag size={13} /> Aksiya&nbsp;&nbsp;−{off}%
-          </span>
+          {off > 0 && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-maroon px-3 py-1.5 text-[12px] font-medium leading-none text-[#e2c48c]">
+              <Tag size={13} /> Aksiya&nbsp;&nbsp;−{off}%
+            </span>
+          )}
           <span className="rounded-full bg-white/90 px-3 py-1.5 text-[12px] leading-none text-ink">{styleLabel[t.style]}</span>
         </div>
         <button
@@ -166,7 +168,7 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
           </div>
         </div>
         <div className="flex flex-col items-end gap-0.5">
-          <s className="text-[13px] leading-[1.5] text-ink-2">{formatPrice(t.priceOld)}</s>
+          {off > 0 && <s className="text-[13px] leading-[1.5] text-ink-2">{formatPrice(t.priceOld)}</s>}
           <span className="font-serif text-[26px] font-medium leading-[1.2] text-maroon lg:text-[30px]">{formatPrice(t.price)}</span>
         </div>
       </div>

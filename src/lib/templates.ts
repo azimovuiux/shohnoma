@@ -1,3 +1,4 @@
+import { tplImgVersions } from "./tplImgVersions.ts";
 /** Shablonlar ro‘yxati — spec §10.1 (narxlar namuna, [Ochiq]) */
 
 export type Ceremony = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun";
@@ -159,16 +160,19 @@ const builtin: Template[] = [
   },
 ];
 
+/** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
+const tplImg = (f: string) => `/templates/${f}${tplImgVersions[f] ? `?v=${tplImgVersions[f]}` : ""}`;
+
 /** Kodga kiritilgan asl shablonlar (statik sahifalar shular bilan yig‘iladi) */
 export const builtinTemplates: Template[] = builtin.map((t) => ({
   ...t,
   active: true,
   images: {
-    phone: `/templates/${t.slug}-phone.webp`,
-    laptop: `/templates/${t.slug}-laptop.webp`,
+    phone: tplImg(`${t.slug}-phone.webp`),
+    laptop: tplImg(`${t.slug}-laptop.webp`),
     // Kartada scroll bo‘ladigan butun sahifa rasmlari (scripts orqali yoki qo‘lda tayyorlanadi)
-    phoneScroll: `/templates/${t.slug}-phone-long.webp`,
-    laptopScroll: `/templates/${t.slug}-laptop-long.webp`,
+    phoneScroll: tplImg(`${t.slug}-phone-long.webp`),
+    laptopScroll: tplImg(`${t.slug}-laptop-long.webp`),
   },
 }));
 export const builtinSlugs = builtinTemplates.map((t) => t.slug);

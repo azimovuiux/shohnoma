@@ -65,8 +65,12 @@ export function TemplateDetail({ t }: { t: Template }) {
           <span className="t-body-s text-ink-2">Narxi</span>
           <div className="flex items-baseline gap-3">
             <span className="font-serif text-[34px] font-medium leading-none text-maroon">{formatPrice(t.price)}</span>
-            <s className="t-body-m text-ink-2">{formatPrice(t.priceOld, false)}</s>
-            <span className="rounded-full bg-maroon px-2 py-0.5 t-body-s text-ink-inverse">−{off}%</span>
+            {off > 0 && (
+              <>
+                <s className="t-body-m text-ink-2">{formatPrice(t.priceOld, false)}</s>
+                <span className="rounded-full bg-maroon px-2 py-0.5 t-body-s text-ink-inverse">−{off}%</span>
+              </>
+            )}
           </div>
         </div>
 

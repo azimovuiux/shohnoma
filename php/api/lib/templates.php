@@ -40,8 +40,15 @@ function templates(bool $fresh = false): array
         $d = json_decode($r['data'], true) ?: [];
         if (($d['kind'] ?? '') !== 'html' && isset($code[$r['slug']])) {
             if (isset($code[$r['slug']]['fields'])) $d['fields'] = $code[$r['slug']]['fields'];
-            // Koddagi rasmlar (masalan, kartadagi scroll preview) bazada bo‘lmasa — qo‘shiladi
-            $d['images'] = ($d['images'] ?? []) + ($code[$r['slug']]['images'] ?? []);
+            // Koddagi rasmlar (kartadagi mokap/scroll preview): bazada yo‘q bo‘lsa — qo‘shiladi;
+            // bazada ham asl /templates/ rasmi turgan bo‘lsa — koddagi versiyali (?v=xesh) manzil olinadi,
+            // admin o‘zi yuklagan rasm (/files/...) esa o‘zgarmaydi
+            $imgs = $d['images'] ?? [];
+            foreach (($code[$r['slug']]['images'] ?? []) as $k => $url) {
+                $cur = (string)($imgs[$k] ?? '');
+                if ($cur === '' || str_starts_with($cur, '/templates/')) $imgs[$k] = $url;
+            }
+            $d['images'] = $imgs;
         }
         $d['slug'] = $r['slug'];
         $d['number'] = (int)$r['sort'];

@@ -4,6 +4,8 @@ export function formatPrice(n: number, withCurrency = true) {
   return withCurrency ? `${s} so‘m` : s;
 }
 
+/** Chegirma foizi; eski narx yo‘q yoki yangisidan katta bo‘lmasa — 0 (aksiya ko‘rsatilmaydi) */
 export function discountPercent(oldPrice: number, price: number) {
+  if (!oldPrice || oldPrice <= price) return 0;
   return Math.round(((oldPrice - price) / oldPrice) * 100);
 }
