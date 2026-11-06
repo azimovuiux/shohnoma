@@ -1098,7 +1098,7 @@ export function AnorSite({ template, data, mode, embedded = false }: InvitationS
 
   return (
     <div ref={root} className={cx(st.root, wide && st.wide)}>
-      <div className={st.page} style={vars({ "--u": wide ? "min(1px, calc(100cqw / 1440))" : "min(1.15px, calc(100cqw / 390))" })}>
+      <div className={st.page} style={vars({ "--u": wide ? "calc(100cqw / 1440)" : "calc(100cqw / 390)" })}>
         <div className={st.paperBg} />
         <MusicButton m={music} wide={wide} embedded={embedded} />
         {withGate && !loaderGone && <Loader done={loaded} seal={`${A}/muhr.webp`} />}

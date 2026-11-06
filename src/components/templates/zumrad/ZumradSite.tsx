@@ -300,7 +300,6 @@ function Collage({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   const v: V = (m, l) => U(wide ? l : m);
   const k = wide ? 1.5 : 1;
   const sh = (speed: number) => `translateY(${((par - 0.5) * (speed - 1) * -120).toFixed(1)}px)`;
-  const toRsvp = () => document.getElementById("zumrad-javob")?.scrollIntoView({ behavior: "smooth", block: "start" });
   return (
     <Sec ready={ready} style={{ paddingTop: v(30, 60), paddingBottom: v(110, 165) }}>
       <div ref={box} className="relative" style={{ width: v(390, 1440), height: v(982, 1472) }}>
@@ -364,22 +363,6 @@ function Collage({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
           </p>
           <TimerRow d={d} run={tIn} size={wide ? { w: 60, h: 87, fs: 39, ls: 13, r: 15, gap: 9 } : { w: 40, h: 58, fs: 26, ls: 9.5, r: 10, gap: 6 }} />
         </div>
-        {/* javob yorlig‘i va kistochka */}
-        <L wide={wide} m={[217, 524.5, 150, 200]} l={[1052, 786, 225, 300]} a="drop" z={6} style={vars({ "--dy": -90, "--r0": "8deg", "--d": "1.6s", "--t": "1.2s", "--e": "var(--spring)" })}>
-          <div className={st.tag} style={{ width: "100%", height: "100%", borderRadius: U(75 * k), rotate: "-4deg", gap: U(8 * k) }}>
-            <p className={st.italic} style={{ fontSize: U(38 * k), color: "var(--green)" }}>
-              Javob
-            </p>
-            <button type="button" onClick={toRsvp} className={st.btnGreen} style={{ fontSize: U(12 * k), padding: `${U(8 * k)} ${U(14 * k)}` }}>
-              Javob qoldirish
-            </button>
-          </div>
-        </L>
-        <L wide={wide} m={[242.25, 724, 97.5, 130]} l={[1090.9, 1086, 146.25, 195]} a="fade" z={5} style={vars({ "--d": "1.8s" })}>
-          <div className={st.pendulum} style={{ width: "100%", height: "100%" }}>
-            <Img src={`${Z}/kistochka.webp`} className={st.contain} />
-          </div>
-        </L>
         {/* imzo */}
         <div data-a="up" className="absolute flex flex-col items-center text-center" style={vars({ left: "50%", translate: "-50% 0", top: v(884, 1326), gap: U(2), "--d": "0.3s", "--y": 30, zIndex: 6 })}>
           <p style={{ fontSize: v(16, 22), fontWeight: 500, color: "#45544d" }}>Muhabbat bilan,</p>
@@ -409,9 +392,9 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
   const { p, o } = vals;
   const ty = (speed: number) => (p - 0.5) * (speed - 1) * -260;
   const px = (n: number) => (wide ? ptr.x * n : 0);
-  const bed = 1 + seg(p, 0.72, 1) * 0.25 * (variant === "open" ? 1 : 0);
+  // bir nechta yonma-yon to‘shak (laptop) alohida kattalashsa — chegaralari ochiladi; faqat mobil (bitta to‘shak)
+  const bed = 1 + seg(p, 0.72, 1) * 0.25 * (variant === "open" && !wide ? 1 : 0);
   const H = variant === "open" ? (wide ? 920 : 1040) : wide ? 900 : 880;
-  const curtainShift = (1 - o) * (wide ? 0 : 0) + o * (wide ? 180 : 180);
   const layer = (style: CSSProperties): CSSProperties => ({ ...style, position: "absolute" });
 
   // Sarvlar va gullar joylashuvi
@@ -433,17 +416,17 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
       ];
   const beds: [number, number, number, number, boolean][] = wide
     ? variant === "close"
-      ? [
+      ? // gul to‘shagi chetlari shaffof emas — ko‘zgu aksi bilan yonma-yon (ustma-ust emas), chegara ko‘rinmasin
+        [
           [-150, 517.32, 680, 382.68, false],
-          [380, 517.32, 680, 382.68, true],
-          [910, 517.32, 680, 382.68, false],
+          [530, 517.32, 680, 382.68, true],
+          [1210, 517.32, 680, 382.68, false],
         ]
       : [
-        [-150, 520, 700, 394, false],
-        [250, 520, 700, 394, true],
-        [650, 520, 700, 394, false],
-        [1050, 520, 700, 394, true],
-      ]
+          [-150, 520.06, 700, 393.94, false],
+          [550, 520.06, 700, 393.94, true],
+          [1250, 520.06, 700, 393.94, false],
+        ]
     : [[-235, variant === "open" ? 550 : 396, 860, 484, false]];
   const madrasa = wide ? (variant === "open" ? [310, 300, 820, 461.5] : [360, 495.32, 720, 405.2]) : variant === "open" ? [-85, 470, 560, 315] : [-105, 430, 600, 338];
 
@@ -464,6 +447,10 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
             <Img src={`${Z}/madrasa.webp`} />
           </div>
         </div>
+      )}
+      {variant === "close" && (
+        /* gullar ostida osmon chizig‘i qolmasin — pastga footer rangiga silliq o‘tadi */
+        <div className="absolute inset-x-0 bottom-0" style={{ height: U(wide ? 200 : 170), zIndex: 2, background: "linear-gradient(rgba(12,42,32,0), rgba(12,42,32,.85) 55%, #0c2a20)" }} />
       )}
       {(variant === "open" || wide) &&
         cypress.map(([x, y, w, h, flip], i) => (
@@ -504,10 +491,10 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
       {variant === "open" ? (
         /* oltin ramka: ichida monogramma → ismlar */
         <div className="absolute" style={{ left: `calc(50% - ${U(wide ? 150 : 135)})`, top: U(wide ? 90 : 150), width: U(wide ? 300 : 270), height: U(wide ? 400 : 360), transform: `translate(${px(-8)}px, ${ty(0.9)}px) scale(${0.8 + o * 0.2})`, opacity: 0.2 + o * 0.8, zIndex: 6 }}>
-          <div className="absolute" style={{ left: "17.6%", top: "21%", width: "74%", height: "70%" }}>
+          <div className="absolute" style={{ left: "13%", top: "21%", width: "74%", height: "70%" }}>
             <Img src={`${Z}/oval-baxmal.webp`} className={st.contain} />
           </div>
-          <Img src={`${Z}/ramka.webp`} className={st.contain} />
+          <Img src={`${Z}/ramka.webp`} className={cx(st.contain, "absolute inset-0")} />
           <div className={st.monogram} style={{ left: 0, right: 0, top: "38%", color: "var(--gold-2)" }}>
             <span style={{ fontSize: U(wide ? 80 : 72.5), lineHeight: 0.8 }}>{d.mono[0]}</span>
             {d.mono[1] && (
@@ -529,7 +516,6 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
           <p style={{ fontSize: U(15), fontWeight: 500, color: "rgba(247,243,234,.85)" }}>{[d.dots, d.city].filter(Boolean).join(" · ")}</p>
         </div>
       )}
-      {curtainShift < 0 && null}
     </section>
   );
 }
@@ -562,7 +548,7 @@ function InviteDate({ d, wide, ready }: { d: D; wide: boolean; ready: boolean })
     </Sec>
   );
   const date = (
-    <Sec ready={ready} style={{ gap: U(26), paddingTop: U(40), paddingBottom: U(80), paddingInline: wide ? 0 : U(24), width: wide ? U(420) : "100%" }}>
+    <Sec ready={ready} style={{ gap: U(26), paddingTop: U(40), paddingBottom: wide ? U(80) : U(150), paddingInline: wide ? 0 : U(24), width: wide ? U(420) : "100%" }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ fontSize: v(52, 46), color: "var(--green)" }}>
         Saqlab qo‘ying
       </p>
@@ -570,10 +556,10 @@ function InviteDate({ d, wide, ready }: { d: D; wide: boolean; ready: boolean })
         <svg className="absolute" style={{ left: U(39), top: U(84), width: U(222), height: U(280) }} viewBox="0 0 222 280" aria-hidden>
           <ellipse cx="111" cy="140" rx="111" ry="140" fill="#FFFDF8" />
         </svg>
-        <Img src={`${Z}/ramka.webp`} className={st.contain} />
+        <Img src={`${Z}/ramka.webp`} className={cx(st.contain, "absolute inset-0")} />
         <div className="absolute inset-x-0 flex flex-col items-center text-center" style={{ top: U(160.5) }}>
           <p style={{ fontSize: U(15), fontWeight: 500, color: "var(--soft)", marginBottom: U(-4) }}>{[d.weekday, d.time].filter(Boolean).join(" · ")}</p>
-          <p className={st.serif} style={{ fontSize: U(88), lineHeight: 1, color: "var(--green)", marginBottom: U(-4), fontVariantNumeric: "tabular-nums" }}>
+          <p className={st.serif} style={{ fontSize: U(88), fontWeight: 600, lineHeight: 1, color: "var(--green)", marginBottom: U(-4), fontVariantNumeric: "lining-nums proportional-nums" }}>
             {day.value || ""}
           </p>
           <p className={st.italic} style={{ fontSize: U(22), color: "var(--ink)" }}>
@@ -982,7 +968,7 @@ export function ZumradSite({ template, data, mode, embedded = false }: Invitatio
   const sfx = wide ? "l" : "m";
   const loaded = usePreload(
     [`${Z}/damask.webp`, `${Z}/qopqoq-${sfx}.webp`, `${Z}/muhr.webp`, `${Z}/paper.webp`],
-    [`${Z}/ichki-qopqoq.webp`, `${Z}/chontak.webp`, `${Z}/lenta.webp`, d.polaroid, `${Z}/kalla.webp`, `${Z}/kistochka.webp`, `${Z}/osmon.webp`, `${Z}/madrasa.webp`, `${Z}/sarv.webp`, `${Z}/gullar.webp`, `${Z}/parda.webp`, `${Z}/gulchambar.webp`, `${Z}/ramka.webp`, `${Z}/oval-baxmal.webp`, d.arch ?? "", d.arch2 ?? "", ...(d.dress ? d.dress.imgs.map((x) => x.src) : []), `${Z}/anketa-qopqoq.webp`],
+    [`${Z}/ichki-qopqoq.webp`, `${Z}/chontak.webp`, `${Z}/lenta.webp`, d.polaroid, `${Z}/kalla.webp`, `${Z}/osmon.webp`, `${Z}/madrasa.webp`, `${Z}/sarv.webp`, `${Z}/gullar.webp`, `${Z}/parda.webp`, `${Z}/gulchambar.webp`, `${Z}/ramka.webp`, `${Z}/oval-baxmal.webp`, d.arch ?? "", d.arch2 ?? "", ...(d.dress ? d.dress.imgs.map((x) => x.src) : []), `${Z}/anketa-qopqoq.webp`],
     withGate,
     sfx,
   );
@@ -1026,7 +1012,7 @@ export function ZumradSite({ template, data, mode, embedded = false }: Invitatio
 
   return (
     <div ref={root} className={cx(st.root, wide && st.wide)}>
-      <div className={st.page} style={vars({ "--u": wide ? "min(1px, calc(100cqw / 1440))" : "min(1.15px, calc(100cqw / 390))" })}>
+      <div className={st.page} style={vars({ "--u": wide ? "calc(100cqw / 1440)" : "calc(100cqw / 390)" })}>
         <div className={st.paperBg} />
         <MusicButton m={music} wide={wide} embedded={embedded} />
         {withGate && !loaderGone && <Loader done={loaded} seal={`${Z}/muhr.webp`} />}
