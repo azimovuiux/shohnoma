@@ -204,7 +204,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
           <div className={st.flap}>
             {[st.face, cx(st.face, st.faceBack)].map((c, i) => (
               <div key={i} className={c}>
-                <div className="absolute" style={{ left: "-7.69%", right: "-7.69%", top: "-4.1%", bottom: "-11.28%", transform: i ? "scaleY(-1)" : undefined }}>
+                <div className="absolute" style={{ ...(wide ? { left: "-2.89%", right: "-2.89%", top: "-4.98%", bottom: "-13.52%" } : { left: "-7.69%", right: "-7.69%", top: "-4.1%", bottom: "-11.28%" }), transform: i ? "scaleY(-1)" : undefined }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={`${Z}/qopqoq-${wide ? "l" : "m"}.webp`} alt="" className="block size-full" style={{ objectFit: "fill" }} />
                 </div>
