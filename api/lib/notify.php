@@ -1,0 +1,100 @@
+<?php
+declare(strict_types=1);
+
+function http_post(string $url, array $opts = []): array
+{
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 10] + $opts);
+    $res = curl_exec($ch);
+    $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return [$code, is_string($res) ? $res : ''];
+}
+
+/** SMS (Eskiz.uz). Sozlanmagan bo‘lsa — PHP error log'ga yoziladi. */
+function send_sms(string $phone, string $text): bool
+{
+    $email = env('ESKIZ_EMAIL');
+    $pass = env('ESKIZ_PASSWORD');
+    if (!$email || !$pass) {
+        error_log("[sms→$phone] $text");
+        return true;
+    }
+    $cache = storage_dir() . '/.eskiz_token';
+    $token = is_file($cache) && filemtime($cache) > time() - 25 * 86400 ? trim((string)file_get_contents($cache)) : '';
+    for ($attempt = 0; $attempt < 2; $attempt++) {
+        if (!$token) {
+            [, $res] = http_post('https://notify.eskiz.uz/api/auth/login', [CURLOPT_POSTFIELDS => ['email' => $email, 'password' => $pass]]);
+            $token = json_decode($res, true)['data']['token'] ?? '';
+            if (!$token) return false;
+            file_put_contents($cache, $token);
+        }
+        [$code] = http_post('https://notify.eskiz.uz/api/message/sms/send', [
+            CURLOPT_HTTPHEADER => ["Authorization: Bearer $token"],
+            CURLOPT_POSTFIELDS => ['mobile_phone' => ltrim($phone, '+'), 'message' => $text, 'from' => env('ESKIZ_FROM', '4546')],
+        ]);
+        if ($code === 401) { $token = ''; @unlink($cache); continue; }
+        return $code >= 200 && $code < 300;
+    }
+    return false;
+}
+
+function tg_send(string $chatId, string $text): bool
+{
+    $token = env('TELEGRAM_BOT_TOKEN');
+    if (!$token) {
+        error_log("[telegram→$chatId] $text");
+        return true;
+    }
+    [$code] = http_post("https://api.telegram.org/bot$token/sendMessage", [
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode(['chat_id' => $chatId, 'text' => $text, 'disable_web_page_preview' => true], JSON_UNESCAPED_UNICODE),
+    ]);
+    return $code === 200;
+}
+/** Telegramga yuborib, xabar id sini qaytaradi (chat javoblarini bog‘lash uchun). Sozlanmagan bo‘lsa — null */
+function tg_send_id(string $chatId, string $text): ?int
+{
+    $token = env('TELEGRAM_BOT_TOKEN');
+    if (!$token || !$chatId) { error_log("[telegram→$chatId] $text"); return null; }
+    [$code, $res] = http_post("https://api.telegram.org/bot$token/sendMessage", [
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode(['chat_id' => $chatId, 'text' => $text, 'disable_web_page_preview' => true], JSON_UNESCAPED_UNICODE),
+    ]);
+    return $code === 200 ? (int)(json_decode($res, true)['result']['message_id'] ?? 0) ?: null : null;
+}
+/** Telegram Bot API chaqiruvi (JSON) → natija massivi yoki null */
+function tg_api(string $method, array $params): ?array
+{
+    $token = env('TELEGRAM_BOT_TOKEN');
+    if (!$token) return null;
+    [$code, $res] = http_post("https://api.telegram.org/bot$token/$method", [
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS => json_encode($params, JSON_UNESCAPED_UNICODE),
+    ]);
+    $d = json_decode($res, true);
+    if ($code !== 200 || empty($d['ok'])) return null;
+    // setWebhook/deleteMessage kabi metodlar `result: true` qaytaradi — massivga aylantiramiz (strict_types TypeError bermasin)
+    $r = $d['result'] ?? [];
+    return is_array($r) ? $r : ['value' => $r];
+}
+
+/** Bot username: .env (TELEGRAM_BOT_USERNAME) yoki getMe (keshlanadi) */
+function tg_bot_username(): ?string
+{
+    $u = env('TELEGRAM_BOT_USERNAME') ?? env('NEXT_PUBLIC_TELEGRAM_BOT_USERNAME');
+    if ($u) return ltrim($u, '@');
+    $token = env('TELEGRAM_BOT_TOKEN');
+    if (!$token) return null;
+    $cache = storage_dir() . '/.tg_bot_' . substr(sha1($token), 0, 10);
+    if (is_file($cache)) return trim((string)file_get_contents($cache)) ?: null;
+    $ch = curl_init("https://api.telegram.org/bot$token/getMe");
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8]);
+    $d = json_decode((string)curl_exec($ch), true);
+    curl_close($ch);
+    $name = $d['result']['username'] ?? null;
+    if ($name) @file_put_contents($cache, $name);
+    return $name;
+}
+function notify_admin(string $text): bool { return tg_send(env('TELEGRAM_ADMIN_CHAT_ID') ?? 'admin', $text); }
+function notify_user(?string $telegramId, string $text): bool { return $telegramId ? tg_send($telegramId, $text) : false; }

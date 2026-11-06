@@ -1,0 +1,11 @@
+User-Agent: *
+Allow: /
+Disallow: /kabinet
+Disallow: /admin
+Disallow: /buyurtma
+Disallow: /api
+Disallow: /kirish
+Disallow: /files
+
+Host: https://shohnoma.uz
+Sitemap: https://shohnoma.uz/sitemap.xml
