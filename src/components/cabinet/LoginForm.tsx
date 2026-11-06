@@ -21,10 +21,10 @@ export function LoginPageClient() {
     if (!loading && me?.user) window.location.replace(next);
   }, [loading, me, next]);
   if (loading || me?.user) return <PageLoading className="flex-1" />;
-  return <LoginForm next={next} initialPhone={sp.get("tel") ?? undefined} />;
+  return <LoginForm next={next} />;
 }
 
-export function LoginForm({ next }: { next: string; initialPhone?: string }) {
+export function LoginForm({ next }: { next: string }) {
   return (
     <div className="mx-auto flex w-full max-w-[420px] flex-col gap-[22px] py-6 lg:mx-0">
       <span className="flex size-[52px] items-center justify-center rounded-full bg-[#2AABEE]/10 text-[#2AABEE]">

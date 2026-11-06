@@ -95,15 +95,3 @@ function tg_bot_username(): ?string
 }
 function notify_admin(string $text): bool { return tg_send(env('TELEGRAM_ADMIN_CHAT_ID') ?? 'admin', $text); }
 function notify_user(?string $telegramId, string $text): bool { return $telegramId ? tg_send($telegramId, $text) : false; }
-
-function verify_telegram_auth(array $data): bool
-{
-    $token = env('TELEGRAM_BOT_TOKEN');
-    if (!$token || empty($data['hash'])) return false;
-    $hash = $data['hash'];
-    unset($data['hash']);
-    ksort($data);
-    $check = implode("\n", array_map(fn($k) => "$k=" . $data[$k], array_keys($data)));
-    $sig = hash_hmac('sha256', $check, hash('sha256', $token, true));
-    return hash_equals($sig, $hash) && (time() - (int)($data['auth_date'] ?? 0)) < 86400;
-}

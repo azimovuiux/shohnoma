@@ -92,34 +92,3 @@ function find_or_create_user_by_phone(string $phone, ?string $name = null): arra
     q('INSERT INTO users (id, phone, name, is_admin) VALUES (?, ?, ?, ?)', [$id, $phone, $name, in_array($phone, admin_phones(), true) ? 1 : 0]);
     return one('SELECT * FROM users WHERE id = ?', [$id]);
 }
-
-/* ── SMS kod: 1 daqiqada 1 ta, 5 daqiqa amal qiladi, 5 xato → 15 daqiqa blok ── */
-function otp_hash(string $phone, string $code): string { return hash('sha256', "$phone:$code:" . env('SESSION_SECRET', 'dev')); }
-
-function send_otp(string $phone): array
-{
-    $last = one('SELECT *, TIMESTAMPDIFF(SECOND, created_at, UTC_TIMESTAMP()) AS age FROM otp_codes WHERE phone = ? ORDER BY created_at DESC LIMIT 1', [$phone]);
-    if ($last) {
-        if ((int)$last['attempts'] >= 5 && (int)$last['age'] < 900) return ['ok' => false, 'error' => 'Ko‘p marta xato kiritildi. 15 daqiqadan so‘ng urinib ko‘ring.'];
-        if ((int)$last['age'] < 60) return ['ok' => false, 'error' => 'Kodni qayta so‘rashdan oldin biroz kuting.', 'retryIn' => 60 - (int)$last['age']];
-    }
-    $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-    q('INSERT INTO otp_codes (id, phone, code_hash, expires_at) VALUES (?, ?, ?, ?)', [new_id(), $phone, otp_hash($phone, $code), gmdate('Y-m-d H:i:s', time() + 300)]);
-    if (!send_sms($phone, "Shohnoma: kirish kodi $code. Kodni hech kimga bermang.")) return ['ok' => false, 'error' => 'SMS yuborilmadi. Birozdan so‘ng urinib ko‘ring.'];
-    $out = ['ok' => true, 'phone' => $phone];
-    if (!env('ESKIZ_EMAIL') && env('APP_DEBUG') === '1') $out['devCode'] = $code;
-    return $out;
-}
-
-function verify_otp(string $phone, string $code): ?string
-{
-    $row = one('SELECT * FROM otp_codes WHERE phone = ? AND used_at IS NULL ORDER BY created_at DESC LIMIT 1', [$phone]);
-    if (!$row || strtotime($row['expires_at'] . ' UTC') < time()) return 'Kod eskirgan. Yangi kod so‘rang.';
-    if ((int)$row['attempts'] >= 5) return 'Ko‘p marta xato kiritildi. 15 daqiqadan so‘ng urinib ko‘ring.';
-    if (!hash_equals($row['code_hash'], otp_hash($phone, $code))) {
-        q('UPDATE otp_codes SET attempts = attempts + 1 WHERE id = ?', [$row['id']]);
-        return 'Kod noto‘g‘ri';
-    }
-    q('UPDATE otp_codes SET used_at = UTC_TIMESTAMP() WHERE id = ?', [$row['id']]);
-    return null;
-}

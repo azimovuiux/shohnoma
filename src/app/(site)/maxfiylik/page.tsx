@@ -36,7 +36,7 @@ export default function PrivacyPage() {
         <h2>2. Ma’lumotlardan qanday foydalanamiz</h2>
         <ul>
           <li>Taklifnoma saytini yaratish va mehmonlarga ko‘rsatish.</li>
-          <li>Kirish kodi, to‘lov tasdig‘i, yangi mehmon javobi va eslatmalarni SMS yoki Telegram orqali yuborish.</li>
+          <li>Kirishni tasdiqlash, to‘lov tasdig‘i, yangi mehmon javobi va eslatmalarni SMS yoki Telegram orqali yuborish.</li>
           <li>Buyurtma va to‘lovlarni hisobga olish, murojaatlarga javob berish.</li>
         </ul>
         <p>Ma’lumotlaringizni reklama maqsadida uchinchi shaxslarga sotmaymiz va bermaymiz.</p>
@@ -60,7 +60,7 @@ export default function PrivacyPage() {
       <section>
         <h2>5. Himoya</h2>
         <p>
-          Sayt HTTPS orqali ishlaydi, kirish bir martalik SMS kod yoki Telegram orqali amalga oshiriladi, ma’lumotlar bazasiga kirish cheklangan.
+          Sayt HTTPS orqali ishlaydi, kirish faqat Telegram bot orqali tasdiqlanadi, ma’lumotlar bazasiga kirish cheklangan.
         </p>
       </section>
       <section>

@@ -1,14 +1,8 @@
-import { Suspense } from "react";
-import { CodePageClient } from "@/components/cabinet/CodeForm";
+import { RedirectToLogin } from "./redirect";
 
-export const metadata = { title: "Kodni kiriting", robots: { index: false } };
+export const metadata = { title: "Kirish", robots: { index: false } };
 
+/** Eski SMS-kod sahifasi — endi mijozlar faqat Telegram bot orqali kiradi */
 export default function CodePage() {
-  return (
-    <div className="mx-auto flex max-w-[1440px] justify-center px-5 py-12 lg:py-24">
-      <Suspense>
-        <CodePageClient />
-      </Suspense>
-    </div>
-  );
+  return <RedirectToLogin />;
 }
