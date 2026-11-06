@@ -157,6 +157,10 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
   const hw = wide ? 600 : 500;
   const hh = wide ? 800 : 666.667;
   const ring = wide ? [260, 204, 156] : [210, 166, 126];
+  // Konvert (qo‘llar balandligining ~12% i) sarlavha bloki ostida qolishi uchun balandlik chegarasi
+  const textBottom = wide ? 230 : 300;
+  const handsH = `min(${U(hh)}, calc((100svh - ${U(textBottom)} + ${U(wide ? 86 : 62)}) / 0.88))`;
+  const handsW = `calc(${handsH} * ${hw / hh})`;
   const cb = useRef({ onReveal, onStart });
   cb.current = { onReveal, onStart };
 
@@ -170,21 +174,28 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
     let started = false;
     const read = () => {
       const r = el.getBoundingClientRect();
-      const range = Math.max(1, r.height - window.innerHeight);
+      const vh = window.innerHeight;
+      const range = Math.max(1, r.height - vh);
       target = clamp01(-r.top / range);
+      // Sahna ostidagi muqova bilan baxmal pastki cheti bir chiziqda (H — sahna balandligi, 100svh):
+      // muqova tepasi = r.bottom - H, baxmal pastki cheti = H - shift  →  shift = 2H - r.bottom
+      // (lerp’siz — tez scroll’da ham orada tirqish ochilmaydi)
+      const H = (el.firstElementChild as HTMLElement | null)?.offsetHeight || vh;
+      const shift = Math.min(H, Math.max(0, 2 * H - r.bottom));
+      el.style.setProperty("--gy", `${shift.toFixed(1)}px`);
+      // yirtiq chekka faqat baxmal surila boshlaganda paydo bo‘ladi (birinchi ekranda pastki chet tekis)
+      el.style.setProperty("--j", Math.min(1, shift / 40).toFixed(3));
+      el.style.pointerEvents = shift > H * 0.6 ? "none" : "";
     };
     const apply = (p: number) => {
       const sp = ease(seg(p, 0.04, 0.3)); // muhr yoriladi
       const hp = ease(seg(p, 0.06, 0.6)); // qo‘llar pastga suziladi
       const tp = ease(seg(p, 0.03, 0.34)); // sarlavha yuqoriga eriydi
-      const rp = seg(p, 0.32, 0.96); // baxmal yirtiladi
       const fp = Math.sin(Math.PI * seg(p, 0.12, 0.42)); // oltin yorqinlik
       el.style.setProperty("--s", sp.toFixed(4));
       el.style.setProperty("--h", hp.toFixed(4));
       el.style.setProperty("--t", tp.toFixed(4));
-      el.style.setProperty("--r", (rp * rp * (3 - 2 * rp)).toFixed(4));
       el.style.setProperty("--f", fp.toFixed(4));
-      el.style.pointerEvents = rp > 0.85 ? "none" : "";
       if (!started && p > 0.02) {
         started = true;
         cb.current.onStart();
@@ -250,7 +261,8 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
           </p>
         </div>
 
-        <div className={st.handsMove} style={{ width: U(hw), height: U(hh), left: `calc(50% - ${U(hw / 2)})`, bottom: v(-62, -86) }}>
+        {/* Past ekranda (masalan 360×640) qo‘llar kichrayadi — konvert sarlavha va matnni yopmasin */}
+        <div className={st.handsMove} style={{ width: handsW, height: handsH, left: `calc(50% - ${handsW} / 2)`, bottom: v(-62, -86) }}>
           <div className={st.hands}>
             <Img src={`${A}/qollar.webp`} eager />
             <div

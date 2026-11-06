@@ -170,7 +170,7 @@
 }
 
 /* ── 00 · Ochilish — scroll bilan (sticky sahna) ──
- * --s muhr, --h qo‘llar, --t sarlavha, --r baxmal yirtilishi, --f yorqinlik (0…1, JS beradi)
+ * --s muhr, --h qo‘llar, --t sarlavha, --gy baxmal siljishi, --f yorqinlik (0…1, JS beradi)
  */
 .gateWrap {
   --s: 0;
@@ -178,6 +178,8 @@
   --t: 0;
   --r: 0;
   --f: 0;
+  --gy: 0px;
+  --j: 0;
   position: relative;
   z-index: 5;
   width: 100%;
@@ -195,22 +197,24 @@
   align-items: center;
   color: var(--cream);
   text-align: center;
-  /* yirtiq yuqori chekka scroll bilan pastga tushadi */
+  /* Maktub animatsiyasidan so‘ng baxmal sahifa bilan birga yuqoriga ketadi — pastki yirtiq cheti
+     ostidagi muqovaga yopishib turadi (orada bo‘sh joy qolmaydi). --g JS’da scroll’dan to‘g‘ridan-to‘g‘ri hisoblanadi. */
+  transform: translate3d(0, calc(var(--gy) * -1), 0);
   clip-path: polygon(
-    0 calc(var(--r) * 107% - 3.5%),
-    8% calc(var(--r) * 107% - 2.1%),
-    16% calc(var(--r) * 107% - 3.3%),
-    25% calc(var(--r) * 107% - 1.8%),
-    34% calc(var(--r) * 107% - 3.4%),
-    43% calc(var(--r) * 107% - 2.2%),
-    52% calc(var(--r) * 107% - 3.6%),
-    61% calc(var(--r) * 107% - 2%),
-    70% calc(var(--r) * 107% - 3.2%),
-    79% calc(var(--r) * 107% - 1.9%),
-    88% calc(var(--r) * 107% - 3.4%),
-    100% calc(var(--r) * 107% - 2.3%),
-    100% 100%,
-    0 100%
+    0 0,
+    100% 0,
+    100% calc(100% - var(--j) * 2.3%),
+    88% calc(100% - var(--j) * 3.4%),
+    79% calc(100% - var(--j) * 1.9%),
+    70% calc(100% - var(--j) * 3.2%),
+    61% calc(100% - var(--j) * 2%),
+    52% calc(100% - var(--j) * 3.6%),
+    43% calc(100% - var(--j) * 2.2%),
+    34% calc(100% - var(--j) * 3.4%),
+    25% calc(100% - var(--j) * 1.8%),
+    16% calc(100% - var(--j) * 3.3%),
+    8% calc(100% - var(--j) * 2.1%),
+    0 calc(100% - var(--j) * 3.5%)
   );
 }
 .gateBg {
@@ -290,9 +294,10 @@
 /* Qo‘llar konvert bilan pastga suzib ketadi (scroll) — kirish animatsiyasi ichki qatlamda */
 .handsMove {
   position: absolute;
-  transform: translateY(calc(var(--h) * 58%)) rotate(calc(var(--h) * -3deg)) scale(calc(1 - var(--h) * 0.06));
+  /* muhr sinadi, maktub biroz pastga tushadi — lekin baxmal bilan birga ketguncha ko‘rinib turadi (bo‘sh ekran qolmasin) */
+  transform: translateY(calc(var(--h) * 16%)) rotate(calc(var(--h) * -3deg)) scale(calc(1 - var(--h) * 0.05));
   transform-origin: 50% 100%;
-  opacity: calc(1 - var(--h) * var(--h));
+  opacity: calc(1 - var(--h) * 0.2);
 }
 .hands {
   position: relative;
@@ -340,15 +345,16 @@
 .sealHalf {
   position: absolute;
   inset: 0;
-  opacity: calc(1 - var(--s) * var(--s));
+  filter: drop-shadow(0 2px 3px rgba(40, 6, 12, calc(var(--s) * 0.45)));
 }
+/* Muhr joyida yoriladi va ochilib qoladi (maktub baxmal bilan birga ketguncha singan holda ko‘rinadi) */
 .sealL {
   clip-path: polygon(0 0, 54% 0, 44% 38%, 56% 62%, 46% 100%, 0 100%);
-  transform: translate(calc(var(--s) * -42%), calc(var(--s) * 60%)) rotate(calc(var(--s) * -32deg));
+  transform: translate(calc(var(--s) * -9%), calc(var(--s) * 5%)) rotate(calc(var(--s) * -11deg));
 }
 .sealR {
   clip-path: polygon(54% 0, 100% 0, 100% 100%, 46% 100%, 56% 62%, 44% 38%);
-  transform: translate(calc(var(--s) * 42%), calc(var(--s) * 64%)) rotate(calc(var(--s) * 28deg));
+  transform: translate(calc(var(--s) * 9%), calc(var(--s) * 7%)) rotate(calc(var(--s) * 9deg));
 }
 .flash {
   position: absolute;

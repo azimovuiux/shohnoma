@@ -129,21 +129,24 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
     let started = false;
     const read = () => {
       const r = el.getBoundingClientRect();
-      target = clamp01(-r.top / Math.max(1, r.height - window.innerHeight));
+      const vh = window.innerHeight;
+      target = clamp01(-r.top / Math.max(1, r.height - vh));
+      // Damask pastki cheti ostidagi kolajga yopishib ketadi (H — sahna balandligi, 100svh; lerp’siz — tirqish ochilmaydi)
+      const H = (el.firstElementChild as HTMLElement | null)?.offsetHeight || vh;
+      const shift = Math.min(H, Math.max(0, 2 * H - r.bottom));
+      el.style.setProperty("--gy", `${shift.toFixed(1)}px`);
+      el.style.pointerEvents = shift > H * 0.6 ? "none" : "";
     };
     const apply = (p: number) => {
       el.style.setProperty("--s", ease(seg(p, 0.02, 0.2)).toFixed(4)); // muhr yoriladi
       el.style.setProperty("--o", ease(seg(p, 0.08, 0.4)).toFixed(4)); // qopqoq 3D ochiladi
       el.style.setProperty("--t", ease(seg(p, 0.03, 0.24)).toFixed(4)); // ismlar
       el.style.setProperty("--f", Math.sin(Math.PI * seg(p, 0.05, 0.24)).toFixed(4));
-      const g = seg(p, 0.22, 1);
-      el.style.setProperty("--g", (g * g * (3 - 2 * g)).toFixed(4)); // damask yuqoriga suriladi
-      el.style.pointerEvents = g > 0.85 ? "none" : "";
       if (!started && p > 0.02) {
         started = true;
         cb.current.onStart();
       }
-      if (!revealed && p > 0.16) {
+      if (!revealed && p > 0.38) {
         revealed = true;
         cb.current.onReveal();
       }
@@ -226,7 +229,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
           <span className={st.flash} style={{ width: U(260), height: U(260) }} />
         </div>
         {/* Ismlar */}
-        <div className={st.gateNames} style={{ top: v(533, 560), gap: U(10) }}>
+        <div className={st.gateNames} style={{ top: `min(${v(533, 560)}, calc(100svh - ${v(250, 175)}))`, gap: U(10) }}>
           <h1 className={st.italic} style={{ fontSize: v(80, 96), lineHeight: 0.88 }}>
             {nameLines.map((line, li) => (
               <span key={li} style={{ display: "block" }}>
@@ -1027,7 +1030,7 @@ export function ZumradSite({ template, data, mode, embedded = false }: Invitatio
         <div className={st.paperBg} />
         <MusicButton m={music} wide={wide} embedded={embedded} />
         {withGate && !loaderGone && <Loader done={loaded} seal={`${Z}/muhr.webp`} />}
-        {withGate && (loaded ? <Gate d={d} wide={wide} onReveal={() => setRevealed(true)} onStart={() => music.play(true)} /> : <div style={{ height: "250svh", marginBottom: "-100svh", width: "100%" }} />)}
+        {withGate && (loaded ? <Gate d={d} wide={wide} onReveal={() => setRevealed(true)} onStart={() => music.play(true)} /> : <div style={{ height: "260svh", marginBottom: "-100svh", width: "100%" }} />)}
         <Collage d={d} wide={wide} ready={ready} />
         <Garden d={d} wide={wide} ready={ready} />
         <InviteDate d={d} wide={wide} ready={ready} />

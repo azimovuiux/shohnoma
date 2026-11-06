@@ -180,12 +180,12 @@
   --s: 0;
   --o: 0;
   --t: 0;
-  --g: 0;
+  --gy: 0px;
   --f: 0;
   position: relative;
   z-index: 5;
   width: 100%;
-  height: calc(100svh * 2.2);
+  height: calc(100svh * 2.6);
   margin-bottom: calc(100svh * -1);
 }
 .gate {
@@ -195,8 +195,9 @@
   overflow: hidden;
   color: var(--cream);
   text-align: center;
-  transform: translateY(calc(var(--g) * -102%));
-  box-shadow: 0 30px 60px rgba(4, 18, 12, calc(var(--g) * 0.5));
+  /* damask sahifa bilan birga yuqoriga ketadi — pastki cheti kolajga yopishgan (--gy JS’da scroll’dan) */
+  transform: translate3d(0, calc(var(--gy) * -1), 0);
+  box-shadow: 0 18px 40px rgba(4, 18, 12, 0.35);
 }
 .gateBg {
   position: absolute;
@@ -250,8 +251,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  opacity: calc(1 - var(--t));
-  transform: translateY(calc(var(--t) * 40px));
+  /* ismlar damask ustida qoladi va u bilan birga ketadi (bo‘sh ekran o‘tmasin) */
+  opacity: calc(1 - var(--t) * 0.15);
+  transform: translateY(calc(var(--t) * -24px));
 }
 .char {
   display: inline-block;
