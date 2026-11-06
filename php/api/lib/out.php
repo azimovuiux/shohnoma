@@ -44,6 +44,7 @@ function invitation_out(array $i): array
         'rsvpEnabled' => (bool)$i['rsvp_enabled'],
         'rsvpDeadline' => $i['rsvp_deadline'],
         'musicEnabled' => (bool)$i['music_enabled'],
+        'musicTrack' => $i['music_track'] ?? null,
         'contactPhone' => $i['contact_phone'],
         'contactTg' => $i['contact_tg'],
         'views' => (int)$i['views'],

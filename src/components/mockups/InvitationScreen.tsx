@@ -153,7 +153,7 @@ export function InvitationScreen({ t }: { t: Template }) {
   }
   const { theme } = t;
   const family = scriptFamily[theme.script];
-  const isEnvelope = designSlug(t) === "bordo-maktub";
+  const isEnvelope = false;
 
   return (
     <div

@@ -5,20 +5,8 @@ export const s = (px: number) => `min(${+(px * 1.2).toFixed(2)}px, ${+((px / 360
 
 export type HeroVariant = "envelope" | "arch" | "seal" | "ticket" | "gate" | "eastern" | "crown";
 
-export const heroVariant: Record<string, HeroVariant> = {
-  "bordo-maktub": "envelope",
-  "yashil-muhr": "seal",
-  "oltin-ravoq": "arch",
-  "baxt-reysi": "ticket",
-  "zaytun-maktub": "seal",
-  qirolicha: "crown",
-  "moviy-abr": "eastern",
-  "sharq-oqshomi": "eastern",
-  "qizil-atirgul": "arch",
-  "oltin-darvoza": "gate",
-  "lola-bog": "arch",
-  "bahor-bogi": "arch",
-};
+/** Umumiy (generik) dizayn uchun hero varianti — slug bo‘yicha; ro‘yxatda bo‘lmasa standart */
+export const heroVariant: Record<string, HeroVariant> = {};
 
 function luminance(hex: string) {
   const h = hex.replace("#", "");

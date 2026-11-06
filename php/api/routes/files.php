@@ -19,4 +19,6 @@ function serve_upload(string $dir, string $name): never
     exit;
 }
 
+// Musiqa fayllari umumiy yo‘ldan oldin (Range qo‘llab-quvvatlanadi)
+route('GET', '/files/music/:file', fn($p) => music_serve($p['file']));
 route('GET', '/files/:dir/:name', fn($p) => serve_upload($p['dir'], $p['name']));

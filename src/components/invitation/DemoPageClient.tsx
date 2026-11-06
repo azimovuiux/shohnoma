@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight } from "@/components/icons";
 import { InvitationSite } from "./InvitationSite";
 import { demoData } from "./data";
 import { useTemplate } from "@/lib/useTemplates";
@@ -23,24 +24,25 @@ export function DemoPageClient({ slug }: { slug: string }) {
   }
   return (
     <>
-      <div className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-line bg-bg-base/95 px-4 py-2.5 backdrop-blur">
-        <span className="t-body-s text-ink-2">
-          Namuna: <span className="font-medium text-ink">{t.name}</span>
-        </span>
-        <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary btn-sm !py-2.5">
-          Shu shablonni tanlash
-        </Link>
-      </div>
       {t.kind === "html" ? (
         <iframe
           src={`/api/tpl/${t.slug}/preview?v=${t.version ?? 1}`}
           title={`${t.name} — namuna`}
-          className="block h-[calc(100dvh-57px)] w-full border-0"
+          className="block h-dvh w-full border-0"
           sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
         />
       ) : (
         <InvitationSite key={t.slug} template={t} data={demoData(t)} mode="demo" />
       )}
+      {/* Sayt elementi: pastda o‘rtada — shablonni tanlab buyurtmaga o‘tish */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex justify-center px-4 pb-[max(18px,env(safe-area-inset-bottom))]">
+        <Link
+          href={`/buyurtma/${t.slug}/marosim/`}
+          className="btn btn-primary pointer-events-auto !h-[52px] !rounded-full !px-7 shadow-[0_14px_40px_-12px_rgba(38,10,18,0.55)] ring-1 ring-white/25"
+        >
+          Shu shablonni ishlatish <ArrowRight size={16} />
+        </Link>
+      </div>
     </>
   );
 }

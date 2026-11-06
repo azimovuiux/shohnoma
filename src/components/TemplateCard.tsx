@@ -170,7 +170,7 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
       </div>
 
       <div className="flex gap-2.5">
-        <Link href={`/shablonlar/${t.slug}/`} className="btn btn-secondary flex-1 !px-3 !py-3.5">
+        <Link href={`/namuna/${t.slug}/`} className="btn btn-secondary flex-1 !px-3 !py-3.5">
           <PlayCircle size={16} /> Jonli ko‘rish
         </Link>
         <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary flex-1 !px-3 !py-3.5">

@@ -61,6 +61,7 @@ export function toFlowOrder(r: OrderResponse): FlowOrder {
     rsvpEnabled: inv.rsvpEnabled,
     rsvpDeadline: inv.rsvpDeadline,
     musicEnabled: inv.musicEnabled,
+    musicTrack: inv.musicTrack ?? null,
     contactPhone: inv.contactPhone ?? "",
     contactTg: inv.contactTg ?? "",
     extra: (inv.extra as Record<string, unknown>) ?? {},

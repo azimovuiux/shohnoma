@@ -43,7 +43,7 @@ Yuklangan rasm va cheklar `/var/www/vhosts/tilirus.uz/shohnoma-storage/` da saql
 
 shohnoma.uz → **PHP** (Hosting settings):
 - Versiya **8.2** yoki yangiroq, ishlov berish: *FPM application served by Apache* (yoki FastCGI by Apache) — `.htaccess` ishlashi uchun Apache kerak
-- `upload_max_filesize = 10M`, `post_max_size = 12M`
+- `upload_max_filesize = 20M`, `post_max_size = 24M` (MP3 musiqa uchun; `.user.ini` ham shuni o‘rnatadi)
 - Kengaytmalar: `pdo_mysql`, `curl`, `fileinfo`, `mbstring` (odatda yoqilgan)
 
 ## 5. SSL

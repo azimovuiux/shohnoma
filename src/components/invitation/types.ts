@@ -18,6 +18,10 @@ export interface InvitationData {
   /** "2026-09-01" */
   rsvpDeadline: string | null;
   musicEnabled: boolean;
+  /** Kutubxonadan tanlangan trek ID si */
+  musicTrack?: string | null;
+  /** Shablonning qo‘shimcha maydonlari (fields) qiymatlari */
+  extra?: Record<string, unknown>;
 }
 
 export interface InvitationSiteProps {

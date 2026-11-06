@@ -1,12 +1,14 @@
 "use client";
 
+import { useMusicTracks, usePreviewPlayer } from "@/lib/music";
+
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
 import { builtinTemplates, ceremonyLabel, colorLabel, styleLabel, type Ceremony, type Style, type Template, type TemplateTheme } from "@/lib/templates";
 import { Field, Input, Textarea, Toggle, api, useToast } from "@/components/ui";
-import { ArrowLeft, DocumentUpload, Trash } from "@/components/icons";
+import { ArrowLeft, DocumentUpload, Pause, Play, Trash } from "@/components/icons";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { InvitationDesktop } from "@/components/mockups/InvitationDesktop";
@@ -341,6 +343,13 @@ export function AdminTemplateEdit() {
 
           )}
 
+          <Section title="Standart musiqa">
+            <p className="t-body-s text-ink-2">
+              Mijoz musiqa tanlamasa — shu trek chalinadi; buyurtma formasida ro‘yxat boshida «tavsiya» bo‘lib turadi. Treklar <a href="/admin/musiqa/" className="text-maroon underline">Musiqa</a> bo‘limida.
+            </p>
+            <DefaultMusic value={t.musicId ?? null} onChange={(id) => set({ musicId: id })} />
+          </Section>
+
           <Section title="Mokap rasmlari">
             <p className="t-body-s text-ink-2">Katalog kartasida telefon va laptop ichida ko‘rinadi. Yuklanmasa — tanlangan ranglar bilan avtomatik chiziladi.</p>
             <div className="grid gap-5 sm:grid-cols-2">
@@ -393,5 +402,31 @@ export function AdminTemplateEdit() {
         </aside>
       </div>
     </form>
+  );
+}
+
+function DefaultMusic({ value, onChange }: { value: string | null; onChange: (id: string | null) => void }) {
+  const tracks = useMusicTracks();
+  const player = usePreviewPlayer();
+  if (!tracks) return <div className="h-12 animate-pulse rounded-input bg-bg-soft" />;
+  if (!tracks.length) return <p className="t-body-s text-ink-2">Kutubxonada hali musiqa yo‘q.</p>;
+  const cur = tracks.find((x) => x.id === value);
+  return (
+    <div className="flex items-center gap-2">
+      <select className={selectClass} value={value ?? ""} onChange={(e) => onChange(e.target.value || null)}>
+        <option value="">Musiqasiz</option>
+        {tracks.map((x) => (
+          <option key={x.id} value={x.id}>
+            {x.title}
+            {x.artist ? ` — ${x.artist}` : ""}
+          </option>
+        ))}
+      </select>
+      {cur && (
+        <button type="button" onClick={() => player.toggle(cur.id, cur.url)} className="icon-btn shrink-0" aria-label="Tinglash">
+          {player.playing === cur.id ? <Pause size={16} /> : <Play size={16} />}
+        </button>
+      )}
+    </div>
   );
 }

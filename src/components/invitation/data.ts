@@ -16,6 +16,8 @@ type Row = {
   rsvpEnabled: boolean;
   rsvpDeadline: string | null;
   musicEnabled: boolean;
+  musicTrack?: string | null;
+  extra?: Record<string, unknown>;
 };
 
 const CEREMONIES = ["nikoh", "fotiha", "sunnat", "tugilgan-kun"] as const;
@@ -37,6 +39,8 @@ export function toInvitationData(r: Row): InvitationData {
     rsvpEnabled: r.rsvpEnabled,
     rsvpDeadline: r.rsvpDeadline,
     musicEnabled: r.musicEnabled,
+    musicTrack: r.musicTrack ?? null,
+    extra: r.extra ?? {},
   };
 }
 

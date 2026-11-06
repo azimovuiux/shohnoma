@@ -101,7 +101,15 @@ function tpl_clean(array $b, string $slug): array
         'theme' => $theme,
         'base' => preg_match('/^[a-z0-9-]{2,80}$/', $base) ? $base : null,
         'images' => array_filter(['phone' => tpl_image($img['phone'] ?? null), 'laptop' => tpl_image($img['laptop'] ?? null)]),
+        'musicId' => tpl_music($b['musicId'] ?? null),
     ];
+}
+
+/** Standart musiqa — kutubxonadagi trek ID si (yoki null) */
+function tpl_music(mixed $v): ?string
+{
+    if (!is_string($v) || $v === '') return null;
+    return one('SELECT id FROM music_tracks WHERE id = ?', [$v]) ? $v : fail('Musiqa topilmadi', 422);
 }
 
 function tpl_save(array $data, int $sort, bool $active, bool $insert): void
@@ -136,6 +144,8 @@ route('PUT', '/admin/templates/:slug', function ($p) {
     $cur = template_get($p['slug']) ?? fail('Shablon topilmadi', 404);
     $b = body();
     $clean = tpl_clean($b, $cur['slug']);
+    // Kodda yozilgan shablonning maydonlari (fields) admin formasida tahrirlanmaydi — saqlanadi
+    if (isset($cur['fields']) && ($cur['kind'] ?? '') !== 'html') $clean['fields'] = $cur['fields'];
     if (($cur['kind'] ?? '') === 'html') {
         foreach (['kind', 'version', 'fields', 'sampleData', 'hasMusic', 'theme'] as $k) if (isset($cur[$k])) $clean[$k] = $cur[$k];
         $clean['theme']['color'] = $clean['theme']['color'] ?? 'krem';

@@ -13,6 +13,7 @@ import { liveTemplate, dayTime } from "./live";
 import { namesOf } from "./labels";
 import type { FlowOrder } from "./types";
 import { SaveIndicator } from "./SaveIndicator";
+import { MusicPicker } from "./MusicPicker";
 
 const MAX_PHOTOS = 10;
 
@@ -101,7 +102,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
 
   const toggles: { key: "rsvpEnabled" | "musicEnabled"; title: string; text: string }[] = [
     { key: "rsvpEnabled", title: "Mehmonlar javobi", text: "Mehmonlar ishtirokini tasdiqlashi mumkin." },
-    { key: "musicEnabled", title: "Fon musiqasi", text: "Shablonga mos musiqa bilan." },
+    { key: "musicEnabled", title: "Fon musiqasi", text: "Ro‘yxatdan o‘zingizga yoqqan kuyni tanlang." },
   ];
 
   return (
@@ -198,6 +199,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
               <Toggle checked={o[t.key]} onChange={(v) => set(t.key, v)} label={t.title} />
             </div>
           ))}
+          {o.musicEnabled && <MusicPicker value={o.musicTrack} defaultId={template.musicId} onChange={(id) => set("musicTrack", id)} />}
         </div>
 
         <div className="flex flex-col gap-4">

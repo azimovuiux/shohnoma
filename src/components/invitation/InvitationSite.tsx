@@ -5,6 +5,7 @@ import { CloseCircle, Music } from "@/components/icons";
 import { useToast } from "@/components/ui";
 import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { splitDate } from "@/lib/display";
+import { musicSrc } from "@/lib/music";
 import { star8Path } from "@/lib/ornament";
 import type { InvitationSiteProps } from "./types";
 import { TemplateArt } from "./TemplateArt";
@@ -13,32 +14,14 @@ import { Divider, HeroArt, heroShowsTitle } from "./Heroes";
 import { Closing, Countdown, Gallery, Program, RsvpBlock, Venue } from "./Sections";
 import { Layer, RsvpForm, ThankYou, fetchSavedAnswer, loadSavedRsvp, useSavedAnswer, type RsvpAnswer, type RsvpStatus } from "./Rsvp";
 import st from "./invitation.module.css";
+import { AnorSite } from "@/components/templates/anor/AnorSite";
 
-/* ── Fon musiqasi: avtomatik yoqilmaydi; fayl bo‘lmasa tugma ko‘rinmaydi ── */
-function useMusic(slug: string, enabled: boolean) {
-  const [src, setSrc] = useState<string | null>(null);
+/* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
+function useMusic(url: string | null, enabled: boolean) {
+  const src = enabled ? url : null;
   const [playing, setPlaying] = useState(false);
   const audio = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    if (!enabled) return;
-    let alive = true;
-    (async () => {
-      for (const url of [`/music/${slug}.mp3`, "/music/default.mp3"]) {
-        try {
-          const r = await fetch(url, { method: "HEAD" });
-          if (r.ok && (r.headers.get("content-type") ?? "").includes("audio")) {
-            if (alive) setSrc(url);
-            return;
-          }
-        } catch {}
-      }
-    })();
-    return () => {
-      alive = false;
-      audio.current?.pause();
-    };
-  }, [slug, enabled]);
+  useEffect(() => () => audio.current?.pause(), [src]);
 
   const play = useCallback(async () => {
     if (!src) return;
@@ -57,11 +40,17 @@ function useMusic(slug: string, enabled: boolean) {
   return { available: !!src, playing, play, toggle };
 }
 
-export function InvitationSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
+/** Shablon dizayniga qarab: maxsus (kodda yozilgan) dizayn yoki umumiy sahifa */
+export function InvitationSite(props: InvitationSiteProps) {
+  if (designSlug(props.template) === "anor") return <AnorSite {...props} />;
+  return <GenericSite {...props} />;
+}
+
+function GenericSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
   const p = useMemo(() => paletteOf(template), [template]);
   const live = mode === "live";
   const toast = useToast();
-  const music = useMusic(designSlug(template), data.musicEnabled && mode !== "preview");
+  const music = useMusic(musicSrc(template, data), data.musicEnabled && mode !== "preview");
   const [opened, setOpened] = useState(false);
   const [form, setForm] = useState<{ open: boolean; initial: Partial<RsvpAnswer>; token: string | null }>({ open: false, initial: {}, token: null });
   const [thanks, setThanks] = useState<RsvpAnswer | null>(null);

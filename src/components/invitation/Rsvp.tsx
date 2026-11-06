@@ -22,7 +22,7 @@ export function loadSavedRsvp(slug: string): { token: string; name: string } | n
     return null;
   }
 }
-const saveRsvp = (slug: string, token: string, name: string) => {
+export const saveRsvp = (slug: string, token: string, name: string) => {
   try {
     localStorage.setItem(storageKey(slug), JSON.stringify({ token, name }));
   } catch {}

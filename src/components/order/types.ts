@@ -25,6 +25,7 @@ export interface FlowOrder {
   rsvpEnabled: boolean;
   rsvpDeadline: string | null;
   musicEnabled: boolean;
+  musicTrack: string | null;
   /** +998901234567 */
   contactPhone: string;
   contactTg: string;

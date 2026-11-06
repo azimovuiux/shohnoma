@@ -17,5 +17,7 @@ export function toInvitationData(o: FlowOrder): InvitationData {
     rsvpEnabled: o.rsvpEnabled,
     rsvpDeadline: o.rsvpDeadline,
     musicEnabled: o.musicEnabled,
+    musicTrack: o.musicTrack,
+    extra: o.extra,
   };
 }

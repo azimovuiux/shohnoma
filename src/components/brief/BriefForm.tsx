@@ -17,8 +17,6 @@ import {
 } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { Field, Input, PhoneInput, Textarea, phoneDigits } from "@/components/ui";
-import { InvitationScreen } from "@/components/mockups/InvitationScreen";
-import { getTemplate } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
 import { site } from "@/lib/site";
 
@@ -34,10 +32,10 @@ const ceremonies: { value: Ceremony; label: string }[] = [
 ];
 
 const styles = [
-  { value: "klassik-bordo", label: "Klassik bordo", template: "bordo-maktub" },
-  { value: "yashil-muhr", label: "Yashil muhr", template: "yashil-muhr" },
-  { value: "moviy-osmon", label: "Moviy osmon", template: "moviy-abr" },
-  { value: "gulli-bahor", label: "Gulli bahor", template: "lola-bog" },
+  { value: "klassik-bordo", label: "Klassik bordo" },
+  { value: "yashil-muhr", label: "Yashil muhr" },
+  { value: "moviy-osmon", label: "Moviy osmon" },
+  { value: "gulli-bahor", label: "Gulli bahor" },
 ];
 
 const colors = [
@@ -87,9 +85,8 @@ function Section({ n, title, hint, error, children, id }: { n: string; title: st
   );
 }
 
-/** Uslub kartasi — shablon mokapining yuqori qismi (Figma: 156×164 oyna) */
-function StyleCard({ label, templateSlug, active, onClick }: { label: string; templateSlug: string; active: boolean; onClick: () => void }) {
-  const t = getTemplate(templateSlug)!;
+/** Uslub kartasi — namuna rasmi (public/images/brief/<value>.webp) */
+function StyleCard({ label, value, active, onClick }: { label: string; value: string; active: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
@@ -99,10 +96,9 @@ function StyleCard({ label, templateSlug, active, onClick }: { label: string; te
         active ? "border-[1.5px] border-maroon/60 bg-maroon/[0.06]" : "border border-line bg-bg-base hover:bg-bg-soft"
       }`}
     >
-      <span className="relative block aspect-[156/164] w-full overflow-hidden rounded-[10px]">
-        <span className="absolute inset-x-0 top-[-25%] block aspect-[280/608]">
-          <InvitationScreen t={t} />
-        </span>
+      <span className="relative block aspect-[156/164] w-full overflow-hidden rounded-[10px] bg-bg-soft">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`/images/brief/${value}.webp`} alt="" className="absolute inset-0 size-full object-cover" />
       </span>
       <span className="flex items-center justify-between px-0.5">
         <span className="text-[12px] font-semibold leading-[1.35] text-ink">{label}</span>
@@ -344,7 +340,7 @@ export function BriefForm() {
                 <StyleCard
                   key={s.value}
                   label={s.label}
-                  templateSlug={s.template}
+                  value={s.value}
                   active={chosenStyles.includes(s.label)}
                   onClick={() => toggle(chosenStyles, s.label, setChosenStyles)}
                 />

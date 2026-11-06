@@ -12,6 +12,28 @@ import { isPaidStatus } from "@/lib/types";
 import { useInvitationData, useSiteUrl } from "../data";
 import { daysUntil, initials, relativeTime, rsvpView } from "@/lib/display";
 
+/** Mehmon uchun shaxsiy havola: taklifnoma «Hurmatli …» deb shu ism bilan ochiladi (?m=) */
+function GuestLink({ url }: { url: string }) {
+  const [name, setName] = useState("");
+  const personal = name.trim() ? `${url}?m=${encodeURIComponent(name.trim())}` : "";
+  return (
+    <div className="flex flex-col gap-2 rounded-xl border border-dashed border-line px-3 py-3">
+      <label htmlFor="guest-name" className="t-body-s text-ink-2">
+        Mehmon uchun shaxsiy havola — taklifnoma uning ismi bilan ochiladi
+      </label>
+      <input
+        id="guest-name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        maxLength={80}
+        placeholder="Masalan: Dilshod aka va Gulnora opa"
+        className="h-10 rounded-lg border border-line bg-bg-base px-3 t-body-m text-ink outline-none focus:border-maroon/55"
+      />
+      {personal && <CopyLink url={personal} className="min-w-0 justify-between" />}
+    </div>
+  );
+}
+
 /** QR kod — brauzerda yaratiladi (SVG ko‘rinish, PNG/SVG yuklab olish) */
 function QrBlock({ url, slug }: { url: string; slug: string }) {
   const [svg, setSvg] = useState<string | null>(null);
@@ -101,6 +123,7 @@ export function OverviewPage() {
                     <CopyLink url={url} className="min-w-0 flex-1 justify-between" />
                   </div>
                   <ShareRow url={url} title={`${invTitle(inv)} — taklifnoma`} />
+                  <GuestLink url={url} />
                 </>
               ) : (
                 <p className="t-body-m text-ink-2">Havola to‘lov tasdiqlangach beriladi.</p>

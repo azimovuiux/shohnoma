@@ -175,6 +175,11 @@ function apply_invitation_patch(array $b, array $p): array
         foreach ($p['photos'] as $u) if (!is_string($u) || !preg_match('#^/files/photos/[a-z0-9]+\.[a-z]+$#', $u)) fail('Surat noto‘g‘ri', 422);
         $set['photos'] = json_encode(array_values($p['photos']));
     }
+    if (array_key_exists('musicTrack', $p)) {
+        $mt = $p['musicTrack'];
+        if ($mt !== null && $mt !== '' && !(is_string($mt) && one('SELECT id FROM music_tracks WHERE id = ? AND is_active = 1', [$mt]))) fail('Musiqa topilmadi', 422);
+        $set['music_track'] = $mt ?: null;
+    }
     foreach (['rsvpEnabled' => 'rsvp_enabled', 'musicEnabled' => 'music_enabled'] as $k => $col) {
         if (array_key_exists($k, $p)) $set[$col] = $p[$k] ? 1 : 0;
     }

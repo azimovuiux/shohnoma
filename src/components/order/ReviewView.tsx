@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowDown2, ArrowRight, Edit, Mobile, Monitor, TickCircle } from "@/components/icons";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
@@ -14,7 +14,7 @@ import type { Template } from "@/lib/templates";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
 import { FlowColumns } from "./FlowTop";
 import { SectionTitle } from "./fields";
-import { liveTemplate, dayTime } from "./live";
+import { liveTemplate, dayTime, hasCustomDesign } from "./live";
 import { namesOf } from "./labels";
 import { toInvitationData } from "./toInvitationData";
 import type { FlowOrder } from "./types";
@@ -57,6 +57,33 @@ function PhonePreview({ order, template, className }: { order: FlowOrder; templa
       </div>
       )}
     </PhoneFrame>
+  );
+}
+
+/** Laptop ekranida haqiqiy sayt: 1440px kenglikda chiziladi va ekranga kichraytiriladi (ichida scroll) */
+function LaptopLive({ order, template }: { order: FlowOrder; template: Template }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [k, setK] = useState(0);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setK(el.clientWidth / 1440));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return (
+    <div ref={box} className="absolute inset-0 overflow-hidden">
+      {k > 0 && (
+        <div
+          className="overflow-y-auto overscroll-contain [scrollbar-width:none]"
+          style={{ width: 1440, height: 900, transform: `scale(${k})`, transformOrigin: "0 0" }}
+          tabIndex={0}
+          aria-label="Taklifnoma ko‘rinishi — pastga suring"
+        >
+          <InvitationSite template={template} data={toInvitationData(order)} mode="preview" embedded />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -153,7 +180,7 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
           {device === "laptop" ? (
             <div className="flex h-[640px] items-center justify-center px-10">
               <LaptopFrame className="w-full max-w-[680px]">
-                <InvitationDesktop t={live} />
+                {hasCustomDesign(template) ? <LaptopLive order={order} template={template} /> : <InvitationDesktop t={live} />}
               </LaptopFrame>
             </div>
           ) : (

@@ -1,0 +1,840 @@
+/*
+ * Anor — taklifnoma shabloni (Figma 250:4528 mobil, 254:4560 laptop).
+ * O‘lchamlar `--u` birligida: mobil — 390px kanvas, laptop — 1440px kanvas (konteyner eniga moslanadi).
+ * Harakat: Figma "Motion — 00…09" va "umumiy qoidalar". Asosiy ease [0.22,1,0.36,1], kirish 0.9–1.6s.
+ */
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --door: cubic-bezier(0.65, 0, 0.35, 1);
+  --maroon: #8c1c2c;
+  --ink: #2a1a17;
+  --soft: #5e5049;
+  --gold: #b8925a;
+  --gold-2: #e3c68e;
+  --cream: #fbf6ee;
+  --paper: #f6f0e6;
+  position: relative;
+  container-type: inline-size;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Jost", system-ui, sans-serif;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.paperBg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-color: var(--paper);
+  background-image: url("/templates/anor/paper.webp");
+  background-size: calc(var(--u) * 60) calc(var(--u) * 60);
+  opacity: 0.55;
+}
+.serif {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 400;
+}
+.italic {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.abs {
+  position: absolute;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.contain {
+  object-fit: contain;
+}
+
+/* ── Bo‘lim va baxmal fon ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.velvet {
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+.velvet img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+/* Baxmal panel ochilganda yirtiq chekka bo‘ylab yuqoridan pastga ochiladi */
+.tear .velvet {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.2s var(--ease);
+}
+.tear.in .velvet {
+  clip-path: inset(0 0 0 0);
+}
+
+/* ── Umumiy reveal (bo‘lim ko‘rinishga kirganda .in qo‘shiladi) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: var(--t, 1.1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.sec:not(.in) [data-a="up"] {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * var(--y, 60)));
+}
+.sec:not(.in) [data-a="blur"] {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(calc(var(--u) * var(--y, 60)));
+}
+.sec:not(.in) [data-a="fade"] {
+  opacity: 0;
+}
+.sec:not(.in) [data-a="mask"] {
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(40%);
+}
+.root [data-a="mask"] {
+  clip-path: inset(-20% -10% -20% -10%);
+}
+.sec:not(.in) [data-a="pop"] {
+  opacity: 0;
+  transform: scale(0);
+}
+.sec:not(.in) [data-a="grow"] {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.sec:not(.in) [data-a="drop"] {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * -40)) rotate(var(--r0, -10deg));
+}
+.sec:not(.in) [data-a="side"] {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateX(calc(var(--u) * var(--x, 40)));
+}
+.sec:not(.in) [data-a="stamp"] {
+  opacity: 0;
+  transform: scale(1.6);
+}
+.sec:not(.in) [data-a="door"] {
+  transform: scaleX(0.02);
+}
+.root [data-a="door"] {
+  transition-duration: 1s;
+  transition-timing-function: var(--door);
+}
+.sec:not(.in) [data-a="wipe"] {
+  clip-path: inset(-10% 100% -10% -2%);
+}
+.root [data-a="wipe"] {
+  clip-path: inset(-10% -2% -10% -2%);
+  transition-duration: 1.4s;
+}
+.sec:not(.in) [data-a="zoom"] {
+  transform: scale(var(--z, 1.25));
+}
+.sec:not(.in) [data-a="fly"] {
+  opacity: 0;
+  transform: translate(calc(var(--u) * var(--fx, 0)), calc(var(--u) * var(--fy, -160))) rotate(var(--fr, 0deg));
+}
+.spring {
+  --e: var(--spring);
+}
+
+/* ── 00 · Ochilish (darvoza) ── */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--cream);
+  text-align: center;
+}
+.gateEmbedded {
+  position: absolute;
+  height: 100%;
+}
+.gateBg {
+  position: absolute;
+  inset: 0;
+  background: #4a0d18 url("/templates/anor/v-ochilish-m.webp") center / cover no-repeat;
+  animation: velvetIn 1.8s var(--ease) both;
+}
+.wide .gateBg {
+  background-image: url("/templates/anor/v-ochilish-l.webp");
+}
+@keyframes velvetIn {
+  from {
+    transform: scale(1.06);
+  }
+}
+.gateCorner {
+  position: absolute;
+  animation: cornerIn 1.6s var(--ease) both;
+}
+@keyframes cornerIn {
+  from {
+    opacity: 0;
+    transform: translate(var(--cx, -60px), -40px) rotate(var(--cr, -8deg)) scale(var(--sx, 1), var(--sy, 1));
+  }
+}
+.title {
+  white-space: nowrap;
+  text-align: center;
+}
+.gateTitle {
+  position: relative;
+  line-height: 0.96;
+  letter-spacing: -0.015em;
+}
+.char {
+  display: inline-block;
+  white-space: pre;
+  animation: charIn 1.2s var(--ease) both;
+}
+@keyframes charIn {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(0.18em);
+  }
+}
+.gateSub {
+  position: relative;
+  color: rgba(251, 246, 238, 0.85);
+  line-height: 1.55;
+  animation: fadeUp 1.2s 0.7s var(--ease) both;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+.hands {
+  position: absolute;
+  animation: handsIn 1.5s 0.35s var(--spring) both;
+  mask-image: linear-gradient(#000 0%, #000 60%, transparent 86%);
+  -webkit-mask-image: linear-gradient(#000 0%, #000 60%, transparent 86%);
+}
+@keyframes handsIn {
+  from {
+    opacity: 0;
+    transform: translateY(160px);
+  }
+}
+.sealBtn {
+  position: absolute;
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  transition: transform 0.25s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.sealBtn:active {
+  transform: scale(0.94);
+}
+.sealBtn:focus-visible {
+  outline: 2px solid var(--gold-2);
+  outline-offset: 6px;
+}
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1.2px solid rgba(227, 198, 142, 0.5);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: ring 2.4s var(--ease) infinite;
+}
+@keyframes ring {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.72);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+.sealHalf {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.9s var(--ease), opacity 0.9s var(--ease);
+}
+.sealHalf:first-child {
+  clip-path: polygon(0 0, 54% 0, 44% 38%, 56% 62%, 46% 100%, 0 100%);
+}
+.sealHalf:last-child {
+  clip-path: polygon(54% 0, 100% 0, 100% 100%, 46% 100%, 56% 62%, 44% 38%);
+}
+/* Ochilish ketma-ketligi */
+.opening .ring {
+  animation: none;
+  opacity: 0;
+}
+.opening .sealHalf:first-child {
+  transform: translate(-30%, 40%) rotate(-28deg);
+  opacity: 0;
+}
+.opening .sealHalf:last-child {
+  transform: translate(30%, 40%) rotate(26deg);
+  opacity: 0;
+}
+.opening .hands {
+  transition: transform 1.1s 0.35s var(--door), opacity 0.9s 0.5s var(--ease);
+  transform: translateY(18%) scale(0.96);
+  opacity: 0;
+}
+.opening .gateTitle,
+.opening .gateSub {
+  transition: opacity 0.6s var(--ease), transform 0.8s var(--ease);
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.opening .gateCorner {
+  transition: opacity 0.8s 0.4s var(--ease);
+  opacity: 0;
+}
+/* Baxmal panel yirtiq chekka bo‘ylab pastga «yirtilib» tushadi */
+.opening {
+  animation: tearDown 1.25s 0.9s var(--door) forwards;
+}
+@keyframes tearDown {
+  from {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 92% 99%, 84% 100%, 75% 98.6%, 66% 100%, 57% 98.8%, 48% 100%, 38% 98.7%, 28% 100%, 18% 98.6%, 9% 100%, 0 99%);
+  }
+  to {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 92% 103%, 84% 101%, 75% 104%, 66% 101%, 57% 103%, 48% 101%, 38% 104%, 28% 101%, 18% 103%, 9% 101%, 0 103%);
+  }
+}
+.flash {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 233, 180, 0.85), rgba(227, 198, 142, 0) 68%);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+}
+.opening .flash {
+  animation: flash 1.1s 0.15s var(--ease) both;
+}
+@keyframes flash {
+  40% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.6);
+  }
+}
+
+/* ── 01 · Muqova ── */
+.archLine {
+  fill: rgba(255, 253, 248, 0);
+  stroke: var(--gold);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.6s var(--ease), fill 1.2s 0.6s var(--ease);
+}
+.in .archLine {
+  stroke-dashoffset: 0;
+  fill: rgba(255, 253, 248, 0.8);
+}
+.archDots {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1 4;
+  opacity: 0;
+  transition: opacity 1.2s 1s var(--ease);
+}
+.in .archDots {
+  opacity: 0.9;
+}
+.archGem {
+  fill: var(--gold);
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  transition: transform 0.7s var(--spring);
+}
+.in .archGem {
+  transform: scale(1);
+}
+.photoArch {
+  position: absolute;
+  filter: drop-shadow(0 calc(var(--u) * 24) calc(var(--u) * 20) rgba(77, 31, 15, 0.22));
+}
+.photoArch .clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.photoArch .frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.sway {
+  transform-origin: 50% 20%;
+  animation: sway 3s ease-in-out infinite;
+}
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(-1.6deg);
+  }
+  50% {
+    transform: rotate(1.6deg);
+  }
+}
+
+/* ── 02 · Taklif va sana ── */
+.card {
+  background: rgba(255, 253, 248, 0.85);
+  border: 1px solid rgba(184, 146, 90, 0.45);
+  filter: drop-shadow(0 calc(var(--u) * 18) calc(var(--u) * 20) rgba(89, 38, 20, 0.1));
+}
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.heart {
+  transform-origin: 50% 55%;
+}
+.in .heart {
+  animation: beatIn 0.9s var(--d, 1s) var(--spring) both, beat 2s calc(var(--d, 1s) + 1s) ease-in-out infinite;
+}
+.sec:not(.in) .heart {
+  transform: scale(0);
+}
+@keyframes beatIn {
+  0% {
+    transform: scale(0);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  12% {
+    transform: scale(1.12);
+  }
+  24% {
+    transform: scale(1);
+  }
+}
+
+/* ── 03 · Taymer ── */
+.timerCell {
+  background: rgba(251, 246, 238, 0.06);
+  border: 1px solid rgba(227, 198, 142, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  perspective: 400px;
+}
+.flip {
+  display: inline-block;
+  animation: flip 0.5s var(--ease);
+  transform-origin: 50% 60%;
+}
+@keyframes flip {
+  from {
+    transform: rotateX(-90deg);
+    opacity: 0.2;
+  }
+}
+.ghostBtn {
+  border: 1px solid rgba(251, 246, 238, 0.7);
+  color: var(--cream);
+  border-radius: 999px;
+  font-weight: 500;
+  transition: background 0.3s var(--ease);
+}
+.ghostBtn:hover {
+  background: rgba(251, 246, 238, 0.08);
+}
+
+/* ── 04 · Manzil ── */
+.postcard {
+  background: #fffdf8;
+  box-shadow: 0 calc(var(--u) * 16) calc(var(--u) * 30) rgba(77, 31, 15, 0.22);
+}
+.btnMaroon {
+  background: var(--maroon);
+  color: var(--cream);
+  border-radius: 999px;
+  font-weight: 500;
+  text-align: center;
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.btnMaroon:hover {
+  background: #74131f;
+}
+.btnLine {
+  border: 1px solid rgba(140, 28, 44, 0.55);
+  color: var(--maroon);
+  border-radius: 999px;
+  font-weight: 500;
+  text-align: center;
+  transition: background 0.3s var(--ease);
+}
+.btnLine:hover {
+  background: rgba(140, 28, 44, 0.05);
+}
+.ripple {
+  position: absolute;
+  inset: -30%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(227, 198, 142, 0.9);
+  opacity: 0;
+  pointer-events: none;
+}
+.in .ripple {
+  animation: ripple 1.2s calc(var(--d, 0s) + 0.25s) var(--ease) both;
+}
+@keyframes ripple {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* ── 05 · Dastur ── */
+.badge {
+  position: absolute;
+  border-radius: 50%;
+  background: #fffdf8;
+  border: 1px solid rgba(184, 146, 90, 0.6);
+  filter: drop-shadow(0 calc(var(--u) * 8) calc(var(--u) * 9) rgba(89, 38, 20, 0.1));
+  transform: scale(0.6);
+  opacity: 0;
+  transition: transform 0.9s var(--spring), opacity 0.5s var(--ease);
+}
+.badge img {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1s 0.25s var(--ease);
+}
+.badge.on {
+  transform: scale(1);
+  opacity: 1;
+}
+.badge.on img {
+  clip-path: inset(0 0 0 0);
+}
+.event {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateX(calc(var(--u) * var(--x, 40)));
+  transition: opacity 0.9s var(--ease), filter 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.event.on {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+.wavePath {
+  fill: none;
+  stroke: var(--maroon);
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 5.4;
+  vector-effect: non-scaling-stroke;
+}
+.runner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+
+/* ── 06 · Dress-kod ── */
+.whiteCard {
+  background: #fffdf8;
+  box-shadow: 0 calc(var(--u) * 24) calc(var(--u) * 50) rgba(0, 0, 0, 0.3);
+}
+.hang {
+  transform-origin: 50% 0;
+}
+.in .hang {
+  animation: hang 2s var(--d, 0.6s) var(--spring) both, hangSway 4s calc(var(--d, 0.6s) + 2s) ease-in-out infinite;
+}
+.sec:not(.in) .hang {
+  opacity: 0;
+}
+@keyframes hang {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * -50)) rotate(var(--hr, 6deg));
+  }
+}
+@keyframes hangSway {
+  0%,
+  100% {
+    transform: rotate(0.8deg);
+  }
+  50% {
+    transform: rotate(-0.8deg);
+  }
+}
+
+/* ── 07 · Hikoya ── */
+.polaroid {
+  background: #fffdf8;
+  box-shadow: 0 calc(var(--u) * 14) calc(var(--u) * 28) rgba(77, 31, 15, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── 08 · Javob (chipta) ── */
+.ticket {
+  position: relative;
+  filter: drop-shadow(0 calc(var(--u) * 24) calc(var(--u) * 25) rgba(0, 0, 0, 0.3));
+}
+.ticketTop,
+.ticketBottom {
+  position: relative;
+  background: #fffdf8;
+  transition: transform 1s var(--ease), opacity 0.8s var(--ease);
+}
+.ticketTop {
+  border-radius: calc(var(--u) * 16) calc(var(--u) * 16) 0 0;
+  -webkit-mask: radial-gradient(circle calc(var(--u) * 14) at 0 100%, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle calc(var(--u) * 14) at 100% 100%, #0000 98%, #000) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle calc(var(--u) * 14) at 0 100%, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle calc(var(--u) * 14) at 100% 100%, #0000 98%, #000) right / 51% 100% no-repeat;
+}
+.ticketBottom {
+  border-radius: 0 0 calc(var(--u) * 16) calc(var(--u) * 16);
+  -webkit-mask: radial-gradient(circle calc(var(--u) * 14) at 0 0, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle calc(var(--u) * 14) at 100% 0, #0000 98%, #000) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle calc(var(--u) * 14) at 0 0, #0000 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle calc(var(--u) * 14) at 100% 0, #0000 98%, #000) right / 51% 100% no-repeat;
+}
+.perf {
+  position: absolute;
+  left: calc(var(--u) * 24);
+  right: calc(var(--u) * 24);
+  bottom: 0;
+  border-top: 1.2px dashed var(--gold);
+}
+.sent .ticketBottom {
+  transform: translateY(calc(var(--u) * 160)) rotate(-4deg);
+  opacity: 0;
+  pointer-events: none;
+}
+.field {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(42, 26, 23, 0.22);
+  background: transparent;
+  color: var(--ink);
+  font-family: "Playfair Display", Georgia, serif;
+  outline: none;
+  padding: 0;
+  border-radius: 0;
+}
+.field::placeholder {
+  color: rgba(42, 26, 23, 0.38);
+}
+.field:focus {
+  border-bottom-color: var(--maroon);
+}
+.choice {
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 26, 23, 0.2);
+  color: var(--ink);
+  font-weight: 500;
+  transition: background 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--maroon);
+  border-color: var(--maroon);
+  color: var(--cream);
+}
+.step {
+  border-radius: 50%;
+  background: rgba(140, 28, 44, 0.08);
+  color: var(--maroon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Playfair Display", Georgia, serif;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.thanks {
+  animation: fadeUp 1s var(--ease) both;
+}
+.stampIn {
+  animation: stampIn 0.6s 0.3s var(--spring) both;
+}
+@keyframes stampIn {
+  from {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* ── 09 · Final ── */
+.seed {
+  position: absolute;
+  border-radius: 50% 50% 46% 54%;
+  background: radial-gradient(circle at 35% 30%, #ff6b7d, #a0102a 70%);
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+}
+.in .seed {
+  animation: seed 1.4s var(--d, 1.2s) var(--ease) both;
+}
+@keyframes seed {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(1);
+  }
+}
+.footer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  background: #3e0a14;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── Musiqa tugmasi (fixed, har bir shablonda majburiy) ── */
+.music {
+  position: fixed;
+  z-index: 70;
+  border-radius: 50%;
+  background: rgba(255, 253, 248, 0.72);
+  border: 1px solid rgba(184, 146, 90, 0.9);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  box-shadow: 0 6px 16px rgba(51, 15, 10, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--maroon);
+  cursor: pointer;
+  animation: fadeUp 0.8s 1.2s var(--ease) both;
+}
+.musicEmbedded {
+  position: absolute;
+}
+.music::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(184, 146, 90, 0.6);
+  opacity: 0;
+}
+.music.playing::after {
+  animation: ring 2.4s var(--ease) infinite;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+}
+.music.playing .note {
+  animation: noteSway 2.2s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+@keyframes noteSway {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  50% {
+    transform: rotate(6deg);
+  }
+}
+.strike {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  transition: stroke-dashoffset 0.3s var(--ease);
+}
+.music:not(.playing) .strike {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

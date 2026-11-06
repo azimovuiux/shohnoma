@@ -57,6 +57,8 @@ export interface Invitation {
   rsvpEnabled: boolean;
   rsvpDeadline: string | null;
   musicEnabled: boolean;
+  /** Kutubxonadan tanlangan trek (yo‘q bo‘lsa — shablon standarti) */
+  musicTrack?: string | null;
   contactPhone: string | null;
   contactTg: string | null;
   extra?: Record<string, unknown>;
