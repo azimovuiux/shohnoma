@@ -145,7 +145,8 @@ export function AdminTemplateEdit() {
   const setSample = (patch: Partial<Template["sample"]>) => setT((p) => (p ? { ...p, sample: { ...p.sample, ...patch } } : p));
   const isNew = !editSlug;
 
-  const save = async (e: React.FormEvent) => {
+  /** stay = true — «Qo‘llash»: saqlaydi, sahifada qoladi (o‘zgarish saytda darhol ko‘rinadi) */
+  const save = async (e: React.FormEvent, stay = false) => {
     e.preventDefault();
     setError(null);
     setSaving(true);
@@ -153,8 +154,9 @@ export function AdminTemplateEdit() {
       const body = { ...t, number: t.number || undefined };
       if (isNew) await api("/api/admin/templates", { method: "POST", json: body });
       else await api(`/api/admin/templates/${t.slug}`, { method: "PUT", json: body });
-      toast(isNew ? "Shablon qo‘shildi" : "Saqlandi");
-      router.push("/admin/shablonlar/");
+      toast(isNew ? "Shablon qo‘shildi" : stay ? "Qo‘llandi — saytda yangilandi" : "Saqlandi");
+      if (isNew && stay) router.replace(`/admin/shablonlar/tahrir/?slug=${encodeURIComponent(t.slug)}`);
+      else if (!stay) router.push("/admin/shablonlar/");
     } catch (err) {
       setError((err as Error).message);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -175,9 +177,14 @@ export function AdminTemplateEdit() {
         title={isNew ? "Yangi shablon" : t.name || "Shablon"}
         sub={isNew ? "Ma’lumotlarni to‘ldiring va saqlang — shablon katalogda darhol paydo bo‘ladi." : `/shablonlar/${t.slug}/`}
         right={
-          <button type="submit" disabled={saving} className="btn btn-primary">
-            {saving ? "Saqlanmoqda…" : "Saqlash"}
-          </button>
+          <div className="flex gap-2">
+            <button type="button" disabled={saving} onClick={(e) => save(e, true)} className="btn btn-secondary">
+              {saving ? "Saqlanmoqda…" : "Qo‘llash"}
+            </button>
+            <button type="submit" disabled={saving} className="btn btn-primary">
+              Saqlash va chiqish
+            </button>
+          </div>
         }
       />
       {error && <p className="mb-5 rounded-input bg-[var(--danger-bg)] px-4 py-3 t-body-m text-danger">{error}</p>}
@@ -396,8 +403,11 @@ export function AdminTemplateEdit() {
               Jonli namunani ochish
             </a>
           )}
+          <button type="button" disabled={saving} onClick={(e) => save(e, true)} className="btn btn-secondary w-full">
+            {saving ? "Saqlanmoqda…" : "Qo‘llash"}
+          </button>
           <button type="submit" disabled={saving} className="btn btn-primary w-full">
-            {saving ? "Saqlanmoqda…" : "Saqlash"}
+            Saqlash va chiqish
           </button>
         </aside>
       </div>

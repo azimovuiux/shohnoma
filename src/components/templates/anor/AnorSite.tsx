@@ -436,24 +436,17 @@ function Invite({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 /* ═════════════ 03 · Taymer ═════════════ */
 function TimerCell({ value, label, wide, run, i }: { value: number; label: string; wide: boolean; run: boolean; i: number }) {
   const v: V = (m, l) => U(wide ? l : m);
-  const counted = useCountUp(value, run);
-  const [shown, setShown] = useState(0);
-  const first = useRef(true);
-  const [key, setKey] = useState(0);
-  useEffect(() => {
-    if (!run) return;
-    if (first.current) {
-      setShown(counted);
-      if (counted === value) first.current = false;
-      return;
-    }
-    setShown(value);
-    setKey((k) => k + 1);
-  }, [counted, value, run]);
+  const c = useCountUp(value, run);
+  const digits = String(c.value).padStart(2, "0").split("");
   return (
     <div data-a="up" className={st.timerCell} style={vars({ width: v(76, 140), height: v(96, 160), borderRadius: v(16, 22), gap: v(2, 4), "--d": `${0.5 + i * 0.1}s`, "--y": 30 })}>
-      <span key={key} className={cx(st.serif, key > 0 && st.flip)} style={{ fontSize: v(38, 64), color: "var(--cream)", lineHeight: 1.3 }}>
-        {String(shown).padStart(2, "0")}
+      <span className={cx(st.serif, st.digits)} style={{ fontSize: v(38, 64), color: "var(--cream)", lineHeight: 1.3 }}>
+        {digits.map((dg, k) => (
+          // Faqat o‘zgargan raqam yangilanadi — ohista pastdan siljib keladi (sanash tugagach)
+          <span key={c.done ? `${digits.length - k}-${dg}` : `${digits.length - k}`} className={c.done ? st.digit : undefined}>
+            {dg}
+          </span>
+        ))}
       </span>
       <span style={{ color: "var(--gold-2)", fontSize: v(14, 15) }}>{label}</span>
     </div>

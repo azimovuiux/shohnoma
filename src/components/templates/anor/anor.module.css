@@ -521,15 +521,19 @@
   overflow: hidden;
   perspective: 400px;
 }
-.flip {
-  display: inline-block;
-  animation: flip 0.5s var(--ease);
-  transform-origin: 50% 60%;
+.digits {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
 }
-@keyframes flip {
+.digit {
+  display: inline-block;
+  animation: digitIn 0.55s var(--ease);
+}
+@keyframes digitIn {
   from {
-    transform: rotateX(-90deg);
-    opacity: 0.2;
+    transform: translateY(-38%);
+    opacity: 0;
   }
 }
 .ghostBtn {

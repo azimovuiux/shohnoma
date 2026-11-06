@@ -92,29 +92,28 @@ export function useCountdown(target: number | null) {
   };
 }
 
-/** Raqamni 0 dan sanab chiqish (birinchi ko‘rinishda) */
+/** Raqamni 0 dan sanab chiqish (faqat birinchi ko‘rinishda, bir marta; keyin qiymatni to‘g‘ridan-to‘g‘ri beradi) */
 export function useCountUp(value: number, run: boolean, ms = 1600) {
+  const target = useRef(value);
+  target.current = value;
   const [v, setV] = useState(0);
-  const done = useRef(false);
+  const [done, setDone] = useState(false);
   useEffect(() => {
-    if (!run) return;
-    if (done.current) return setV(value);
-    if (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      done.current = true;
-      return setV(value);
-    }
+    if (!run || done) return;
+    if (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches) return setDone(true);
     let raf = 0;
     const t0 = performance.now();
     const step = (t: number) => {
       const k = Math.min(1, (t - t0) / ms);
-      setV(Math.round(value * (1 - Math.pow(1 - k, 3))));
+      setV(Math.round(target.current * (1 - Math.pow(1 - k, 3))));
       if (k < 1) raf = requestAnimationFrame(step);
-      else done.current = true;
+      else setDone(true);
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [value, run, ms]);
-  return v;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [run]);
+  return { value: done ? value : v, done };
 }
 
 /** Sichqoncha parallaksi (faqat laptop): -1…1 */
