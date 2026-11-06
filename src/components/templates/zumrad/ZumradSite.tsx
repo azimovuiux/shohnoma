@@ -67,7 +67,7 @@ function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" 
       address: demo ? ZUMRAD_DEMO.address : data.address,
       city: (data.address || "Toshkent").split(/[,.]/)[0].replace(/\s+(sh|shahri|shahar)$/i, "").trim() || "Toshkent",
       mapUrl: data.mapUrl || `https://yandex.uz/maps/?text=${encodeURIComponent([data.venueName, data.address].filter(Boolean).join(", "))}`,
-      coords: coordsFrom(data.mapUrl),
+      coords: demo ? { lat: 41.3385, lon: 69.2851 } : coordsFrom(data.mapUrl),
       program: (demo ? ZUMRAD_DEMO.program : exProgram.length ? exProgram : (data.program as ProgramItem[])) as ProgramItem[],
       dress: dress && DRESS[dress] ? { ...DRESS[dress], note: str("dressNote") || DRESS[dress].note } : null,
       storyText: str("storyText") || (demo ? ZUMRAD_DEMO.storyText : ""),
@@ -406,7 +406,6 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
   const { p, o } = vals;
   const ty = (speed: number) => (p - 0.5) * (speed - 1) * -260;
   const px = (n: number) => (wide ? ptr.x * n : 0);
-  const mono = ease(seg(p, 0.4, 0.55));
   const bed = 1 + seg(p, 0.72, 1) * 0.25 * (variant === "open" ? 1 : 0);
   const H = variant === "open" ? (wide ? 920 : 1040) : wide ? 900 : 880;
   const curtainShift = (1 - o) * (wide ? 0 : 0) + o * (wide ? 180 : 180);
@@ -414,30 +413,43 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
 
   // Sarvlar va gullar joylashuvi
   const cypress: [number, number, number, number, boolean][] = wide
-    ? [
-        [-114, 220, 348, 620, false],
-        [84, 320, 292, 520, false],
-        [1031.8, 220, 348, 620, true],
-        [918, 320, 292, 520, true],
-      ]
+    ? variant === "close"
+      ? [
+          [-88.46, 240, 336.92, 600, false],
+          [1191.54, 240, 336.92, 600, true],
+        ]
+      : [
+          [-114, 220, 348, 620, false],
+          [84, 320, 292, 520, false],
+          [1205.9, 220, 348, 620, true],
+          [1064, 320, 292, 520, true],
+        ]
     : [
         [-110, 330, 314.5, 560, false],
         [185.5, 330, 314.5, 560, true],
       ];
   const beds: [number, number, number, number, boolean][] = wide
-    ? [
+    ? variant === "close"
+      ? [
+          [-150, 517.32, 680, 382.68, false],
+          [380, 517.32, 680, 382.68, true],
+          [910, 517.32, 680, 382.68, false],
+        ]
+      : [
         [-150, 520, 700, 394, false],
         [250, 520, 700, 394, true],
         [650, 520, 700, 394, false],
         [1050, 520, 700, 394, true],
       ]
     : [[-235, variant === "open" ? 550 : 396, 860, 484, false]];
-  const madrasa = wide ? [310, variant === "open" ? 300 : 380, 820, 461.5] : variant === "open" ? [-85, 470, 560, 315] : [-105, 430, 600, 338];
+  const madrasa = wide ? (variant === "open" ? [310, 300, 820, 461.5] : [360, 495.32, 720, 405.2]) : variant === "open" ? [-85, 470, 560, 315] : [-105, 430, 600, 338];
 
   return (
     <section ref={ref} className={st.scene} style={{ height: U(H) }}>
-      <div className="absolute inset-0" style={{ transform: `translateY(${ty(0.15)}px) scale(1.15)` }}>
-        <Img src={`${Z}/osmon.webp`} />
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0" style={{ transform: `translateY(${ty(0.15)}px) scale(1.15)` }}>
+          <Img src={`${Z}/osmon.webp`} />
+        </div>
       </div>
       {/* madrasa + hovuz aksi */}
       <div className={st.layer} style={layer({ left: U(madrasa[0]), top: U(madrasa[1]), width: U(madrasa[2]), height: U(madrasa[3]), transform: `translate(${px(-10)}px, ${ty(0.4)}px)` })}>
@@ -450,7 +462,7 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
           </div>
         </div>
       )}
-      {variant === "open" &&
+      {(variant === "open" || wide) &&
         cypress.map(([x, y, w, h, flip], i) => (
           <div key={i} className={st.layer} style={layer({ left: U(x), top: U(y), width: U(w), height: U(h), transform: `translate(${px(-16)}px, ${ty(0.6)}px) translateX(${(flip ? 1 : -1) * (1 - o) * 30}px)` })}>
             <Img src={`${Z}/sarv.webp`} className={flip ? st.flipX : undefined} />
@@ -463,10 +475,10 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
       ))}
       {/* pardalar — markazdan chetga ochiladi (final: yopiladi) */}
       {(() => {
-        const cw = variant === "open" ? (wide ? 518.9 : 586.2) : wide ? 518.9 : 496.4;
+        const cw = variant === "open" ? (wide ? 518.9 : 586.2) : wide ? 507.63 : 496.4;
         const ch = H + 4;
-        const lx = variant === "open" ? (wide ? -118.9 : -436.25) : wide ? -118.9 : -331.4;
-        const inward = variant === "open" ? (1 - o) * 180 : (1 - o) * (wide ? 260 : 120);
+        const lx = variant === "open" ? (wide ? -118.9 : -436.25) : wide ? -77.63 : -331.4;
+        const inward = variant === "open" ? (1 - o) * 180 : (1 - o) * (wide ? 110 : 50);
         return (
           <>
             <div className={st.layer} style={layer({ left: U(lx), top: U(-2), width: U(cw), height: U(ch), transform: `translateX(${U(inward)})`, zIndex: 4 })}>
@@ -479,7 +491,7 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
         );
       })()}
       {/* osma gulchambar — tepadan tushadi, yengil tebranadi */}
-      {(wide ? [[-60, -152, 820, 461.5], [690, -152, 820, 461.5]] : variant === "open" ? [[-195, -145, 780, 439]] : [[-85, -80, 560, 315]]).map(([x, y, w, h], i) => (
+      {(wide ? (variant === "open" ? [[-60, -152, 820, 461.5], [690, -152, 820, 461.5]] : [[-45, -115.84, 790, 444], [695, -115.84, 790, 444]]) : variant === "open" ? [[-195, -145, 780, 439]] : [[-85, -80, 560, 315]]).map(([x, y, w, h], i) => (
         <div key={i} className={st.layer} style={layer({ left: U(x), top: U(y), width: U(w), height: U(h), transform: `translate(${px(-24)}px, ${ty(1.4) + (variant === "open" ? (1 - o) * -50 : 0)}px)`, zIndex: 5 })}>
           <div className={st.sway} style={{ width: "100%", height: "100%" }}>
             <Img src={`${Z}/gulchambar.webp`} />
@@ -493,7 +505,7 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
             <Img src={`${Z}/oval-baxmal.webp`} className={st.contain} />
           </div>
           <Img src={`${Z}/ramka.webp`} className={st.contain} />
-          <div className={st.monogram} style={{ left: 0, right: 0, top: "38%", opacity: 1 - mono, color: "var(--gold-2)" }}>
+          <div className={st.monogram} style={{ left: 0, right: 0, top: "38%", color: "var(--gold-2)" }}>
             <span style={{ fontSize: U(wide ? 80 : 72.5), lineHeight: 0.8 }}>{d.mono[0]}</span>
             {d.mono[1] && (
               <>
@@ -501,11 +513,6 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
                 <span style={{ fontSize: U(wide ? 80 : 72.5), lineHeight: 0.8 }}>{d.mono[1]}</span>
               </>
             )}
-          </div>
-          <div className={st.ovalNames} style={{ left: 0, right: 0, top: "42%", opacity: mono, color: "var(--cream)", gap: U(4) }}>
-            <span style={{ fontSize: U(wide ? 36 : 32), lineHeight: 1, color: "var(--gold-2)" }}>{d.a}</span>
-            {d.b && <span style={{ fontSize: U(wide ? 36 : 32), lineHeight: 1, color: "var(--gold-2)" }}>&amp; {d.b}</span>}
-            <span style={{ fontSize: U(14), fontFamily: "Manrope, sans-serif", fontStyle: "normal", letterSpacing: "0.08em", opacity: 0.85 }}>{d.dots}</span>
           </div>
         </div>
       ) : (

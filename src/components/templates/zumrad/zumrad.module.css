@@ -406,8 +406,10 @@
   --p: 0;
   --o: 0;
   position: relative;
+  z-index: 1;
   width: 100%;
-  overflow: hidden;
+  /* gulchambar Figma’dagidek yuqoridagi bo‘lim ustiga osilib turadi — faqat yon va past kesiladi */
+  clip-path: inset(calc(var(--u) * -320) 0 0 0);
 }
 .layer {
   position: absolute;

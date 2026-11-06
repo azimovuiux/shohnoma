@@ -212,11 +212,11 @@ function MobileMenu({
           </button>
         ) : (
           <Link
-            href="/shablonlar/"
+            href="/kirish/"
             onClick={onClose}
             className="btn btn-primary w-full"
           >
-            Buyurtma berish
+            <ProfileCircle size={18} /> Kirish
           </Link>
         )}
         <div className="flex items-center justify-between">
@@ -368,7 +368,7 @@ function AccountMenu({
 
 export function Header() {
   const router = useRouter();
-  const { me, reload } = useMe();
+  const { me, reload, loading: meLoading } = useMe();
   const user: HeaderUser = me?.user
     ? {
         name: me.user.name,
@@ -433,9 +433,11 @@ export function Header() {
             </a>
             {user ? (
               <AccountMenu user={user} onLogout={logout} />
+            ) : meLoading && !me ? (
+              <span className="ml-1 h-9 w-[104px]" aria-hidden />
             ) : (
-              <Link href="/shablonlar/" className="btn btn-primary btn-sm ml-1">
-                Buyurtma berish
+              <Link href="/kirish/" className="btn btn-primary btn-sm ml-1">
+                <ProfileCircle size={18} /> Kirish
               </Link>
             )}
           </div>
