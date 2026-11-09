@@ -10,7 +10,7 @@ import { getTemplate } from "@/lib/templates";
 import { formatPrice } from "@/lib/format";
 import { useLocale, useT } from "@/lib/i18n";
 
-const payStatus: Record<string, { label: string; tone: Tone }> = {
+export const payStatus: Record<string, { label: string; tone: Tone }> = {
   created: { label: "Yaratildi", tone: "pending" },
   processing: { label: "Jarayonda", tone: "pending" },
   paid: { label: "To‘langan", tone: "success" },

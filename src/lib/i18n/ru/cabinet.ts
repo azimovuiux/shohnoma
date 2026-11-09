@@ -221,4 +221,17 @@ export const ru: Record<string, string> = {
   siyosati: "конфиденциальности",
   Foydalanish: "Условия",
   shartlari: "использования",
+  // To‘lovlar sahifasi, buyurtmalar filtri va o‘chirish
+  "Barcha to‘lovlaringiz, ularning holati va cheklar": "Все ваши платежи, их статус и чеки",
+  "To‘lovlar soni": "Количество платежей",
+  "Tekshirilmoqda / kutilmoqda": "На проверке / в ожидании",
+  "Shablon tanlash": "Выбрать шаблон",
+  "To‘lov kutilmoqda": "Ожидают оплаты",
+  "Ism yoki kod bo‘yicha qidirish": "Поиск по имени или коду",
+  "Bu filtr bo‘yicha buyurtma topilmadi": "По этому фильтру заказов нет",
+  "«{name}» buyurtmasi butunlay o‘chirilsinmi? Kiritilgan ma’lumotlar qaytarilmaydi.": "Удалить заказ «{name}» навсегда? Введённые данные нельзя будет восстановить.",
+  "Buyurtma o‘chirildi": "Заказ удалён",
+  "O‘chirilmoqda…": "Удаление…",
+  "To‘langan taklifnomani o‘chirib bo‘lmaydi": "Оплаченное приглашение удалить нельзя",
+  "To‘lov tekshirilayotgan buyurtmani o‘chirib bo‘lmaydi": "Нельзя удалить заказ, оплата которого проверяется",
 };

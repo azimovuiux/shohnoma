@@ -4,7 +4,7 @@ import Link from "@/components/LocalLink";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { PageLoading, useMe, useRequireUser } from "@/lib/client";
-import { DocumentText, Heart, LogoutCurve, Messages, UserTick } from "@/components/icons";
+import { DocumentText, Heart, LogoutCurve, Messages, Receipt2, UserTick } from "@/components/icons";
 import { site } from "@/lib/site";
 import { formatPhoneDisplay, initials } from "@/lib/display";
 import { currentLocale, lpath, useLpath, useT } from "@/lib/i18n";
@@ -13,6 +13,7 @@ type Props = { name: string | null; phone: string | null; telegramUser: string |
 
 const items = [
   { href: "/kabinet/", label: "Buyurtmalarim", icon: DocumentText, count: "orders" as const },
+  { href: "/kabinet/tolovlar/", label: "To‘lovlar", icon: Receipt2, count: null },
   { href: "/kabinet/sevimlilar/", label: "Sevimlilar", icon: Heart, count: "favorites" as const },
   { href: "/kabinet/profil/", label: "Profil", icon: UserTick, count: null },
 ];

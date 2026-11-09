@@ -219,13 +219,13 @@ function Gate({ d, wide, onReveal, onStart, onGo }: { d: D; wide: boolean; onRev
     };
     const apply = (k: number) => {
       // sahna ichidagi parallaks sticky qismida; keyin sahna butunligicha keyingi bo‘lim bilan birga ketadi
-      el.style.setProperty("--k", `${Math.min(k, H * 0.85).toFixed(1)}px`);
-      el.style.setProperty("--q", clamp01(k / (H * 0.85)).toFixed(4));
+      el.style.setProperty("--k", `${Math.min(k, H * 0.6).toFixed(1)}px`);
+      el.style.setProperty("--q", clamp01(k / (H * 0.6)).toFixed(4));
       if (!started && k > 4) {
         started = true;
         cb.current.onStart();
       }
-      if (!revealed && k > H * 0.6) {
+      if (!revealed && k > H * 0.35) {
         revealed = true;
         cb.current.onReveal();
       }
@@ -1484,7 +1484,7 @@ export function ParvozSite({ template, data, mode, embedded = false }: Invitatio
       <div className={st.page} style={vars({ "--u": wide ? "calc(100cqw / 1440)" : "calc(100cqw / 390)" })}>
         <MusicButton m={music} wide={wide} embedded={embedded} />
         {withGate && !loaderGone && <Loader done={loaded} seal={`${P}/belgi.svg`} />}
-        {withGate && (loaded ? <Gate d={d} wide={wide} onReveal={() => setRevealed(true)} onStart={() => music.play(true)} onGo={goTicket} /> : <div style={{ height: "285svh", marginBottom: "-100svh", width: "100%" }} />)}
+        {withGate && (loaded ? <Gate d={d} wide={wide} onReveal={() => setRevealed(true)} onStart={() => music.play(true)} onGo={goTicket} /> : <div style={{ height: "230svh", marginBottom: "-100svh", width: "100%" }} />)}
         {!withGate && <h1 className="sr-only">{d.names}</h1>}
         <div ref={ticketRef} className="w-full" style={{ position: "relative", zIndex: z("ticket") }}>
           <Ticket d={d} wide={wide} ready={ready} rsvp={data.rsvpEnabled} tail={tail("ticket")} z={z("ticket")} />

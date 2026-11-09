@@ -9,10 +9,11 @@ import { AdminError, AdminLoading, AdminRefreshProvider, AdminTitle, Empty, fmtD
 import { StatusSelect } from "../StatusSelect";
 import { useReloadCounts } from "../AdminShell";
 import { StatusBadge, Toggle, api, useToast } from "@/components/ui";
-import { ExportSquare, SearchNormal1 } from "@/components/icons";
+import { ExportSquare, SearchNormal1, Trash } from "@/components/icons";
 import { formatPrice } from "@/lib/format";
 import { formatPhoneDisplay, orderStatusView, splitDate } from "@/lib/display";
 import { getTemplate } from "@/lib/templates";
+import { useTemplates } from "@/lib/useTemplates";
 
 const PAGE = 30;
 const orderStatuses: OrderStatus[] = ["draft", "pending_payment", "payment_processing", "p2p_review", "p2p_rejected", "payment_failed", "paid", "active", "archived"];
@@ -44,10 +45,13 @@ function OrdersInner() {
   const reloadCounts = useReloadCounts();
   const status = orderStatuses.includes(sp.get("status") as OrderStatus) ? (sp.get("status") as OrderStatus) : undefined;
   const q = (sp.get("q") ?? "").trim();
+  const tpl = (sp.get("tpl") ?? "").trim();
   const page = Math.max(1, Number(sp.get("page")) || 1);
   const api = new URLSearchParams({ page: String(page) });
   if (status) api.set("status", status);
   if (q) api.set("q", q);
+  if (tpl) api.set("tpl", tpl);
+  const tplList = useTemplates();
   const { data, loading, error, reload } = useApi<{ ok: boolean; total: number; items: Row[] }>(`/api/admin/orders?${api}`);
   const rows = (data?.items ?? []).map((r) => ({ order: r.order, inv: r.invitation, owner: r.owner }));
   const n = data?.total ?? 0;
@@ -57,6 +61,7 @@ function OrdersInner() {
     const s = new URLSearchParams();
     if (status) s.set("status", status);
     if (q) s.set("q", q);
+    if (tpl) s.set("tpl", tpl);
     if (p > 1) s.set("page", String(p));
     return `/admin/buyurtmalar/${s.toString() ? `?${s}` : ""}`;
   };
@@ -72,8 +77,10 @@ function OrdersInner() {
           const s = new URLSearchParams();
           const fq = String(f.get("q") ?? "").trim();
           const fs = String(f.get("status") ?? "");
+          const ft = String(f.get("tpl") ?? "");
           if (fq) s.set("q", fq);
           if (fs) s.set("status", fs);
+          if (ft) s.set("tpl", ft);
           router.push(`/admin/buyurtmalar/${s.toString() ? `?${s}` : ""}`);
         }}
       >
@@ -95,9 +102,22 @@ function OrdersInner() {
             </option>
           ))}
         </select>
+        <select key={`t${tpl}`} name="tpl" defaultValue={tpl} className="h-11 rounded-full border border-line bg-bg-base px-4 t-body-m text-ink outline-none">
+          <option value="">Barcha shablonlar</option>
+          {tplList.map((t) => (
+            <option key={t.slug} value={t.slug}>
+              {t.name}
+            </option>
+          ))}
+        </select>
         <button type="submit" className="btn btn-primary btn-sm">
           Qidirish
         </button>
+        {(q || status || tpl) && (
+          <button type="button" onClick={() => router.push("/admin/buyurtmalar/")} className="btn btn-secondary btn-sm">
+            Tozalash
+          </button>
+        )}
       </form>
 
       {loading && !data ? (
@@ -160,6 +180,7 @@ function OrdersInner() {
                         <Link href={`/kabinet/t/${inv.id}/`} className="text-ink-2 hover:text-maroon">
                           Kabinetda ochish
                         </Link>
+                        <DeleteOrder id={order.id} code={order.code} paid={live} onDone={() => (reload(true), reloadCounts())} />
                       </div>
                     </td>
                   </tr>
@@ -216,5 +237,31 @@ function MusicToggle({ orderId, initial }: { orderId: string; initial: boolean }
     <span className={busy ? "pointer-events-none opacity-60" : ""}>
       <Toggle checked={on} onChange={change} label="Fon musiqasi" />
     </span>
+  );
+}
+
+/** Buyurtmani butunlay o‘chirish (taklifnoma, mehmon javoblari, to‘lov yozuvlari bilan) */
+function DeleteOrder({ id, code, paid, onDone }: { id: string; code: string; paid: boolean; onDone: () => void }) {
+  const toast = useToast();
+  const [busy, setBusy] = useState(false);
+  const run = async () => {
+    const warn = paid ? "\n\nDIQQAT: bu to‘langan taklifnoma — mehmonlardagi havola ishlamay qoladi, to‘lov yozuvi ham o‘chadi." : "";
+    if (!window.confirm(`${code} buyurtmasi butunlay o‘chirilsinmi?${warn}`)) return;
+    if (paid && window.prompt(`Tasdiqlash uchun buyurtma kodini yozing: ${code}`)?.trim().toUpperCase() !== code.toUpperCase()) return;
+    setBusy(true);
+    try {
+      await api(`/api/admin/orders/${id}`, { method: "DELETE" });
+      toast(`${code} o‘chirildi`);
+      onDone();
+    } catch (e) {
+      toast((e as Error).message, "error");
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <button type="button" onClick={run} disabled={busy} className="inline-flex items-center gap-1 text-ink-2 hover:text-danger disabled:opacity-50">
+      <Trash size={13} /> {busy ? "O‘chirilmoqda…" : "O‘chirish"}
+    </button>
   );
 }

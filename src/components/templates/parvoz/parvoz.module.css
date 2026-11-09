@@ -290,7 +290,8 @@
   position: relative;
   z-index: 5;
   width: 100%;
-  height: calc(100svh * 2.85);
+  /* parallaks (0.85 ekran) tugashi bilan sahna keyingi bo‘lim bilan birga ketadi — faqat bulut turgan bo‘sh ekran bo‘lmasin */
+  height: calc(100svh * 2.3); /* 1 ekran sahna + 0.6 parallaks + 1 ekran keyingi bo‘lim ostidan chiqishi */
   margin-bottom: calc(100svh * -1);
 }
 .gate {

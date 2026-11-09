@@ -23,6 +23,7 @@ export const RU_TITLES: Record<string, string> = {
   "Chek tasdiqlandi": "Чек подтверждён",
   "Chek tekshirilmoqda": "Чек проверяется",
   "To‘lov": "Оплата",
+  "To‘lovlar": "Платежи",
   "To‘lov qabul qilindi": "Оплата принята",
   "Test to‘lov": "Тестовая оплата",
   "To‘lov o‘tmadi": "Оплата не прошла",

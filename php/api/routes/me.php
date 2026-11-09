@@ -46,6 +46,26 @@ route('GET', '/me/orders', function () {
     json_out(['ok' => true, 'items' => $items]);
 });
 
+/** Buyurtmani butunlay o‘chirish (taklifnoma, mehmon javoblari, to‘lov yozuvlari) */
+function order_purge(string $orderId): void
+{
+    $inv = one('SELECT id FROM invitations WHERE order_id = ?', [$orderId]);
+    if ($inv) q('DELETE FROM guest_responses WHERE invitation_id = ?', [$inv['id']]);
+    q('DELETE FROM invitations WHERE order_id = ?', [$orderId]);
+    q('DELETE FROM payments WHERE order_id = ?', [$orderId]);
+    q('DELETE FROM orders WHERE id = ?', [$orderId]);
+}
+
+/* Mijoz faqat to‘lanmagan buyurtmani o‘chira oladi (to‘langan taklifnoma — mehmonlarda havola bor) */
+route('DELETE', '/me/orders/:id', function ($p) {
+    $u = require_user();
+    $o = one('SELECT * FROM orders WHERE id = ? AND user_id = ?', [$p['id'], $u['id']]) ?? fail('Buyurtma topilmadi', 404);
+    if (in_array($o['status'], ['paid', 'active', 'archived'], true)) fail('To‘langan taklifnomani o‘chirib bo‘lmaydi', 422);
+    if (in_array($o['status'], ['payment_processing', 'p2p_review'], true)) fail('To‘lov tekshirilayotgan buyurtmani o‘chirib bo‘lmaydi', 422);
+    order_purge($o['id']);
+    json_out(['ok' => true]);
+});
+
 route('GET', '/me/payments', function () {
     $u = require_user();
     $rows = all('SELECT p.id AS p_id FROM payments p JOIN orders o ON o.id = p.order_id WHERE o.user_id = ? ORDER BY p.created_at DESC', [$u['id']]);

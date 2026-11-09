@@ -11,6 +11,7 @@ import {
   Whatsapp,
   TickCircle,
   Receipt2,
+  Card,
   Heart,
   ProfileCircle,
   MessageQuestion,
@@ -168,9 +169,10 @@ function MobileMenu({
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {[
               ["/kabinet/", "Buyurtmalar", user.orders],
+              ["/kabinet/tolovlar/", "To‘lovlar", null],
               ["/kabinet/sevimlilar/", "Sevimlilar", user.favorites],
               ["/kabinet/profil/", "Profil", null],
             ].map(([href, label, n]) => (
@@ -324,6 +326,14 @@ function AccountMenu({
           >
             <Heart size={18} /> <span className="flex-1">{t("Sevimlilar")}</span>{" "}
             <span className="t-body-s text-ink-2">{user.favorites}</span>
+          </Link>
+          <Link
+            role="menuitem"
+            href="/kabinet/tolovlar/"
+            className={item}
+            onClick={() => setOpen(false)}
+          >
+            <Card size={18} /> {t("To‘lovlar")}
           </Link>
           <Link
             role="menuitem"

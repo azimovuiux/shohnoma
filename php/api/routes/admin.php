@@ -59,6 +59,8 @@ route('GET', '/admin/orders', function () {
     $args = [];
     $status = $_GET['status'] ?? '';
     if (in_array($status, ORDER_STATUSES, true)) { $where .= ' AND o.status = ?'; $args[] = $status; }
+    $tpl = (string)($_GET['tpl'] ?? '');
+    if ($tpl !== '' && preg_match('/^[a-z0-9-]{2,80}$/', $tpl)) { $where .= ' AND o.template_slug = ?'; $args[] = $tpl; }
     $qtext = trim((string)($_GET['q'] ?? ''));
     if ($qtext !== '') {
         $like = '%' . str_replace(['%', '_'], '', $qtext) . '%';
@@ -92,6 +94,13 @@ route('PATCH', '/admin/orders/:id', function ($p) {
         json_out(['ok' => true]);
     }
     q('UPDATE orders SET status = ? WHERE id = ?', [$status, $o['id']]);
+    json_out(['ok' => true]);
+});
+
+route('DELETE', '/admin/orders/:id', function ($p) {
+    require_admin();
+    $o = one('SELECT id FROM orders WHERE id = ?', [$p['id']]) ?? fail('Buyurtma topilmadi', 404);
+    order_purge($o['id']);
     json_out(['ok' => true]);
 });
 
