@@ -36,8 +36,8 @@ export function EditPage() {
       rows: [
         { icon: <Edit size={16} />, v: inv.message ? `“${inv.message.slice(0, 70)}${inv.message.length > 70 ? "…" : ""}”` : "—" },
         { icon: <Gallery size={16} />, v: t("{n} ta surat", { n: (inv.photos ?? []).length }) },
-        { icon: <Profile2User size={16} />, v: `${t("Mehmonlar javobi")}: ${inv.rsvpEnabled ? t("yoqilgan") : t("o‘chirilgan")}` },
-        { icon: <Music size={16} />, v: `${t("Fon musiqasi")}: ${inv.musicEnabled ? t("yoqilgan") : t("o‘chirilgan")}` },
+        { icon: <Profile2User size={16} />, v: inv.rsvpEnabled ? t("Mehmonlar javobi: yoqilgan") : t("Mehmonlar javobi: o‘chirilgan") },
+        { icon: <Music size={16} />, v: inv.musicEnabled ? t("Fon musiqasi: yoqilgan") : t("Fon musiqasi: o‘chirilgan") },
       ],
     },
   ];

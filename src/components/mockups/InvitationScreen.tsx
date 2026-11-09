@@ -1,9 +1,9 @@
 "use client";
 
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, designSlug } from "@/lib/templates";
+import { ceremonyLabel, designSlug, tplImages } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 import { TemplateArt } from "@/components/invitation/TemplateArt";
 import { HtmlFrame } from "./HtmlFrame";
 
@@ -131,7 +131,7 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
         <span
           style={{ fontSize: u(7.8), color: theme.accent, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: u(8) }}
         >
-          {tt(t.sample.venue)} · {t.sample.time}
+          {t.sample.venue} · {t.sample.time}
         </span>
       </div>
     </div>
@@ -141,7 +141,8 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
 
 export function InvitationScreen({ t }: { t: Template }) {
   const tt = useT();
-  const img = !t.isLive ? t.images?.phone : undefined;
+  const locale = useLocale();
+  const img = !t.isLive ? tplImages(t, locale)?.phone : undefined;
   if (t.kind === "html" && !img) return <HtmlFrame src={t.previewUrl ?? `/api/tpl/${t.slug}/preview?v=${t.version ?? 1}`} baseWidth={390} />;
   if (img) {
     return (
@@ -235,7 +236,7 @@ export function InvitationScreen({ t }: { t: Template }) {
         </span>
         {isEnvelope && (
           <span style={{ fontSize: u(8.6), color: theme.ink, opacity: 0.6, letterSpacing: "0.06em", marginTop: u(22) }}>
-            {tt(t.sample.venue)} · {t.sample.time}
+            {t.sample.venue} · {t.sample.time}
           </span>
         )}
       </div>

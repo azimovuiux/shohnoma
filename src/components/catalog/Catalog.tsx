@@ -3,7 +3,7 @@
 import Link from "@/components/LocalLink";
 import { useSearchParams } from "next/navigation";
 import { useLocalRouter } from "@/lib/useLocalRouter";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 import { useMemo, useState } from "react";
 import { ArrowDown2, ArrowRight, Brush, CloseCircle, Filter, Mobile, SearchNormal1, Card } from "@/components/icons";
 import {
@@ -75,6 +75,7 @@ function Chip({ active, children, onClick }: { active: boolean; children: React.
 
 function CustomDesignBanner() {
   const t = useT();
+  const ru = useLocale() === "ru";
   return (
     <div className="flex flex-col items-start justify-between gap-6 rounded-card bg-maroon p-8 text-ink-inverse md:col-span-2 lg:col-span-3 lg:flex-row lg:items-center lg:px-12 lg:py-10">
       <div className="flex items-center gap-5">
@@ -82,7 +83,7 @@ function CustomDesignBanner() {
           <Brush size={24} />
         </span>
         <p className="font-serif text-[30px] font-light leading-[1.1] lg:text-[38px]">
-          {t("Mos dizayn topilmadimi?")} <em className="italic text-gold-soft">{t("yaratib beramiz")}</em>
+          {t("Mos dizayn topilmadimi?")} <em className="italic text-gold-soft">{ru ? "Мы создадим его для вас" : "yaratib beramiz"}</em>
         </p>
       </div>
       <Link href="/maxsus-dizayn/" className="btn bg-bg-base text-maroon hover:bg-white">

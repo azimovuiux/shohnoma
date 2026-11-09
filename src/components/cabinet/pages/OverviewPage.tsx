@@ -144,7 +144,7 @@ export function OverviewPage() {
             {quick.map((q) => (
               <Link key={q.label} href={q.href} className="flex flex-col gap-2.5 rounded-[14px] bg-bg-soft p-3.5 transition-colors hover:bg-gold-soft">
                 <span className="flex size-[34px] items-center justify-center rounded-full bg-bg-base text-maroon">{q.icon}</span>
-                <span className="text-[13px] font-semibold leading-[1.35] text-ink">{q.label}</span>
+                <span className="text-[13px] font-semibold leading-[1.35] text-ink [overflow-wrap:anywhere] hyphens-auto">{q.label}</span>
               </Link>
             ))}
           </div>

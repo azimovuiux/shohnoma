@@ -3,7 +3,7 @@ import { LocaleProvider } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: {
-    default: "Shohnoma — королевское сайт-приглашение на вашу свадьбу",
+    default: "Shohnoma — королевский сайт-приглашение на ваше торжество",
     template: "%s · Shohnoma",
   },
   description:

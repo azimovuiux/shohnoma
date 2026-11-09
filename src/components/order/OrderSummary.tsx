@@ -37,7 +37,7 @@ export function OrderSummary({
   return (
     <div className="flex flex-col gap-5 rounded-[24px] bg-bg-soft p-6">
       <LiveDevices template={template} live={live} order={order} />
-      <div className="flex items-end justify-between gap-3">
+      <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
         <div className="flex min-w-0 flex-col gap-1">
           <span className="t-body-s text-ink-2">{t("Tanlangan shablon")}</span>
           <span className="font-serif text-[26px] font-medium leading-[1.2] text-ink">{template.name}</span>

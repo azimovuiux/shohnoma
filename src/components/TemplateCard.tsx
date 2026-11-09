@@ -7,7 +7,7 @@ import { ArrowRight, Eye, Heart, MonitorMobbile, PlayCircle, Tag } from "@/compo
 import { GirihPattern } from "./Ornament";
 import { useToast } from "./ui";
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, styleLabel } from "@/lib/templates";
+import { ceremonyLabel, styleLabel, tplImages } from "@/lib/templates";
 import { discountPercent, formatPrice } from "@/lib/format";
 import { LaptopFrame, PhoneFrame } from "./mockups/Devices";
 import { InvitationScreen } from "./mockups/InvitationScreen";
@@ -97,7 +97,8 @@ export function isDarkTheme(t: Template) {
 /** Kartadagi sahna: girih fonida laptop + telefon (Figma 95:11492: 560×380). Uzun rasm bo‘lsa — ekranlar scroll bo‘ladi */
 export function DevicePreview({ t, className = "" }: { t: Template; className?: string }) {
   const shot = useShotActive<HTMLDivElement>();
-  const im = !t.isLive ? t.images : undefined;
+  const locale = useLocale();
+  const im = !t.isLive ? tplImages(t, locale) : undefined;
   const scroll = !!(im?.phoneScroll && im?.laptopScroll && im.phone && im.laptop);
   return (
     <div ref={shot.ref} className={`relative aspect-[560/380] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#efe4d3] to-[#f8f3eb] ${className}`}>

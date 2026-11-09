@@ -65,7 +65,17 @@ export interface Template {
   /** Dizayn asosi — qaysi tayyor dizayn (hero varianti, bezaklar, musiqa) ishlatiladi. Bo‘sh bo‘lsa — slug */
   base?: string;
   /** Mokap rasmlari (Figma eksport yoki admin yuklagan) */
-  images?: { phone?: string; laptop?: string; phoneScroll?: string; laptopScroll?: string };
+  images?: {
+    phone?: string;
+    laptop?: string;
+    phoneScroll?: string;
+    laptopScroll?: string;
+    /** Ruscha sahifalar uchun mokap rasmlari (bo‘lmasa — o‘zbekchasi) */
+    phoneRu?: string;
+    laptopRu?: string;
+    phoneScrollRu?: string;
+    laptopScrollRu?: string;
+  };
   /** Katalogda ko‘rinadimi (admin) */
   active?: boolean;
   /** Mijoz ma’lumotlari bilan to‘ldirilgan nusxa — mokapda rasm emas, jonli chizma */
@@ -177,8 +187,33 @@ export const builtinTemplates: Template[] = builtin.map((t) => ({
     // Kartada scroll bo‘ladigan butun sahifa rasmlari (scripts orqali yoki qo‘lda tayyorlanadi)
     phoneScroll: tplImg(`${t.slug}-phone-long.webp`),
     laptopScroll: tplImg(`${t.slug}-laptop-long.webp`),
+    // Ruscha posterlar (fayl bor bo‘lsa)
+    ...Object.fromEntries(
+      (
+        [
+          ["phoneRu", "phone"],
+          ["laptopRu", "laptop"],
+          ["phoneScrollRu", "phone-long"],
+          ["laptopScrollRu", "laptop-long"],
+        ] as const
+      )
+        .filter(([, f]) => tplImgVersions[`${t.slug}-ru-${f}.webp`])
+        .map(([k, f]) => [k, tplImg(`${t.slug}-ru-${f}.webp`)]),
+    ),
   },
 }));
+
+/** Joriy tilga mos mokap rasmlari: ruschada *Ru variantlari bo‘lsa — o‘shalar */
+export function tplImages(t: Pick<Template, "images">, locale: "uz" | "ru") {
+  const im = t.images;
+  if (!im || locale !== "ru") return im;
+  return {
+    phone: im.phoneRu ?? im.phone,
+    laptop: im.laptopRu ?? im.laptop,
+    phoneScroll: im.phoneScrollRu ?? im.phoneScroll,
+    laptopScroll: im.laptopScrollRu ?? im.laptopScroll,
+  };
+}
 export const builtinSlugs = builtinTemplates.map((t) => t.slug);
 
 declare global {

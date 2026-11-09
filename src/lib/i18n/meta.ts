@@ -44,6 +44,8 @@ export const RU_DESCRIPTIONS: Record<string, string> = {
 export function ruMeta(m: Metadata | undefined, path: string): Metadata {
   const out: Metadata = { ...(m ?? {}) };
   if (typeof out.title === "string") out.title = RU_TITLES[out.title] ?? out.title;
+  // Bosh sahifa: sarlavha to‘liq (shablon «· Shohnoma» qo‘shilmasin)
+  if (path === "/" && !out.title) out.title = { absolute: "Shohnoma — королевский сайт-приглашение на ваше торжество" };
   if (typeof out.description === "string") out.description = RU_DESCRIPTIONS[out.description] ?? out.description;
   out.alternates = { canonical: `/ru${path}`, languages: { uz: path, ru: `/ru${path}` } };
   return out;

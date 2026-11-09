@@ -464,3 +464,8 @@ html.js [data-reveal="stagger"].is-done > [data-split] > * {
     transform: translateY(0);
   }
 }
+
+/* Ruscha so‘zlar uzunroq: bitta so‘z qatorga sig‘masa — chetdan chiqmasdan ko‘chadi */
+html[lang="ru"] :where(p, li, dd, dt, label, td, th, h1, h2, h3, h4) {
+  overflow-wrap: break-word;
+}

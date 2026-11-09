@@ -1,9 +1,9 @@
 "use client";
 
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, designSlug } from "@/lib/templates";
+import { ceremonyLabel, designSlug, tplImages } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 import { TemplateArt } from "@/components/invitation/TemplateArt";
 import { HtmlFrame } from "./HtmlFrame";
 
@@ -13,7 +13,8 @@ const u = (px: number) => `${((px / 1280) * 100).toFixed(3)}cqw`;
 
 export function InvitationDesktop({ t }: { t: Template }) {
   const tt = useT();
-  const img = !t.isLive ? t.images?.laptop : undefined;
+  const locale = useLocale();
+  const img = !t.isLive ? tplImages(t, locale)?.laptop : undefined;
   if (t.kind === "html" && !img) return <HtmlFrame src={t.previewUrl ?? `/api/tpl/${t.slug}/preview?v=${t.version ?? 1}`} baseWidth={1280} />;
   if (img) {
     return (
@@ -65,7 +66,7 @@ export function InvitationDesktop({ t }: { t: Template }) {
           {t.sample.date}
         </span>
         <span style={{ fontSize: u(15), color: theme.ink, opacity: 0.7, letterSpacing: "0.12em", marginTop: u(14), textTransform: "uppercase" }}>
-          {tt(t.sample.venue)} · {t.sample.time}
+          {t.sample.venue} · {t.sample.time}
         </span>
         <span
           className="rounded-full"

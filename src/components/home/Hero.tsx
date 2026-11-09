@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "@/components/LocalLink";
+import "@fontsource/great-vibes/cyrillic-400.css";
+import "@fontsource/great-vibes/latin-400.css";
 import { useLocale, useT } from "@/lib/i18n";
 import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight } from "@/components/icons";
@@ -58,26 +60,31 @@ function Img({ src, className = "", fit = "cover" }: { src: string; className?: 
 }
 
 /** Qog‘oz taklifnoma (Figma «Qog‘oz taklifnoma», 420×580) */
+/** Qo‘lyozma so‘zlar: Pinyon Script’da kirill harflari yo‘q — ruschada Great Vibes */
+const SCRIPT_RU = "font-['Great_Vibes',cursive]";
+
 function Paper() {
   const t = useT();
+  const ru = useLocale() === "ru";
+  const script = ru ? SCRIPT_RU : "font-script";
   return (
     <div className="flex size-full items-center justify-center border border-[#e9dcc6] bg-[#fffdf8] shadow-[0_30px_60px_rgba(77,46,26,0.2)]" style={{ paddingInline: u(40) }}>
       <div className="flex w-full flex-col items-center border border-[#d9b97a]/70 text-center" style={{ height: u(398), paddingTop: u(44), gap: u(6) }}>
         <span className="font-cormorant font-light italic leading-tight text-gold" style={{ fontSize: u(22) }}>
           {t("Nikoh to‘yi")}
         </span>
-        <span className="font-script leading-[1.15] text-maroon" style={{ fontSize: u(62) }}>
-          Taklifnoma
+        <span className={`${script} whitespace-nowrap leading-[1.15] text-maroon`} style={{ fontSize: u(ru ? 50 : 62) }}>
+          {ru ? "Приглашение" : "Taklifnoma"}
         </span>
         <span className="bg-[#d9b97a]" style={{ width: u(56), height: 1 }} />
-        <span className="font-script leading-[1.1] text-ink" style={{ fontSize: u(46) }}>
-          Jasur
+        <span className={`${script} leading-[1.1] text-ink`} style={{ fontSize: u(46) }}>
+          {ru ? "Жасур" : "Jasur"}
         </span>
         <span className="font-cormorant font-light italic leading-tight text-gold" style={{ fontSize: u(20) }}>
           {t("va")}
         </span>
-        <span className="font-script leading-[1.1] text-ink" style={{ fontSize: u(46) }}>
-          Madina
+        <span className={`${script} leading-[1.1] text-ink`} style={{ fontSize: u(46) }}>
+          {ru ? "Мадина" : "Madina"}
         </span>
         <span className="font-cinzel text-maroon" style={{ fontSize: u(15), letterSpacing: "0.22em" }}>
           12 · 09 · 2026
@@ -93,6 +100,7 @@ function Paper() {
 /** Qo‘ldagi telefon ekrani (Figma «Ekran — Bordo maktub», 188.55×394) */
 function PhoneScreen() {
   const t = useT();
+  const ru = useLocale() === "ru";
   return (
     <div
       className="absolute flex flex-col items-center bg-maroon text-center"
@@ -101,8 +109,8 @@ function PhoneScreen() {
       <span className="font-cormorant font-light italic leading-tight text-[#d9b97a]" style={{ fontSize: u(13) }}>
         {t("Nikoh to‘yi")}
       </span>
-      <span className="font-script leading-[1.2] text-[#fbf7f1]" style={{ fontSize: u(22) }}>
-        Jasur &amp; Madina
+      <span className={`${ru ? SCRIPT_RU : "font-script"} leading-[1.2] text-[#fbf7f1]`} style={{ fontSize: u(22) }}>
+        {ru ? "Жасур & Мадина" : "Jasur & Madina"}
       </span>
       <span className="font-cinzel text-[#d9b97a]" style={{ fontSize: u(9), letterSpacing: "0.18em" }}>
         12 · 09 · 2026
@@ -184,7 +192,7 @@ export function Hero() {
           <h1
             data-split
             className={`flex flex-col font-serif font-normal leading-[0.9] tracking-[-0.02em] text-ink ${
-              locale === "ru" ? "text-[42px] sm:text-[60px] lg:text-[5.35cqw] lg:[&>*]:whitespace-nowrap" : "text-[48px] sm:text-[72px] lg:text-[7.0833cqw]"
+              locale === "ru" ? "text-[42px] sm:text-[60px] lg:text-[4.75cqw] lg:[&>*]:whitespace-nowrap" : "text-[48px] sm:text-[72px] lg:text-[7.0833cqw]"
             }`}
           >
             <span>{t("Har bir to‘y —")}</span>

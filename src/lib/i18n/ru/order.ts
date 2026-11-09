@@ -34,7 +34,7 @@ export const ru: Record<string, string> = {
   // Buyurtma xulosasi (OrderSummary)
   "Tanlangan shablon": "Выбранный шаблон",
   "Jonli ko‘rinish": "Живой просмотр",
-  Jonli: "Живой",
+  Jonli: "Превью",
   Jami: "Итого",
   "Savolingiz bormi? Telegramda yozing": "Есть вопросы? Напишите в Telegram",
   Ismlar: "Имена",

@@ -14,9 +14,9 @@ export function LegalPage({ title, italic, updated, children }: { title: string;
         <ArrowLeft size={16} /> {t("Bosh sahifa")}
       </Link>
       <article className="mx-auto mt-8 max-w-[760px]">
-        <h1 className="flex flex-col font-serif font-light">
-          <span className="text-[38px] leading-[1.04] text-ink lg:text-[52px]">{t(title)}</span>
-          <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{t(italic)}</em>
+        <h1 className="flex flex-col font-serif font-light [overflow-wrap:anywhere] hyphens-auto">
+          <span className="text-[34px] leading-[1.04] text-ink sm:text-[38px] lg:text-[52px]">{t(title)}</span>
+          <em className="text-[36px] italic leading-none text-maroon sm:text-[42px] lg:text-[64px]">{t(italic)}</em>
         </h1>
         <p className="mt-4 t-body-s text-ink-2">{t("Oxirgi yangilanish: {date}", { date: t(updated) })}</p>
         <p className="mt-6 flex items-start gap-2.5 rounded-xl px-4 py-3 t-body-s text-pending" style={{ background: "var(--pending-bg)" }}>

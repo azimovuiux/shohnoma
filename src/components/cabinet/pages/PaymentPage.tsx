@@ -59,7 +59,7 @@ export function PaymentPage() {
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">
                   <Receipt2 size={18} />
                 </span>
-                <div className="flex min-w-0 flex-1 flex-col">
+                <div className="flex min-w-[150px] flex-1 flex-col">
                   <span className="t-title text-ink">{tr(providerLabel[p.provider] ?? p.provider)}</span>
                   <span className="t-body-s text-ink-2">{dateTimeTk(p.paidAt ?? p.createdAt)}</span>
                   {p.status === "rejected" && p.reviewNote && <span className="t-body-s text-danger">{tr("Sabab:")} {p.reviewNote}</span>}
