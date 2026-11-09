@@ -167,9 +167,9 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
             </span>
           </div>
         </div>
-        <div className="flex flex-col items-end gap-0.5">
-          {off > 0 && <s className="text-[13px] leading-[1.5] text-ink-2">{formatPrice(t.priceOld)}</s>}
+        <div className="flex items-baseline gap-2.5">
           <span className="font-serif text-[26px] font-medium leading-[1.2] text-maroon lg:text-[30px]">{formatPrice(t.price)}</span>
+          {off > 0 && <s className="whitespace-nowrap text-[13px] leading-[1.5] text-ink-2">{formatPrice(t.priceOld)}</s>}
         </div>
       </div>
 
