@@ -164,12 +164,6 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
             <span className="inline-flex items-center gap-1.5">
               <MonitorMobbile size={14} /> {tt("Telefon va laptop")}
             </span>
-            <span className="size-[3px] rounded-full bg-ink-2" />
-            <span className="flex" aria-label={tt("Ranglar")}>
-              {t.palette.slice(0, 3).map((c, i) => (
-                <span key={c} className="size-3.5 rounded-full ring-2 ring-bg-base" style={{ background: c, marginLeft: i ? -4 : 0 }} />
-              ))}
-            </span>
           </div>
         </div>
         <div className="flex items-baseline gap-2.5">

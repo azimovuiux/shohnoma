@@ -149,15 +149,6 @@ export function QuickView({
           <p className="t-body-m text-ink-2">{(locale === "ru" && t.descriptionRu) || t.description}</p>
 
           <div className="flex flex-col gap-2.5">
-            <p className="t-title text-ink">{tt("Ranglar")}</p>
-            <div className="flex gap-2">
-              {t.palette.map((c) => (
-                <span key={c} title={c} className="size-7 rounded-full border border-line" style={{ background: c }} />
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2.5">
             <p className="t-title text-ink">{tt("Saytda nimalar bor")}</p>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
               {templateFeatures.map((f) => (

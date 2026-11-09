@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
-import { builtinTemplates, ceremonyLabel, colorLabel, styleLabel, type Ceremony, type Style, type Template, type TemplateTheme } from "@/lib/templates";
+import { builtinTemplates, ceremonyLabel, styleLabel, type Ceremony, type Style, type Template } from "@/lib/templates";
 import { Field, Input, Textarea, Toggle, api, useToast } from "@/components/ui";
 import { ArrowLeft, DocumentUpload, Pause, Play, Trash } from "@/components/icons";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
@@ -57,16 +57,6 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function ColorField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
-  return (
-    <Field label={label}>
-      <span className="flex items-center gap-2">
-        <input type="color" value={/^#[0-9a-f]{6}$/i.test(value) ? value : "#000000"} onChange={(e) => onChange(e.target.value)} className="h-12 w-12 shrink-0 cursor-pointer rounded-input border border-line bg-bg-base p-1" />
-        <Input value={value} onChange={(e) => onChange(e.target.value.trim())} maxLength={7} className="font-mono" />
-      </span>
-    </Field>
-  );
-}
 
 function ImageField({ label, hint, value, kind, onChange }: { label: string; hint: string; value?: string; kind: "phone" | "laptop"; onChange: (v: string | undefined) => void }) {
   const ref = useRef<HTMLInputElement>(null);
@@ -141,7 +131,6 @@ export function AdminTemplateEdit() {
   if (!t) return <AdminLoading />;
 
   const set = (patch: Partial<Template>) => setT((p) => (p ? { ...p, ...patch } : p));
-  const setTheme = (patch: Partial<TemplateTheme>) => setT((p) => (p ? { ...p, theme: { ...p.theme, ...patch } } : p));
   const setSample = (patch: Partial<Template["sample"]>) => setT((p) => (p ? { ...p, sample: { ...p.sample, ...patch } } : p));
   const isNew = !editSlug;
 
@@ -283,22 +272,13 @@ export function AdminTemplateEdit() {
                   </ul>
                 )}
               </div>
-              <Field label="Rang guruhi (katalog filtri)">
-                <select className={selectClass} value={t.theme.color} onChange={(e) => setTheme({ color: e.target.value as TemplateTheme["color"] })}>
-                  {Object.entries(colorLabel).map(([v, l]) => (
-                    <option key={v} value={v}>
-                      {l}
-                    </option>
-                  ))}
-                </select>
-              </Field>
               <ZipUpload open={zipOpen} onClose={() => (setZipOpen(false), zipDone.current && location.reload())} replace={t.slug} onDone={() => (zipDone.current = true)} />
             </Section>
           )}
 
           {t.kind !== "html" && (
           <Section title="Dizayn">
-            <Field label="Dizayn asosi" hint="Mehmon sahifasidagi bezaklar, kirish bloki va musiqa shu dizayndan olinadi; ranglar quyidagidan.">
+            <Field label="Dizayn asosi" hint="Mehmon sahifasi qaysi tayyor dizayn (animatsiya, bezaklar, ranglar) asosida ochilishi.">
               <select className={selectClass} value={t.base ?? ""} onChange={(e) => set({ base: e.target.value })}>
                 {builtinTemplates.map((b) => (
                   <option key={b.slug} value={b.slug}>
@@ -307,48 +287,6 @@ export function AdminTemplateEdit() {
                 ))}
               </select>
             </Field>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <ColorField label="Fon (yuqori)" value={t.theme.bg[0]} onChange={(v) => setTheme({ bg: [v, t.theme.bg[1]] })} />
-              <ColorField label="Fon (pastki)" value={t.theme.bg[1]} onChange={(v) => setTheme({ bg: [t.theme.bg[0], v] })} />
-              <ColorField label="Asosiy matn" value={t.theme.ink} onChange={(v) => setTheme({ ink: v })} />
-              <ColorField label="Urg‘u (ismlar, tugma)" value={t.theme.accent} onChange={(v) => setTheme({ accent: v })} />
-              <ColorField label="Ikkilamchi matn" value={t.theme.soft} onChange={(v) => setTheme({ soft: v })} />
-              <Field label="Sarlavha shrifti">
-                <select className={selectClass} value={t.theme.script} onChange={(e) => setTheme({ script: e.target.value as TemplateTheme["script"] })}>
-                  <option value="pinyon">Pinyon Script (yozma)</option>
-                  <option value="cinzel">Cinzel (bosma, klassik)</option>
-                  <option value="cormorant">Cormorant (nafis serif)</option>
-                </select>
-              </Field>
-              <Field label="Rang guruhi (katalog filtri)">
-                <select className={selectClass} value={t.theme.color} onChange={(e) => setTheme({ color: e.target.value as TemplateTheme["color"] })}>
-                  {Object.entries(colorLabel).map(([v, l]) => (
-                    <option key={v} value={v}>
-                      {l}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-            </div>
-            <div className="flex flex-col gap-2">
-              <span className="t-body-s text-ink-2">Kartadagi rang nuqtalari</span>
-              <div className="flex flex-wrap gap-3">
-                {[0, 1, 2].map((i) => (
-                  <input
-                    key={i}
-                    type="color"
-                    value={t.palette[i] ?? "#ffffff"}
-                    onChange={(e) => {
-                      const p = [...t.palette];
-                      p[i] = e.target.value;
-                      set({ palette: p.map((c) => c ?? "#ffffff") });
-                    }}
-                    className="h-10 w-14 cursor-pointer rounded-lg border border-line bg-bg-base p-1"
-                    aria-label={`Palitra ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
           </Section>
 
           )}
@@ -361,7 +299,7 @@ export function AdminTemplateEdit() {
           </Section>
 
           <Section title="Mokap rasmlari">
-            <p className="t-body-s text-ink-2">Katalog kartasida telefon va laptop ichida ko‘rinadi. Yuklanmasa — tanlangan ranglar bilan avtomatik chiziladi.</p>
+            <p className="t-body-s text-ink-2">Katalog kartasida telefon va laptop ichida ko‘rinadi. Yuklanmasa — avtomatik chizilgan namuna ko‘rinadi.</p>
             <div className="grid gap-5 sm:grid-cols-2">
               <ImageField label="Telefon ekrani" hint="Tavsiya: 600×1300, WEBP/PNG/JPG" kind="phone" value={t.images?.phone} onChange={(v) => set({ images: { ...t.images, phone: v } })} />
               <ImageField label="Laptop ekrani" hint="Tavsiya: 1280×800" kind="laptop" value={t.images?.laptop} onChange={(v) => set({ images: { ...t.images, laptop: v } })} />

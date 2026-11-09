@@ -9,11 +9,9 @@ import { ArrowDown2, ArrowRight, Brush, CloseCircle, Filter, Mobile, SearchNorma
 import {
   ceremonyLabel,
   styleLabel,
-  colorLabel,
   type Ceremony,
   type Style,
   type Template,
-  type TemplateTheme,
 } from "@/lib/templates";
 import { useTemplates } from "@/lib/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
@@ -25,7 +23,6 @@ const sortLabel: Record<Sort, string> = { new: "Yangilari", cheap: "Arzonroq", e
 
 const ceremonies = Object.keys(ceremonyLabel) as Ceremony[];
 const styles = Object.keys(styleLabel) as Style[];
-const colors = Object.keys(colorLabel) as TemplateTheme["color"][];
 
 function Select<T extends string>({
   label,
@@ -99,7 +96,6 @@ export function Catalog() {
   const params = useSearchParams();
   const ceremony = (params.get("marosim") as Ceremony | null) ?? "";
   const style = (params.get("uslub") as Style | null) ?? "";
-  const color = (params.get("rang") as TemplateTheme["color"] | null) ?? "";
   const sort = ((params.get("sort") as Sort | null) ?? "new") as Sort;
   const [q, setQ] = useState(params.get("q") ?? "");
   const templates = useTemplates();
@@ -121,7 +117,6 @@ export function Catalog() {
       (t) =>
         (!ceremony || t.ceremony === ceremony) &&
         (!style || t.style === style) &&
-        (!color || t.theme.color === color) &&
         (!needle ||
           t.name.toLocaleLowerCase("uz").includes(needle) ||
           styleLabel[t.style].toLocaleLowerCase("uz").includes(needle) ||
@@ -133,7 +128,7 @@ export function Catalog() {
     else if (sort === "expensive") list.sort((a, b) => b.price - a.price);
     else list.sort((a, b) => b.number - a.number);
     return list;
-  }, [templates, ceremony, style, color, q, sort, tt]);
+  }, [templates, ceremony, style, q, sort, tt]);
 
   const clearAll = () => {
     setQ("");
@@ -187,7 +182,6 @@ export function Catalog() {
         </div>
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <Select label={tt("Uslub")} value={style} options={styles.map((s) => ({ value: s, label: tt(styleLabel[s]) }))} onChange={(v) => setParam("uslub", v)} />
-          <Select label={tt("Rang")} value={color} options={colors.map((c) => ({ value: c, label: tt(colorLabel[c]) }))} onChange={(v) => setParam("rang", v)} />
           <Select
             label={tt("Saralash")}
             value={sort}
@@ -260,11 +254,10 @@ export function Catalog() {
         <FilterSheet
           ceremony={ceremony}
           style={style}
-          color={color}
           onClose={() => setSheet(false)}
           onApply={(next) => {
             const sp = new URLSearchParams(params.toString());
-            (["marosim", "uslub", "rang"] as const).forEach((k) => (next[k] ? sp.set(k, next[k]) : sp.delete(k)));
+            (["marosim", "uslub"] as const).forEach((k) => (next[k] ? sp.set(k, next[k]) : sp.delete(k)));
             router.replace(`/shablonlar/${sp.toString() ? `?${sp}` : ""}`, { scroll: false });
             setSheet(false);
           }}
@@ -277,21 +270,19 @@ export function Catalog() {
 function FilterSheet({
   ceremony,
   style,
-  color,
   onClose,
   onApply,
 }: {
   ceremony: Ceremony | "";
   style: Style | "";
-  color: TemplateTheme["color"] | "";
   onClose: () => void;
-  onApply: (v: { marosim: string; uslub: string; rang: string }) => void;
+  onApply: (v: { marosim: string; uslub: string }) => void;
 }) {
   const templates = useTemplates();
   const tt = useT();
-  const [v, setV] = useState({ marosim: ceremony as string, uslub: style as string, rang: color as string });
+  const [v, setV] = useState({ marosim: ceremony as string, uslub: style as string });
   const count = templates.filter(
-    (t) => (!v.marosim || t.ceremony === v.marosim) && (!v.uslub || t.style === v.uslub) && (!v.rang || t.theme.color === v.rang),
+    (t) => (!v.marosim || t.ceremony === v.marosim) && (!v.uslub || t.style === v.uslub),
   ).length;
 
   const group = (title: string, key: keyof typeof v, items: { value: string; label: string }[]) => (
@@ -325,9 +316,8 @@ function FilterSheet({
         </div>
         {group(tt("Marosim"), "marosim", ceremonies.map((c) => ({ value: c, label: tt(ceremonyLabel[c]) })))}
         {group(tt("Uslub"), "uslub", styles.map((s) => ({ value: s, label: tt(styleLabel[s]) })))}
-        {group(tt("Asosiy rang"), "rang", colors.map((c) => ({ value: c, label: tt(colorLabel[c]) })))}
         <div className="flex gap-2.5 pt-2">
-          <button type="button" className="btn btn-secondary flex-1" onClick={() => setV({ marosim: "", uslub: "", rang: "" })}>
+          <button type="button" className="btn btn-secondary flex-1" onClick={() => setV({ marosim: "", uslub: "" })}>
             {tt("Tozalash")}
           </button>
           <button type="button" className="btn btn-primary flex-[1.6]" onClick={() => onApply(v)}>

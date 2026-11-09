@@ -55,15 +55,6 @@ export function TemplateDetail({ t }: { t: Template }) {
           </ul>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <p className="t-title text-ink">{tt("Ranglar")}</p>
-          <div className="flex gap-2">
-            {t.palette.map((c) => (
-              <span key={c} title={c} className="size-8 rounded-full border border-line" style={{ background: c }} />
-            ))}
-          </div>
-        </div>
-
         <div className="flex flex-col gap-1 rounded-panel border border-line p-5">
           <span className="t-body-s text-ink-2">{tt("Narxi")}</span>
           <div className="flex items-baseline gap-3">
