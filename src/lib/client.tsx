@@ -127,6 +127,7 @@ export type SiteConfig = {
   providers: ("payme" | "click" | "google_pay" | "p2p")[];
   p2p: { card: string; holder: string; bank: string };
   telegramBot: string | null;
+  gaId?: string | null;
   sandbox: boolean;
   siteUrl: string;
 };

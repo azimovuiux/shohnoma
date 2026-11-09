@@ -76,6 +76,13 @@ export function AdminSettings() {
             save={save}
           />
           <FieldsCard
+            title="Google Analytics"
+            sub="GA4 Measurement ID (Google Analytics → Admin → Data streams → Web). Kiritilsa — sayt sahifalarida Google Analytics ishlay boshlaydi (admin paneldan tashqari). Bo‘sh qoldirilsa — o‘chadi."
+            fields={[["GA_MEASUREMENT_ID", "Measurement ID", "G-XXXXXXXXXX"]]}
+            data={data}
+            save={save}
+          />
+          <FieldsCard
             title="Payme"
             sub="Payme Business kabinetidagi kassa ma’lumotlari. Ikkalasi to‘ldirilsa — Payme to‘lov usuli yoqiladi."
             fields={[

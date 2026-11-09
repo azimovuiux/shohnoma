@@ -38,6 +38,7 @@ const SETTING_KEYS = [
     'P2P_CARD', 'P2P_HOLDER', 'P2P_BANK',
     'PAYME_MERCHANT_ID', 'PAYME_KEY',
     'CLICK_SERVICE_ID', 'CLICK_MERCHANT_ID', 'CLICK_SECRET_KEY', 'CLICK_MERCHANT_USER_ID',
+    'GA_MEASUREMENT_ID',
 ];
 
 function db_settings(bool $fresh = false): array
