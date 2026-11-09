@@ -197,7 +197,15 @@ export function Hero() {
           >
             <span>{t("Har bir to‘y —")}</span>
             <span>{t("o‘z hikoyasi.")}</span>
-            <em className="italic text-maroon">{t("Taklifnomasi ham.")}</em>
+            {locale === "ru" ? (
+              // ruschada «тоже.» alohida qatorda
+              <>
+                <em className="italic text-maroon">И приглашение</em>
+                <em className="italic text-maroon">тоже.</em>
+              </>
+            ) : (
+              <em className="italic text-maroon">{t("Taklifnomasi ham.")}</em>
+            )}
           </h1>
           <p className="mt-[26px] max-w-[460px] font-sans text-[16px] leading-[1.6] text-ink-2 lg:mt-[1.8cqw] lg:max-w-[max(400px,31.94cqw)] lg:text-[max(15px,1.25cqw)]">
             {t("Tayyor dizayn asosida 2 daqiqada yaratiladigan taklifnoma sayti. Bitta havolada — vaqt, xarita, musiqa va mehmonlar javobi.")}
