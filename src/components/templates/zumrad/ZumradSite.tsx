@@ -987,8 +987,8 @@ export function ZumradSite({ template, data, mode, embedded = false }: Invitatio
   const root = useRef<HTMLDivElement>(null);
   const wide = useWide(root);
   const d = useData({ template, data, mode });
-  const withGate = !embedded && mode !== "preview";
-  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && mode !== "preview");
+  const withGate = !embedded;
+  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && !embedded);
   const [revealed, setRevealed] = useState(!withGate);
   const ready = revealed;
   const sfx = wide ? "l" : "m";

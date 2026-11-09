@@ -6,9 +6,11 @@ import { isPaidStatus, type Invitation, type Order, type Payment, type Stats } f
 import { useSiteUrl } from "../data";
 import { Add, ArrowRight, Clock, Edit, Gallery, Profile2User, SearchNormal1, Trash } from "@/components/icons";
 import { StatusBadge, api, confirmDialog, useToast } from "@/components/ui";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { OrderStatus } from "@/lib/types";
 import { InvitationThumb } from "../InvitationThumb";
+import { LiveDevices } from "@/components/order/LiveDevices";
+import { toFlowOrder } from "@/components/order/FlowGate";
 import { CopyLink, ShareButton } from "../LinkActions";
 import { getTemplate, ceremonyLabel, type Ceremony } from "@/lib/templates";
 import { orderStatusView, splitDate } from "@/lib/display";
@@ -120,7 +122,7 @@ export function OrdersPage() {
           </Link>
         </div>
       ) : (
-        list.map(({ order, invitation: inv, stats }) => {
+        list.map(({ order, invitation: inv, stats, payment }) => {
           const t = getTemplate(order.templateSlug);
           const d = splitDate(inv.date);
           const paid = isPaidStatus(order.status);
@@ -130,8 +132,8 @@ export function OrdersPage() {
           const meta = [t?.name, tr(ceremonyLabel[inv.ceremony as Ceremony] ?? ""), d ? `${d.day}${paid && d.time ? `, ${d.time}` : ""}` : null].filter(Boolean).join(" · ");
           return (
             <article key={order.id} className="flex flex-col gap-5 rounded-card border border-line bg-bg-base p-4 sm:flex-row sm:gap-6 sm:p-5">
-              <div className="flex gap-4 sm:contents">
-                <InvitationThumb templateSlug={order.templateSlug} inv={inv} className="w-[88px] sm:w-[112px]" />
+              <div className="flex flex-col gap-4 sm:contents">
+                <OrderMockup order={order} inv={inv} payment={payment} />
                 <div className="flex min-w-0 flex-1 flex-col items-start gap-2.5">
                   <StatusBadge tone={view.tone} dot>
                     {tr(view.label)}
@@ -209,5 +211,17 @@ export function OrdersPage() {
         })
       )}
     </>
+  );
+}
+
+/** Kartadagi ko‘rinish: buyurtma sahifasidagi kabi laptop + telefon, mijozning o‘z ma’lumotlari bilan */
+function OrderMockup({ order, inv, payment }: { order: Order; inv: Invitation; payment: Payment | null }) {
+  const tpl = getTemplate(order.templateSlug);
+  const fo = useMemo(() => toFlowOrder({ ok: true, order, invitation: inv, payment, missing: [] }), [order, inv, payment]);
+  if (!tpl) return <InvitationThumb templateSlug={order.templateSlug} inv={inv} className="w-[88px] sm:w-[112px]" />;
+  return (
+    <div className="w-full shrink-0 sm:w-[280px] lg:w-[320px]">
+      <LiveDevices template={tpl} live={tpl} order={fo} />
+    </div>
   );
 }

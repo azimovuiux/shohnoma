@@ -86,6 +86,16 @@ route('PATCH', '/admin/orders/:id', function ($p) {
         q('UPDATE invitations SET music_enabled = ? WHERE order_id = ?', [$b['musicEnabled'] ? 1 : 0, $o['id']]);
         json_out(['ok' => true]);
     }
+    // Narxni o‘zgartirish — faqat hali to‘lanmagan va to‘lov jarayonida bo‘lmagan buyurtmada
+    if (array_key_exists('amount', $b)) {
+        $o = one('SELECT id, status FROM orders WHERE id = ?', [$p['id']]) ?? fail('Buyurtma topilmadi', 404);
+        if (!in_array($o['status'], ['draft', 'pending_payment', 'payment_failed', 'p2p_rejected'], true))
+            fail('To‘langan yoki to‘lov jarayonidagi buyurtma narxini o‘zgartirib bo‘lmaydi', 409);
+        $amount = filter_var($b['amount'], FILTER_VALIDATE_INT);
+        if ($amount === false || $amount < 1000 || $amount > 100000000) fail('Narx 1 000 so‘mdan 100 000 000 so‘mgacha bo‘lishi kerak');
+        q('UPDATE orders SET amount = ? WHERE id = ?', [$amount, $o['id']]);
+        json_out(['ok' => true, 'amount' => $amount]);
+    }
     $status = $b['status'] ?? '';
     if (!in_array($status, ORDER_STATUSES, true)) fail('Holat noto‘g‘ri');
     $o = one('SELECT * FROM orders WHERE id = ?', [$p['id']]) ?? fail('Buyurtma topilmadi', 404);

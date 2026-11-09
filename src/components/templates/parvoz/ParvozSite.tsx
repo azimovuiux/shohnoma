@@ -191,14 +191,15 @@ const PlaneIcon = ({ size, color, rot = 90, style }: { size: string; color: stri
 const Cloud = ({ small, flip, opacity }: { small?: boolean; flip?: boolean; opacity?: number }) => <Img src={`${P}/${small ? "bulutlar" : "bulut"}.webp`} className={flip ? st.flipX : undefined} style={{ opacity }} />;
 
 /* ═════════════ 00 · Osmon sahnasi (scroll bilan) ═════════════ */
-function Gate({ d, wide, onReveal, onStart, onGo }: { d: D; wide: boolean; onReveal: () => void; onStart: () => void; onGo: () => void }) {
+/** still — mokap ichida (embedded): scroll’siz, birinchi kadr, ekran balandligi px da */
+function Gate({ d, wide, onReveal, onStart, onGo, still = false }: { d: D; wide: boolean; onReveal: () => void; onStart: () => void; onGo: () => void; still?: boolean }) {
   const t = useT();
   const wrap = useRef<HTMLDivElement>(null);
   const cb = useRef({ onReveal, onStart });
   cb.current = { onReveal, onStart };
   useEffect(() => {
     const el = wrap.current;
-    if (!el) return;
+    if (!el || still) return;
     let raf = 0;
     let cur = 0;
     let target = 0;
@@ -248,7 +249,7 @@ function Gate({ d, wide, onReveal, onStart, onGo }: { d: D; wide: boolean; onRev
       window.removeEventListener("resize", on);
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [still]);
 
   const W = wide ? 1440 : 390;
   // sahna koordinatasi: gorizontal markazdan
@@ -269,8 +270,12 @@ function Gate({ d, wide, onReveal, onStart, onGo }: { d: D; wide: boolean; onRev
 
   return (
     // Ochilish sahnasi bir ekranga sig‘adi: kenglik va balandlikdan kichigiga moslanadi
-    <div ref={wrap} className={st.gateWrap} style={vars({ "--u": wide ? "min(calc(100cqw / 1440), calc(100svh / 900))" : "min(calc(100cqw / 390), calc(100svh / 760))" })}>
-      <div className={st.gate} aria-label={t("Taklifnoma")}>
+    <div
+      ref={wrap}
+      className={st.gateWrap}
+      style={vars(still ? { "--u": `calc(100cqw / ${W})`, height: U(wide ? 900 : 815), marginBottom: 0 } : { "--u": wide ? "min(calc(100cqw / 1440), calc(100svh / 900))" : "min(calc(100cqw / 390), calc(100svh / 760))" })}
+    >
+      <div className={st.gate} aria-label={t("Taklifnoma")} style={still ? { position: "relative", height: "100%", transform: "none" } : undefined}>
         <div className={st.gSky}>
           <div className={cx("size-full", st.fadeIn)} style={{ animationDuration: "1.6s" }}>
             <Img src={`${P}/osmon.webp`} eager />
@@ -1374,8 +1379,8 @@ export function ParvozSite({ template, data, mode, embedded = false }: Invitatio
   const root = useRef<HTMLDivElement>(null);
   const wide = useWide(root);
   const d = useData({ template, data, mode });
-  const withGate = !embedded && mode !== "preview";
-  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && mode !== "preview");
+  const withGate = !embedded;
+  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && !embedded);
   const [revealed, setRevealed] = useState(!withGate);
   const ready = revealed;
   const loaded = usePreload(
@@ -1450,7 +1455,7 @@ export function ParvozSite({ template, data, mode, embedded = false }: Invitatio
         <MusicButton m={music} wide={wide} embedded={embedded} />
         {withGate && !loaderGone && <Loader done={loaded} seal={`${P}/belgi.svg`} />}
         {withGate && (loaded ? <Gate d={d} wide={wide} onReveal={() => setRevealed(true)} onStart={() => music.play(true)} onGo={goTicket} /> : <div style={{ height: "230svh", marginBottom: "-100svh", width: "100%" }} />)}
-        {!withGate && <h1 className="sr-only">{d.names}</h1>}
+        {embedded && <Gate d={d} wide={wide} still onReveal={() => {}} onStart={() => {}} onGo={() => {}} />}
         <div ref={ticketRef} className="w-full" style={{ position: "relative", zIndex: z("ticket") }}>
           <Ticket d={d} wide={wide} ready={ready} rsvp={data.rsvpEnabled} tail={tail("ticket")} z={z("ticket")} />
         </div>

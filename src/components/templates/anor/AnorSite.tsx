@@ -1068,8 +1068,8 @@ export function AnorSite({ template, data, mode, embedded = false }: InvitationS
   const root = useRef<HTMLDivElement>(null);
   const wide = useWide(root);
   const d = useAnorData({ template, data, mode });
-  const withGate = !embedded && mode !== "preview";
-  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && mode !== "preview");
+  const withGate = !embedded;
+  const music = useMusic(d.musicUrl, data.slug, data.musicEnabled && !embedded);
   const [revealed, setRevealed] = useState(!withGate);
   const ready = revealed;
   const sfx = wide ? "l" : "m";

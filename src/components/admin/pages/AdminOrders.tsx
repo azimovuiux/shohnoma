@@ -9,7 +9,7 @@ import { AdminError, AdminLoading, AdminRefreshProvider, AdminTitle, Empty, fmtD
 import { StatusSelect } from "../StatusSelect";
 import { useReloadCounts } from "../AdminShell";
 import { StatusBadge, Toggle, api, confirmDialog, useToast } from "@/components/ui";
-import { ExportSquare, SearchNormal1, Trash } from "@/components/icons";
+import { Edit, ExportSquare, SearchNormal1, Trash } from "@/components/icons";
 import { formatPrice } from "@/lib/format";
 import { formatPhoneDisplay, orderStatusView, splitDate } from "@/lib/display";
 import { getTemplate } from "@/lib/templates";
@@ -165,7 +165,9 @@ function OrdersInner() {
                     <td className="px-4 py-3">
                       <MusicToggle orderId={order.id} initial={inv.musicEnabled} />
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">{formatPrice(order.amount)}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <PriceEdit orderId={order.id} initial={order.amount} editable={["draft", "pending_payment", "payment_failed", "p2p_rejected"].includes(order.status)} />
+                    </td>
                     <td className="px-4 py-3 t-body-s text-ink-2 whitespace-nowrap">{fmtDateTime(order.createdAt)}</td>
                     <td className="px-4 py-3 t-body-s whitespace-nowrap">
                       {phone ? <a href={`tel:${phone}`} className="hover:text-maroon">{formatPhoneDisplay(phone)}</a> : owner?.telegramUser ?? "—"}
@@ -216,6 +218,59 @@ function OrdersInner() {
 }
 
 /** Taklifnomaning fon musiqasini yoqish/o‘chirish (mijoz ham kabinetida o‘zgartira oladi) */
+/** Narx: to‘lanmagan buyurtmada bosib o‘zgartiriladi */
+function PriceEdit({ orderId, initial, editable }: { orderId: string; initial: number; editable: boolean }) {
+  const toast = useToast();
+  const [amount, setAmount] = useState(initial);
+  const [edit, setEdit] = useState(false);
+  const [val, setVal] = useState(String(initial));
+  const [busy, setBusy] = useState(false);
+  if (!editable) return <>{formatPrice(amount)}</>;
+  if (!edit)
+    return (
+      <button type="button" onClick={() => (setVal(String(amount)), setEdit(true))} className="group inline-flex items-center gap-1.5 hover:text-maroon" title="Narxni o‘zgartirish">
+        {formatPrice(amount)} <Edit size={14} className="opacity-50 group-hover:opacity-100" />
+      </button>
+    );
+  const save = async () => {
+    const n = Number(val.replace(/\D/g, ""));
+    if (n === amount) return setEdit(false);
+    if (!(await confirmDialog({ title: "Narxni o‘zgartirasizmi?", text: `${formatPrice(amount)} → ${formatPrice(n)}. Mijoz yangi narxni to‘laydi.`, ok: "O‘zgartirish" }))) return;
+    setBusy(true);
+    try {
+      await api(`/api/admin/orders/${orderId}`, { method: "PATCH", json: { amount: n } });
+      setAmount(n);
+      setEdit(false);
+      toast("Narx o‘zgartirildi");
+    } catch (e) {
+      toast((e as Error).message, "error");
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <form
+      className={`flex items-center gap-1.5 ${busy ? "pointer-events-none opacity-60" : ""}`}
+      onSubmit={(e) => {
+        e.preventDefault();
+        void save();
+      }}
+    >
+      <input
+        autoFocus
+        inputMode="numeric"
+        value={val.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
+        onChange={(e) => setVal(e.target.value)}
+        onKeyDown={(e) => e.key === "Escape" && setEdit(false)}
+        aria-label="Yangi narx (so‘m)"
+        className="h-9 w-[110px] rounded-lg border border-line bg-bg-base px-2.5 text-[14px] outline-none focus:border-maroon"
+      />
+      <button type="submit" className="btn btn-primary !h-9 !px-3 !py-0 text-[13px]">Saqlash</button>
+      <button type="button" onClick={() => setEdit(false)} className="px-1 text-[13px] text-ink-2 hover:text-ink">Bekor</button>
+    </form>
+  );
+}
+
 function MusicToggle({ orderId, initial }: { orderId: string; initial: boolean }) {
   const toast = useToast();
   const [on, setOn] = useState(initial);
