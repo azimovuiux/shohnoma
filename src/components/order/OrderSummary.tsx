@@ -3,10 +3,8 @@
 import type { ReactNode } from "react";
 import { LiveDevices, LivePreviewButton } from "./LiveDevices";
 import type { FlowOrder } from "./types";
-import { TelegramIcon } from "@/components/TelegramIcon";
 import { ceremonyLabel, styleLabel, type Template } from "@/lib/templates";
 import { formatPrice } from "@/lib/format";
-import { site } from "@/lib/site";
 import { useLocale, useT } from "@/lib/i18n";
 
 export type SummaryRow = [label: string, value: ReactNode];
@@ -67,22 +65,7 @@ export function OrderSummary({
       </div>
       {extra}
       {action}
-      <HelpLink />
     </div>
-  );
-}
-
-export function HelpLink() {
-  const t = useT();
-  return (
-    <a
-      href={site.telegram}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center justify-center gap-2 t-body-s text-maroon hover:underline"
-    >
-      <TelegramIcon size={15} /> {t("Savolingiz bormi? Telegramda yozing")}
-    </a>
   );
 }
 
@@ -114,7 +97,6 @@ export function MobileBar({ children }: { children: ReactNode }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-20 flex flex-col gap-2.5 border-t border-line bg-bg-base/95 px-5 pb-[max(14px,env(safe-area-inset-bottom))] pt-3.5 backdrop-blur lg:hidden">
       {children}
-      <HelpLink />
     </div>
   );
 }

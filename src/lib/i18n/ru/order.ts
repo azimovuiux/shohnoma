@@ -352,4 +352,8 @@ export const ru: Record<string, string> = {
   "Havola yaratish": "Создать ссылку",
   "Shaxsiy havola nusxalandi": "Личная ссылка скопирована",
   "Ochish": "Открыть",
+  "Sahifadan chiqasizmi?": "Покинуть страницу?",
+  "Kiritgan ma’lumotlaringiz avtomatik saqlanadi — keyinroq kabinetdagi «Buyurtmalarim» bo‘limidan davom ettirishingiz mumkin.": "Введённые данные сохраняются автоматически — продолжить можно позже в разделе «Мои заказы» личного кабинета.",
+  "Ha, chiqish": "Да, выйти",
+  "Davom ettirish": "Продолжить",
 };

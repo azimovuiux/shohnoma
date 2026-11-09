@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowDown2, Clock, TickCircle } from "@/components/icons";
+import { ArrowDown2, ArrowLeft2, ArrowRight2, Calendar, Clock, TickCircle } from "@/components/icons";
 import { useT } from "@/lib/i18n";
 
 /** Tashqariga bosilganda / Esc — yopiladi */
@@ -236,6 +236,135 @@ export function SelectField<T extends string>({
             );
           })}
         </ul>
+      )}
+    </div>
+  );
+}
+
+/* ── Sana: kk/oo/yyyy (brauzer tilidan qat’i nazar) + ochiladigan kalendar ── */
+const MONTHS_UZ = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"];
+const MONTHS_RU = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+const WD_UZ = ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"];
+const WD_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const pad2 = (n: number) => String(n).padStart(2, "0");
+const isoToDmy = (iso: string) => (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}` : "");
+function dmyToIso(s: string): string {
+  const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!m) return "";
+  const [d, mo, y] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const dt = new Date(Date.UTC(y, mo - 1, d));
+  if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) return "";
+  return `${y}-${pad2(mo)}-${pad2(d)}`;
+}
+
+export function DateField({
+  value,
+  onChange,
+  id,
+  invalid,
+  min,
+  label = "Sana",
+  locale = "uz",
+}: {
+  value: string;
+  onChange: (iso: string) => void;
+  id?: string;
+  invalid?: boolean;
+  min?: string;
+  label?: string;
+  locale?: "uz" | "ru";
+}) {
+  const [open, setOpen] = useState(false);
+  const [text, setText] = useState(isoToDmy(value));
+  useEffect(() => setText(isoToDmy(value)), [value]);
+  const ref = useDismiss<HTMLDivElement>(open, () => setOpen(false));
+  const base = value || min || new Date().toISOString().slice(0, 10);
+  const [view, setView] = useState({ y: Number(base.slice(0, 4)), m: Number(base.slice(5, 7)) - 1 });
+  useEffect(() => {
+    if (open) setView({ y: Number(base.slice(0, 4)), m: Number(base.slice(5, 7)) - 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  const months = locale === "ru" ? MONTHS_RU : MONTHS_UZ;
+  const wd = locale === "ru" ? WD_RU : WD_UZ;
+  const first = new Date(Date.UTC(view.y, view.m, 1));
+  const lead = (first.getUTCDay() + 6) % 7; // dushanbadan
+  const days = new Date(Date.UTC(view.y, view.m + 1, 0)).getUTCDate();
+  const cells = [...Array(lead).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)];
+  const today = new Date().toISOString().slice(0, 10);
+  const shift = (d: number) => setView((v) => ({ y: v.y + Math.floor((v.m + d) / 12), m: (((v.m + d) % 12) + 12) % 12 }));
+
+  return (
+    <div ref={ref} className="relative w-full" onBlur={(e) => !e.currentTarget.contains(e.relatedTarget as Node | null) && setOpen(false)}>
+      <div className={shell(invalid, open)}>
+        <input
+          id={id}
+          value={text}
+          inputMode="numeric"
+          autoComplete="off"
+          placeholder={locale === "ru" ? "дд/мм/гггг" : "kk/oo/yyyy"}
+          aria-label={label}
+          aria-invalid={invalid || undefined}
+          maxLength={10}
+          onFocus={() => setOpen(true)}
+          onChange={(e) => {
+            const d = e.target.value.replace(/\D/g, "").slice(0, 8);
+            const t = [d.slice(0, 2), d.slice(2, 4), d.slice(4)].filter(Boolean).join("/");
+            setText(t);
+            const iso = dmyToIso(t);
+            if (iso && (!min || iso >= min)) onChange(iso);
+          }}
+          onBlur={() => setText(isoToDmy(value))}
+          className="h-full min-w-0 flex-1 bg-transparent px-3.5 t-body-m tabular-nums text-ink outline-none placeholder:text-ink-2/80"
+        />
+        <button type="button" tabIndex={-1} aria-label={label} onClick={() => setOpen((x) => !x)} className="flex h-full shrink-0 items-center pr-3.5 text-ink-2">
+          <Calendar size={18} />
+        </button>
+      </div>
+      {open && (
+        <div className={`${panel} w-[296px] p-3`} role="dialog" aria-label={label} onMouseDown={(e) => e.preventDefault()}>
+          <div className="mb-2 flex items-center justify-between">
+            <button type="button" onClick={() => shift(-1)} className="flex size-8 items-center justify-center rounded-full text-ink hover:bg-bg-soft" aria-label="‹">
+              <ArrowLeft2 size={16} />
+            </button>
+            <span className="t-title text-ink">
+              {months[view.m]} {view.y}
+            </span>
+            <button type="button" onClick={() => shift(1)} className="flex size-8 items-center justify-center rounded-full text-ink hover:bg-bg-soft" aria-label="›">
+              <ArrowRight2 size={16} />
+            </button>
+          </div>
+          <div className="grid grid-cols-7 gap-0.5 text-center">
+            {wd.map((w) => (
+              <span key={w} className="py-1 text-[11px] font-medium uppercase text-ink-2">
+                {w}
+              </span>
+            ))}
+            {cells.map((d, i) => {
+              if (d === null) return <span key={`e${i}`} />;
+              const iso = `${view.y}-${pad2(view.m + 1)}-${pad2(d)}`;
+              const off = !!min && iso < min;
+              const sel = iso === value;
+              return (
+                <button
+                  key={iso}
+                  type="button"
+                  disabled={off}
+                  onClick={() => {
+                    onChange(iso);
+                    setText(isoToDmy(iso));
+                    setOpen(false);
+                  }}
+                  className={`h-9 rounded-[8px] text-[14px] tabular-nums transition-colors disabled:opacity-30 ${
+                    sel ? "bg-maroon font-semibold text-ink-inverse" : iso === today ? "font-semibold text-maroon hover:bg-bg-soft" : "text-ink hover:bg-bg-soft"
+                  }`}
+                >
+                  {d}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { Add, Trash } from "@/components/icons";
-import { SelectField, TimeField } from "./pickers";
+import { DateField, SelectField, TimeField } from "./pickers";
 import type { FieldSpec, TemplateField } from "@/lib/templates";
 import { SectionTitle, flowInput } from "./fields";
 import { tr, useT } from "@/lib/i18n";
@@ -38,7 +38,8 @@ function Input({ spec, value, onChange, label }: { spec: FieldSpec; value: strin
   if (spec.type === "select")
     return <SelectField label={label} value={value} onChange={onChange} options={(spec.options ?? []).map((o) => ({ value: o, label: t(o) }))} />;
   if (spec.type === "time") return <TimeField label={label} value={value} onChange={onChange} />;
-  const type = spec.type === "date" ? "date" : spec.type === "number" ? "number" : "text";
+  if (spec.type === "date") return <DateField label={label} value={value} onChange={onChange} />;
+  const type = spec.type === "number" ? "number" : "text";
   return <input {...common} type={type} maxLength={spec.max ?? 160} className={flowInput} />;
 }
 

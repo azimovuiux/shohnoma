@@ -108,14 +108,22 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
   );
 }
 
+/** Ish sahifalari (buyurtma, kabinet, kirish) uchun navigatsiya — landing bo‘limlari emas */
+const appNav = [
+  { label: "Bosh sahifa", href: "/" },
+  { label: "Shablonlar", href: "/shablonlar/" },
+];
+
 function MobileMenu({
   onClose,
   user,
   onLogout,
+  app = false,
 }: {
   onClose: () => void;
   user: HeaderUser;
   onLogout: () => void;
+  app?: boolean;
 }) {
   const t = useT();
   useEffect(() => {
@@ -128,7 +136,7 @@ function MobileMenu({
     };
   }, [onClose]);
 
-  const links = [
+  const links = app ? appNav : [
     ...mainNav.slice(0, 3),
     { label: "Maxsus dizayn", href: "/maxsus-dizayn/" },
     ...mainNav.slice(3),
@@ -377,7 +385,8 @@ function AccountMenu({
   );
 }
 
-export function Header() {
+export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
+  const app = variant === "app";
   const router = useLocalRouter();
   const t = useT();
   const { me, reload, loading: meLoading } = useMe();
@@ -420,7 +429,7 @@ export function Header() {
             className="hidden items-center gap-6 lg:flex xl:gap-8"
             aria-label={t("Asosiy")}
           >
-            {mainNav.map((l) => (
+            {(app ? appNav.slice(1) : mainNav).map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
@@ -479,6 +488,7 @@ export function Header() {
           onClose={() => setMenuOpen(false)}
           user={user}
           onLogout={logout}
+          app={app}
         />
       )}
     </>

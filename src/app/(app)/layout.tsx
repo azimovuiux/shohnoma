@@ -6,7 +6,7 @@ import { FloatingContact } from "@/components/FloatingContact";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Header />
+      <Header variant="app" />
       <main className="min-h-[70vh]">{children}</main>
       <FooterCompact />
       <FloatingContact />

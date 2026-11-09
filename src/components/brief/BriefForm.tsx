@@ -1,7 +1,9 @@
 "use client";
 
+import { DateField } from "@/components/order/pickers";
+
 import Link from "@/components/LocalLink";
-import { useT } from "@/lib/i18n";
+import { currentLocale, useT } from "@/lib/i18n";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Add,
@@ -333,7 +335,7 @@ export function BriefForm() {
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label={t("Sana")}>
-                <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} min={new Date().toISOString().slice(0, 10)} />
+                <DateField value={date} onChange={setDate} min={new Date().toISOString().slice(0, 10)} locale={currentLocale()} />
               </Field>
               <Field label={t("Taxminiy mehmonlar soni")}>
                 <Input inputMode="numeric" placeholder={t("300 kishi")} value={guests} onChange={(e) => setGuests(e.target.value.replace(/[^\d]/g, "").slice(0, 4))} />

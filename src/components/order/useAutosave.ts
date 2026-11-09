@@ -76,7 +76,10 @@ export function useAutosave(orderId: string, delay = 700) {
       });
     };
     window.addEventListener("pagehide", onHide);
-    return () => window.removeEventListener("pagehide", onHide);
+    return () => {
+      window.removeEventListener("pagehide", onHide);
+      onHide(); // sayt ichida boshqa sahifaga o‘tilganda ham yo‘qolmasin
+    };
   }, [orderId, send]);
 
   return { queue, flush, state, error };

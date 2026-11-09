@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useLocalRouter } from "@/lib/useLocalRouter";
 import { useLocale, useT } from "@/lib/i18n";
-import { Add, ArrowRight, Calendar, CloseCircle, Location, Trash } from "@/components/icons";
+import { Add, ArrowRight, CloseCircle, Location, Trash } from "@/components/icons";
 import { ceremonyLabel, type Ceremony, type Template } from "@/lib/templates";
 import { FlowField, IconInput, bareInput, flowInput, SectionTitle } from "./fields";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
@@ -13,7 +13,7 @@ import { liveTemplate, dayTime } from "./live";
 import { namesOf, needsPersonB, personLabels } from "./labels";
 import type { FlowOrder } from "./types";
 import { SaveIndicator } from "./SaveIndicator";
-import { SelectField, TimeField } from "./pickers";
+import { DateField, SelectField, TimeField } from "./pickers";
 import { ExtraFields, extraErrors, extraReady, type Extra } from "./ExtraFields";
 
 const ceremonies = (Object.keys(ceremonyLabel) as Ceremony[]).filter((c) => c in ceremonyLabel);
@@ -172,17 +172,15 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
 
         <div className="grid grid-cols-2 gap-3">
           <FlowField label={t("Sana")} required error={errors.day} htmlFor="f-day">
-            <IconInput icon={<Calendar size={18} />} invalid={!!errors.day}>
-              <input
-                id="f-day"
-                type="date"
-                value={o.day}
-                min={new Date().toISOString().slice(0, 10)}
-                onChange={(e) => set("day", e.target.value, { day: e.target.value, time: o.time || "18:00" })}
-                aria-invalid={!!errors.day}
-                className={`${bareInput} [&::-webkit-calendar-picker-indicator]:opacity-0`}
-              />
-            </IconInput>
+            <DateField
+              id="f-day"
+              value={o.day}
+              min={new Date().toISOString().slice(0, 10)}
+              invalid={!!errors.day}
+              label={t("Sana")}
+              locale={locale}
+              onChange={(v) => set("day", v, { day: v, time: o.time || "18:00" })}
+            />
           </FlowField>
           <FlowField label={t("Boshlanishi")} required error={errors.time} htmlFor="f-time">
             <TimeField

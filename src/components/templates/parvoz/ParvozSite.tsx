@@ -11,7 +11,7 @@ import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/co
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 import { DRESS, calendarWords, coordsFrom, downloadIcs, untilPhrase, type ProgramItem } from "../anor/data";
-import { P, PARVOZ_DEMO, PARVOZ_DEMO_RU, airCode, minusHour, monShort, wavePath, wavePoint } from "./data";
+import { P, PARVOZ_DEMO, PARVOZ_DEMO_RU, minusHour, monShort, wavePath, wavePoint } from "./data";
 import st from "./parvoz.module.css";
 
 const U = (n: number) => `calc(var(--u) * ${n})`;
@@ -53,7 +53,7 @@ function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" 
     const dd = date ? String(date.getUTCDate()).padStart(2, "0") : "";
     const mm = date ? String(date.getUTCMonth() + 1).padStart(2, "0") : "";
     const initials = `${[...(a ?? "")][0] ?? ""}${[...(b ?? "")][0] ?? ""}`.toUpperCase();
-    const flight = [initials, `${dd}${mm}`].filter(Boolean).join(" ");
+    const flight = [...initials].join(" & ");
     const venue = demo ? t(data.venueName) : data.venueName;
     const message = (demo ? DEMO.message : data.message || "").replace(/^(Aziz mehmonlar!|Qadrli mehmonlar!|Дорогие гости!)\s*/, "");
     const baxt = t("Baxt");
@@ -62,8 +62,6 @@ function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" 
       b,
       names: b ? `${a} & ${b}` : a,
       namesVa: b ? t("{a} va {b}", { a, b }) : a,
-      codeA: airCode(a),
-      codeB: b ? airCode(b) : airCode(baxt),
       nameB: b || baxt,
       flight,
       dots: sd?.dots ?? "",
@@ -396,7 +394,7 @@ function Ticket({ d, wide, ready, rsvp, tail, z }: { d: D; wide: boolean; ready:
     box,
     (p) => {
       const f = seg(p, 0.22, 0.5);
-      if (plane.current) plane.current.style.transform = `translateX(${U(f * (wide ? 176 : 54))})`;
+      if (plane.current) plane.current.style.transform = `translateX(${U(f * (wide ? 90 : 32))})`;
       const g = rsvp ? seg(p, 0.7, 0.95) : 0;
       if (stub.current) stub.current.style.transform = g ? `translateY(${U(g * 40)}) rotate(${(-6 * g).toFixed(2)}deg)` : "";
     },
@@ -420,7 +418,7 @@ function Ticket({ d, wide, ready, rsvp, tail, z }: { d: D; wide: boolean; ready:
         <Img src={`${P}/qr.svg`} eager className={st.contain} />
       </div>
       <p className={st.lbl} style={{ position: "absolute", left: U(wide ? 40 : 144), top: U(wide ? 170 : 22), fontSize: U(wide ? 12 : 11), letterSpacing: U(wide ? 1.92 : 1.76) }}>
-        CHECK-IN
+        {rsvp && d.rsvpUntil ? t("JAVOB MUDDATI") : t("BOSHLANISHI")}
       </p>
       <p className={cx(st.italic, st.ell)} style={{ position: "absolute", left: U(wide ? 40 : 144), top: U(wide ? 190 : 40), maxWidth: U(wide ? 220 : 170), fontSize: U(wide ? 28 : 24), color: "var(--navy)" }}>
         {rsvp && d.rsvpUntil ? d.rsvpUntil : d.time ? t("soat {time}", { time: d.time }) : d.dots}
@@ -444,75 +442,53 @@ function Ticket({ d, wide, ready, rsvp, tail, z }: { d: D; wide: boolean; ready:
           <div data-a="slot" className={st.ticket} style={vars({ inset: 0, borderRadius: U(wide ? 26 : 22), "--t": "1.2s", "--d": "0.15s" })}>
             <div className="absolute inset-x-0 top-0" style={{ height: U(wide ? 70 : 66), background: "var(--navy)", borderRadius: `${U(wide ? 26 : 22)} ${U(wide ? 26 : 22)} 0 0` }} />
             <p className={st.mono} style={{ position: "absolute", left: U(wide ? 36 : 24), top: U(wide ? 26 : 25), fontSize: U(wide ? 14 : 13), letterSpacing: U(wide ? 2.8 : 2.34), color: "var(--cream)", whiteSpace: "nowrap" }}>
-              {t("BAXT AIRLINES")}
+              {t("TAKLIFNOMA")}
             </p>
-            {wide && (
-              <p className={st.mono} style={{ position: "absolute", left: U(430), top: U(27), fontSize: U(13), letterSpacing: U(2.08), color: "var(--peach)", whiteSpace: "nowrap" }}>
-                {t("BORDING PASS · BIZNES KLASS")}
-              </p>
-            )}
             <div className="absolute" style={{ left: U(wide ? 980 : 284), top: U(wide ? 23 : 22) }}>
               <PlaneIcon size={U(wide ? 24 : 22)} color="var(--peach)" />
             </div>
             {/* yo‘nalish: JSR ✈ MDN */}
-            <p data-a="flap" className={st.serif} style={vars({ position: "absolute", left: U(wide ? 36 : 22), top: U(wide ? 98 : 86), fontSize: U(wide ? 80 : 56), lineHeight: 1.1, whiteSpace: "nowrap", "--d": "0.4s" })}>
-              <Fit base={wide ? 80 : 56} max={wide ? 196 : 104} deps={d.codeA}>
-                {d.codeA}
+            {/* yo‘nalish: ismlar to‘liq — Jasur ✈ Madina */}
+            <p data-a="flap" className={st.serif} style={vars({ position: "absolute", left: U(wide ? 36 : 22), top: U(wide ? 100 : 104), fontSize: U(wide ? 64 : 40), lineHeight: 1.1, whiteSpace: "nowrap", "--d": "0.4s" })}>
+              <Fit base={wide ? 64 : 40} max={wide ? 250 : 112} deps={d.a}>
+                {d.a}
               </Fit>
             </p>
-            <p data-a="flap" className={cx(st.serif, "text-right")} style={vars({ position: "absolute", right: U(wide ? 330 : 22), top: U(wide ? 98 : 86), fontSize: U(wide ? 80 : 56), lineHeight: 1.1, whiteSpace: "nowrap", "--d": "0.45s" })}>
-              <Fit base={wide ? 80 : 56} max={wide ? 196 : 104} deps={d.codeB}>
-                {d.codeB}
+            <p data-a="flap" className={cx(st.serif, "text-right")} style={vars({ position: "absolute", right: U(wide ? 330 : 22), top: U(wide ? 100 : 104), fontSize: U(wide ? 64 : 40), lineHeight: 1.1, whiteSpace: "nowrap", "--d": "0.45s" })}>
+              <Fit base={wide ? 64 : 40} max={wide ? 250 : 112} deps={d.nameB}>
+                {d.nameB}
               </Fit>
             </p>
-            <svg className="absolute" style={{ left: U(wide ? 245 : 133), top: U(wide ? 149.25 : 123.25), width: U(wide ? 190 : 64), height: U(1.5), overflow: "visible" }} viewBox={`0 0 ${wide ? 190 : 64} 1.5`} preserveAspectRatio="none" aria-hidden>
-              <line x1="0" y1="0.75" x2={wide ? 190 : 64} y2="0.75" stroke="#7A8496" strokeWidth="1.5" strokeDasharray="3.05 4.06" />
+            <svg className="absolute" style={{ left: U(wide ? 306 : 144), top: U(wide ? 137.25 : 127.25), width: U(wide ? 98 : 42), height: U(1.5), overflow: "visible" }} viewBox={`0 0 ${wide ? 98 : 42} 1.5`} preserveAspectRatio="none" aria-hidden>
+              <line x1="0" y1="0.75" x2={wide ? 98 : 42} y2="0.75" stroke="#7A8496" strokeWidth="1.5" strokeDasharray="3.05 4.06" />
             </svg>
-            <div ref={plane} className="absolute" style={{ left: U(wide ? 231 : 122), top: U(wide ? 136 : 113), willChange: "transform" }}>
+            <div ref={plane} className="absolute" style={{ left: U(wide ? 296 : 138), top: U(wide ? 124 : 117), willChange: "transform" }}>
               <PlaneIcon size={U(wide ? 28 : 22)} color="var(--terra)" />
             </div>
-            <p className={st.ell} style={{ position: "absolute", left: U(wide ? 40 : 24), top: U(wide ? 196 : 158), maxWidth: U(wide ? 300 : 140), fontSize: U(wide ? 17 : 15), color: "var(--grey-2)" }}>
-              {d.a}
-            </p>
-            <p className={cx(st.ell, "text-right")} style={{ position: "absolute", right: U(wide ? 330 : 22), top: U(wide ? 196 : 158), maxWidth: U(wide ? 300 : 140), fontSize: U(wide ? 17 : 15), color: "var(--grey-2)" }}>
-              {d.nameB}
-            </p>
-            <div className="absolute" style={{ left: U(wide ? 36 : 22), top: U(wide ? 240 : 202), width: U(wide ? 674 : 286), height: 1, background: "#e3e6ec" }} />
-            {lbl(wide ? 36 : 24, wide ? 262 : 224, t("YO‘LOVCHI"), 0)}
-            <p data-a="flap" className={st.italic} style={vars({ position: "absolute", left: U(wide ? 36 : 24), top: U(wide ? 282 : 244), color: "var(--navy)", "--d": "0.6s" })}>
-              <Fit base={wide ? 30 : 28} max={wide ? 330 : 282} deps={passenger}>
+            <div className="absolute" style={{ left: U(wide ? 36 : 22), top: U(wide ? 212 : 202), width: U(wide ? 674 : 286), height: 1, background: "#e3e6ec" }} />
+            {lbl(wide ? 36 : 24, wide ? 232 : 224, t("MEHMON"), 0)}
+            <p data-a="flap" className={st.italic} style={vars({ position: "absolute", left: U(wide ? 36 : 24), top: U(wide ? 252 : 244), color: "var(--navy)", "--d": "0.6s" })}>
+              <Fit base={wide ? 30 : 28} max={wide ? 660 : 282} deps={passenger}>
                 {passenger}
               </Fit>
             </p>
             {wide ? (
               <>
-                {lbl(36, 326, t("REYS"), 1)}
-                {val(36, 348, d.flight, 1, 150)}
-                {lbl(196, 326, t("SANA"), 2)}
-                {val(196, 348, d.ticketDate, 2, 180)}
-                {lbl(386, 326, t("BORDING"), 3)}
-                {val(386, 348, d.boarding, 3, 130)}
-                {lbl(526, 326, t("UCHISH"), 4)}
-                {val(526, 348, d.time, 4, 180)}
-                {lbl(386, 262, "GATE", 5)}
-                {val(386, 284, d.venue, 5, 210)}
-                {lbl(606, 262, t("O‘RINDIQ"), 6)}
-                {val(606, 284, "1A", 6, 100)}
+                {lbl(36, 330, t("SANA"), 1)}
+                {val(36, 352, d.ticketDate, 1, 190)}
+                {lbl(246, 330, t("BOSHLANISHI"), 2)}
+                {val(246, 352, d.time, 2, 140)}
+                {lbl(406, 330, t("TO‘YXONA"), 3)}
+                {val(406, 352, d.venue, 3, 310)}
               </>
             ) : (
               <>
-                {lbl(24, 300, t("REYS"), 1)}
-                {val(24, 320, d.flight, 1, 150)}
-                {lbl(182, 300, t("SANA"), 2)}
-                {val(182, 320, d.ticketDate, 2, 130)}
-                {lbl(24, 368, t("BORDING"), 3)}
-                {val(24, 388, d.boarding, 3, 150)}
-                {lbl(182, 368, t("UCHISH"), 4)}
-                {val(182, 388, d.time, 4, 130)}
-                {lbl(24, 436, "GATE", 5)}
-                {val(24, 456, d.venue, 5, 150)}
-                {lbl(182, 436, t("O‘RINDIQ"), 6)}
-                {val(182, 456, "1A", 6, 130)}
+                {lbl(24, 310, t("SANA"), 1)}
+                {val(24, 330, d.ticketDate, 1, 150)}
+                {lbl(182, 310, t("BOSHLANISHI"), 2)}
+                {val(182, 330, d.time, 2, 124)}
+                {lbl(24, 400, t("TO‘YXONA"), 3)}
+                {val(24, 420, d.venue, 3, 282)}
               </>
             )}
             {/* perforatsiya va kesiklar */}
@@ -521,16 +497,12 @@ function Ticket({ d, wide, ready, rsvp, tail, z }: { d: D; wide: boolean; ready:
                 <svg className="absolute" style={{ left: U(751.25), top: U(86), width: U(1.5), height: U(300) }} viewBox="0 0 1.5 300" preserveAspectRatio="none" aria-hidden>
                   <line x1="0.75" y1="0" x2="0.75" y2="300" stroke="#C8CDD6" strokeWidth="1.5" strokeDasharray="4.98 5.98" />
                 </svg>
-                <span className="absolute rounded-full" style={{ left: U(736), top: U(-16), width: U(32), height: U(32), background: "#e4eaf2" }} />
-                <span className="absolute rounded-full" style={{ left: U(736), top: U(384), width: U(32), height: U(32), background: "#e4eaf2" }} />
               </>
             ) : (
               <>
                 <svg className="absolute" style={{ left: U(28), top: U(511.25), width: U(274), height: U(1.5) }} viewBox="0 0 274 1.5" preserveAspectRatio="none" aria-hidden>
                   <line x1="0" y1="0.75" x2="274" y2="0.75" stroke="#C8CDD6" strokeWidth="1.5" strokeDasharray="4.98 5.98" />
                 </svg>
-                <span className="absolute rounded-full" style={{ left: U(-15), top: U(497), width: U(30), height: U(30), background: "#e4eaf2" }} />
-                <span className="absolute rounded-full" style={{ left: U(315), top: U(497), width: U(30), height: U(30), background: "#e4eaf2" }} />
               </>
             )}
             {/* qirqim — scroll oxirida perforatsiya bo‘ylab yirtiladi (08 anketada yana paydo bo‘ladi) */}
@@ -656,7 +628,7 @@ function Board({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: boolea
       ))}
     </div>
   );
-  const ticker = [d.flight, `${d.city.toUpperCase()} → ${t("BAXT")}`, t("O‘Z VAQTIDA"), `GATE: ${(d.venue || "").toUpperCase()}`].filter(Boolean).join("  ·  ");
+  const ticker = [d.namesVa, d.ticketDate, d.time && t("soat {time}", { time: d.time }), d.venue].filter(Boolean).join("  ·  ");
   const H = (wide ? 700 : 660) + tail;
   return (
     <Sec ready={ready} z={z} style={{ height: U(H), background: "var(--navy-2)", color: "var(--cream)" }}>
@@ -665,7 +637,7 @@ function Board({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: boolea
         <path d={wide ? EDGE_L : EDGE_M} fill="#17233A" />
       </svg>
       <p data-a="blur" className={cx(st.italic, "absolute inset-x-0 text-center")} style={{ top: v(62, 70), fontSize: v(42, 56) }}>
-        {t("Uchishgacha")}
+        {t("To‘yga qadar")}
       </p>
       <div ref={ref} className="absolute inset-x-0 flex flex-col items-center" style={{ top: v(148, 180), gap: U(22) }}>
         {groups && (wide ? row([0, 1, 2, 3]) : (
@@ -690,10 +662,10 @@ function Board({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: boolea
           {d.longDate}
         </Fit>
       </p>
-      <p data-a="up" className="absolute inset-x-0 text-center" style={vars({ top: v(510, 506), fontSize: v(17, 19), opacity: 0.72, whiteSpace: "pre", "--y": 20, "--d": "0.1s" })}>
-        {[d.boarding && `${t("Bording")} ${d.boarding}`, d.time && `${t("Uchish")} ${d.time}`].filter(Boolean).join("  ·  ")}
+      <p data-a="up" className="absolute inset-x-0 text-center" style={vars({ top: v(512, 506), fontSize: v(16, 19), lineHeight: 1.4, opacity: 0.72, whiteSpace: "pre", "--y": 20, "--d": "0.1s" })}>
+        {[d.boarding && `${t("Mehmonlarni kutib olish")} ${d.boarding}`, d.time && `${t("Boshlanishi")} ${d.time}`].filter(Boolean).join(wide ? "  ·  " : "\n")}
       </p>
-      <div data-a="up" className="absolute inset-x-0 flex justify-center" style={vars({ top: v(560, 564), "--y": 20, "--d": "0.2s" })}>
+      <div data-a="up" className="absolute inset-x-0 flex justify-center" style={vars({ top: v(574, 564), "--y": 20, "--d": "0.2s" })}>
         <button
           type="button"
           className={st.btnLine}
@@ -788,7 +760,7 @@ function Program({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: bool
         <Cloud small />
       </L>
       <p data-a="blur" className={cx(st.serif, "text-center")} style={{ position: wide ? "absolute" : "relative", left: 0, right: 0, top: wide ? U(150) : undefined, paddingTop: wide ? 0 : U(120), fontSize: v(46, 64), lineHeight: wide ? 1.33 : 1.33 }}>
-        {t("Parvoz rejasi")}
+        {t("To‘y dasturi")}
       </p>
       {wide ? (
         <div ref={list} className="absolute inset-x-0" style={{ top: 0, height: U(700) }}>
@@ -902,12 +874,8 @@ function Venue({ d, wide, ready, tail, z, linkable }: { d: D; wide: boolean; rea
   const [par, setPar] = useState(0.5);
   useScrollProgress(box, (p) => setPar((x) => (Math.abs(x - p) < 0.003 ? x : p)), ready);
   const taxi = d.coords ? `https://3.redirect.appmetrica.yandex.com/route?end-lat=${d.coords.lat}&end-lon=${d.coords.lon}&appmetrica_tracking_id=1178268795219780156` : null;
-  const gate = `GATE · ${(d.venue || "").toUpperCase()}`;
   const card = (
     <div data-a="up" className={cx(st.card, "relative flex flex-col items-start")} style={vars({ width: v(318, 500), padding: v(26, 34), gap: v(10, 12), borderRadius: v(22, 24), "--y": 60, "--d": "0.35s", zIndex: 2 })}>
-      <p className={cx(st.mono, st.ell)} style={{ maxWidth: "100%", fontSize: v(12, 13), letterSpacing: v(1.92, 2.08), color: "var(--grey)" }}>
-        {gate}
-      </p>
       <p className={st.serif} style={{ fontSize: v(32, 40), lineHeight: 1.1, overflowWrap: "anywhere" }}>
         {d.venueTitle}
       </p>
@@ -945,8 +913,8 @@ function Venue({ d, wide, ready, tail, z, linkable }: { d: D; wide: boolean; rea
           </div>
           <div className="relative flex flex-col items-end" style={{ marginRight: U(150) }}>
             <p data-a="blur" className={cx(st.serif, "text-right")} style={{ lineHeight: 1.33, width: U(500) }}>
-              <Fit base={64} max={420} deps={t("Qo‘nish joyi")}>
-                {t("Qo‘nish joyi")}
+              <Fit base={64} max={420} deps={t("To‘yxona")}>
+                {t("To‘yxona")}
               </Fit>
             </p>
             <div style={{ marginTop: U(65) }}>{card}</div>
@@ -955,7 +923,7 @@ function Venue({ d, wide, ready, tail, z, linkable }: { d: D; wide: boolean; rea
       ) : (
         <div className="relative flex flex-col items-center" style={{ paddingTop: U(110) }}>
           <p data-a="blur" className={cx(st.serif, "text-center")} style={{ fontSize: U(46), lineHeight: 1.33 }}>
-            {t("Qo‘nish joyi")}
+            {t("To‘yxona")}
           </p>
           <div className="relative overflow-hidden" style={{ width: U(350), height: U(262.5), marginTop: U(24), borderRadius: U(15) }}>
             <Img src={`${P}/manzil.webp`} a="zoom" style={vars({ "--z": 1.15, "--t": "1.6s" })} />
@@ -985,7 +953,7 @@ function Dress({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: boolea
       <div className="flex items-center" style={{ gap: s(10) }}>
         <span className="rounded-full" style={{ width: s(14), height: s(14), background: "#e4eaf2", border: "1px solid #c8cdd6" }} />
         <p className={st.mono} style={{ fontSize: s(12), letterSpacing: s(1.92), color: "var(--grey)", whiteSpace: "nowrap" }}>
-          {t("BAGAJ · DRESS-KOD")}
+          {t("DRESS-KOD")}
         </p>
       </div>
       <p className={st.serif} style={{ fontSize: s(34), lineHeight: 1.1 }}>
@@ -1183,13 +1151,10 @@ function Rsvp({ d, wide, ready, slug, mode, tail, z }: { d: D; wide: boolean; re
           <Img src={`${P}/qr.svg`} className={st.contain} />
         </div>
         <p className={st.lbl} style={{ position: "absolute", left: v(126, 140), top: v(26, 30), fontSize: v(11, 12), letterSpacing: v(1.54, 1.68), color: "var(--grey)" }}>
-          CHECK-IN · {d.flight}
+          {t("JAVOBINGIZ")}
         </p>
         <p className={cx(st.italic, st.nowrap)} style={{ position: "absolute", left: v(126, 140), top: v(46, 52), fontSize: v(22, 25), color: "var(--navy)" }}>
           {t("Sizning joyingiz")}
-        </p>
-        <p className={st.lbl} style={{ position: "absolute", left: v(126, 140), top: v(82, 94), fontSize: v(12, 13), letterSpacing: v(1.68, 1.82), color: "var(--terra)" }}>
-          {t("O‘RINDIQ")} 1A
         </p>
         {sent && sent !== "not_coming" && (
           <div className={st.approved} style={{ left: v(150, 168), top: v(12, 16), padding: `${U(4)} ${U(8)}`, fontSize: v(12, 13), rotate: "-12deg" }}>
@@ -1203,18 +1168,18 @@ function Rsvp({ d, wide, ready, slug, mode, tail, z }: { d: D; wide: boolean; re
     <>
       {wide ? (
         <p data-a="blur" className={st.serif} style={{ fontSize: U(64), lineHeight: 1.05, overflowWrap: "anywhere" }}>
-          {t("Ro‘yxatdan o‘tish")}
+          {t("Taklifga javob")}
         </p>
       ) : (
         <p data-a="blur" className={cx(st.serif, "text-center")} style={{ lineHeight: 1.33 }}>
-          <Fit base={44} max={366} deps={t("Ro‘yxatdan o‘tish")}>
-            {t("Ro‘yxatdan o‘tish")}
+          <Fit base={44} max={366} deps={t("Taklifga javob")}>
+            {t("Taklifga javob")}
           </Fit>
         </p>
       )}
       <p data-a="fade" className={!wide ? "text-center" : undefined} style={vars({ fontSize: v(17, 20), lineHeight: wide ? 1.55 : 1.45, color: "var(--grey)", marginTop: wide ? U(26) : 0, maxWidth: wide ? undefined : U(310), "--d": "0.2s" })}>
         {d.rsvpUntil ? t("Iltimos, javobingizni {date} qoldiring", { date: d.rsvpUntil }) : t("Iltimos, javobingizni qoldiring")}
-        {wide && <> {t("Chiptangizni tasdiqlaganingizdan so‘ng joyingiz band qilinadi.")}</>}
+        {wide && <> {t("Javobingizdan so‘ng sizga joy ajratamiz.")}</>}
       </p>
     </>
   );
@@ -1281,7 +1246,7 @@ function Rsvp({ d, wide, ready, slug, mode, tail, z }: { d: D; wide: boolean; re
           </label>
           {err && <p style={{ color: "#b3261e", fontSize: U(14) }}>{err}</p>}
           <button type="submit" disabled={busy} className={st.btnPeach} style={{ marginTop: U(6), padding: v(18, 20), fontSize: v(17, 18), gap: U(10), opacity: busy ? 0.7 : 1 }}>
-            {busy ? t("Yuborilmoqda…") : t("Chiptani tasdiqlash")}
+            {busy ? t("Yuborilmoqda…") : t("Javobni yuborish")}
             <span key={fly} className={fly ? st.planeOut : undefined} style={{ display: "inline-flex" }}>
               <PlaneIcon size={U(20)} color="var(--navy)" />
             </span>
