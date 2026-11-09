@@ -587,11 +587,18 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  white-space: nowrap;
   opacity: 0;
   filter: blur(6px);
   transform: translateX(calc(var(--u) * var(--x, 40)));
   transition: opacity 0.9s var(--ease), filter 0.9s var(--ease), transform 0.9s var(--ease);
+}
+/* Mijoz yozgan uzun nom/izoh — ko‘pi bilan 2 qator, keyingi bandga tegmaydi */
+.clamp2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }
 .event.on {
   opacity: 1;

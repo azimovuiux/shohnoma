@@ -612,8 +612,10 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   if (!d.program.length) return null;
-  const half = Math.ceil(d.program.length / 2);
-  const cols = wide ? [d.program.slice(0, half), d.program.slice(half)] : [d.program];
+  // laptop: 4 va undan ko‘p bandda — ikki ustun; kamida — bitta markaziy ustun (bo‘sh ustun qolmasin)
+  const two = wide && d.program.length >= 4;
+  const half = two ? Math.ceil(d.program.length / 2) : d.program.length;
+  const cols = two ? [d.program.slice(0, half), d.program.slice(half)] : [d.program];
   return (
     <Sec ready={ready} className={st.damask} style={{ paddingTop: v(150, 200), paddingBottom: v(110, 150), paddingInline: v(44, 0), gap: v(26, 40) }}>
       {/* pardalar chetdan ichkariga, gulchambar tepadan */}
@@ -635,7 +637,7 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
       </p>
       <div className="flex w-full justify-center" style={{ gap: U(80), zIndex: 3 }}>
         {cols.map((col, ci) => (
-          <div key={ci} className="flex flex-col" style={{ width: wide ? U(380) : "100%" }}>
+          <div key={ci} className="flex flex-col" style={{ width: wide ? U(two ? 380 : 520) : "100%" }}>
             {col.map((it, i) => {
               const n = ci * half + i;
               return (
@@ -644,8 +646,8 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
                     {it.time}
                   </p>
                   <div data-a="fade" className="flex min-w-0 flex-col" style={vars({ gap: U(2), "--d": `${0.65 + n * 0.12}s` })}>
-                    <p style={{ fontSize: v(16, 18), fontWeight: 600, color: "var(--cream)" }}>{it.title}</p>
-                    {it.note && <p style={{ fontSize: v(14, 15), color: "rgba(247,243,234,.7)" }}>{it.note}</p>}
+                    <p style={{ fontSize: v(16, 18), fontWeight: 600, color: "var(--cream)", overflowWrap: "anywhere" }}>{it.title}</p>
+                    {it.note && <p style={{ fontSize: v(14, 15), color: "rgba(247,243,234,.7)", overflowWrap: "anywhere" }}>{it.note}</p>}
                   </div>
                 </div>
               );

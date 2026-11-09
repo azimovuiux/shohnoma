@@ -627,7 +627,7 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   // Geometriya (Figma: mobil — 132px qadam, nishon 96; laptop — 200px qadam, nishon 108)
   const step = wide ? Math.min(200, 1200 / Math.max(n, 1)) : 132;
   const W = wide ? step * n : 390;
-  const H = wide ? 460 : n * 132;
+  const H = wide ? (n === 1 ? 300 : 460) : n * 132; // bitta bandda pastki qator yo‘q — bo‘sh joy qolmasin
   const pts = d.program.map((_, i) =>
     wide ? { x: step / 2 + i * step, y: i % 2 ? 275 : 185 } : { x: i % 2 ? 120 : 270, y: 66 + i * 132 },
   );
@@ -701,10 +701,10 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
           const on = reached >= i;
           const right = i % 2 === 0; // mobil: nishon o‘ngda, matn chapda
           const textStyle: CSSProperties = wide
-            ? { left: U(p.x), top: U(i % 2 ? 349 : 14), transform: "translateX(-50%)", alignItems: "center", textAlign: "center" }
+            ? { left: U(p.x), ...(i % 2 ? { top: U(349) } : { bottom: U(H - 124) }), width: U(Math.min(step - 14, 210)), transform: "translateX(-50%)", alignItems: "center", textAlign: "center" }
             : right
-              ? { right: U(390 - 214), top: U(p.y - 46), alignItems: "flex-end", textAlign: "right" }
-              : { left: U(214), top: U(p.y - 46), alignItems: "flex-start", textAlign: "left" };
+              ? { right: U(390 - 214), top: U(p.y - 46), width: U(188), alignItems: "flex-end", textAlign: "right" }
+              : { left: U(214), top: U(p.y - 46), width: U(160), alignItems: "flex-start", textAlign: "left" };
           return (
             <div key={i}>
               <div className={cx(st.badge, on && st.on)} style={{ left: U(p.x - badge / 2), top: U(p.y - badge / 2), width: U(badge), height: U(badge), zIndex: 2 }}>
@@ -714,8 +714,8 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
                 <span className={st.italic} style={{ color: "var(--maroon)", fontSize: v(39, 36), lineHeight: 1.25 }}>
                   {it.time}
                 </span>
-                <span style={{ fontWeight: 500, fontSize: U(17) }}>{it.title}</span>
-                {it.note && <span style={{ color: "var(--soft)", fontSize: U(14) }}>{it.note}</span>}
+                <span className={st.clamp2} style={{ fontWeight: 500, fontSize: U(17), lineHeight: 1.3 }}>{it.title}</span>
+                {it.note && <span className={st.clamp2} style={{ color: "var(--soft)", fontSize: U(14), lineHeight: 1.3 }}>{it.note}</span>}
               </div>
             </div>
           );
