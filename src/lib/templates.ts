@@ -91,6 +91,8 @@ export interface Template {
   descriptionRu?: string;
   /** Standart fon musiqasi — kutubxonadagi trek ID si (admin tanlaydi) */
   musicId?: string | null;
+  /** Server: shablonda musiqa tanlanmagan bo‘lsa — kutubxonadagi birinchi trek */
+  musicFallback?: string | null;
 }
 
 const builtin: Template[] = [

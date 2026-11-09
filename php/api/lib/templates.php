@@ -32,6 +32,7 @@ function templates(bool $fresh = false): array
     if ($t !== null && !$fresh) return $t;
     templates_seed();
     $t = [];
+    $fallback = null;
     // Kodda yozilgan shablonlar: maydonlar sxemasi (fields) har doim koddagi eng so‘nggi versiyadan olinadi
     $code = [];
     $file = __DIR__ . '/templates.json';
@@ -51,6 +52,8 @@ function templates(bool $fresh = false): array
             }
             $d['images'] = $imgs;
         }
+        // Shablonga standart musiqa tanlanmagan bo‘lsa — kutubxonadagi birinchi faol trek (musiqa doim yoqiq bo‘lsin)
+        $d['musicFallback'] = $fallback ??= (string)(scalar('SELECT id FROM music_tracks WHERE is_active = 1 ORDER BY sort, created_at LIMIT 1') ?: '');
         $d['slug'] = $r['slug'];
         $d['number'] = (int)$r['sort'];
         $d['active'] = (bool)$r['is_active'];

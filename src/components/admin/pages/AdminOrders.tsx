@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApi } from "@/lib/client";
 import type { Invitation, Order, OrderStatus } from "@/lib/types";
 import { AdminError, AdminLoading, AdminRefreshProvider, AdminTitle, Empty, fmtDateTime } from "../shared";
 import { StatusSelect } from "../StatusSelect";
 import { useReloadCounts } from "../AdminShell";
-import { StatusBadge } from "@/components/ui";
+import { StatusBadge, Toggle, api, useToast } from "@/components/ui";
 import { ExportSquare, SearchNormal1 } from "@/components/icons";
 import { formatPrice } from "@/lib/format";
 import { formatPhoneDisplay, orderStatusView, splitDate } from "@/lib/display";
@@ -112,7 +112,7 @@ function OrdersInner() {
           <table className="w-full min-w-[1080px] text-left [&_td:first-child]:whitespace-nowrap">
             <thead className="bg-bg-soft t-annotation text-ink-2">
               <tr>
-                {["Kod", "Shablon", "Ismlar", "Marosim sanasi", "Holat", "Summa", "Yaratilgan", "Telefon", ""].map((h) => (
+                {["Kod", "Shablon", "Ismlar", "Marosim sanasi", "Holat", "Musiqa", "Summa", "Yaratilgan", "Telefon", ""].map((h) => (
                   <th key={h} className="px-4 py-3 font-medium">
                     {h}
                   </th>
@@ -141,6 +141,9 @@ function OrdersInner() {
                           confirmFor={["archived", "active", "paid", "draft"]}
                         />
                       </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      <MusicToggle orderId={order.id} initial={inv.musicEnabled} />
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">{formatPrice(order.amount)}</td>
                     <td className="px-4 py-3 t-body-s text-ink-2 whitespace-nowrap">{fmtDateTime(order.createdAt)}</td>
@@ -188,5 +191,30 @@ function OrdersInner() {
         </div>
       )}
     </>
+  );
+}
+
+/** Taklifnomaning fon musiqasini yoqish/o‘chirish (mijoz ham kabinetida o‘zgartira oladi) */
+function MusicToggle({ orderId, initial }: { orderId: string; initial: boolean }) {
+  const toast = useToast();
+  const [on, setOn] = useState(initial);
+  const [busy, setBusy] = useState(false);
+  const change = async (v: boolean) => {
+    setBusy(true);
+    setOn(v);
+    try {
+      await api(`/api/admin/orders/${orderId}`, { method: "PATCH", json: { musicEnabled: v } });
+      toast(v ? "Musiqa yoqildi" : "Musiqa o‘chirildi");
+    } catch (e) {
+      setOn(!v);
+      toast((e as Error).message, "error");
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <span className={busy ? "pointer-events-none opacity-60" : ""}>
+      <Toggle checked={on} onChange={change} label="Fon musiqasi" />
+    </span>
   );
 }

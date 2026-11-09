@@ -202,7 +202,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
               <Toggle checked={o[tg.key]} onChange={(v) => set(tg.key, v)} label={t(tg.title)} />
             </div>
           ))}
-          {o.musicEnabled && <MusicPicker value={o.musicTrack} defaultId={template.musicId} onChange={(id) => set("musicTrack", id)} />}
+          {o.musicEnabled && <MusicPicker value={o.musicTrack} defaultId={template.musicId || template.musicFallback} onChange={(id) => set("musicTrack", id)} />}
         </div>
 
         <div className="flex flex-col gap-4">

@@ -17,8 +17,10 @@ export interface Track {
 export const trackUrl = (id: string) => `/files/music/${id}.mp3`;
 
 /** Taklifnomada chalinadigan trek: mijoz tanlagani, bo‘lmasa shablonning standarti */
-export const musicSrc = (t: { musicId?: string | null }, d: { musicTrack?: string | null }) =>
-  d.musicTrack ? trackUrl(d.musicTrack) : t.musicId ? trackUrl(t.musicId) : null;
+export const musicSrc = (t: { musicId?: string | null; musicFallback?: string | null }, d: { musicTrack?: string | null }) => {
+  const id = d.musicTrack || t.musicId || t.musicFallback;
+  return id ? trackUrl(id) : null;
+};
 
 export const fmtDuration = (s: number | null | undefined) => (s ? `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}` : "");
 

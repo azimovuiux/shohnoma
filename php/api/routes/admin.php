@@ -77,7 +77,14 @@ route('GET', '/admin/orders', function () {
 
 route('PATCH', '/admin/orders/:id', function ($p) {
     require_admin();
-    $status = body()['status'] ?? '';
+    $b = body();
+    // Fon musiqasini yoqish/o‘chirish (admin buyurtmalar ro‘yxatidan)
+    if (array_key_exists('musicEnabled', $b)) {
+        $o = one('SELECT id FROM orders WHERE id = ?', [$p['id']]) ?? fail('Buyurtma topilmadi', 404);
+        q('UPDATE invitations SET music_enabled = ? WHERE order_id = ?', [$b['musicEnabled'] ? 1 : 0, $o['id']]);
+        json_out(['ok' => true]);
+    }
+    $status = $b['status'] ?? '';
     if (!in_array($status, ORDER_STATUSES, true)) fail('Holat noto‘g‘ri');
     $o = one('SELECT * FROM orders WHERE id = ?', [$p['id']]) ?? fail('Buyurtma topilmadi', 404);
     if (($status === 'paid' || $status === 'active') && !in_array($o['status'], ['archived', 'active', 'paid'], true)) {
