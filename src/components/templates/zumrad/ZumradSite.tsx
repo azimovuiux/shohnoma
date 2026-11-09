@@ -484,7 +484,7 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
       {/* osma gulchambar — tepadan tushadi, yengil tebranadi */}
       {(wide ? (variant === "open" ? [[-60, -152, 820, 461.5], [690, -152, 820, 461.5]] : [[-45, -115.84, 790, 444], [695, -115.84, 790, 444]]) : variant === "open" ? [[-195, -145, 780, 439]] : [[-85, -80, 560, 315]]).map(([x, y, w, h], i) => (
         <div key={i} className={st.layer} style={layer({ left: U(x), top: U(y), width: U(w), height: U(h), transform: `translate(${px(-24)}px, ${ty(1.4) + (variant === "open" ? (1 - o) * -50 : 0)}px)`, zIndex: 5 })}>
-          <div className={st.sway} style={{ width: "100%", height: "100%" }}>
+          <div style={{ width: "100%", height: "100%" }}>
             <Img src={`${Z}/gulchambar.webp`} />
           </div>
         </div>
@@ -610,7 +610,7 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
       </div>
       {(wide ? [[-40, -146.3, 780, 439], [700, -146.3, 780, 439]] : [[-125, -126.3, 640, 360.2]]).map(([x, y, w, h], i) => (
         <div key={i} data-a="drop" className="absolute" style={vars({ left: U(x), top: U(y), width: U(w), height: U(h), "--dy": -70, "--r0": "0deg", "--t": "1.3s", "--e": "var(--spring)", zIndex: 2 })}>
-          <div className={st.sway} style={{ width: "100%", height: "100%" }}>
+          <div style={{ width: "100%", height: "100%" }}>
             <Img src={`${Z}/gulchambar.webp`} />
           </div>
         </div>
