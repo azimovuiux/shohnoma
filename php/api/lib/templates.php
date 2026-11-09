@@ -40,6 +40,7 @@ function templates(bool $fresh = false): array
         $d = json_decode($r['data'], true) ?: [];
         if (($d['kind'] ?? '') !== 'html' && isset($code[$r['slug']])) {
             if (isset($code[$r['slug']]['fields'])) $d['fields'] = $code[$r['slug']]['fields'];
+            if (empty($d['descriptionRu']) && !empty($code[$r['slug']]['descriptionRu'])) $d['descriptionRu'] = $code[$r['slug']]['descriptionRu'];
             // Koddagi rasmlar (kartadagi mokap/scroll preview): bazada yo‘q bo‘lsa — qo‘shiladi;
             // bazada ham asl /templates/ rasmi turgan bo‘lsa — koddagi versiyali (?v=xesh) manzil olinadi,
             // admin o‘zi yuklagan rasm (/files/...) esa o‘zgarmaydi

@@ -77,6 +77,8 @@ export interface Template {
   fields?: TemplateField[];
   /** HTML shablon: jonli ko‘rinish manzili (buyurtma oqimida — mijoz ma’lumotlari bilan) */
   previewUrl?: string;
+  /** Ruscha tavsif (/ru/ sahifalarida) */
+  descriptionRu?: string;
   /** Standart fon musiqasi — kutubxonadagi trek ID si (admin tanlaydi) */
   musicId?: string | null;
 }
@@ -92,6 +94,7 @@ const builtin: Template[] = [
     price: 199000,
     featured: true,
     description: "Bordo baxmal, muhrlangan maktub va anor bezaklari. Muhr ochilgach — ravoqli muqova, otkritka-manzil, polaroid hikoya va chipta-javob.",
+    descriptionRu: "Бордовый бархат, запечатанное письмо и гранатовые узоры. После вскрытия печати — арочная обложка, открытка с адресом, история в полароидах и билет-ответ.",
     palette: ["#7A1E2C", "#4A0F1A", "#C9A25E", "#F3ECE0"],
     sample: { a: "Azizbek", b: "Sevara", date: "12 · 09 · 2026", venue: "«Navro‘z» saroyi", time: "17:00" },
     theme: { bg: ["#7a1e2c", "#4a0f1a"], ink: "#f3ece0", accent: "#c9a25e", soft: "#e8d3a8", script: "cormorant", color: "bordo" },
@@ -135,6 +138,7 @@ const builtin: Template[] = [
     price: 199000,
     featured: true,
     description: "Zumrad yashil damask, oltin muhrli konvert va bog‘ manzarasi. Konvert ochilgach — madrasa ravog‘i, parda ortidagi bog‘, ravoqli suratlar va konvert-javob.",
+    descriptionRu: "Изумрудный дамаск, конверт с золотой печатью и садовый пейзаж. После открытия конверта — арка медресе, сад за занавесом, фото в арках и конверт-ответ.",
     palette: ["#123C2E", "#0C2A20", "#C6A15B", "#F7F3EA"],
     sample: { a: "Azizbek", b: "Sevara", date: "12 · 09 · 2026", venue: "«Navro‘z» saroyi", time: "17:00" },
     theme: { bg: ["#123c2e", "#0c2a20"], ink: "#f7f3ea", accent: "#c6a15b", soft: "#e2c88e", script: "cormorant", color: "yashil" },

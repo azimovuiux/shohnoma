@@ -69,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="uz" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js');if(/^\\/ru(\\/|$)/.test(location.pathname))document.documentElement.lang='ru'" }} />
         {/* Admin boshqaradigan shablonlar ro‘yxati — React'dan oldin yuklanadi (window.__SHOHNOMA_TEMPLATES__) */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script src="/api/templates.js" />

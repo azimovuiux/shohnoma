@@ -6,6 +6,7 @@
  */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { User, Order, Invitation, Payment, Guest, Stats } from "./types";
+import { currentLocale, tr } from "@/lib/i18n";
 
 export type { User, Order, Invitation, Payment, Guest, Stats };
 
@@ -18,7 +19,7 @@ export class ApiError extends Error {
 export async function apiGet<T>(url: string): Promise<T> {
   const res = await fetch(url, { credentials: "same-origin", headers: { Accept: "application/json" } });
   const data = (await res.json().catch(() => ({}))) as T & { ok?: boolean; error?: string };
-  if (!res.ok || data.ok === false) throw new ApiError(data.error || "Xatolik yuz berdi", res.status);
+  if (!res.ok || data.ok === false) throw new ApiError(tr(currentLocale(), data.error || "Xatolik yuz berdi"), res.status);
   return data;
 }
 

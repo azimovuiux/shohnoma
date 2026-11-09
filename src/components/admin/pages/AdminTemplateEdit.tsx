@@ -253,6 +253,9 @@ export function AdminTemplateEdit() {
             <Field label="Tavsif">
               <Textarea value={t.description} onChange={(e) => set({ description: e.target.value })} maxLength={400} />
             </Field>
+            <Field label="Tavsif (ruscha)" hint="Saytning ruscha versiyasida (/ru/) ko‘rinadi. Bo‘sh qolsa — o‘zbekchasi chiqadi.">
+              <Textarea value={t.descriptionRu ?? ""} onChange={(e) => set({ descriptionRu: e.target.value })} maxLength={400} />
+            </Field>
           </Section>
 
           {t.kind === "html" && (

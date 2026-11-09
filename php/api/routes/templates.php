@@ -96,6 +96,7 @@ function tpl_clean(array $b, string $slug): array
         'priceOld' => $priceOld ?: $price,
         'featured' => !empty($b['featured']),
         'description' => str_in($b['description'] ?? '', 400),
+        'descriptionRu' => str_in($b['descriptionRu'] ?? '', 400),
         'palette' => $palette,
         'sample' => $sample,
         'theme' => $theme,

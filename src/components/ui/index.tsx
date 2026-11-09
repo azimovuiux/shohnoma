@@ -5,6 +5,7 @@
  */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode, type InputHTMLAttributes, type TextareaHTMLAttributes } from "react";
 import { Add, CloseCircle, Minus, TickCircle } from "@/components/icons";
+import { currentLocale, tr } from "@/lib/i18n";
 
 /* ── Field / Input ── */
 
@@ -277,7 +278,7 @@ export async function api<T = Record<string, unknown>>(url: string, init?: Reque
     body: init?.json !== undefined ? JSON.stringify(init.json) : init?.body,
   });
   const data = (await res.json().catch(() => ({}))) as T & { ok?: boolean; error?: string };
-  if (!res.ok || data.ok === false) throw new Error(data.error || "Xatolik yuz berdi. Qayta urinib ko‘ring.");
+  if (!res.ok || data.ok === false) throw new Error(tr(currentLocale(), data.error || "Xatolik yuz berdi. Qayta urinib ko‘ring."));
   return data;
 }
 

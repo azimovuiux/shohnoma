@@ -19,6 +19,7 @@ import {
 } from "@/components/icons";
 import { useRouter } from "next/navigation";
 import { useMe } from "@/lib/client";
+import { switchPath, useLocale } from "@/lib/i18n";
 
 export type HeaderUser = {
   name: string | null;
@@ -38,14 +39,10 @@ type Lang = "uz" | "ru";
 
 function LangSwitcher({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
-  const [lang, setLang] = useState<Lang>("uz");
+  const lang = useLocale();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const saved = document.cookie.match(/(?:^|; )lang=(uz|ru)/)?.[1] as
-      | Lang
-      | undefined;
-    if (saved) setLang(saved);
     const onDoc = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node))
         setOpen(false);
@@ -54,11 +51,12 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
     return () => document.removeEventListener("mousedown", onDoc);
   }, []);
 
+  // Til almashganda — o‘sha sahifaning boshqa tildagi manziliga (/ru/... ↔ /...)
   const choose = (l: Lang) => {
-    setLang(l);
     setOpen(false);
     document.cookie = `lang=${l}; path=/; max-age=31536000`;
-    // [Ochiq] ruscha tarjima keyingi bosqichda (next-intl) ulanadi
+    if (l === lang) return;
+    window.location.href = switchPath(window.location.pathname, l) + window.location.search + window.location.hash;
   };
 
   return (

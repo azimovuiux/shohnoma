@@ -67,6 +67,13 @@ RewriteRule ^shablonlar/[a-z0-9-]+/$ shablonlar/_/index.html [L]
 RewriteRule ^shablonlar/[a-z0-9-]+/index\.txt$ shablonlar/_/index.txt [L]
 RewriteRule ^namuna/[a-z0-9-]+/$ namuna/_/index.html [L]
 RewriteRule ^namuna/[a-z0-9-]+/index\.txt$ namuna/_/index.txt [L]
+# Ruscha versiya (/ru/...) — xuddi shu qobiqlar
+RewriteRule ^ru/buyurtma/[^/]+/(.*)$ ru/buyurtma/_/$1 [L]
+RewriteRule ^ru/kabinet/t/[^/]+/(.*)$ ru/kabinet/t/_/$1 [L]
+RewriteRule ^ru/shablonlar/[a-z0-9-]+/$ ru/shablonlar/_/index.html [L]
+RewriteRule ^ru/shablonlar/[a-z0-9-]+/index\.txt$ ru/shablonlar/_/index.txt [L]
+RewriteRule ^ru/namuna/[a-z0-9-]+/$ ru/namuna/_/index.html [L]
+RewriteRule ^ru/namuna/[a-z0-9-]+/index\.txt$ ru/namuna/_/index.txt [L]
 
 
 # Mehmon taklifnomasi: /jasur-madina/ → invite.php (OG meta bilan)
