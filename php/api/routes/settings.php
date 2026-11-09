@@ -55,6 +55,7 @@ route('PUT', '/admin/settings', function () {
             $v = strtoupper($v);
             if (!preg_match('/^(G|GTM)-[A-Z0-9]{4,16}$/', $v)) fail('ID «G-XXXXXXXXXX» (Google Analytics) yoki «GTM-XXXXXXX» (Tag Manager) ko‘rinishida bo‘lsin.', 422);
         }
+        if (str_ends_with($k, '_DISABLED')) $v = $v === '1' ? '1' : '';
         if ($k === 'P2P_CARD' && $v !== '' && !preg_match('/^\d{4} ?\d{4} ?\d{4} ?\d{4}$/', $v)) fail('Karta raqami 16 ta raqam bo‘lsin', 422);
         setting_set($k, $v === '' ? null : mb_substr($v, 0, 500));
     }

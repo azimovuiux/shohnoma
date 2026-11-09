@@ -115,7 +115,13 @@ export function PayPageClient() {
               title={t("So‘nggi qadam")}
               sub={t("Qulay to‘lov usulini tanlang.")}
             />
-            <PayChoice order={order} template={template} providers={cfg.data.providers as Provider[]} />
+            {cfg.data.providers.length ? (
+              <PayChoice order={order} template={template} providers={cfg.data.providers as Provider[]} />
+            ) : (
+              <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-3 px-5 pb-16 lg:px-10">
+                <p className="t-body-m text-ink-2">{t("Onlayn to‘lov vaqtincha ishlamayapti. Iltimos, biz bilan bog‘laning — to‘lovni boshqa yo‘l bilan qabul qilamiz.")}</p>
+              </div>
+            )}
           </>
         )
       }

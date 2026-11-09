@@ -7,10 +7,11 @@ function enabled_providers(): array
 {
     $sandbox = env('PAYMENTS_SANDBOX') === '1';
     $list = [];
-    if ((env('PAYME_MERCHANT_ID') && env('PAYME_KEY')) || $sandbox) $list[] = 'payme';
-    if ((env('CLICK_SERVICE_ID') && env('CLICK_MERCHANT_ID') && env('CLICK_SECRET_KEY')) || $sandbox) $list[] = 'click';
+    // *_DISABLED = '1' — admin to‘lov usulini vaqtincha o‘chirib qo‘ygan (kalitlar saqlanib qoladi)
+    if (((env('PAYME_MERCHANT_ID') && env('PAYME_KEY')) || $sandbox) && env('PAYME_DISABLED') !== '1') $list[] = 'payme';
+    if (((env('CLICK_SERVICE_ID') && env('CLICK_MERCHANT_ID') && env('CLICK_SECRET_KEY')) || $sandbox) && env('CLICK_DISABLED') !== '1') $list[] = 'click';
     if (env('GOOGLE_PAY_ENABLED') === '1') $list[] = 'google_pay';
-    $list[] = 'p2p';
+    if (env('P2P_DISABLED') !== '1') $list[] = 'p2p';
     return $list;
 }
 
@@ -180,44 +181,71 @@ function handle_payme(array $body): array
 
 function click_reply(array $p, int $error, string $note, array $extra = []): array
 {
-    return ['click_trans_id' => $p['click_trans_id'] ?? null, 'merchant_trans_id' => $p['merchant_trans_id'] ?? null, 'error' => $error, 'error_note' => $note] + $extra;
+    return ['click_trans_id' => isset($p['click_trans_id']) && ctype_digit((string)$p['click_trans_id']) ? (int)$p['click_trans_id'] : ($p['click_trans_id'] ?? null), 'merchant_trans_id' => $p['merchant_trans_id'] ?? null, 'error' => $error, 'error_note' => $note] + $extra;
 }
 
+/** Click so‘rovidagi majburiy maydonlar va service_id tekshiruvi; xato bo‘lsa — javob, aks holda null */
+function click_check(array $p, array $need): ?array
+{
+    foreach ($need as $k) if (!isset($p[$k]) || $p[$k] === '') return click_reply($p, -8, 'Error in request from click');
+    if ((string)$p['service_id'] !== (string)env('CLICK_SERVICE_ID')) return click_reply($p, -8, 'Error in request from click');
+    return null;
+}
+
+/**
+ * Prepare (action=0). merchant_prepare_id sifatida Click’ning o‘z click_trans_id’si (butun son) qaytariladi —
+ * Click bu maydonni raqam sifatida kutadi.
+ */
 function click_prepare(array $p): array
 {
-    $sign = md5(($p['click_trans_id'] ?? '') . ($p['service_id'] ?? '') . env('CLICK_SECRET_KEY', '') . ($p['merchant_trans_id'] ?? '') . ($p['amount'] ?? '') . ($p['action'] ?? '') . ($p['sign_time'] ?? ''));
-    if (!env('CLICK_SECRET_KEY') || !hash_equals($sign, (string)($p['sign_string'] ?? ''))) return click_reply($p, -1, 'SIGN CHECK FAILED!');
-    if ((string)($p['action'] ?? '') !== '0') return click_reply($p, -3, 'Action not found');
-    $o = one('SELECT * FROM orders WHERE code = ?', [(string)($p['merchant_trans_id'] ?? '')]);
+    if ($e = click_check($p, ['click_trans_id', 'service_id', 'merchant_trans_id', 'amount', 'action', 'sign_time', 'sign_string'])) return $e;
+    $sign = md5($p['click_trans_id'] . $p['service_id'] . env('CLICK_SECRET_KEY', '') . $p['merchant_trans_id'] . $p['amount'] . $p['action'] . $p['sign_time']);
+    if (!env('CLICK_SECRET_KEY') || !hash_equals($sign, (string)$p['sign_string'])) return click_reply($p, -1, 'SIGN CHECK FAILED!');
+    if ((string)$p['action'] !== '0') return click_reply($p, -3, 'Action not found');
+    $o = one('SELECT * FROM orders WHERE code = ?', [(string)$p['merchant_trans_id']]);
     if (!$o) return click_reply($p, -5, 'User does not exist');
     if (is_paid_status($o['status'])) return click_reply($p, -4, 'Already paid');
-    if (abs((float)($p['amount'] ?? 0) - (int)$o['amount']) > 0.01) return click_reply($p, -2, 'Incorrect parameter amount');
-    $existing = one("SELECT id FROM payments WHERE provider = 'click' AND external_id = ?", [(string)$p['click_trans_id']]);
-    if ($existing) return click_reply($p, 0, 'Success', ['merchant_prepare_id' => $existing['id']]);
-    $id = new_id();
+    if ($o['status'] === 'archived') return click_reply($p, -5, 'User does not exist');
+    if (abs((float)$p['amount'] - (int)$o['amount']) > 0.01) return click_reply($p, -2, 'Incorrect parameter amount');
+    $tid = (string)$p['click_trans_id'];
+    $existing = one("SELECT * FROM payments WHERE provider = 'click' AND external_id = ?", [$tid]);
+    if ($existing) {
+        if ($existing['status'] === 'cancelled') return click_reply($p, -9, 'Transaction cancelled');
+        if ($existing['status'] === 'paid') return click_reply($p, -4, 'Already paid');
+        return click_reply($p, 0, 'Success', ['merchant_prepare_id' => (int)$tid]);
+    }
     q("INSERT INTO payments (id, order_id, provider, amount, status, external_id, meta) VALUES (?, ?, 'click', ?, 'processing', ?, ?)",
-        [$id, $o['id'], (int)$o['amount'], (string)$p['click_trans_id'], json_encode(['click_paydoc_id' => $p['click_paydoc_id'] ?? null])]);
+        [new_id(), $o['id'], (int)$o['amount'], $tid, json_encode(['click_paydoc_id' => $p['click_paydoc_id'] ?? null])]);
     q("UPDATE orders SET status = 'payment_processing' WHERE id = ?", [$o['id']]);
-    return click_reply($p, 0, 'Success', ['merchant_prepare_id' => $id]);
+    return click_reply($p, 0, 'Success', ['merchant_prepare_id' => (int)$tid]);
 }
 
+/** Complete (action=1): to‘lov yakuni (error < 0 — Click tomonda bekor qilingan) */
 function click_complete(array $p): array
 {
-    $sign = md5(($p['click_trans_id'] ?? '') . ($p['service_id'] ?? '') . env('CLICK_SECRET_KEY', '') . ($p['merchant_trans_id'] ?? '') . ($p['merchant_prepare_id'] ?? '') . ($p['amount'] ?? '') . ($p['action'] ?? '') . ($p['sign_time'] ?? ''));
-    if (!env('CLICK_SECRET_KEY') || !hash_equals($sign, (string)($p['sign_string'] ?? ''))) return click_reply($p, -1, 'SIGN CHECK FAILED!');
-    if ((string)($p['action'] ?? '') !== '1') return click_reply($p, -3, 'Action not found');
-    $pay = one("SELECT * FROM payments WHERE id = ? AND provider = 'click'", [(string)($p['merchant_prepare_id'] ?? '')]);
+    if ($e = click_check($p, ['click_trans_id', 'service_id', 'merchant_trans_id', 'merchant_prepare_id', 'amount', 'action', 'sign_time', 'sign_string'])) return $e;
+    $sign = md5($p['click_trans_id'] . $p['service_id'] . env('CLICK_SECRET_KEY', '') . $p['merchant_trans_id'] . $p['merchant_prepare_id'] . $p['amount'] . $p['action'] . $p['sign_time']);
+    if (!env('CLICK_SECRET_KEY') || !hash_equals($sign, (string)$p['sign_string'])) return click_reply($p, -1, 'SIGN CHECK FAILED!');
+    if ((string)$p['action'] !== '1') return click_reply($p, -3, 'Action not found');
+    // merchant_prepare_id = click_trans_id (yangi), eski to‘lovlar uchun — payments.id
+    $pay = one("SELECT * FROM payments WHERE provider = 'click' AND (external_id = ? OR id = ?)", [(string)$p['merchant_prepare_id'], (string)$p['merchant_prepare_id']]);
     if (!$pay) return click_reply($p, -6, 'Transaction does not exist');
     $o = one('SELECT * FROM orders WHERE id = ?', [$pay['order_id']]);
-    if (!$o || $o['code'] !== ($p['merchant_trans_id'] ?? '')) return click_reply($p, -5, 'User does not exist');
-    if ($pay['status'] === 'paid' || is_paid_status($o['status'])) return click_reply($p, -4, 'Already paid', ['merchant_confirm_id' => $pay['id']]);
+    if (!$o || $o['code'] !== (string)$p['merchant_trans_id']) return click_reply($p, -5, 'User does not exist');
+    $confirm = ['merchant_confirm_id' => (int)$p['merchant_prepare_id']];
+    if ($pay['status'] === 'paid') return click_reply($p, -4, 'Already paid', $confirm);
     if ($pay['status'] === 'cancelled') return click_reply($p, -9, 'Transaction cancelled');
-    if (abs((float)($p['amount'] ?? 0) - (int)$o['amount']) > 0.01) return click_reply($p, -2, 'Incorrect parameter amount');
     if ((int)($p['error'] ?? 0) < 0) {
         q("UPDATE payments SET status = 'cancelled' WHERE id = ?", [$pay['id']]);
-        q("UPDATE orders SET status = 'payment_failed' WHERE id = ?", [$o['id']]);
+        if (!is_paid_status($o['status'])) q("UPDATE orders SET status = 'payment_failed' WHERE id = ?", [$o['id']]);
         return click_reply($p, -9, 'Transaction cancelled');
     }
+    if (abs((float)$p['amount'] - (int)$pay['amount']) > 0.01) return click_reply($p, -2, 'Incorrect parameter amount');
+    if (is_paid_status($o['status'])) {
+        // buyurtma boshqa yo‘l bilan allaqachon to‘langan — ikki marta yechilmasin (Click pulni qaytaradi)
+        q("UPDATE payments SET status = 'cancelled' WHERE id = ?", [$pay['id']]);
+        return click_reply($p, -4, 'Already paid');
+    }
     mark_order_paid($o['id'], 'click', $pay['id']);
-    return click_reply($p, 0, 'Success', ['merchant_confirm_id' => $pay['id']]);
+    return click_reply($p, 0, 'Success', $confirm);
 }

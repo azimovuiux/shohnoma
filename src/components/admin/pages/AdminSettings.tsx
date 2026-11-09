@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
-import { Field, Input, api, confirmDialog, useToast } from "@/components/ui";
+import { Field, Input, Toggle, api, confirmDialog, useToast } from "@/components/ui";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { TickCircle } from "@/components/icons";
 import { AdminError, AdminLoading, AdminTitle } from "../shared";
@@ -64,6 +64,7 @@ export function AdminSettings() {
       <div className="grid gap-6 xl:grid-cols-2">
         <TelegramCard data={data} save={save} reload={load} />
         <div className="flex flex-col gap-6">
+          <PayMethodsCard data={data} save={save} />
           <FieldsCard
             title="P2P o‘tkazma (karta)"
             sub="Mijoz to‘lov sahifasida ko‘radigan karta."
@@ -107,6 +108,48 @@ export function AdminSettings() {
         </div>
       </div>
     </>
+  );
+}
+
+/** To‘lov usullarini yoqish/o‘chirish (kalitlar o‘chirilmaydi — keyin qayta yoqish mumkin) */
+function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void> }) {
+  const toast = useToast();
+  const [busy, setBusy] = useState<string | null>(null);
+  const rows: [key: string, label: string, ready: boolean, hint: string][] = [
+    ["PAYME_DISABLED", "Payme", !!(data.settings.PAYME_MERCHANT_ID?.set && data.settings.PAYME_KEY?.set), "Merchant ID va kalit kiritilmagan"],
+    ["CLICK_DISABLED", "Click", !!(data.settings.CLICK_SERVICE_ID?.set && data.settings.CLICK_MERCHANT_ID?.set && data.settings.CLICK_SECRET_KEY?.set), "Service ID, Merchant ID va Secret key kiritilmagan"],
+    ["P2P_DISABLED", "P2P o‘tkazma (karta)", true, ""],
+  ];
+  const set = async (key: string, label: string, on: boolean) => {
+    if (!on && !(await confirmDialog({ title: `${label} o‘chirilsinmi?`, text: "Mijozlar to‘lov sahifasida bu usulni ko‘rmaydi. Saqlangan ma’lumotlar o‘chmaydi — istalgan vaqtda qayta yoqishingiz mumkin.", ok: "O‘chirish" }))) return;
+    setBusy(key);
+    try {
+      await save({ [key]: on ? "" : "1" }, on ? `${label} yoqildi` : `${label} o‘chirildi`);
+    } catch (e) {
+      toast((e as Error).message, "error");
+    } finally {
+      setBusy(null);
+    }
+  };
+  return (
+    <Card title="To‘lov usullari" sub="Mijozga ko‘rinadigan usullar. O‘chirilgan usul to‘lov sahifasida chiqmaydi.">
+      <ul className="flex flex-col divide-y divide-line">
+        {rows.map(([key, label, ready, hint]) => {
+          const on = data.settings[key]?.value !== "1";
+          return (
+            <li key={key} className="flex items-center justify-between gap-4 py-3">
+              <span className="flex flex-col gap-0.5">
+                <span className="t-title text-ink">{label}</span>
+                <span className="t-body-s text-ink-2">{!ready ? hint : on ? "Yoqilgan" : "O‘chirilgan"}</span>
+              </span>
+              <span className={busy === key || !ready ? "pointer-events-none opacity-50" : ""}>
+                <Toggle checked={ready && on} onChange={(v) => set(key, label, v)} label={label} />
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </Card>
   );
 }
 

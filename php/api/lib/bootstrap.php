@@ -39,6 +39,7 @@ const SETTING_KEYS = [
     'PAYME_MERCHANT_ID', 'PAYME_KEY',
     'CLICK_SERVICE_ID', 'CLICK_MERCHANT_ID', 'CLICK_SECRET_KEY', 'CLICK_MERCHANT_USER_ID',
     'GA_MEASUREMENT_ID',
+    'PAYME_DISABLED', 'CLICK_DISABLED', 'P2P_DISABLED',
 ];
 
 function db_settings(bool $fresh = false): array
