@@ -13,12 +13,14 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNod
 import { ceremonyLabel } from "@/lib/templates";
 import { splitDate, tashkentDate } from "@/lib/display";
 import { musicSrc } from "@/lib/music";
+import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
+import { timerUnits } from "@/components/invitation/data";
 import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
 import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
-import { DRESS, MONTHS, MONTHS_LOWER, WEEKDAY, coordsFrom, downloadIcs, type ProgramItem } from "../anor/data";
-import { Z, ZUMRAD_DEMO, ogee } from "./data";
+import { DRESS, calendarWords, coordsFrom, downloadIcs, untilPhrase, type ProgramItem } from "../anor/data";
+import { Z, ZUMRAD_DEMO, ZUMRAD_DEMO_RU, ogee } from "./data";
 import st from "./zumrad.module.css";
 
 const U = (n: number) => `calc(var(--u) * ${n})`;
@@ -29,57 +31,64 @@ const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
 const ease = (x: number) => 1 - Math.pow(1 - x, 3);
 
-/* ── Ma’lumot ── */
+/* ── Ma’lumot (taklifnoma tilida — InvitationSite LocaleProvider’i) ── */
 function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" | "data" | "mode">) {
   const demo = mode === "demo";
+  const t = useT();
+  const lang = useLocale();
+  const DEMO = lang === "ru" ? ZUMRAD_DEMO_RU : ZUMRAD_DEMO;
   const ex = (data.extra ?? {}) as Record<string, unknown>;
   const str = (k: string) => (typeof ex[k] === "string" ? (ex[k] as string).trim() : "");
   const sd = splitDate(data.date);
   const [guest, setGuest] = useState("");
   useEffect(() => {
     const m = new URLSearchParams(location.search).get("m");
-    setGuest(m ? m.slice(0, 80) : demo ? ZUMRAD_DEMO.guest : "");
-  }, [demo]);
+    setGuest(m ? m.slice(0, 80) : demo ? DEMO.guest : "");
+  }, [demo, DEMO.guest]);
   return useMemo(() => {
+    const cw = calendarWords(lang);
+    const city = (lang === "ru" ? (data.address || "Toshkent").replace(/^\s*г\.\s*/i, "") : data.address || "Toshkent").split(/[,.]/)[0].replace(/\s+(sh|shahri|shahar)$/i, "").trim() || "Toshkent";
     const exProgram = Array.isArray(ex.program) ? (ex.program as ProgramItem[]).filter((p) => p?.time && p?.title) : [];
     const P = data.photos ?? [];
     const date = sd ? new Date(`${sd.iso}T12:00:00Z`) : null;
-    const dress = str("dressCode") || (demo ? ZUMRAD_DEMO.dressCode : "");
-    const a = data.personA;
-    const b = data.personB;
+    const dz = DRESS[str("dressCode") || (demo ? DEMO.dressCode : "")];
+    // namunadagi ismlar va joy nomi tarjima qilinadi (mijoz ma’lumoti — o‘zgarishsiz)
+    const a = demo ? t(data.personA) : data.personA;
+    const b = demo && data.personB ? t(data.personB) : data.personB;
     return {
       a,
       b,
       names: b ? `${a} & ${b}` : a,
       mono: [a?.[0], b?.[0]].filter(Boolean) as string[],
-      kind: `${ceremonyLabel[data.ceremony].replace(/to‘yi$/, "to‘yiga")} taklif`,
+      kind: t(`${ceremonyLabel[data.ceremony].replace(/to‘yi$/, "to‘yiga")} taklif`),
       dots: sd?.dots ?? "",
       iso: sd?.iso ?? "",
       time: sd?.time ?? "",
       day: date ? date.getUTCDate() : 0,
-      weekday: date ? WEEKDAY[date.getUTCDay()] : "",
-      monthYear: date ? `${MONTHS[date.getUTCMonth()]} ${date.getUTCFullYear()}` : "",
+      weekday: date ? cw.weekday[date.getUTCDay()] : "",
+      // ruscha — katta kun raqami ostida: «сентября 2026»
+      monthYear: date ? `${(lang === "ru" ? cw.monthsAfterDay : cw.months)[date.getUTCMonth()]} ${date.getUTCFullYear()}` : "",
       target: data.date ? tashkentDate(data.date).getTime() : null,
       guest,
-      message: demo ? ZUMRAD_DEMO.message : data.message || "",
-      hosts: str("hosts") || (demo ? ZUMRAD_DEMO.hosts : ""),
-      venue: data.venueName,
-      address: demo ? ZUMRAD_DEMO.address : data.address,
-      city: (data.address || "Toshkent").split(/[,.]/)[0].replace(/\s+(sh|shahri|shahar)$/i, "").trim() || "Toshkent",
+      message: demo ? DEMO.message : data.message || "",
+      hosts: str("hosts") || (demo ? DEMO.hosts : ""),
+      venue: demo ? t(data.venueName) : data.venueName,
+      address: demo ? DEMO.address : data.address,
+      city: t(city),
       mapUrl: data.mapUrl || `https://yandex.uz/maps/?text=${encodeURIComponent([data.venueName, data.address].filter(Boolean).join(", "))}`,
       coords: demo ? { lat: 41.3385, lon: 69.2851 } : coordsFrom(data.mapUrl),
-      program: (demo ? ZUMRAD_DEMO.program : exProgram.length ? exProgram : (data.program as ProgramItem[])) as ProgramItem[],
-      dress: dress && DRESS[dress] ? { ...DRESS[dress], note: str("dressNote") || DRESS[dress].note } : null,
-      storyText: str("storyText") || (demo ? ZUMRAD_DEMO.storyText : ""),
-      caption: str("caption") || (demo ? ZUMRAD_DEMO.caption : "Bir umrga"),
+      program: (demo ? DEMO.program : exProgram.length ? exProgram : (data.program as ProgramItem[])) as ProgramItem[],
+      dress: dz ? { ...dz, title: t(dz.title), sub: t(dz.sub), note: str("dressNote") || t(dz.note), imgs: dz.imgs.map((x) => ({ ...x, label: t(x.label) })) } : null,
+      storyText: str("storyText") || (demo ? DEMO.storyText : ""),
+      caption: str("caption") || (demo ? DEMO.caption : t("Bir umrga")),
       polaroid: P[0] ?? (demo ? `${Z}/foto-polaroid.webp` : `${Z}/foto-qollar.webp`),
       arch: demo ? `${Z}/foto-juftlik.webp` : (P[1] ?? null),
       arch2: demo ? `${Z}/foto-qollar.webp` : (P[2] ?? null),
-      rsvpUntil: data.rsvpDeadline ? `${Number(data.rsvpDeadline.slice(8, 10))}-${MONTHS_LOWER[Number(data.rsvpDeadline.slice(5, 7)) - 1]}gacha` : "",
+      rsvpUntil: untilPhrase(data.rsvpDeadline, lang),
       musicUrl: musicSrc(template, data),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [template, data, demo, guest]);
+  }, [template, data, demo, guest, lang, t]);
 }
 type D = ReturnType<typeof useData>;
 
@@ -114,6 +123,7 @@ function L({ m, l, wide, children, className, style, a, z }: { m: [number, numbe
 
 /* ═════════════ 00 · Muhrlangan maktub (scroll bilan) ═════════════ */
 function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: () => void; onStart: () => void }) {
+  const t = useT();
   const wrap = useRef<HTMLDivElement>(null);
   const ptr = usePointer(wide);
   const v: V = (m, l) => U(wide ? l : m);
@@ -182,7 +192,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
   return (
     // Ochilish sahnasi bir ekranga sig‘ishi kerak: katta/past ekranda kenglik va balandlikdan kichigiga moslanadi
     <div ref={wrap} className={st.gateWrap} style={wide ? ({ "--u": "min(calc(100cqw / 1440), calc(100svh / 900))" } as CSSProperties) : undefined}>
-      <div className={st.gate} aria-label="Taklifnoma">
+      <div className={st.gate} aria-label={t("Taklifnoma")}>
         <div className={cx(st.gateBg, st.damask)} />
         {wide ? (
           <div className={cx("absolute", st.damask)} style={{ left: `calc(50% - ${U(450)})`, top: U(180), width: U(900), height: U(600), border: "1.2px solid rgba(198,161,91,.7)", borderRadius: U(10), boxShadow: "0 30px 70px rgba(0,8,5,.6)" }} />
@@ -247,7 +257,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
           </p>
           {d.guest && (
             <p className={st.fadeIn} style={{ fontSize: U(15), color: "rgba(247,243,234,.75)", marginTop: U(6), animationDelay: "1.2s" }}>
-              Hurmatli {d.guest}
+              {t("Hurmatli {guest}", { guest: d.guest })}
             </p>
           )}
         </div>
@@ -274,19 +284,20 @@ function Cell({ value, label, run, i, w, h, fs, ls, radius }: { value: number; l
   );
 }
 function TimerRow({ d, run, size }: { d: D; run: boolean; size: { w: number; h: number; fs: number; ls: number; r: number; gap: number } }) {
+  const units = timerUnits(useLocale());
   const c = useCountdown(d.target);
   if (!c) return null;
   return (
     <div className="flex" style={{ gap: U(size.gap) }}>
       {(
         [
-          [c.d, "kun"],
-          [c.h, "soat"],
-          [c.m, "daqiqa"],
-          [c.s, "soniya"],
+          [c.d, units[0]],
+          [c.h, units[1]],
+          [c.m, units[2]],
+          [c.s, units[3]],
         ] as const
       ).map(([n, l], i) => (
-        <Cell key={l} value={n} label={l} run={run} i={i} w={U(size.w)} h={U(size.h)} fs={U(size.fs)} ls={U(size.ls)} radius={U(size.r)} />
+        <Cell key={i} value={n} label={l} run={run} i={i} w={U(size.w)} h={U(size.h)} fs={U(size.fs)} ls={U(size.ls)} radius={U(size.r)} />
       ))}
     </div>
   );
@@ -294,6 +305,7 @@ function TimerRow({ d, run, size }: { d: D; run: boolean; size: { w: number; h: 
 
 /* ═════════════ 01 · Konvert kolaji ═════════════ */
 function Collage({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const box = useRef<HTMLDivElement>(null);
   const [par, setPar] = useState(0.5);
   useScrollProgress(box, (p) => setPar(p), ready);
@@ -360,13 +372,13 @@ function Collage({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         {/* taymer */}
         <div ref={tref} className="absolute flex flex-col items-start" style={{ left: v(24, 163.5), top: v(560, 840), gap: v(10, 15), zIndex: 6 }}>
           <p data-a="up" className={cx(st.italic, st.title)} style={vars({ fontSize: v(32, 48), color: "var(--green)", "--d": "0.8s", "--y": 20 })}>
-            {d.b ? "To‘yimizgacha" : "Bayramgacha"}
+            {d.b ? t("To‘yimizgacha") : t("Bayramgacha")}
           </p>
           <TimerRow d={d} run={tIn} size={wide ? { w: 60, h: 87, fs: 39, ls: 13, r: 15, gap: 9 } : { w: 40, h: 58, fs: 26, ls: 9.5, r: 10, gap: 6 }} />
         </div>
         {/* imzo */}
         <div data-a="up" className="absolute flex flex-col items-center text-center" style={vars({ left: "50%", translate: "-50% 0", top: v(884, 1326), gap: U(2), "--d": "0.3s", "--y": 30, zIndex: 6 })}>
-          <p style={{ fontSize: v(16, 22), fontWeight: 500, color: "#45544d" }}>Muhabbat bilan,</p>
+          <p style={{ fontSize: v(16, 22), fontWeight: 500, color: "#45544d" }}>{t("Muhabbat bilan,")}</p>
           <p className={cx(st.italic, st.title)} style={{ fontSize: v(36, 54), color: "var(--green)" }}>
             {d.names}
           </p>
@@ -378,6 +390,7 @@ function Collage({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 02 · Samarqand bog‘i — qatlamli parallaks sahna ═════════════ */
 function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: boolean; ready: boolean; variant?: "open" | "close"; onSeen?: () => void }) {
+  const t = useT();
   const ref = useRef<HTMLDivElement>(null);
   const [vals, setVals] = useState({ p: variant === "open" ? 0.3 : 0.6, o: variant === "open" ? 0 : 1 });
   useScrollProgress(
@@ -509,7 +522,7 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
       ) : (
         <div className="absolute inset-x-0 flex flex-col items-center text-center" style={{ top: U(wide ? 300 : 315.8), gap: U(6), zIndex: 6, textShadow: "0 2px 18px rgba(5,20,15,.55)", opacity: 0.3 + 0.7 * seg(p, 0.2, 0.45), transform: `translateY(${(1 - seg(p, 0.2, 0.45)) * 20}px)` }}>
           <p className={cx(st.italic, st.title)} style={{ fontSize: U(wide ? 80 : 56), color: "var(--cream)" }}>
-            Sizni kutamiz
+            {t("Sizni kutamiz")}
           </p>
           <p className={cx(st.serif, st.title)} style={{ fontSize: U(wide ? 40 : 28), color: "var(--gold-2)" }}>
             {d.names}
@@ -523,13 +536,14 @@ function Garden({ d, wide, ready, variant = "open", onSeen }: { d: D; wide: bool
 
 /* ═════════════ 03 · Taklif  +  04 · Sana ═════════════ */
 function InviteDate({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   const [ref, inView] = useInView<HTMLDivElement>(0.35, ready);
   const day = useCountUp(d.day, inView, 900);
   const invite = (
     <Sec ready={ready} style={{ gap: U(22), paddingTop: U(40), paddingBottom: U(70), paddingInline: wide ? 0 : U(32), width: wide ? U(520) : "100%" }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ fontSize: v(46, 53), color: "var(--green)" }}>
-        Qadrli mehmonlar!
+        {t("Qadrli mehmonlar!")}
       </p>
       {d.message && (
         <p data-a="up" className="text-center" style={vars({ fontSize: U(17), lineHeight: 1.65, "--d": "0.2s", "--y": 20 })}>
@@ -541,7 +555,7 @@ function InviteDate({ d, wide, ready }: { d: D; wide: boolean; ready: boolean })
       </div>
       {d.hosts && (
         <p data-a="up" className={cx(st.italic, "text-center")} style={vars({ fontSize: v(24, 28), lineHeight: 1.2, color: "var(--green)", "--d": "0.5s", "--y": 20 })}>
-          Hurmat bilan,
+          {t("Hurmat bilan,")}
           <br />
           {d.hosts}
         </p>
@@ -551,7 +565,7 @@ function InviteDate({ d, wide, ready }: { d: D; wide: boolean; ready: boolean })
   const date = (
     <Sec ready={ready} style={{ gap: U(26), paddingTop: U(40), paddingBottom: wide ? U(80) : U(150), paddingInline: wide ? 0 : U(24), width: wide ? U(420) : "100%" }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ fontSize: v(52, 46), color: "var(--green)" }}>
-        Saqlab qo‘ying
+        {t("Saqlab qo‘ying")}
       </p>
       <div ref={ref} data-a="grow" className="relative" style={vars({ width: U(300), height: U(400), "--gr": "-6deg", "--t": "1.2s", "--e": "var(--spring)" })}>
         <svg className="absolute" style={{ left: U(39), top: U(84), width: U(222), height: U(280) }} viewBox="0 0 222 280" aria-hidden>
@@ -574,9 +588,9 @@ function InviteDate({ d, wide, ready }: { d: D; wide: boolean; ready: boolean })
         data-a="up"
         className={st.btnLine}
         style={vars({ fontSize: U(15), padding: `${U(16)} ${U(24)}`, "--d": "0.8s", "--y": 20 })}
-        onClick={() => downloadIcs({ title: d.b ? `${d.names} — to‘y` : `${d.a} — taklif`, startLocal: `${d.iso}T${d.time || "18:00"}`, location: [d.venue, d.address].filter(Boolean).join(", "), slug: (d.a || "toy").toLowerCase() })}
+        onClick={() => downloadIcs({ title: d.b ? t("{names} — to‘y", { names: d.names }) : t("{name} — taklif", { name: d.a }), startLocal: `${d.iso}T${d.time || "18:00"}`, location: [d.venue, d.address].filter(Boolean).join(", "), slug: (d.a || "toy").toLowerCase() })}
       >
-        Kalendarga qo‘shish
+        {t("Kalendarga qo‘shish")}
       </button>
     </Sec>
   );
@@ -595,6 +609,7 @@ function InviteDate({ d, wide, ready }: { d: D; wide: boolean; ready: boolean })
 
 /* ═════════════ 05 · Kun dasturi — parda sahnasi ═════════════ */
 function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   if (!d.program.length) return null;
   const half = Math.ceil(d.program.length / 2);
@@ -616,7 +631,7 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         </div>
       ))}
       <p data-a="mask" className={cx(st.italic, st.title)} style={vars({ fontSize: v(52, 64), color: "var(--cream)", "--d": "0.4s", zIndex: 3 })}>
-        Kun dasturi
+        {t("Kun dasturi")}
       </p>
       <div className="flex w-full justify-center" style={{ gap: U(80), zIndex: 3 }}>
         {cols.map((col, ci) => (
@@ -644,6 +659,7 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 06 · Manzil — deraza ichidagi mini-sahna ═════════════ */
 function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   const ptr = usePointer(wide && ready);
   const box = useRef<HTMLDivElement>(null);
@@ -684,11 +700,11 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   const btns = (
     <div className="flex w-full" style={{ gap: U(10) }}>
       <a href={d.mapUrl} target="_blank" rel="noopener noreferrer" className={st.btnGreen} style={{ flex: 1, padding: `${U(16)} ${U(20)}`, fontSize: U(15) }}>
-        Xaritada ochish
+        {t("Xaritada ochish")}
       </a>
       {taxi && (
         <a href={taxi} target="_blank" rel="noopener noreferrer" className={st.btnLine} style={{ flex: 1, padding: `${U(16)} ${U(20)}`, fontSize: U(15) }}>
-          Taksi chaqirish
+          {t("Taksi chaqirish")}
         </a>
       )}
     </div>
@@ -700,7 +716,7 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
           {win}
           <div className="flex flex-col items-start" style={{ gap: U(22), width: U(460) }}>
             <p data-a="mask" className={st.italic} style={{ fontSize: U(64), color: "var(--green)" }}>
-              Manzil
+              {t("Manzil")}
             </p>
             <p data-a="up" className={st.serif} style={vars({ fontSize: U(40), color: "var(--ink)", "--d": "0.3s", "--y": 20 })}>
               {d.venue}
@@ -716,7 +732,7 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
       ) : (
         <div className="flex w-full flex-col items-center text-center" style={{ gap: U(22) }}>
           <p data-a="mask" className={cx(st.italic, st.title)} style={{ fontSize: U(52), color: "var(--green)" }}>
-            Manzil
+            {t("Manzil")}
           </p>
           {win}
           <p data-a="up" className={st.serif} style={vars({ fontSize: U(32), color: "var(--ink)", "--d": "0.3s", "--y": 20 })}>
@@ -736,6 +752,7 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 07 · Dress-kod  +  08 · Lahzalar ═════════════ */
 function Dress({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   if (!d.dress) return null;
   const x = d.dress;
@@ -744,7 +761,7 @@ function Dress({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   return (
     <Sec ready={ready} style={{ paddingTop: v(70, 93), paddingBottom: v(80, 107), paddingInline: v(24, 32), gap: v(22, 29.3), width: wide ? U(520) : "100%" }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ fontSize: v(52, 61.3), color: "var(--green)" }}>
-        Dress-kod
+        {t("Dress-kod")}
       </p>
       <div data-a="up" className={cx(st.dressCard, "relative w-full")} style={vars({ borderRadius: U(26 * k), padding: `${U(28 * k)} ${U(20 * k)}`, "--y": 60, "--d": "0.3s" })}>
         <div data-a="grow" className="absolute" style={vars({ right: U(-30 * k), top: U(-80 * k), width: U(150 * k), height: U(150 * k), "--gr": "20deg", "--d": "1s", transformOrigin: "100% 0" })}>
@@ -773,6 +790,7 @@ function Dress({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 }
 
 function Moments({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   const box = useRef<HTMLDivElement>(null);
   const [par, setPar] = useState(0.5);
@@ -783,7 +801,7 @@ function Moments({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   return (
     <Sec ready={ready} style={{ paddingTop: v(70, 93), paddingBottom: v(90, 107), paddingInline: v(24, 0), gap: v(24, 30), width: wide ? U(460) : "100%" }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ fontSize: v(52, 61.3), color: "var(--green)" }}>
-        Bizning lahzalar
+        {t("Bizning lahzalar")}
       </p>
       {d.arch && (
         <div ref={box} className="relative" style={{ width: U(342 * k), height: U((d.arch2 ? 470 : 340) * k) }}>
@@ -828,6 +846,7 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
   const v: V = (m, l) => U(wide ? l : m);
   const k = wide ? 1.3 : 1;
   const fs = (n: number) => U(n * k);
+  const t = useT();
   const live = mode === "live";
   const [name, setName] = useState("");
   const [status, setStatus] = useState<RsvpStatus>("coming");
@@ -857,7 +876,7 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
   }, [live, slug]);
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return setErr("Ismingizni yozing");
+    if (!name.trim()) return setErr(t("Ismingizni yozing"));
     setErr(null);
     if (!live) return setSent(status);
     setBusy(true);
@@ -868,10 +887,10 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
         body: JSON.stringify({ name: name.trim(), status, count: status === "coming" ? count : 0, wish: wish.trim() || null }),
       });
       const j = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; editToken?: string };
-      if (!res.ok || !j.ok) throw new Error(j.error || "Javob yuborilmadi. Qayta urinib ko‘ring.");
-      const t = token ?? j.editToken!;
-      saveRsvp(slug, t, name.trim());
-      setToken(t);
+      if (!res.ok || !j.ok) throw new Error(t(j.error || "Javob yuborilmadi. Qayta urinib ko‘ring."));
+      const tk = token ?? j.editToken!;
+      saveRsvp(slug, tk, name.trim());
+      setToken(tk);
       setSent(status);
     } catch (x) {
       setErr((x as Error).message);
@@ -879,14 +898,17 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
       setBusy(false);
     }
   };
+  const rsvpTitle = t("Javobingizni|kutamiz").split("|");
   return (
     <Sec ready={ready} id="zumrad-javob" className={st.damask} style={{ paddingTop: v(120, 160), paddingBottom: v(110, 140), paddingInline: v(24, 0), gap: v(24, 28) }}>
       <p data-a="mask" className={cx(st.italic, "text-center")} style={{ fontSize: v(50, 64), lineHeight: 0.96, color: "var(--cream)" }}>
-        Javobingizni{wide ? " " : <br />}kutamiz
+        {rsvpTitle[0]}
+        {wide ? " " : <br />}
+        {rsvpTitle[1]}
       </p>
       {d.rsvpUntil && (
         <p data-a="fade" style={vars({ fontSize: U(16), color: "rgba(247,243,234,.8)", "--d": "0.3s" })}>
-          Iltimos, {d.rsvpUntil} bildiring
+          {t("Iltimos, {date} bildiring", { date: d.rsvpUntil })}
         </p>
       )}
       <form onSubmit={submit} noValidate data-a="up" className={cx(st.form, sent && st.sent)} style={vars({ width: fs(342), minHeight: sent ? fs(380) : undefined, padding: `${fs(151)} ${fs(24)} ${fs(30)}`, "--y": 90, "--d": "0.4s", "--t": "1.2s" })}>
@@ -900,22 +922,22 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
         {sent && (
           <div className={st.thanks} style={{ top: fs(150), gap: fs(10), paddingInline: fs(24) }}>
             <p className={st.italic} style={{ fontSize: fs(36), color: "var(--green)", lineHeight: 1.1 }}>
-              {sent === "not_coming" ? "Rahmat!" : "Rahmat! Sizni kutamiz"}
+              {sent === "not_coming" ? t("Rahmat!") : t("Rahmat! Sizni kutamiz")}
             </p>
             <p style={{ fontSize: fs(15), color: "var(--soft)", lineHeight: 1.5 }}>
-              {sent === "not_coming" ? "Javobingiz uchun rahmat — sizni duolarimizda eslaymiz." : `${name.trim() || "Javobingiz"} — ${count} kishi. Javobingiz yetkazildi.`}
+              {sent === "not_coming" ? t("Javobingiz uchun rahmat — sizni duolarimizda eslaymiz.") : t("{name} — {count} kishi. Javobingiz yetkazildi.", { name: name.trim() || t("Javobingiz"), count })}
             </p>
             <button type="button" onClick={() => setSent(null)} style={{ color: "var(--green)", fontSize: fs(14), textDecoration: "underline", textUnderlineOffset: 3 }}>
-              Javobni o‘zgartirish
+              {t("Javobni o‘zgartirish")}
             </button>
           </div>
         )}
         <div className={cx(st.formBody, "flex flex-col")} style={{ gap: fs(18) }}>
           <label className="flex flex-col" style={{ gap: fs(6) }}>
-            <span style={{ color: "var(--soft)", fontSize: fs(13) }}>Ismingiz</span>
-            <input className={st.field} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder="Dilshod va Gulnora" style={{ fontSize: fs(21), paddingBottom: fs(6) }} />
+            <span style={{ color: "var(--soft)", fontSize: fs(13) }}>{t("Ismingiz")}</span>
+            <input className={st.field} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder={t("Dilshod va Gulnora")} style={{ fontSize: fs(21), paddingBottom: fs(6) }} />
           </label>
-          <div className="flex" role="radiogroup" aria-label="Javob" style={{ gap: fs(8) }}>
+          <div className="flex" role="radiogroup" aria-label={t("Javob")} style={{ gap: fs(8) }}>
             {(
               [
                 ["coming", "Albatta kelaman"],
@@ -923,33 +945,33 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
               ] as const
             ).map(([s, l]) => (
               <button key={s} type="button" role="radio" aria-checked={status === s} onClick={() => setStatus(s)} className={st.choice} style={{ paddingBlock: fs(13), fontSize: fs(14) }}>
-                {l}
+                {t(l)}
               </button>
             ))}
           </div>
           {status === "coming" && (
             <div className="flex items-center justify-between" style={{ borderBottom: "1px solid rgba(30,42,36,.22)", paddingBottom: fs(8) }}>
-              <span style={{ color: "var(--soft)", fontSize: fs(13) }}>Necha kishi bo‘lasiz?</span>
+              <span style={{ color: "var(--soft)", fontSize: fs(13) }}>{t("Necha kishi bo‘lasiz?")}</span>
               <div className="flex items-center" style={{ gap: fs(12) }}>
-                <button type="button" className={st.step} disabled={count <= 1} onClick={() => setCount((c) => Math.max(1, c - 1))} aria-label="Kamaytirish" style={{ width: fs(32), height: fs(32), fontSize: fs(18) }}>
+                <button type="button" className={st.step} disabled={count <= 1} onClick={() => setCount((c) => Math.max(1, c - 1))} aria-label={t("Kamaytirish")} style={{ width: fs(32), height: fs(32), fontSize: fs(18) }}>
                   −
                 </button>
                 <span className={st.serif} style={{ fontSize: fs(21), minWidth: fs(52), textAlign: "center" }} aria-live="polite">
-                  {count} kishi
+                  {t("{count} kishi", { count })}
                 </span>
-                <button type="button" className={st.step} disabled={count >= 20} onClick={() => setCount((c) => Math.min(20, c + 1))} aria-label="Ko‘paytirish" style={{ width: fs(32), height: fs(32), fontSize: fs(18) }}>
+                <button type="button" className={st.step} disabled={count >= 20} onClick={() => setCount((c) => Math.min(20, c + 1))} aria-label={t("Ko‘paytirish")} style={{ width: fs(32), height: fs(32), fontSize: fs(18) }}>
                   +
                 </button>
               </div>
             </div>
           )}
           <label className="flex flex-col" style={{ gap: fs(6) }}>
-            <span style={{ color: "var(--soft)", fontSize: fs(13) }}>Tilaklaringiz</span>
-            <input className={st.field} value={wish} onChange={(e) => setWish(e.target.value)} maxLength={500} placeholder="Baxtingiz abadiy bo‘lsin…" style={{ fontSize: fs(21), paddingBottom: fs(6) }} />
+            <span style={{ color: "var(--soft)", fontSize: fs(13) }}>{t("Tilaklaringiz")}</span>
+            <input className={st.field} value={wish} onChange={(e) => setWish(e.target.value)} maxLength={500} placeholder={t("Baxtingiz abadiy bo‘lsin…")} style={{ fontSize: fs(21), paddingBottom: fs(6) }} />
           </label>
           {err && <p style={{ color: "#b3261e", fontSize: fs(14) }}>{err}</p>}
           <button type="submit" disabled={busy} className={st.btnGreen} style={{ paddingBlock: fs(16), fontSize: fs(15), opacity: busy ? 0.7 : 1 }}>
-            {busy ? "Yuborilmoqda…" : "Javobni yuborish"}
+            {busy ? t("Yuborilmoqda…") : t("Javobni yuborish")}
           </button>
         </div>
       </form>
@@ -959,6 +981,7 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
 
 /* ═════════════ Sahifa ═════════════ */
 export function ZumradSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
+  const t = useT();
   const root = useRef<HTMLDivElement>(null);
   const wide = useWide(root);
   const d = useData({ template, data, mode });
@@ -1040,7 +1063,7 @@ export function ZumradSite({ template, data, mode, embedded = false }: Invitatio
           <a href="https://shohnoma.uz" className={st.italic} style={{ color: "var(--gold-2)", fontSize: U(20) }}>
             Shohnoma
           </a>
-          <span style={{ color: "rgba(247,243,234,.6)", fontSize: U(12) }}>shohnoma.uz orqali tayyorlandi</span>
+          <span style={{ color: "rgba(247,243,234,.6)", fontSize: U(12) }}>{t("shohnoma.uz orqali tayyorlandi")}</span>
         </footer>
       </div>
     </div>

@@ -1,5 +1,15 @@
 import type { Template } from "@/lib/templates";
+import type { Locale } from "@/lib/i18n";
 import type { InvitationData } from "./types";
+
+/**
+ * Taklifnoma tili — sayt manzilidan emas, buyurtmadan: mijoz formada tanlagan `extra.lang` ("uz" | "ru").
+ * Tanlanmagan bo‘lsa (namuna, eski buyurtmalar) — joriy sahifa tili (/ru/namuna/... → ruscha).
+ */
+export function inviteLang(extra: unknown, fallback: Locale): Locale {
+  const l = (extra as { lang?: unknown } | null | undefined)?.lang;
+  return l === "ru" || l === "uz" ? l : fallback;
+}
 
 type Row = {
   slug: string;
@@ -19,6 +29,12 @@ type Row = {
   musicTrack?: string | null;
   extra?: Record<string, unknown>;
 };
+
+/**
+ * Sanoq birliklari. Ruschada son bilan kelishmaydigan, lekin sanoqlarda odatiy shakl («дней/часов/минут/секунд»);
+ * lug‘atga qo‘yilmagan — "kun"/"soat" kalitlari saytning boshqa joylarida qisqa shaklda tarjima qilingan.
+ */
+export const timerUnits = (lang: Locale) => (lang === "ru" ? ["дней", "часов", "минут", "секунд"] : ["kun", "soat", "daqiqa", "soniya"]);
 
 const CEREMONIES = ["nikoh", "fotiha", "sunnat", "tugilgan-kun"] as const;
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useT } from "@/lib/i18n";
 import st from "./shared.module.css";
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
@@ -43,8 +44,9 @@ export function usePreload(critical: string[], rest: string[], enabled: boolean,
 
 /** Yuklovchi: shablon rangidagi fon va muhr pulsi (yozuvsiz) */
 export function Loader({ done, seal }: { done: boolean; seal: string }) {
+  const t = useT();
   return (
-    <div className={cx(st.loader, done && st.loaderDone)} aria-hidden={done} role="status" aria-label="Taklifnoma yuklanmoqda">
+    <div className={cx(st.loader, done && st.loaderDone)} aria-hidden={done} role="status" aria-label={t("Taklifnoma yuklanmoqda")}>
       <span className={st.loaderRing} />
       <span className={st.loaderSeal}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -125,13 +127,14 @@ export function useMusic(url: string | null, slug: string, enabled: boolean) {
 }
 
 export function MusicButton({ m, wide, embedded }: { m: ReturnType<typeof useMusic>; wide: boolean; embedded: boolean }) {
+  const t = useT();
   if (!m.available) return null;
   const size = wide ? 60 : 52;
   const btn = (
     <button
       type="button"
       onClick={m.toggle}
-      aria-label={m.playing ? "Musiqani o‘chirish" : "Musiqani yoqish"}
+      aria-label={m.playing ? t("Musiqani o‘chirish") : t("Musiqani yoqish")}
       aria-pressed={m.playing}
       className={cx(st.music, embedded && st.musicEmbedded, m.playing && st.playing)}
       style={{ width: size, height: size, right: wide ? 32 : 16, top: wide ? 28 : 16 }}

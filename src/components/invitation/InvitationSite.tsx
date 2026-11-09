@@ -7,7 +7,9 @@ import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { splitDate } from "@/lib/display";
 import { musicSrc } from "@/lib/music";
 import { star8Path } from "@/lib/ornament";
-import type { InvitationSiteProps } from "./types";
+import { LocaleProvider, useLocale, useT } from "@/lib/i18n";
+import type { InvitationData, InvitationSiteProps } from "./types";
+import { inviteLang } from "./data";
 import { TemplateArt } from "./TemplateArt";
 import { paletteOf, s } from "./theme";
 import { Divider, HeroArt, heroShowsTitle } from "./Heroes";
@@ -41,15 +43,44 @@ function useMusic(url: string | null, enabled: boolean) {
   return { available: !!src, playing, play, toggle };
 }
 
-/** Shablon dizayniga qarab: maxsus (kodda yozilgan) dizayn yoki umumiy sahifa */
+/**
+ * Shablon dizayniga qarab: maxsus (kodda yozilgan) dizayn yoki umumiy sahifa.
+ * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
+ */
 export function InvitationSite(props: InvitationSiteProps) {
+  const lang = inviteLang(props.data.extra, useLocale());
   const ds = designSlug(props.template);
-  if (ds === "anor") return <AnorSite {...props} />;
-  if (ds === "zumrad") return <ZumradSite {...props} />;
-  return <GenericSite {...props} />;
+  return (
+    <LocaleProvider locale={lang}>
+      {ds === "anor" ? <AnorSite {...props} /> : ds === "zumrad" ? <ZumradSite {...props} /> : <GenericSite {...props} />}
+    </LocaleProvider>
+  );
 }
 
-function GenericSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
+/** Namuna (demo) matnlarini tarjima qilish — mijoz ma’lumotiga tegilmaydi */
+function useDemoData(data: InvitationData, demo: boolean): InvitationData {
+  const t = useT();
+  return useMemo(
+    () =>
+      demo
+        ? {
+            ...data,
+            personA: t(data.personA),
+            personB: data.personB && t(data.personB),
+            venueName: t(data.venueName),
+            address: t(data.address),
+            message: data.message && t(data.message),
+            program: data.program.map((x) => ({ ...x, title: t(x.title) })),
+          }
+        : data,
+    [data, demo, t],
+  );
+}
+
+function GenericSite({ template, data: raw, mode, embedded = false }: InvitationSiteProps) {
+  const t = useT();
+  const lang = useLocale();
+  const data = useDemoData(raw, mode === "demo");
   const p = useMemo(() => paletteOf(template), [template]);
   const live = mode === "live";
   const toast = useToast();
@@ -82,7 +113,7 @@ function GenericSite({ template, data, mode, embedded = false }: InvitationSiteP
     const prev = await fetchSavedAnswer(data.slug, saved.token);
     setThanks(null);
     if (!prev) {
-      toast("Avvalgi javob topilmadi — qayta yuboring", "error");
+      toast(t("Avvalgi javob topilmadi — qayta yuboring"), "error");
       return setForm({ open: true, initial: {}, token: null });
     }
     setForm({ open: true, initial: prev, token: saved.token });
@@ -104,7 +135,7 @@ function GenericSite({ template, data, mode, embedded = false }: InvitationSiteP
             <button
               type="button"
               onClick={music.toggle}
-              aria-label={music.playing ? "Musiqani to‘xtatish" : "Musiqani yoqish"}
+              aria-label={music.playing ? t("Musiqani to‘xtatish") : t("Musiqani yoqish")}
               aria-pressed={music.playing}
               className="pointer-events-auto flex items-center justify-center rounded-full backdrop-blur"
               style={{ width: 38, height: 38, background: "rgba(253,249,242,.9)", border: `1px solid color-mix(in srgb, ${p.accent} 60%, transparent)`, color: p.heading }}
@@ -131,12 +162,12 @@ function GenericSite({ template, data, mode, embedded = false }: InvitationSiteP
 
         {heroShowsTitle(designSlug(template)) ? (
           <>
-            <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(18), color: p.heroSoft }}>{ceremonyLabel[data.ceremony]}</p>
-            <h1 style={{ fontFamily: "var(--font-script)", fontSize: s(56), color: p.accent, lineHeight: 1.25 }}>Taklifnoma</h1>
+            <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(18), color: p.heroSoft }}>{t(ceremonyLabel[data.ceremony])}</p>
+            <h1 style={{ fontFamily: "var(--font-script)", fontSize: s(56), color: p.accent, lineHeight: 1.25 }}>{t("Taklifnoma")}</h1>
           </>
         ) : (
           <h1 className="sr-only">
-            {ceremonyLabel[data.ceremony]} taklifnomasi — {[data.personA, data.personB].filter(Boolean).join(" & ")}
+            {t(`${ceremonyLabel[data.ceremony]} taklifnomasi`)} — {[data.personA, data.personB].filter(Boolean).join(" & ")}
           </h1>
         )}
         {sd && <p style={{ fontFamily: "var(--font-cinzel)", fontSize: s(13), letterSpacing: "0.22em", color: p.heroInk, marginTop: s(4) }}>{sd.dots}</p>}
@@ -148,10 +179,10 @@ function GenericSite({ template, data, mode, embedded = false }: InvitationSiteP
         <div style={{ marginTop: s(30) }}>
           <Divider color={p.accent} />
         </div>
-        <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(24), color: p.heroInk, marginTop: s(12) }}>Aziz mehmonlar!</p>
+        <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(24), color: p.heroInk, marginTop: s(12) }}>{t("Aziz mehmonlar!")}</p>
         {data.message && (
           <p style={{ fontFamily: "var(--font-cormorant)", fontSize: s(15), lineHeight: 1.35, color: p.heroInk, opacity: 0.85, maxWidth: s(260), marginTop: s(10), whiteSpace: "pre-line" }}>
-            {data.message.replace(/^Aziz mehmonlar!\s*/, "")}
+            {lang === "ru" ? data.message.replace(/^(Aziz mehmonlar!|Дорогие гости!)\s*/, "") : data.message.replace(/^Aziz mehmonlar!\s*/, "")}
           </p>
         )}
         <button
@@ -160,7 +191,7 @@ function GenericSite({ template, data, mode, embedded = false }: InvitationSiteP
           className={`rounded-full ${opened ? "" : st.pulse}`}
           style={{ border: `1px solid ${p.accent}`, color: p.accent, fontFamily: "var(--font-cinzel)", fontSize: s(11), letterSpacing: "0.14em", padding: `${s(13)} ${s(26)}`, marginTop: s(30) }}
         >
-          Taklifnomani ochish
+          {t("Taklifnomani ochish")}
         </button>
         <p style={{ fontSize: s(11), letterSpacing: "0.06em", color: p.heroInk, opacity: 0.6, marginTop: s(28) }}>
           {[data.venueName, sd?.time].filter(Boolean).join("  ·  ")}
@@ -177,13 +208,13 @@ function GenericSite({ template, data, mode, embedded = false }: InvitationSiteP
       <Closing d={data} p={p} />
 
       {/* 15 — forma */}
-      <Layer embedded={embedded} open={form.open} onClose={() => setForm({ open: false, initial: {}, token: null })} label="Javobingizni qoldiring">
+      <Layer embedded={embedded} open={form.open} onClose={() => setForm({ open: false, initial: {}, token: null })} label={t("Javobingizni qoldiring")}>
         <RsvpForm d={data} p={p} initial={form.initial} mode={mode} editToken={form.token} onDone={done} onClose={() => setForm({ open: false, initial: {}, token: null })} />
       </Layer>
 
       {/* 16 — rahmat */}
       {thanks && (
-        <div className={`${st.fade} ${embedded ? "absolute" : "fixed"} inset-0 z-[60] overflow-y-auto`} style={{ background: p.deep }} role="dialog" aria-label="Rahmat">
+        <div className={`${st.fade} ${embedded ? "absolute" : "fixed"} inset-0 z-[60] overflow-y-auto`} style={{ background: p.deep }} role="dialog" aria-label={t("Rahmat")}>
           <div className="mx-auto min-h-full" style={{ maxWidth: embedded ? undefined : 480 }}>
             <ThankYou d={data} p={p} answer={thanks} live={live} onBack={() => setThanks(null)} onEdit={editAnswer} />
           </div>
@@ -192,10 +223,10 @@ function GenericSite({ template, data, mode, embedded = false }: InvitationSiteP
 
       {/* surat ko‘ruvchi */}
       {photo !== null && data.photos[photo] && (
-        <div className={`${st.fade} ${embedded ? "absolute" : "fixed"} inset-0 z-[60] flex items-center justify-center bg-black/90 p-4`} onClick={() => setPhoto(null)} role="dialog" aria-label="Surat">
+        <div className={`${st.fade} ${embedded ? "absolute" : "fixed"} inset-0 z-[60] flex items-center justify-center bg-black/90 p-4`} onClick={() => setPhoto(null)} role="dialog" aria-label={t("Surat")}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={data.photos[photo]} alt="" className="max-h-full max-w-full rounded-lg object-contain" />
-          <button type="button" onClick={() => setPhoto(null)} aria-label="Yopish" className="absolute right-4 top-4 text-white">
+          <button type="button" onClick={() => setPhoto(null)} aria-label={t("Yopish")} className="absolute right-4 top-4 text-white">
             <CloseCircle size={28} />
           </button>
         </div>

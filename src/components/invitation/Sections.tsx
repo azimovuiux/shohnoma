@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { Location } from "@/components/icons";
 import { star8Path } from "@/lib/ornament";
 import { splitDate, tashkentDate, monthsUz } from "@/lib/display";
+import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationData } from "./types";
+import { timerUnits } from "./data";
 import { s, type Palette } from "./theme";
 
 export function mapHref(d: Pick<InvitationData, "mapUrl" | "venueName" | "address">) {
@@ -24,6 +26,8 @@ function parts(ms: number) {
 }
 
 export function Countdown({ date, p }: { date: string; p: Palette }) {
+  const t = useT();
+  const lang = useLocale();
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
     setNow(Date.now());
@@ -34,11 +38,11 @@ export function Countdown({ date, p }: { date: string; p: Palette }) {
   const target = tashkentDate(date).getTime();
   const left = now === null ? null : target - now;
   const v = left === null ? null : parts(left);
-  const labels = ["kun", "soat", "daqiqa", "soniya"];
+  const labels = timerUnits(lang);
   return (
-    <section className="text-center" style={{ background: `linear-gradient(to bottom, ${p.deep}, ${p.deep2})`, padding: `${s(36)} ${s(24)} ${s(48)}` }} aria-label="To‘yga qadar">
+    <section className="text-center" style={{ background: `linear-gradient(to bottom, ${p.deep}, ${p.deep2})`, padding: `${s(36)} ${s(24)} ${s(48)}` }} aria-label={t("To‘yga qadar")}>
       <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(26), color: p.onDeep }}>
-        {left !== null && left <= 0 ? "Baxtli kun keldi!" : "To‘yga qadar"}
+        {left !== null && left <= 0 ? t("Baxtli kun keldi!") : t("To‘yga qadar")}
       </p>
       <div className="mx-auto grid grid-cols-4" style={{ gap: s(10), marginTop: s(20), maxWidth: s(300) }} role="timer" aria-live="off">
         {labels.map((l, i) => (
@@ -61,11 +65,12 @@ export function Countdown({ date, p }: { date: string; p: Palette }) {
 /* ── Dastur ── */
 
 export function Program({ items, p }: { items: InvitationData["program"]; p: Palette }) {
+  const t = useT();
   if (!items.length) return null;
   return (
     <section className="flex flex-col items-center" style={{ background: p.paper, padding: `${s(30)} ${s(32)} ${s(40)}` }}>
       <ScriptTitle color={p.heading} font={p.script}>
-        Dastur
+        {t("Dastur")}
       </ScriptTitle>
       <ol className="relative w-full" style={{ marginTop: s(28), maxWidth: s(300) }}>
         <span className="absolute" style={{ left: s(76), top: s(8), bottom: s(8), width: 1, background: `color-mix(in srgb, ${p.accent} 50%, transparent)` }} aria-hidden />
@@ -116,6 +121,7 @@ function MapArt({ p }: { p: Palette }) {
 }
 
 export function Venue({ d, p, linkable }: { d: InvitationData; p: Palette; linkable: boolean }) {
+  const t = useT();
   if (!d.venueName && !d.address) return null;
   return (
     <section className="flex flex-col items-center text-center" style={{ background: p.paper, padding: `${s(8)} ${s(24)} ${s(40)}` }}>
@@ -124,7 +130,7 @@ export function Venue({ d, p, linkable }: { d: InvitationData; p: Palette; linka
       </svg>
       <div style={{ marginTop: s(8) }}>
         <ScriptTitle color={p.heading} font={p.script}>
-          Manzil
+          {t("Manzil")}
         </ScriptTitle>
       </div>
       <div className="w-full" style={{ marginTop: s(20), maxWidth: s(312) }}>
@@ -139,7 +145,7 @@ export function Venue({ d, p, linkable }: { d: InvitationData; p: Palette; linka
         className="inline-flex items-center rounded-full font-semibold"
         style={{ background: p.heading, color: "#fff", fontSize: s(12), padding: `${s(13)} ${s(22)}`, marginTop: s(18), gap: s(8) }}
       >
-        <Location size={14} /> Xaritada ochish
+        <Location size={14} /> {t("Xaritada ochish")}
       </a>
     </section>
   );
@@ -148,11 +154,12 @@ export function Venue({ d, p, linkable }: { d: InvitationData; p: Palette; linka
 /* ── Galereya ── */
 
 export function Gallery({ photos, p, onOpen }: { photos: string[]; p: Palette; onOpen: (i: number) => void }) {
+  const t = useT();
   if (!photos.length) return null;
   return (
     <section style={{ background: p.paper, padding: `${s(8)} 0 ${s(40)}` }}>
       <div className="text-center">
-        <h2 style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? s(28) : s(44), color: p.heading, lineHeight: 1.2 }}>Lahzalar</h2>
+        <h2 style={{ fontFamily: p.script, fontSize: p.script.includes("cinzel") ? s(28) : s(44), color: p.heading, lineHeight: 1.2 }}>{t("Lahzalar")}</h2>
       </div>
       <div className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto" style={{ gap: s(10), padding: `${s(20)} ${s(24)} ${s(4)}`, scrollbarWidth: "none" }}>
         {photos.map((src, i) => (
@@ -162,7 +169,7 @@ export function Gallery({ photos, p, onOpen }: { photos: string[]; p: Palette; o
             onClick={() => onOpen(i)}
             className="shrink-0 snap-center overflow-hidden"
             style={{ width: photos.length === 1 ? "100%" : s(220), aspectRatio: "3/4", borderRadius: s(14), border: `1px solid color-mix(in srgb, ${p.accent} 40%, transparent)` }}
-            aria-label={`Suratni kattalashtirish (${i + 1})`}
+            aria-label={t("Suratni kattalashtirish ({n})", { n: i + 1 })}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={src} alt="" loading="lazy" className="size-full object-cover" />
@@ -188,26 +195,28 @@ export function RsvpBlock({
   onAnswer: (status: "coming" | "not_coming") => void;
   onEdit: () => void;
 }) {
+  const t = useT();
+  const lang = useLocale();
   if (!d.rsvpEnabled) return null;
-  const dl = d.rsvpDeadline ? splitDate(d.rsvpDeadline) : null;
-  const deadline = dl ? `${Number(dl.iso.slice(8, 10))}-${monthsUz[Number(dl.iso.slice(5, 7)) - 1]}gacha` : null;
+  const dl = d.rsvpDeadline ? splitDate(d.rsvpDeadline, lang) : null;
+  const deadline = dl ? (lang === "ru" ? `до ${dl.short}` : `${Number(dl.iso.slice(8, 10))}-${monthsUz[Number(dl.iso.slice(5, 7)) - 1]}gacha`) : null;
   return (
     <section className="flex flex-col items-center text-center" style={{ background: `linear-gradient(to bottom, ${p.deep2}, ${p.deep})`, padding: `${s(40)} ${s(24)} ${s(48)}` }}>
-      <h2 style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(32), color: p.onDeep }}>Kelasizmi?</h2>
+      <h2 style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(32), color: p.onDeep }}>{t("Kelasizmi?")}</h2>
       <p style={{ fontFamily: "var(--font-cormorant)", fontSize: s(16), color: p.onDeep, opacity: 0.85, maxWidth: s(260), marginTop: s(12), lineHeight: 1.35 }}>
-        {deadline ? `Iltimos, ${deadline} javob bering — joyni oldindan tayyorlaymiz.` : "Iltimos, javob bering — joyni oldindan tayyorlaymiz."}
+        {deadline ? t("Iltimos, {date} javob bering — joyni oldindan tayyorlaymiz.", { date: deadline }) : t("Iltimos, javob bering — joyni oldindan tayyorlaymiz.")}
       </p>
       {answered ? (
         <div className="flex flex-col items-center" style={{ marginTop: s(24), gap: s(10) }}>
-          <p style={{ fontSize: s(13), color: p.onDeep, opacity: 0.9 }}>Rahmat, {answered.name}! Javobingiz qabul qilingan.</p>
+          <p style={{ fontSize: s(13), color: p.onDeep, opacity: 0.9 }}>{t("Rahmat, {name}! Javobingiz qabul qilingan.", { name: answered.name })}</p>
           <button type="button" onClick={onEdit} className="rounded-full font-semibold" style={{ border: `1px solid ${p.onDeep}`, color: p.onDeep, fontSize: s(12), padding: `${s(12)} ${s(22)}` }}>
-            Javobni o‘zgartirish
+            {t("Javobni o‘zgartirish")}
           </button>
         </div>
       ) : (
         <div className="grid w-full grid-cols-2" style={{ gap: s(12), marginTop: s(28), maxWidth: s(292) }}>
           <button type="button" onClick={() => onAnswer("coming")} className="rounded-full font-semibold" style={{ background: p.accentDeep, color: p.deep, fontSize: s(12), padding: `${s(13)} ${s(10)}` }}>
-            Boraman
+            {t("Boraman")}
           </button>
           <button
             type="button"
@@ -215,7 +224,7 @@ export function RsvpBlock({
             className="rounded-full font-semibold"
             style={{ border: `1px solid ${p.onDeep}`, color: p.onDeep, fontSize: s(12), padding: `${s(13)} ${s(10)}` }}
           >
-            Kela olmayman
+            {t("Kela olmayman")}
           </button>
         </div>
       )}

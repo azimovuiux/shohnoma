@@ -8,10 +8,12 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSPrope
 import { ceremonyLabel } from "@/lib/templates";
 import { splitDate, tashkentDate } from "@/lib/display";
 import { musicSrc } from "@/lib/music";
+import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
+import { timerUnits } from "@/components/invitation/data";
 import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
 import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
-import { A, ANOR_DEMO, DRESS, MONTHS, MONTHS_LOWER, WEEK, WEEKDAY, coordsFrom, downloadIcs, programIcon, weekOf, type ProgramItem, type StoryItem } from "./data";
+import { A, ANOR_DEMO, ANOR_DEMO_RU, DRESS, calendarWords, coordsFrom, downloadIcs, programIcon, untilPhrase, weekOf, type ProgramItem, type StoryItem } from "./data";
 import st from "./anor.module.css";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 
@@ -21,61 +23,68 @@ type V = (m: number, l: number) => string;
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
 const vars = (o: Record<string, string | number | undefined>) => o as CSSProperties;
 
-/** Ma’lumotlarni shablon ko‘rinishiga tayyorlash */
+/** Ma’lumotlarni shablon ko‘rinishiga tayyorlash (taklifnoma tilida — InvitationSite LocaleProvider’i) */
 function useAnorData({ template, data, mode }: Pick<InvitationSiteProps, "template" | "data" | "mode">) {
   const demo = mode === "demo";
+  const t = useT();
+  const lang = useLocale();
+  const DEMO = lang === "ru" ? ANOR_DEMO_RU : ANOR_DEMO;
   const ex = (data.extra ?? {}) as Record<string, unknown>;
   const str = (k: string) => (typeof ex[k] === "string" ? (ex[k] as string).trim() : "");
   const sd = splitDate(data.date);
   const [guest, setGuest] = useState("");
   useEffect(() => {
     const m = new URLSearchParams(location.search).get("m");
-    setGuest(m ? m.slice(0, 80) : demo ? ANOR_DEMO.guest : "");
-  }, [demo]);
+    setGuest(m ? m.slice(0, 80) : demo ? DEMO.guest : "");
+  }, [demo, DEMO.guest]);
 
   return useMemo(() => {
+    const cw = calendarWords(lang);
+    const city = (lang === "ru" ? (data.address || "Toshkent").replace(/^\s*г\.\s*/i, "") : data.address || "Toshkent").split(/[,.]/)[0].replace(/\s+(sh|shahri|shahar)$/i, "").trim() || "Toshkent";
+    const dz = DRESS[str("dressCode") || (demo ? DEMO.dressCode : "")];
     const exProgram = Array.isArray(ex.program) ? (ex.program as ProgramItem[]).filter((p) => p?.time && p?.title) : [];
-    const program: ProgramItem[] = demo ? ANOR_DEMO.program : exProgram.length ? exProgram : data.program;
+    const program: ProgramItem[] = demo ? DEMO.program : exProgram.length ? exProgram : data.program;
     const exStory = Array.isArray(ex.story) ? (ex.story as StoryItem[]).filter((s) => s?.caption) : [];
-    const story = demo ? ANOR_DEMO.story : exStory;
+    const story = demo ? DEMO.story : exStory;
     const P = data.photos ?? [];
     const stock = { couple: `${A}/foto-juftlik.webp`, meet: `${A}/foto-tanishuv.webp`, hands: `${A}/foto-taklif.webp`, venue: `${A}/foto-toyxona.webp` };
     const storyPhotos = demo ? [stock.meet, stock.hands, stock.couple] : P.slice(1, 4);
     const date = sd ? new Date(`${sd.iso}T12:00:00Z`) : null;
-    const dress = str("dressCode") || (demo ? ANOR_DEMO.dressCode : "");
     return {
-      a: data.personA,
-      b: data.personB,
-      kind: `${ceremonyLabel[data.ceremony]} taklifnomasi`,
+      // namunadagi ismlar va joy nomi tarjima qilinadi (mijoz ma’lumoti — o‘zgarishsiz)
+      a: demo ? t(data.personA) : data.personA,
+      b: demo && data.personB ? t(data.personB) : data.personB,
+      kind: t(`${ceremonyLabel[data.ceremony]} taklifnomasi`),
       dots: sd?.dots ?? "",
       iso: sd?.iso ?? "",
       time: sd?.time ?? "",
-      weekday: date ? WEEKDAY[date.getUTCDay()] : "",
-      month: date ? `${MONTHS[date.getUTCMonth()]}, ${date.getUTCFullYear()}` : "",
+      weekday: date ? cw.weekday[date.getUTCDay()] : "",
+      month: date ? `${cw.months[date.getUTCMonth()]}${lang === "ru" ? "" : ","} ${date.getUTCFullYear()}` : "",
       week: sd ? weekOf(sd.iso) : [],
+      weekNames: cw.week,
       target: data.date ? tashkentDate(data.date).getTime() : null,
       guest,
-      message: demo ? ANOR_DEMO.message : data.message || "",
-      hosts: str("hosts") || (demo ? ANOR_DEMO.hosts : ""),
-      venue: data.venueName,
-      address: data.address && data.address !== "Toshkent shahri" ? data.address : demo ? ANOR_DEMO.address : data.address,
-      city: (data.address || "Toshkent").split(/[,.]/)[0].replace(/\s+(sh|shahri|shahar)$/i, "").trim() || "Toshkent",
+      message: demo ? DEMO.message : data.message || "",
+      hosts: str("hosts") || (demo ? DEMO.hosts : ""),
+      venue: demo ? t(data.venueName) : data.venueName,
+      address: data.address && data.address !== "Toshkent shahri" ? data.address : demo ? DEMO.address : data.address,
+      city: t(city),
       mapUrl: data.mapUrl || `https://yandex.uz/maps/?text=${encodeURIComponent([data.venueName, data.address].filter(Boolean).join(", "))}`,
       coords: coordsFrom(data.mapUrl),
       program,
-      dress: dress && DRESS[dress] ? { ...DRESS[dress], note: str("dressNote") || DRESS[dress].note } : null,
-      storyText: str("storyText") || (demo ? ANOR_DEMO.storyText : ""),
+      dress: dz ? { ...dz, title: t(dz.title), sub: t(dz.sub), note: str("dressNote") || t(dz.note), imgs: dz.imgs.map((x) => ({ ...x, label: t(x.label) })) } : null,
+      storyText: str("storyText") || (demo ? DEMO.storyText : ""),
       story,
       storyPhotos,
       cover: P[0] ?? (demo ? stock.couple : stock.hands),
       coverRight: P[1] ?? (demo ? stock.meet : stock.venue),
       venuePhoto: stock.venue,
       final: P.length > 1 ? P[P.length - 1] : demo ? stock.hands : (P[0] ?? stock.hands),
-      rsvpUntil: data.rsvpDeadline ? `${Number(data.rsvpDeadline.slice(8, 10))}-${MONTHS_LOWER[Number(data.rsvpDeadline.slice(5, 7)) - 1]}gacha` : "",
+      rsvpUntil: untilPhrase(data.rsvpDeadline, lang),
       musicUrl: musicSrc(template, data),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [template, data, demo, guest]);
+  }, [template, data, demo, guest, lang, t]);
 }
 type D = ReturnType<typeof useAnorData>;
 
@@ -151,7 +160,9 @@ const ease = (x: number) => 1 - Math.pow(1 - x, 3);
 function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: () => void; onStart: () => void }) {
   const wrap = useRef<HTMLDivElement>(null);
   const ptr = usePointer(wide);
-  const title = wide ? ["Sizga maktub bor"] : ["Sizga", "maktub bor"];
+  const t = useT();
+  const lines = t("Sizga|maktub bor").split("|");
+  const title = wide ? [lines.join(" ")] : lines;
   let k = 0;
   const v: V = (m, l) => U(wide ? l : m);
   const hw = wide ? 600 : 500;
@@ -231,7 +242,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
   return (
     // Ochilish sahnasi bir ekranga sig‘ishi kerak: katta/past ekranda kenglik va balandlikdan kichigiga moslanadi
     <div ref={wrap} className={st.gateWrap} style={wide ? ({ "--u": "min(calc(100cqw / 1440), calc(100svh / 900))" } as CSSProperties) : undefined}>
-      <div className={st.gate} aria-label="Taklifnoma">
+      <div className={st.gate} aria-label={t("Taklifnoma")}>
         <div className={st.gateBg} />
         <div className={st.cornerL} style={{ left: v(-40, -50), top: v(-40, -50), width: v(170, 380), height: v(170, 380) }}>
           <div className={st.gateCorner} style={vars({ width: "100%", height: "100%", "--cx": "-60px", "--cr": "-8deg" })}>
@@ -257,8 +268,9 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
             ))}
           </h1>
           <p className={st.gateSub} style={{ marginTop: v(18, 14), fontSize: U(18), maxWidth: v(340, 900) }}>
-            {d.guest ? `Hurmatli ${d.guest},` : "Aziz mehmon,"}
-            {wide ? " " : <br />}ushbu maktub siz uchun
+            {d.guest ? t("Hurmatli {guest},", { guest: d.guest }) : t("Aziz mehmon,")}
+            {wide ? " " : <br />}
+            {t("ushbu maktub siz uchun")}
           </p>
         </div>
 
@@ -295,6 +307,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
 
 /* ═════════════ 01 · Muqova ═════════════ */
 function Cover({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const ref = useRef<HTMLDivElement>(null);
   const [par, setPar] = useState(0);
   useScrollProgress(ref, (p) => setPar(p), ready);
@@ -327,7 +340,7 @@ function Cover({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         {d.dots}
       </p>
       <p data-a="up" style={vars({ color: "var(--soft)", fontSize: v(15, 16), "--d": "1.35s", "--y": 16 })}>
-        {[d.weekday, d.time && `soat ${d.time}`].filter(Boolean).join(", ")}
+        {[d.weekday, d.time && t("soat {time}", { time: d.time })].filter(Boolean).join(", ")}
         {d.city ? ` · ${d.city}` : ""}
       </p>
     </div>
@@ -394,6 +407,7 @@ function Cover({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 02 · Taklif va sana ═════════════ */
 function Invite({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   return (
     <Sec ready={ready} style={{ paddingTop: v(70, 110), paddingBottom: v(90, 110), paddingInline: v(24, 0) }}>
@@ -406,7 +420,7 @@ function Invite({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
           <Img src={`${A}/shox.webp`} />
         </div>
         <p data-a="mask" className={cx(st.italic, st.title)} style={vars({ color: "var(--maroon)", fontSize: v(36, 48), lineHeight: 1.25, "--d": "0.3s" })}>
-          Qadrli mehmonlar!
+          {t("Qadrli mehmonlar!")}
         </p>
         {d.message && (
           <p data-a="up" style={vars({ fontSize: v(17, 19), lineHeight: 1.6, "--d": "0.4s", "--y": 20 })}>
@@ -415,7 +429,8 @@ function Invite({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         )}
         {d.hosts && (
           <p data-a="up" className={st.italic} style={vars({ color: "var(--soft)", fontSize: v(18, 19), lineHeight: 1.4, "--d": "0.48s", "--y": 20 })}>
-            Hurmat bilan,{wide ? " " : <br />}
+            {t("Hurmat bilan,")}
+            {wide ? " " : <br />}
             {d.hosts}
           </p>
         )}
@@ -428,7 +443,7 @@ function Invite({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         <div className="flex w-full justify-between">
           {d.week.map((w, i) => (
             <div key={i} className={st.day} data-a="up" style={vars({ gap: v(8, 10), "--d": `${0.65 + i * 0.08}s`, "--y": 14 })}>
-              <span style={{ color: "var(--soft)", fontSize: U(14) }}>{WEEK[i]}</span>
+              <span style={{ color: "var(--soft)", fontSize: U(14) }}>{d.weekNames[i]}</span>
               <span className="relative flex items-center justify-center" style={{ width: v(40, 52), height: v(38, 48) }}>
                 {w.current && (
                   <svg viewBox="0 0 40 38" className={cx(st.heart, "absolute inset-0 size-full")} style={vars({ "--d": `${0.65 + i * 0.08 + 0.2}s` })} aria-hidden>
@@ -468,6 +483,8 @@ function TimerCell({ value, label, wide, run, i }: { value: number; label: strin
 }
 
 function Timer({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
+  const units = timerUnits(useLocale());
   const v: V = (m, l) => U(wide ? l : m);
   const c = useCountdown(d.target);
   const [ref, inView] = useInView<HTMLDivElement>(0.3, ready);
@@ -491,18 +508,18 @@ function Timer({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         </>
       )}
       <p data-a="mask" className={cx(st.italic, st.title)} style={vars({ color: "var(--cream)", fontSize: v(39, 52), lineHeight: 1.3, "--d": "0.4s" })}>
-        {d.b ? "To‘yimizgacha qoldi" : "Bayramgacha qoldi"}
+        {d.b ? t("To‘yimizgacha qoldi") : t("Bayramgacha qoldi")}
       </p>
       <div ref={ref} className="flex" style={{ gap: v(10, 20) }}>
         {(
           [
-            [c.d, "kun"],
-            [c.h, "soat"],
-            [c.m, "daqiqa"],
-            [c.s, "soniya"],
+            [c.d, units[0]],
+            [c.h, units[1]],
+            [c.m, units[2]],
+            [c.s, units[3]],
           ] as const
         ).map(([n, l], i) => (
-          <TimerCell key={l} value={n} label={l} wide={wide} run={inView} i={i} />
+          <TimerCell key={i} value={n} label={l} wide={wide} run={inView} i={i} />
         ))}
       </div>
       <button
@@ -510,9 +527,9 @@ function Timer({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         data-a="up"
         className={st.ghostBtn}
         style={vars({ padding: `${v(16, 18)} ${v(24, 30)}`, fontSize: v(17, 16), "--d": "0.9s", "--y": 20 })}
-        onClick={() => downloadIcs({ title: d.b ? `${d.a} & ${d.b} — to‘y` : `${d.a} — ${d.kind}`, startLocal: `${d.iso}T${d.time || "18:00"}`, location: [d.venue, d.address].filter(Boolean).join(", "), slug: d.a.toLowerCase() })}
+        onClick={() => downloadIcs({ title: d.b ? t("{names} — to‘y", { names: `${d.a} & ${d.b}` }) : `${d.a} — ${d.kind}`, startLocal: `${d.iso}T${d.time || "18:00"}`, location: [d.venue, d.address].filter(Boolean).join(", "), slug: d.a.toLowerCase() })}
       >
-        Kalendarga qo‘shish
+        {t("Kalendarga qo‘shish")}
       </button>
     </Sec>
   );
@@ -520,6 +537,7 @@ function Timer({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 04 · Manzil ═════════════ */
 function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   const taxi = d.coords ? `https://3.redirect.appmetrica.yandex.com/route?end-lat=${d.coords.lat}&end-lon=${d.coords.lon}&appmetrica_tracking_id=1178268795219780156` : null;
   const card = (
@@ -543,11 +561,11 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   const btns = (
     <div className="flex w-full" style={{ gap: v(10, 12), maxWidth: wide ? undefined : U(342) }}>
       <a href={d.mapUrl} target="_blank" rel="noopener noreferrer" className={st.btnMaroon} style={{ flex: wide ? undefined : 1, padding: `${v(16, 18)} ${v(18, 30)}`, fontSize: v(17, 16) }}>
-        Xaritada ochish
+        {t("Xaritada ochish")}
       </a>
       {taxi && (
         <a href={taxi} target="_blank" rel="noopener noreferrer" className={st.btnLine} style={{ flex: wide ? undefined : 1, padding: `${v(16, 18)} ${v(18, 30)}`, fontSize: v(17, 16) }}>
-          Taksi chaqirish
+          {t("Taksi chaqirish")}
         </a>
       )}
     </div>
@@ -559,7 +577,7 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
           {card}
           <div className="flex flex-col items-start" style={{ gap: U(20), width: U(440) }}>
             <p data-a="mask" className={cx(st.italic, st.title)} style={{ color: "var(--maroon)", fontSize: U(60), lineHeight: 1.25 }}>
-              Manzil
+              {t("Manzil")}
             </p>
             <p data-a="up" className={st.serif} style={vars({ fontSize: U(36), "--d": "0.3s", "--y": 20 })}>
               {d.venue}
@@ -575,7 +593,7 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
       ) : (
         <div className="flex flex-col items-center text-center" style={{ gap: U(22) }}>
           <p data-a="mask" className={cx(st.italic, st.title)} style={{ color: "var(--maroon)", fontSize: U(48), lineHeight: 1.25 }}>
-            Manzil
+            {t("Manzil")}
           </p>
           {card}
           <p data-a="up" className={st.serif} style={vars({ fontSize: U(28), "--d": "0.3s", "--y": 20 })}>
@@ -595,6 +613,8 @@ function Venue({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 05 · Dastur ═════════════ */
 function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
+  const lang = useLocale();
   const v: V = (m, l) => U(wide ? l : m);
   const n = d.program.length;
   const box = useRef<HTMLDivElement>(null);
@@ -659,7 +679,8 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   return (
     <Sec ready={ready} style={{ paddingTop: v(70, 60), paddingBottom: v(90, 120), gap: v(30, 50) }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ color: "var(--maroon)", fontSize: v(48, 60), lineHeight: 1.25 }}>
-        To‘y dasturi
+        {/* ruscha — qisqa sarlavha (nowrap: «Программа торжества» mobilga sig‘maydi) */}
+        {lang === "ru" ? t("Kun dasturi") : "To‘y dasturi"}
       </p>
       <div ref={box} className="relative" style={{ width: U(W), height: U(H) }}>
         <svg className="absolute inset-0 size-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ overflow: "visible" }} aria-hidden>
@@ -706,6 +727,7 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 06 · Dress-kod (ixtiyoriy) ═════════════ */
 function Dress({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   if (!d.dress) return null;
   const x = d.dress;
@@ -725,7 +747,7 @@ function Dress({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
         </>
       )}
       <p data-a="mask" className={cx(st.italic, st.title)} style={vars({ color: "var(--cream)", fontSize: v(48, 60), lineHeight: 1.25, "--d": "0.4s" })}>
-        Dress-kod
+        {t("Dress-kod")}
       </p>
       <div data-a="up" className={st.whiteCard} style={vars({ width: wide ? undefined : "100%", borderRadius: v(28, 32), padding: `${v(30, 44)} ${v(20, 60)}`, "--y": 80, "--t": "1.2s", "--d": "0.5s" })}>
         <div className="flex flex-col items-center text-center" style={{ width: U(302 * k), gap: U(16.3 * k), margin: "0 auto" }}>
@@ -754,6 +776,7 @@ function Dress({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 
 /* ═════════════ 07 · Hikoyamiz (ixtiyoriy) ═════════════ */
 function Story({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   const box = useRef<HTMLDivElement>(null);
   const [par, setPar] = useState(0.5);
@@ -783,7 +806,7 @@ function Story({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
   return (
     <Sec ready={ready} style={{ paddingTop: v(80, 120), paddingBottom: v(80, 110), paddingInline: v(24, 0), gap: v(20, 40) }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ color: "var(--maroon)", fontSize: v(44, 60), lineHeight: 1.25 }}>
-        Bizning hikoyamiz
+        {t("Bizning hikoyamiz")}
       </p>
       {photos.length > 0 && (
         <div ref={box} className="relative" style={{ width: v(342, 1100), height: U(boxH) }}>
@@ -831,6 +854,8 @@ function Story({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
 function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: boolean; slug: string; mode: InvitationSiteProps["mode"] }) {
   const v: V = (m, l) => U(wide ? l : m);
   const k = wide ? 1.45 : 1; // laptop chiptasi 1.45 baravar (Figma 495.9 / 342)
+  const t = useT();
+  const ruLang = useLocale() === "ru";
   const live = mode === "live";
   const [name, setName] = useState("");
   const [status, setStatus] = useState<RsvpStatus>("coming");
@@ -862,7 +887,7 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return setErr("Ismingizni yozing");
+    if (!name.trim()) return setErr(t("Ismingizni yozing"));
     setErr(null);
     if (!live) return setSent(status);
     setBusy(true);
@@ -873,10 +898,10 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
         body: JSON.stringify({ name: name.trim(), status, count: status === "coming" ? count : 0, wish: wish.trim() || null }),
       });
       const j = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; editToken?: string };
-      if (!res.ok || !j.ok) throw new Error(j.error || "Javob yuborilmadi. Qayta urinib ko‘ring.");
-      const t = token ?? j.editToken!;
-      saveRsvp(slug, t, name.trim());
-      setToken(t);
+      if (!res.ok || !j.ok) throw new Error(t(j.error || "Javob yuborilmadi. Qayta urinib ko‘ring."));
+      const tk = token ?? j.editToken!;
+      saveRsvp(slug, tk, name.trim());
+      setToken(tk);
       setSent(status);
     } catch (x) {
       setErr((x as Error).message);
@@ -890,12 +915,12 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
     <Sec ready={ready} tear style={{ paddingBlock: v(110, 130), paddingInline: v(24, 0), gap: v(22, 30) }}>
       <Velvet name="javob" wide={wide} inset={wide ? [0.77, 1.5] : [1.09, 2.14]} />
       <div className="flex flex-col items-center text-center" style={{ gap: v(10, 14) }}>
-        <p data-a="mask" className={cx(st.italic, st.title)} style={vars({ color: "var(--cream)", fontSize: v(39, 56), lineHeight: 1.25, "--d": "0.4s" })}>
-          Javobingizni kutamiz
+        <p data-a="mask" className={cx(st.italic, st.title)} style={vars({ color: "var(--cream)", fontSize: v(ruLang ? 34 : 39, 56), lineHeight: 1.25, "--d": "0.4s" })}>
+          {t("Javobingizni kutamiz")}
         </p>
         {d.rsvpUntil && (
           <p data-a="fade" style={vars({ color: "rgba(251,246,238,.8)", fontSize: v(17, 18), "--d": "0.6s" })}>
-            Iltimos, {d.rsvpUntil} bildiring
+            {t("Iltimos, {date} bildiring", { date: d.rsvpUntil })}
           </p>
         )}
       </div>
@@ -918,22 +943,24 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
                 <Img src={`${A}/muhr.webp`} />
               </div>
               <p className={st.italic} style={{ color: "var(--maroon)", fontSize: fs(34), lineHeight: 1.2 }}>
-                {sent === "not_coming" ? "Rahmat!" : "Rahmat! Sizni kutamiz"}
+                {sent === "not_coming" ? t("Rahmat!") : t("Rahmat! Sizni kutamiz")}
               </p>
               <p style={{ color: "var(--soft)", fontSize: fs(15), lineHeight: 1.5 }}>
-                {sent === "not_coming" ? "Javobingiz uchun rahmat — sizni duolarimizda eslaymiz." : `${name.trim() || "Javobingiz"} — ${count} kishi. Javobingiz ${d.b ? "kelin-kuyovga" : "egasiga"} yetkazildi.`}
+                {sent === "not_coming"
+                  ? t("Javobingiz uchun rahmat — sizni duolarimizda eslaymiz.")
+                  : t(d.b ? "{name} — {count} kishi. Javobingiz kelin-kuyovga yetkazildi." : "{name} — {count} kishi. Javobingiz egasiga yetkazildi.", { name: name.trim() || t("Javobingiz"), count })}
               </p>
               <button type="button" onClick={() => setSent(null)} style={{ color: "var(--maroon)", fontSize: fs(14), textDecoration: "underline", textUnderlineOffset: 3, marginTop: fs(4) }}>
-                Javobni o‘zgartirish
+                {t("Javobni o‘zgartirish")}
               </button>
             </div>
           ) : (
             <div className="flex flex-col" style={{ gap: fs(18) }}>
               <label className="flex flex-col" style={{ gap: fs(6) }}>
-                <span style={{ color: "var(--soft)", fontSize: fs(14) }}>Ismingiz</span>
-                <input className={st.field} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder="Dilshod va Gulnora" style={{ fontSize: fs(19), paddingBottom: fs(6) }} />
+                <span style={{ color: "var(--soft)", fontSize: fs(14) }}>{t("Ismingiz")}</span>
+                <input className={st.field} value={name} onChange={(e) => setName(e.target.value)} maxLength={80} placeholder={t("Dilshod va Gulnora")} style={{ fontSize: fs(19), paddingBottom: fs(6) }} />
               </label>
-              <div className="flex" role="radiogroup" aria-label="Javob" style={{ gap: fs(8) }}>
+              <div className="flex" role="radiogroup" aria-label={t("Javob")} style={{ gap: fs(8) }}>
                 {(
                   [
                     ["coming", "Albatta kelaman"],
@@ -941,29 +968,29 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
                   ] as const
                 ).map(([s, l]) => (
                   <button key={s} type="button" role="radio" aria-checked={status === s} onClick={() => setStatus(s)} className={st.choice} style={{ paddingBlock: fs(13), fontSize: fs(15) }}>
-                    {l}
+                    {t(l)}
                   </button>
                 ))}
               </div>
               {status === "coming" && (
                 <div className="flex items-center justify-between">
-                  <span style={{ fontSize: fs(17) }}>Necha kishi bo‘lasiz?</span>
+                  <span style={{ fontSize: fs(17) }}>{t("Necha kishi bo‘lasiz?")}</span>
                   <div className="flex items-center" style={{ gap: fs(14) }}>
-                    <button type="button" className={st.step} disabled={count <= 1} onClick={() => setCount((c) => Math.max(1, c - 1))} aria-label="Kamaytirish" style={{ width: fs(36), height: fs(36), fontSize: fs(20) }}>
+                    <button type="button" className={st.step} disabled={count <= 1} onClick={() => setCount((c) => Math.max(1, c - 1))} aria-label={t("Kamaytirish")} style={{ width: fs(36), height: fs(36), fontSize: fs(20) }}>
                       −
                     </button>
                     <span className={st.serif} style={{ color: "var(--maroon)", fontSize: fs(20), minWidth: fs(16), textAlign: "center" }} aria-live="polite">
                       {count}
                     </span>
-                    <button type="button" className={st.step} disabled={count >= 20} onClick={() => setCount((c) => Math.min(20, c + 1))} aria-label="Ko‘paytirish" style={{ width: fs(36), height: fs(36), fontSize: fs(20) }}>
+                    <button type="button" className={st.step} disabled={count >= 20} onClick={() => setCount((c) => Math.min(20, c + 1))} aria-label={t("Ko‘paytirish")} style={{ width: fs(36), height: fs(36), fontSize: fs(20) }}>
                       +
                     </button>
                   </div>
                 </div>
               )}
               <label className="flex flex-col" style={{ gap: fs(6) }}>
-                <span style={{ color: "var(--soft)", fontSize: fs(14) }}>Tilaklaringiz</span>
-                <input className={st.field} value={wish} onChange={(e) => setWish(e.target.value)} maxLength={500} placeholder="Baxtingiz abadiy bo‘lsin…" style={{ fontSize: fs(19), paddingBottom: fs(6) }} />
+                <span style={{ color: "var(--soft)", fontSize: fs(14) }}>{t("Tilaklaringiz")}</span>
+                <input className={st.field} value={wish} onChange={(e) => setWish(e.target.value)} maxLength={500} placeholder={t("Baxtingiz abadiy bo‘lsin…")} style={{ fontSize: fs(19), paddingBottom: fs(6) }} />
               </label>
               {err && <p style={{ color: "#b3261e", fontSize: fs(14) }}>{err}</p>}
             </div>
@@ -972,7 +999,7 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
         </div>
         <div className={st.ticketBottom} style={{ padding: `${fs(18)} ${fs(26)} ${fs(30)}` }}>
           <button type="submit" disabled={busy} className={cx(st.btnMaroon, "w-full")} style={{ paddingBlock: fs(17), fontSize: fs(17), opacity: busy ? 0.7 : 1 }}>
-            {busy ? "Yuborilmoqda…" : "Javobni yuborish"}
+            {busy ? t("Yuborilmoqda…") : t("Javobni yuborish")}
           </button>
         </div>
       </form>
@@ -988,6 +1015,7 @@ const SEEDS = Array.from({ length: 14 }, (_, i) => {
 });
 
 function Final({ d, wide, ready, onSeen }: { d: D; wide: boolean; ready: boolean; onSeen: () => void }) {
+  const t = useT();
   const v: V = (m, l) => U(wide ? l : m);
   const k = wide ? 1.45 : 1;
   const [ref, inView] = useInView<HTMLDivElement>(0.4, ready);
@@ -1022,7 +1050,7 @@ function Final({ d, wide, ready, onSeen }: { d: D; wide: boolean; ready: boolean
         </div>
       </div>
       <p data-a="wipe" className={cx(st.italic, st.title)} style={vars({ color: "var(--cream)", fontSize: v(46, 72), lineHeight: 1.25, "--d": "1.3s" })}>
-        Sizni kutamiz
+        {t("Sizni kutamiz")}
       </p>
       <p data-a="up" className={st.serif} style={vars({ color: "var(--gold-2)", fontSize: v(26, 36), "--d": "1.6s", "--y": 16 })}>
         {d.b ? `${d.a} & ${d.b}` : d.a}
@@ -1036,6 +1064,7 @@ function Final({ d, wide, ready, onSeen }: { d: D; wide: boolean; ready: boolean
 
 /* ═════════════ Sahifa ═════════════ */
 export function AnorSite({ template, data, mode, embedded = false }: InvitationSiteProps) {
+  const t = useT();
   const root = useRef<HTMLDivElement>(null);
   const wide = useWide(root);
   const d = useAnorData({ template, data, mode });
@@ -1117,7 +1146,7 @@ export function AnorSite({ template, data, mode, embedded = false }: InvitationS
           <a href="https://shohnoma.uz" className={st.italic} style={{ color: "var(--gold-2)", fontSize: U(wide ? 20 : 18) }}>
             Shohnoma
           </a>
-          <span style={{ color: "rgba(251,246,238,.6)", fontSize: U(wide ? 13 : 14) }}>shohnoma.uz orqali tayyorlandi</span>
+          <span style={{ color: "rgba(251,246,238,.6)", fontSize: U(wide ? 13 : 14) }}>{t("shohnoma.uz orqali tayyorlandi")}</span>
         </footer>
       </div>
     </div>

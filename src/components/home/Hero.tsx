@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "@/components/LocalLink";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight } from "@/components/icons";
 import { site } from "@/lib/site";
@@ -173,13 +173,20 @@ function Stage() {
 
 export function Hero() {
   const t = useT();
+  const locale = useLocale();
   return (
     <section className="relative overflow-hidden bg-[#f7f1e7]">
       {/* lg+: butun kompozitsiya 1440×900 Figma kanvasi, ekran eniga proporsional (cqw) masshtablanadi */}
       <div className="relative mx-auto max-w-[1440px] lg:aspect-[1440/900] lg:[container-type:inline-size]">
         {/* Matn */}
         <div data-reveal="stagger" className="relative z-10 flex flex-col items-start px-5 pt-10 lg:absolute lg:left-[8.3333%] lg:top-[23.4444%] lg:w-[48.6111%] lg:px-0 lg:pt-0">
-          <h1 data-split className="flex flex-col font-serif text-[48px] font-normal leading-[0.9] tracking-[-0.02em] text-ink sm:text-[72px] lg:text-[7.0833cqw]">
+          {/* Ruscha satrlar uzunroq — sarlavha shrifti kichikroq, har satr bitta qatorda qoladi */}
+          <h1
+            data-split
+            className={`flex flex-col font-serif font-normal leading-[0.9] tracking-[-0.02em] text-ink ${
+              locale === "ru" ? "text-[42px] sm:text-[60px] lg:text-[5.35cqw] lg:[&>*]:whitespace-nowrap" : "text-[48px] sm:text-[72px] lg:text-[7.0833cqw]"
+            }`}
+          >
             <span>{t("Har bir to‘y —")}</span>
             <span>{t("o‘z hikoyasi.")}</span>
             <em className="italic text-maroon">{t("Taklifnomasi ham.")}</em>

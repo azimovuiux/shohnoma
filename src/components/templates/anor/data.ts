@@ -1,4 +1,6 @@
 /** Anor shabloni — matnlar, namuna ma’lumotlar va yordamchi funksiyalar */
+import type { Locale } from "@/lib/i18n";
+import { monthsRu } from "@/lib/display";
 
 export const A = "/templates/anor";
 
@@ -28,6 +30,30 @@ export const ANOR_DEMO = {
   ] as StoryItem[],
 };
 
+/** Namuna — ruscha (taklifnoma tili ruscha bo‘lsa) */
+export const ANOR_DEMO_RU: typeof ANOR_DEMO = {
+  guest: "Дильшод ака и Гульнора опа",
+  message: "В день, когда два сердца и две семьи соберутся за одним дастарханом, — в день нашего никаха — мы будем счастливы видеть вас среди самых дорогих гостей.",
+  hosts: "Семьи Каримовых и Рахимовых",
+  address: "г. Ташкент, Юнусабадский район, ул. Амира Темура, 108",
+  program: [
+    { time: "17:00", title: "Встреча гостей", note: "Напитки и живая музыка" },
+    { time: "17:40", title: "Церемония никаха", note: "Фотиха и обмен кольцами" },
+    { time: "18:30", title: "Банкет", note: "Праздничный ужин" },
+    { time: "20:00", title: "Первый танец", note: "Вальс жениха и невесты" },
+    { time: "21:30", title: "Свадебный торт", note: "Сладкий момент" },
+    { time: "22:30", title: "Салют", note: "Завершение вечера" },
+  ],
+  dressCode: "Klassik",
+  storyText: "История, которая началась в университетской библиотеке, когда мы оба попросили одну и ту же книгу, — теперь на всю жизнь.",
+  story: [
+    { year: "2021", caption: "Знакомство" },
+    { year: "2024", caption: "Помолвка" },
+    { year: "2026", caption: "Никах" },
+  ],
+};
+
+/** Dress-kod: kalitlar (DB'dagi qiymat) o‘zbekcha qoladi; ko‘rsatiladigan matnlar useT() bilan tarjima qilinadi */
 export const DRESS: Record<string, { title: string; sub: string; note: string; imgs: { src: string; label: string }[] }> = {
   Klassik: {
     title: "Klassik",
@@ -65,12 +91,12 @@ export const DRESS: Record<string, { title: string; sub: string; note: string; i
 };
 
 const ICONS: [RegExp, string][] = [
-  [/kutib|sharbat|qadah|mehmon/i, "qadahlar"],
-  [/nikoh|uzuk|fotiha|marosim|rasmiy/i, "uzuklar"],
-  [/ziyofat|dasturxon|osh|kechki|tushlik|nonushta/i, "ziyofat"],
-  [/raqs|vals|guldasta|gul/i, "guldasta"],
-  [/tort|shirin/i, "tort"],
-  [/salyut|yakun|feyerverk|xayr/i, "salyut"],
+  [/kutib|sharbat|qadah|mehmon|встреч|напит|бокал|фуршет/i, "qadahlar"],
+  [/nikoh|uzuk|fotiha|marosim|rasmiy|никах|кольц|фотиха|церемон|регистрац/i, "uzuklar"],
+  [/ziyofat|dasturxon|osh|kechki|tushlik|nonushta|банкет|ужин|застол|плов|обед|завтрак/i, "ziyofat"],
+  [/raqs|vals|guldasta|gul|танец|вальс|букет|цвет/i, "guldasta"],
+  [/tort|shirin|торт|сладк|десерт/i, "tort"],
+  [/salyut|yakun|feyerverk|xayr|салют|фейерверк|заверш|финал/i, "salyut"],
 ];
 const ORDER = ["qadahlar", "uzuklar", "ziyofat", "guldasta", "tort", "salyut"];
 
@@ -85,6 +111,25 @@ export const WEEK = ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"];
 export const WEEKDAY = ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"];
 export const MONTHS = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"];
 export const MONTHS_LOWER = MONTHS.map((m) => m.toLowerCase());
+export const WEEK_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+export const WEEKDAY_RU = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+export const MONTHS_RU = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+/** Ruscha — kun bilan keladigan oy (qaratqich kelishigi): «12 сентября» */
+export const MONTHS_RU_GEN = monthsRu;
+
+/** Taklifnoma tiliga mos hafta/oy nomlari */
+export const calendarWords = (lang: Locale) =>
+  lang === "ru"
+    ? { week: WEEK_RU, weekday: WEEKDAY_RU, months: MONTHS_RU, monthsAfterDay: MONTHS_RU_GEN }
+    : { week: WEEK, weekday: WEEKDAY, months: MONTHS, monthsAfterDay: MONTHS_LOWER };
+
+/** Javob muddati: "2026-09-02" → «2-sentabrgacha» / «до 2 сентября» */
+export function untilPhrase(iso: string | null | undefined, lang: Locale) {
+  if (!iso) return "";
+  const day = Number(iso.slice(8, 10));
+  const m = Number(iso.slice(5, 7)) - 1;
+  return lang === "ru" ? `до ${day} ${MONTHS_RU_GEN[m]}` : `${day}-${MONTHS_LOWER[m]}gacha`;
+}
 
 /** Sana atrofidagi hafta (Du…Ya) */
 export function weekOf(iso: string) {

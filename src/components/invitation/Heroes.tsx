@@ -1,6 +1,7 @@
 import type { Template } from "@/lib/templates";
 import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
+import { useT } from "@/lib/i18n";
 import type { InvitationData } from "./types";
 import { heroVariant, monogram, namesOf, s, type Palette } from "./theme";
 import st from "./invitation.module.css";
@@ -33,6 +34,7 @@ export function Divider({ color }: { color: string }) {
 /* ── Variantlar ── */
 
 function Envelope({ d, p }: { d: InvitationData; p: Palette }) {
+  const tt = useT();
   return (
     <div className="relative mx-auto" style={{ width: s(260), height: s(250) }}>
       <div className="absolute inset-x-0 bottom-0" style={{ height: s(168), background: "#5a1625", borderRadius: s(4) }} />
@@ -51,7 +53,7 @@ function Envelope({ d, p }: { d: InvitationData; p: Palette }) {
       >
         <span style={{ fontFamily: p.script, fontSize: d.personB ? s(30) : s(36), color: "#6b2436", lineHeight: 1.15 }}>{namesOf(d.personA, d.personB)}</span>
         <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: "#8a6a55", marginTop: s(6), padding: `0 ${s(10)}` }}>
-          {invitePhrase[d.ceremony]}
+          {tt(invitePhrase[d.ceremony])}
         </span>
       </div>
       <svg className="absolute inset-x-0 bottom-0" viewBox="0 0 260 168" style={{ width: "100%", height: s(168) }} aria-hidden>
@@ -81,6 +83,7 @@ function Envelope({ d, p }: { d: InvitationData; p: Palette }) {
 }
 
 function Arch({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
+  const tt = useT();
   const bloom = t.palette[3] ?? t.palette[1] ?? p.accent;
   return (
     <div className="relative mx-auto" style={{ width: s(250), height: s(330) }}>
@@ -91,7 +94,7 @@ function Arch({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
       <div className="absolute inset-x-0 flex flex-col items-center text-center" style={{ top: s(96) }}>
         <Star size={s(12)} color={p.accent} />
         <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.accent, marginTop: s(10) }}>
-          {ceremonyLabel[d.ceremony]} taklifnomasi
+          {tt(`${ceremonyLabel[d.ceremony]} taklifnomasi`)}
         </span>
         <span style={{ fontFamily: p.script, fontSize: d.personB ? s(40) : s(46), lineHeight: 1.1, color: p.heroSoft, marginTop: s(10) }}>
           {d.personA}
@@ -108,6 +111,7 @@ function Arch({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
 }
 
 function Seal({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
+  const tt = useT();
   const wax = t.palette[0];
   return (
     <div className="relative mx-auto flex flex-col items-center" style={{ width: s(264), paddingTop: s(8) }}>
@@ -122,7 +126,7 @@ function Seal({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
         }}
       >
         <span style={{ fontFamily: p.script, fontSize: d.personB ? s(34) : s(40), color: p.heroInk, lineHeight: 1.15 }}>{namesOf(d.personA, d.personB)}</span>
-        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft, marginTop: s(8) }}>{invitePhrase[d.ceremony]}</span>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft, marginTop: s(8) }}>{tt(invitePhrase[d.ceremony])}</span>
       </div>
       <div className="absolute flex" style={{ top: `calc(${s(8)} - ${s(34)})`, width: s(72), height: s(72) }}>
         {[st.sealHalfL, st.sealHalfR].map((cls, i) => (
@@ -159,6 +163,7 @@ function Seal({ d, p, t }: { d: InvitationData; p: Palette; t: Template }) {
 }
 
 function Ticket({ d, p }: { d: InvitationData; p: Palette }) {
+  const tt = useT();
   const [, mo, dd] = (d.date.match(/^(\d{4})-(\d{2})-(\d{2})/) ?? []).slice(0, 4);
   const time = d.date.slice(11, 16);
   const cell = (label: string, value: string) => (
@@ -180,30 +185,30 @@ function Ticket({ d, p }: { d: InvitationData; p: Palette }) {
         }}
       >
         <div className="flex items-center justify-between">
-          <span style={{ fontFamily: "var(--font-cinzel)", fontSize: s(12), letterSpacing: "0.2em", color: p.accent }}>BAXT REYSI</span>
+          <span style={{ fontFamily: "var(--font-cinzel)", fontSize: s(12), letterSpacing: "0.2em", color: p.accent }}>{tt("BAXT REYSI")}</span>
           <svg viewBox="0 0 24 24" style={{ width: s(18), height: s(18) }} fill={p.heroInk} aria-hidden>
             <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z" />
           </svg>
         </div>
         <div className="flex items-end justify-between" style={{ gap: s(8) }}>
           <div className="flex min-w-0 flex-col">
-            <span style={{ fontSize: s(8), letterSpacing: "0.14em", color: p.heroSoft }}>YO‘LOVCHI</span>
+            <span style={{ fontSize: s(8), letterSpacing: "0.14em", color: p.heroSoft }}>{tt("YO‘LOVCHI")}</span>
             <span style={{ fontFamily: p.script, fontSize: s(26), color: p.heroInk, lineHeight: 1.1 }}>{d.personA}</span>
           </div>
           {d.personB && (
             <>
               <span style={{ color: p.accent, fontSize: s(16), paddingBottom: s(6) }}>✈</span>
               <div className="flex min-w-0 flex-col items-end">
-                <span style={{ fontSize: s(8), letterSpacing: "0.14em", color: p.heroSoft }}>YO‘LOVCHI</span>
+                <span style={{ fontSize: s(8), letterSpacing: "0.14em", color: p.heroSoft }}>{tt("YO‘LOVCHI")}</span>
                 <span style={{ fontFamily: p.script, fontSize: s(26), color: p.heroInk, lineHeight: 1.1 }}>{d.personB}</span>
               </div>
             </>
           )}
         </div>
         <div className="grid grid-cols-3" style={{ gap: s(8) }}>
-          {cell("Sana", dd && mo ? `${dd}.${mo}` : "—")}
-          {cell("Vaqt", time || "—")}
-          {cell("O‘rin", "VIP")}
+          {cell(tt("Sana"), dd && mo ? `${dd}.${mo}` : "—")}
+          {cell(tt("Vaqt"), time || "—")}
+          {cell(tt("O‘rin"), "VIP")}
         </div>
       </div>
       <div
@@ -222,6 +227,7 @@ function Ticket({ d, p }: { d: InvitationData; p: Palette }) {
 }
 
 function Gate({ d, p }: { d: InvitationData; p: Palette }) {
+  const tt = useT();
   const lattice = (
     <svg viewBox="0 0 100 200" className="absolute inset-0 size-full" preserveAspectRatio="none" aria-hidden>
       <rect x="4" y="4" width="92" height="192" fill="none" stroke={p.accent} strokeWidth="1.2" />
@@ -250,7 +256,7 @@ function Gate({ d, p }: { d: InvitationData; p: Palette }) {
           )}
         </span>
         <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(13), color: p.heroSoft, marginTop: s(10), padding: `0 ${s(12)}` }}>
-          {invitePhrase[d.ceremony]}
+          {tt(invitePhrase[d.ceremony])}
         </span>
       </div>
       <div className="absolute flex overflow-hidden" style={{ inset: `${s(18)} ${s(14)} 0`, borderRadius: `${s(110)} ${s(110)} 0 0` }} aria-hidden>
@@ -265,6 +271,7 @@ function Gate({ d, p }: { d: InvitationData; p: Palette }) {
 }
 
 function Eastern({ d, p }: { d: InvitationData; p: Palette }) {
+  const tt = useT();
   return (
     <div className="relative mx-auto flex items-center justify-center" style={{ width: s(270), height: s(270) }}>
       <svg viewBox="0 0 200 200" className={`${st.spin} absolute inset-0 size-full`} aria-hidden>
@@ -276,7 +283,7 @@ function Eastern({ d, p }: { d: InvitationData; p: Palette }) {
         })}
       </svg>
       <div className="relative flex flex-col items-center text-center" style={{ maxWidth: s(170) }}>
-        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft }}>{ceremonyLabel[d.ceremony]}</span>
+        <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(14), color: p.heroSoft }}>{tt(ceremonyLabel[d.ceremony])}</span>
         <span style={{ fontFamily: p.script, fontSize: s(d.personB ? 22 : 26), color: p.accent, letterSpacing: "0.06em", lineHeight: 1.25, marginTop: s(6) }}>
           {namesOf(d.personA, d.personB)}
         </span>
@@ -286,6 +293,7 @@ function Eastern({ d, p }: { d: InvitationData; p: Palette }) {
 }
 
 function Crown({ d, p }: { d: InvitationData; p: Palette }) {
+  const tt = useT();
   return (
     <div className="relative mx-auto flex flex-col items-center text-center" style={{ width: s(270) }}>
       <svg viewBox="0 0 120 70" className={st.crown} style={{ width: s(110) }} aria-hidden>
@@ -300,7 +308,7 @@ function Crown({ d, p }: { d: InvitationData; p: Palette }) {
         ))}
       </svg>
       <span style={{ fontFamily: p.script, fontSize: s(54), color: p.heroInk, lineHeight: 1.15, marginTop: s(8) }}>{namesOf(d.personA, d.personB)}</span>
-      <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(15), color: p.heroSoft, marginTop: s(6) }}>{invitePhrase[d.ceremony]}</span>
+      <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(15), color: p.heroSoft, marginTop: s(6) }}>{tt(invitePhrase[d.ceremony])}</span>
       {/* konfetti */}
       <svg viewBox="0 0 270 160" className="pointer-events-none absolute inset-x-0 top-0 w-full" aria-hidden>
         {[

@@ -21,6 +21,25 @@ export const ZUMRAD_DEMO = {
   caption: "Bir umrga",
 };
 
+/** Namuna — ruscha (taklifnoma tili ruscha bo‘lsa) */
+export const ZUMRAD_DEMO_RU: typeof ZUMRAD_DEMO = {
+  guest: "Дильшод ака и Гульнора опа",
+  message: "В самый счастливый день нашей жизни — на нашем никахе — мы от всего сердца хотим видеть вас рядом. Отпраздновать этот день вместе с вами — большая радость для нас.",
+  hosts: "Семьи Каримовых и Рахимовых",
+  address: "г. Ташкент, Юнусабадский район, ул. Амира Темура, 108",
+  program: [
+    { time: "17:00", title: "Встреча гостей", note: "Напитки и живая музыка" },
+    { time: "17:40", title: "Церемония никаха", note: "Фотиха и обмен кольцами" },
+    { time: "18:30", title: "Банкет", note: "Праздничный ужин" },
+    { time: "20:00", title: "Первый танец", note: "Вальс жениха и невесты" },
+    { time: "21:30", title: "Свадебный торт", note: "Сладкий момент" },
+    { time: "22:30", title: "Салют", note: "Завершение вечера" },
+  ],
+  dressCode: "Klassik",
+  storyText: "Знакомство, начавшееся в университетской библиотеке, — теперь история на всю жизнь.",
+  caption: "Навсегда",
+};
+
 /** Onion-ravoq (Figma «Osmon» maskasi, 300×380) — istalgan o‘lchamga */
 export function ogee(w: number, h: number, inset = 0) {
   const sx = (w - inset * 2) / 300;

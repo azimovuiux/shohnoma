@@ -1,6 +1,9 @@
+"use client";
+
 import type { Template } from "@/lib/templates";
 import { ceremonyLabel, designSlug } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
+import { useT } from "@/lib/i18n";
 import { TemplateArt } from "@/components/invitation/TemplateArt";
 import { HtmlFrame } from "./HtmlFrame";
 
@@ -27,6 +30,7 @@ function Divider({ color }: { color: string }) {
 
 /** Bordo maktub — konvert, muhr (Figma 33:131) */
 function Envelope({ t }: { t: Template }) {
+  const tt = useT();
   const initials = `${t.sample.a[0]}${t.sample.b?.[0] ?? ""}`;
   return (
     <div className="relative mx-auto" style={{ width: u(203), height: u(195) }}>
@@ -48,7 +52,7 @@ function Envelope({ t }: { t: Template }) {
           {t.sample.a}{t.sample.b ? <> &amp; {t.sample.b}</> : null}
         </span>
         <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: u(10.9), color: "#8a6a55" }}>
-          sizni to‘yimizga taklif qiladi
+          {tt("sizni to‘yimizga taklif qiladi")}
         </span>
       </div>
       <svg className="absolute inset-x-0 bottom-0" viewBox="0 0 203 131" style={{ width: "100%", height: u(131) }} aria-hidden>
@@ -79,6 +83,7 @@ function Envelope({ t }: { t: Template }) {
 
 /** Ravoq (arch) — Oltin ravoq va boshqa ochiq fonli shablonlar uchun */
 function ArchNames({ t, family }: { t: Template; family: string }) {
+  const tt = useT();
   const { theme } = t;
   return (
     <div className="relative mx-auto" style={{ width: u(224), height: u(342) }}>
@@ -91,7 +96,7 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
           <path d={star8Path(20, 20, 20)} fill={theme.accent} />
         </svg>
         <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: u(12.4), color: theme.accent }}>
-          {ceremonyLabel[t.ceremony]} taklifnomasi
+          {tt(`${ceremonyLabel[t.ceremony]} taklifnomasi`)}
         </span>
         <span
           style={{
@@ -126,7 +131,7 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
         <span
           style={{ fontSize: u(7.8), color: theme.accent, letterSpacing: "0.14em", textTransform: "uppercase", marginTop: u(8) }}
         >
-          {t.sample.venue} · {t.sample.time}
+          {tt(t.sample.venue)} · {t.sample.time}
         </span>
       </div>
     </div>
@@ -135,6 +140,7 @@ function ArchNames({ t, family }: { t: Template; family: string }) {
 
 
 export function InvitationScreen({ t }: { t: Template }) {
+  const tt = useT();
   const img = !t.isLive ? t.images?.phone : undefined;
   if (t.kind === "html" && !img) return <HtmlFrame src={t.previewUrl ?? `/api/tpl/${t.slug}/preview?v=${t.version ?? 1}`} baseWidth={390} />;
   if (img) {
@@ -172,9 +178,9 @@ export function InvitationScreen({ t }: { t: Template }) {
         {isEnvelope ? (
           <>
             <span style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: u(14), color: theme.soft }}>
-              {ceremonyLabel[t.ceremony]}
+              {tt(ceremonyLabel[t.ceremony])}
             </span>
-            <span style={{ fontFamily: family, fontSize: u(43.7), color: theme.accent, lineHeight: 1.25 }}>Taklifnoma</span>
+            <span style={{ fontFamily: family, fontSize: u(43.7), color: theme.accent, lineHeight: 1.25 }}>{tt("Taklifnoma")}</span>
             <span style={{ fontFamily: "var(--font-cinzel)", fontSize: u(10.1), color: theme.ink, letterSpacing: "0.22em" }}>
               {t.sample.date}
             </span>
@@ -198,7 +204,7 @@ export function InvitationScreen({ t }: { t: Template }) {
             marginTop: isEnvelope ? u(10) : u(24),
           }}
         >
-          Aziz mehmonlar!
+          {tt("Aziz mehmonlar!")}
         </span>
         <span
           style={{
@@ -211,7 +217,7 @@ export function InvitationScreen({ t }: { t: Template }) {
             marginTop: u(6),
           }}
         >
-          Hayotimizning eng baxtli kunida yonimizda bo‘lishingizni istaymiz.
+          {tt("Hayotimizning eng baxtli kunida yonimizda bo‘lishingizni istaymiz.")}
         </span>
         <span
           className="rounded-full"
@@ -225,11 +231,11 @@ export function InvitationScreen({ t }: { t: Template }) {
             marginTop: u(22),
           }}
         >
-          Taklifnomani ochish
+          {tt("Taklifnomani ochish")}
         </span>
         {isEnvelope && (
           <span style={{ fontSize: u(8.6), color: theme.ink, opacity: 0.6, letterSpacing: "0.06em", marginTop: u(22) }}>
-            {t.sample.venue} · {t.sample.time}
+            {tt(t.sample.venue)} · {t.sample.time}
           </span>
         )}
       </div>
