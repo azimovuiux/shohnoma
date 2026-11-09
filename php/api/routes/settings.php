@@ -53,7 +53,7 @@ route('PUT', '/admin/settings', function () {
         }
         if ($k === 'GA_MEASUREMENT_ID' && $v !== '') {
             $v = strtoupper($v);
-            if (!preg_match('/^G-[A-Z0-9]{4,16}$/', $v)) fail('Measurement ID «G-XXXXXXXXXX» ko‘rinishida bo‘lsin (Google Analytics → Admin → Data streams).', 422);
+            if (!preg_match('/^(G|GTM)-[A-Z0-9]{4,16}$/', $v)) fail('ID «G-XXXXXXXXXX» (Google Analytics) yoki «GTM-XXXXXXX» (Tag Manager) ko‘rinishida bo‘lsin.', 422);
         }
         if ($k === 'P2P_CARD' && $v !== '' && !preg_match('/^\d{4} ?\d{4} ?\d{4} ?\d{4}$/', $v)) fail('Karta raqami 16 ta raqam bo‘lsin', 422);
         setting_set($k, $v === '' ? null : mb_substr($v, 0, 500));

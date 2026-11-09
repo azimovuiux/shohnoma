@@ -77,8 +77,8 @@ export function AdminSettings() {
           />
           <FieldsCard
             title="Google Analytics"
-            sub="GA4 Measurement ID (Google Analytics → Admin → Data streams → Web). Kiritilsa — sayt sahifalarida Google Analytics ishlay boshlaydi (admin paneldan tashqari). Bo‘sh qoldirilsa — o‘chadi."
-            fields={[["GA_MEASUREMENT_ID", "Measurement ID", "G-XXXXXXXXXX"]]}
+            sub="Google Tag Manager ID (GTM-XXXXXXX) yoki GA4 Measurement ID (G-XXXXXXXXXX). Kiritilsa — sayt sahifalarida ishlay boshlaydi (admin paneldan tashqari). Bo‘sh qoldirilsa — o‘chadi."
+            fields={[["GA_MEASUREMENT_ID", "GTM yoki GA4 ID", "GTM-XXXXXXX"]]}
             data={data}
             save={save}
           />

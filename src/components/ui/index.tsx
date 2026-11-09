@@ -191,7 +191,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const seq = useRef(0);
   const push = useCallback((text: string, tone: ToastItem["tone"] = "success") => {
     const id = ++seq.current;
-    setItems((l) => [...l, { id, text, tone }]);
+    // bir xil xabar takrorlansa — ustma-ust yig‘ilmaydi; ekranda ko‘pi bilan 3 ta
+    setItems((l) => [...l.filter((t) => t.text !== text), { id, text, tone }].slice(-3));
     setTimeout(() => setItems((l) => l.filter((t) => t.id !== id)), 2500);
   }, []);
   return (

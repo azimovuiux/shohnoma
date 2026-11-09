@@ -31,17 +31,23 @@ declare global {
 
 /** Google Analytics 4 — admin sozlamalarida Measurement ID kiritilgan bo‘lsa (sahifa o‘tishlarini GA o‘zi kuzatadi) */
 function loadGa(id: string) {
-  if (window.gtag || !/^G-[A-Z0-9]{4,16}$/.test(id)) return;
+  if (window.gtag || !/^(G|GTM)-[A-Z0-9]{4,16}$/.test(id)) return;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
     // eslint-disable-next-line prefer-rest-params
     window.dataLayer!.push(arguments);
   };
   window.gtag("js", new Date());
-  window.gtag("config", id);
   const s = document.createElement("script");
   s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+  if (id.startsWith("GTM-")) {
+    // Google Tag Manager — teglar (GA4 va boshqalar) GTM ichida sozlanadi
+    window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
+    s.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(id)}`;
+  } else {
+    window.gtag("config", id);
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+  }
   document.head.appendChild(s);
 }
 
