@@ -5,11 +5,13 @@ export const monthsUz = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iy
 export const monthsRu = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
 
 /** "2026-09-12T18:00" → { day: "12.09.2026", time: "18:00", long: "12 sentabr 2026", dots: "12 · 09 · 2026" } */
-export function splitDate(local: string | null | undefined, locale: "uz" | "ru" = "uz") {
+export const monthsEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+export function splitDate(local: string | null | undefined, locale: "uz" | "ru" | "en" = "uz") {
   const m = (local ?? "").match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}:\d{2}))?/);
   if (!m) return null;
   const [, y, mo, d, t] = m;
-  const months = locale === "ru" ? monthsRu : monthsUz;
+  const months = locale === "ru" ? monthsRu : locale === "en" ? monthsEn : monthsUz;
   return {
     iso: `${y}-${mo}-${d}`,
     day: `${d}.${mo}.${y}`,
@@ -36,7 +38,7 @@ export function formatPhoneDisplay(p: string | null | undefined) {
 }
 
 /** Nisbiy vaqt: "hozirgina", "5 daqiqa oldin", "kecha 14:20", "12.09 18:00" */
-export function relativeTime(date: Date | string, locale: "uz" | "ru" = "uz") {
+export function relativeTime(date: Date | string, locale: "uz" | "ru" | "en" = "uz") {
   const d = typeof date === "string" ? new Date(date) : date;
   const diff = (Date.now() - d.getTime()) / 1000;
   const ru = locale === "ru";

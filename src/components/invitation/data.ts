@@ -8,7 +8,7 @@ import type { InvitationData } from "./types";
  */
 export function inviteLang(extra: unknown, fallback: Locale): Locale {
   const l = (extra as { lang?: unknown } | null | undefined)?.lang;
-  return l === "ru" || l === "uz" ? l : fallback;
+  return l === "ru" || l === "uz" || l === "en" ? l : fallback;
 }
 
 type Row = {
@@ -34,7 +34,8 @@ type Row = {
  * Sanoq birliklari. Ruschada son bilan kelishmaydigan, lekin sanoqlarda odatiy shakl («дней/часов/минут/секунд»);
  * lug‘atga qo‘yilmagan — "kun"/"soat" kalitlari saytning boshqa joylarida qisqa shaklda tarjima qilingan.
  */
-export const timerUnits = (lang: Locale) => (lang === "ru" ? ["дней", "часов", "минут", "секунд"] : ["kun", "soat", "daqiqa", "soniya"]);
+export const timerUnits = (lang: Locale) =>
+  lang === "ru" ? ["дней", "часов", "минут", "секунд"] : lang === "en" ? ["days", "hours", "minutes", "seconds"] : ["kun", "soat", "daqiqa", "soniya"];
 
 const CEREMONIES = ["nikoh", "fotiha", "sunnat", "tugilgan-kun"] as const;
 

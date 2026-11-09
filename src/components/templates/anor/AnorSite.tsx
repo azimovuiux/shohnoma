@@ -680,7 +680,7 @@ function Program({ d, wide, ready }: { d: D; wide: boolean; ready: boolean }) {
     <Sec ready={ready} style={{ paddingTop: v(70, 60), paddingBottom: v(90, 120), gap: v(30, 50) }}>
       <p data-a="mask" className={cx(st.italic, st.title)} style={{ color: "var(--maroon)", fontSize: v(48, 60), lineHeight: 1.25 }}>
         {/* ruscha — qisqa sarlavha (nowrap: «Программа торжества» mobilga sig‘maydi) */}
-        {lang === "ru" ? t("Kun dasturi") : "To‘y dasturi"}
+        {lang === "ru" ? t("Kun dasturi") : t("To‘y dasturi")}
       </p>
       <div ref={box} className="relative" style={{ width: U(W), height: U(H) }}>
         <svg className="absolute inset-0 size-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ overflow: "visible" }} aria-hidden>

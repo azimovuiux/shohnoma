@@ -15,14 +15,16 @@ import type { FlowOrder } from "./types";
 import { SaveIndicator } from "./SaveIndicator";
 import { DateField, SelectField, TimeField } from "./pickers";
 import { ExtraFields, extraErrors, extraReady, type Extra } from "./ExtraFields";
+import { localizeDefaults } from "./localizeDefaults";
 
 const ceremonies = (Object.keys(ceremonyLabel) as Ceremony[]).filter((c) => c in ceremonyLabel);
 
 /** Taklifnoma (mehmonlar ko‘radigan sayt) tili — extra.lang da saqlanadi */
-type InviteLang = "uz" | "ru";
+type InviteLang = "uz" | "ru" | "en";
 const inviteLangs: { value: InviteLang; label: string }[] = [
   { value: "uz", label: "O‘zbekcha" },
   { value: "ru", label: "Русский" },
+  { value: "en", label: "English" },
 ];
 
 type Errors = Partial<Record<"personA" | "personB" | "day" | "time" | "venueName" | "address" | "mapUrl", string>>;
@@ -32,10 +34,14 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
   const t = useT();
   const locale = useLocale();
   // Til tanlanmagan bo‘lsa: yangi buyurtmada — sayt tili; mavjud taklifnomani tahrirlashda — o‘zbekcha (hozirgi ko‘rinishi)
-  const langMissing = order.extra?.lang !== "uz" && order.extra?.lang !== "ru";
-  const [o, setO] = useState<FlowOrder>(() =>
-    langMissing ? { ...order, extra: { ...(order.extra ?? {}), lang: editing ? "uz" : locale } } : order,
-  );
+  const langMissing = !["uz", "ru", "en"].includes(String(order.extra?.lang ?? ""));
+  const [o, setO] = useState<FlowOrder>(() => {
+    if (!langMissing) return order;
+    const l = editing ? "uz" : locale;
+    const base = { ...order, extra: { ...(order.extra ?? {}), lang: l } };
+    const loc = localizeDefaults(base, l);
+    return { ...base, ...loc, extra: { ...(loc.extra ?? base.extra), lang: l } };
+  });
   const [errors, setErrors] = useState<Errors>({});
   const [extraErr, setExtraErr] = useState<Record<string, string>>({});
   const fields = template.fields ?? [];
@@ -78,7 +84,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
       return;
     }
     // standart til hali saqlanmagan bo‘lsa — hozir saqlaymiz
-    if (langMissing) queue({ extra: o.extra });
+    if (langMissing) queue({ extra: o.extra, message: o.message, program: o.program });
     setBusy(true);
     const ok = await flush();
     setBusy(false);
@@ -94,10 +100,16 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
   };
 
   const actionLabel = editing ? t("Saqlash") : t("Davom etish");
-  const lang: InviteLang = o.extra?.lang === "ru" ? "ru" : "uz";
+  const lang: InviteLang = o.extra?.lang === "ru" || o.extra?.lang === "en" ? o.extra.lang : "uz";
   const setLang = (v: InviteLang) => {
-    const x = { ...(o.extra as Extra), lang: v };
-    setO((p) => ({ ...p, extra: x }));
+    // standart taklif matni va dastur bandlari ham shu tilga o‘tadi (mijoz yozganiga tegilmaydi)
+    const loc = localizeDefaults(o, v);
+    const x = { ...((loc.extra ?? o.extra) as Extra), lang: v };
+    setO((p) => ({ ...p, ...loc, extra: x }));
+    const rest: Record<string, unknown> = {};
+    if (loc.message) rest.message = loc.message;
+    if (loc.program) rest.program = loc.program;
+    if (Object.keys(rest).length) queue(rest);
     if (extraReady(fields, x)) queue({ extra: x });
   };
   const button = (

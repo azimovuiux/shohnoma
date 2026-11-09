@@ -1,5 +1,5 @@
 /** 149000 → "149 000 so‘m" (dizayndagi kabi oddiy bo‘sh joy bilan); ruscha — "149 000 сум" */
-export function formatPrice(n: number, withCurrency = true, locale: "uz" | "ru" = "uz") {
+export function formatPrice(n: number, withCurrency = true, locale: "uz" | "ru" | "en" = "uz") {
   const s = String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   return withCurrency ? `${s} ${locale === "ru" ? "сум" : "so‘m"}` : s;
 }

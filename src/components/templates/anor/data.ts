@@ -118,17 +118,23 @@ export const MONTHS_RU = ["Январь", "Февраль", "Март", "Апр�
 export const MONTHS_RU_GEN = monthsRu;
 
 /** Taklifnoma tiliga mos hafta/oy nomlari */
+export const WEEK_EN = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+export const WEEKDAY_EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+export const MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 export const calendarWords = (lang: Locale) =>
   lang === "ru"
     ? { week: WEEK_RU, weekday: WEEKDAY_RU, months: MONTHS_RU, monthsAfterDay: MONTHS_RU_GEN }
-    : { week: WEEK, weekday: WEEKDAY, months: MONTHS, monthsAfterDay: MONTHS_LOWER };
+    : lang === "en"
+      ? { week: WEEK_EN, weekday: WEEKDAY_EN, months: MONTHS_EN, monthsAfterDay: MONTHS_EN }
+      : { week: WEEK, weekday: WEEKDAY, months: MONTHS, monthsAfterDay: MONTHS_LOWER };
 
 /** Javob muddati: "2026-09-02" → «2-sentabrgacha» / «до 2 сентября» */
 export function untilPhrase(iso: string | null | undefined, lang: Locale) {
   if (!iso) return "";
   const day = Number(iso.slice(8, 10));
   const m = Number(iso.slice(5, 7)) - 1;
-  return lang === "ru" ? `до ${day} ${MONTHS_RU_GEN[m]}` : `${day}-${MONTHS_LOWER[m]}gacha`;
+  return lang === "ru" ? `до ${day} ${MONTHS_RU_GEN[m]}` : lang === "en" ? `by ${day} ${MONTHS_EN[m]}` : `${day}-${MONTHS_LOWER[m]}gacha`;
 }
 
 /** Sana atrofidagi hafta (Du…Ya) */

@@ -272,7 +272,7 @@ export function DateField({
   invalid?: boolean;
   min?: string;
   label?: string;
-  locale?: "uz" | "ru";
+  locale?: "uz" | "ru" | "en";
 }) {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState(isoToDmy(value));

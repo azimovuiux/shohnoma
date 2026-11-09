@@ -1,5 +1,5 @@
 /** Toshkent vaqti: "Bugun, 14:32" / "Kecha, 09:10" / "04.11.2026, 23:41" */
-export function tashkentStamp(d: Date | string | null | undefined, mode: "relative" | "full" = "relative", locale: "uz" | "ru" = "uz") {
+export function tashkentStamp(d: Date | string | null | undefined, mode: "relative" | "full" = "relative", locale: "uz" | "ru" | "en" = "uz") {
   if (!d) return "";
   const date = typeof d === "string" ? new Date(d) : d;
   const t = new Date(date.getTime() + 5 * 3600_000).toISOString();

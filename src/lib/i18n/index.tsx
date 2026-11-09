@@ -6,6 +6,7 @@ import { ru as site } from "./ru/site";
 import { ru as order } from "./ru/order";
 import { ru as cabinet } from "./ru/cabinet";
 import { ru as invite } from "./ru/invite";
+import { en as inviteEn } from "./en/invite";
 
 /**
  * Sayt tillari. O‘zbekcha — asosiy (manzil prefikssiz), ruscha — /ru/... ostida.
@@ -13,13 +14,14 @@ import { ru as invite } from "./ru/invite";
  * Lug‘atda topilmasa — o‘zbekcha matn qaytadi (sahifa buzilmaydi).
  * O‘zgaruvchilar: t("{n} ta shablon", { n: 3 }).
  */
-export type Locale = "uz" | "ru";
+export type Locale = "uz" | "ru" | "en";
+/** Sayt tillari (ingliz tili — faqat taklifnoma sahifalari uchun) */
 export const LOCALES: Locale[] = ["uz", "ru"];
 
 const DICT: Record<string, string> = { ...common, ...site, ...order, ...cabinet, ...invite };
 
 export function tr(locale: Locale, s: string, vars?: Record<string, string | number>): string {
-  let out = locale === "ru" ? (DICT[s] ?? s) : s;
+  let out = locale === "ru" ? (DICT[s] ?? s) : locale === "en" ? (inviteEn[s] ?? s) : s;
   if (vars) for (const [k, v] of Object.entries(vars)) out = out.split(`{${k}}`).join(String(v));
   return out;
 }

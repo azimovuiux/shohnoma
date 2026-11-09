@@ -146,7 +146,7 @@ function Visual2() {
         ri="pop"
         riDelay={1000}
       />
-      <UICard ri="left" delay={650} className="absolute left-0 top-[17%] w-[280px] max-w-[70%]">
+      <UICard ri="left" delay={650} className="absolute left-0 top-[66%] w-[280px] max-w-[64%] sm:top-[17%] sm:max-w-[70%]">
         <div className="flex items-center gap-2.5">
           <span className="flex size-[34px] items-center justify-center rounded-full bg-maroon text-[14px] font-semibold text-ink-inverse">J</span>
           <div className="flex flex-col gap-px">
@@ -155,7 +155,7 @@ function Visual2() {
           </div>
         </div>
         <p className="text-[13px] leading-[1.5] text-ink">{t("Salom, Nilufar! To‘yimizga taklif qilamiz — albatta keling.")}</p>
-        <div className="flex items-center gap-3 rounded-xl bg-bg-soft p-2.5">
+        <div className="hidden items-center gap-3 rounded-xl bg-bg-soft p-2.5 sm:flex">
           <span className="flex h-[54px] w-11 shrink-0 items-center justify-center rounded-lg bg-maroon">
             <span className="size-3.5 rounded-full bg-[#c9a25e]" />
           </span>

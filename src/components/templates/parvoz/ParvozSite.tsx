@@ -11,6 +11,7 @@ import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/co
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 import { DRESS, calendarWords, coordsFrom, downloadIcs, untilPhrase, type ProgramItem } from "../anor/data";
+import { timerUnits } from "@/components/invitation/data";
 import { P, PARVOZ_DEMO, PARVOZ_DEMO_RU, minusHour, monShort, wavePath, wavePoint } from "./data";
 import st from "./parvoz.module.css";
 
@@ -70,7 +71,7 @@ function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" 
       time,
       boarding,
       ticketDate: date ? `${dd} ${monShort(date.getUTCMonth(), lang)} ${date.getUTCFullYear()}` : "",
-      longDate: date ? `${date.getUTCDate()} ${cw.monthsAfterDay[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${cw.weekday[date.getUTCDay()].toLowerCase()}` : "",
+      longDate: date ? `${date.getUTCDate()} ${cw.monthsAfterDay[date.getUTCMonth()]} ${date.getUTCFullYear()}, ${lang === "en" ? cw.weekday[date.getUTCDay()] : cw.weekday[date.getUTCDay()].toLowerCase()}` : "",
       target: data.date ? tashkentDate(data.date).getTime() : null,
       guest,
       message,
@@ -622,7 +623,7 @@ function Board({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: boolea
   const v: V = (m, l) => U(wide ? l : m);
   const [ref, inView] = useInView<HTMLDivElement>(0.3, ready);
   const c = useCountdown(d.target);
-  const labels = lang === "ru" ? ["дней", "часов", "минут", "секунд"] : ["kun", "soat", "daqiqa", "soniya"];
+  const labels = timerUnits(lang);
   const daysLen = c ? Math.max(2, String(c.d).length) : 2;
   const groups = c ? ([c.d, c.h, c.m, c.s] as const) : null;
   const run = inView;

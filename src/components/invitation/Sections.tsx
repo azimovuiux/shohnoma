@@ -199,7 +199,7 @@ export function RsvpBlock({
   const lang = useLocale();
   if (!d.rsvpEnabled) return null;
   const dl = d.rsvpDeadline ? splitDate(d.rsvpDeadline, lang) : null;
-  const deadline = dl ? (lang === "ru" ? `до ${dl.short}` : `${Number(dl.iso.slice(8, 10))}-${monthsUz[Number(dl.iso.slice(5, 7)) - 1]}gacha`) : null;
+  const deadline = dl ? (lang === "ru" ? `до ${dl.short}` : lang === "en" ? `by ${dl.short}` : `${Number(dl.iso.slice(8, 10))}-${monthsUz[Number(dl.iso.slice(5, 7)) - 1]}gacha`) : null;
   return (
     <section className="flex flex-col items-center text-center" style={{ background: `linear-gradient(to bottom, ${p.deep2}, ${p.deep})`, padding: `${s(40)} ${s(24)} ${s(48)}` }}>
       <h2 style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(32), color: p.onDeep }}>{t("Kelasizmi?")}</h2>

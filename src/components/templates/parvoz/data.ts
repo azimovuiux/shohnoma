@@ -46,7 +46,8 @@ export const PARVOZ_DEMO_RU: typeof PARVOZ_DEMO = {
 const MON = ["YAN", "FEV", "MAR", "APR", "MAY", "IYN", "IYL", "AVG", "SEN", "OKT", "NOY", "DEK"];
 const MON_RU = ["ЯНВ", "ФЕВ", "МАР", "АПР", "МАЙ", "ИЮН", "ИЮЛ", "АВГ", "СЕН", "ОКТ", "НОЯ", "ДЕК"];
 /** Chipta uchun qisqa oy: «SEN» / «СЕН» */
-export const monShort = (m: number, lang: Locale) => (lang === "ru" ? MON_RU : MON)[m] ?? "";
+const MON_EN = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+export const monShort = (m: number, lang: Locale) => (lang === "ru" ? MON_RU : lang === "en" ? MON_EN : MON)[m] ?? "";
 
 const VOWELS = /[aeiouyаеёиоуыэюяўу]/i;
 /** Aeroport kodi uslubida 3 harf: Jasur → JSR, Madina → MDN (birinchi harf + undoshlar) */

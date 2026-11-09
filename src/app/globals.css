@@ -469,3 +469,15 @@ html.js [data-reveal="stagger"].is-done > [data-split] > * {
 html[lang="ru"] :where(p, li, dd, dt, label, td, th, h1, h2, h3, h4) {
   overflow-wrap: break-word;
 }
+
+/* Native select: brauzer o‘qi chetga yopishib qolmasin — o‘zimizning chevron, to‘g‘ri chekinish bilan.
+   O‘z ikonkasi bor selectlar (.appearance-none) bunga kirmaydi. */
+select:not(.appearance-none):not([multiple]) {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237a6f66' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px 14px;
+  padding-right: 38px;
+}

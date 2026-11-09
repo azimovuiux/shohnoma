@@ -241,7 +241,7 @@ export const builtinTemplates: Template[] = builtin.map((t) => ({
 }));
 
 /** Joriy tilga mos mokap rasmlari: ruschada *Ru variantlari bo‘lsa — o‘shalar */
-export function tplImages(t: Pick<Template, "images">, locale: "uz" | "ru") {
+export function tplImages(t: Pick<Template, "images">, locale: "uz" | "ru" | "en") {
   const im = t.images;
   if (!im || locale !== "ru") return im;
   return {
