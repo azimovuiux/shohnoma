@@ -1,5 +1,8 @@
+"use client";
+
 import { Card, CardPos, Edit, Gallery, MoneySend, Mobile, Send2, WalletCheck } from "@/components/icons";
 import { SectionTitle } from "./SectionTitle";
+import { useT } from "@/lib/i18n";
 
 const steps = [
   { icon: <Gallery size={24} />, title: "Dizaynni tanlang", text: "Marosimingizga mos tayyor shablonni tanlang." },
@@ -37,12 +40,13 @@ function Connector() {
 }
 
 export function HowItWorks() {
+  const t = useT();
   return (
     <section id="qanday-ishlaydi" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-14 lg:gap-[72px]">
         <div data-reveal="stagger" className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <SectionTitle plain="Qanday" italic="ishlaydi" />
-          <p className="t-body-m max-w-[400px] text-ink-2 lg:text-right">Buyurtmadan tayyor havolagacha — to‘rt oddiy qadam.</p>
+          <p className="t-body-m max-w-[400px] text-ink-2 lg:text-right">{t("Buyurtmadan tayyor havolagacha — to‘rt oddiy qadam.")}</p>
         </div>
 
         <ol data-reveal="stagger" style={{ ["--d" as string]: "150ms" }} className="grid gap-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0">
@@ -53,9 +57,9 @@ export function HowItWorks() {
               <div className="flex flex-col gap-2.5">
                 <div className="flex items-baseline gap-2.5">
                   <span className="font-serif text-[26px] font-light italic leading-none text-gold">{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className="t-display-card text-ink">{s.title}</h3>
+                  <h3 className="t-display-card text-ink">{t(s.title)}</h3>
                 </div>
-                <p className="t-body-m max-w-[250px] text-ink-2">{s.text}</p>
+                <p className="t-body-m max-w-[250px] text-ink-2">{t(s.text)}</p>
               </div>
             </li>
           ))}
@@ -67,15 +71,15 @@ export function HowItWorks() {
               <WalletCheck size={22} />
             </span>
             <div className="flex flex-col gap-1">
-              <p className="text-[15px] font-semibold leading-[1.35] text-ink">To‘lov usullari</p>
-              <p className="t-body-s text-ink-2">To‘lov tasdiqlangach, tayyor sayt havolasi sizga yuboriladi.</p>
+              <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("To‘lov usullari")}</p>
+              <p className="t-body-s text-ink-2">{t("To‘lov tasdiqlangach, tayyor sayt havolasi sizga yuboriladi.")}</p>
             </div>
           </div>
           <ul className="flex flex-wrap gap-2.5">
             {methods.map((m) => (
               <li key={m.label} className="flex items-center gap-2 rounded-xl border border-line bg-bg-base px-[18px] py-3 t-nav text-ink">
                 <span className="text-gold">{m.icon}</span>
-                {m.label}
+                {t(m.label)}
               </li>
             ))}
           </ul>

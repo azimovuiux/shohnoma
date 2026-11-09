@@ -1,14 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { isPaidStatus } from "@/lib/types";
 import { useInvitationData, useSiteUrl } from "../data";
 import { ArrowRight, Calendar, Edit, Gallery, Location, Music, Profile2User, User } from "@/components/icons";
 import { InvitationHeader } from "../InvitationHeader";
 import { SlugEditor } from "../SlugEditor";
 import { splitDate } from "@/lib/display";
+import { useT } from "@/lib/i18n";
 
 export function EditPage() {
+  const t = useT();
   const { data, reload } = useInvitationData();
   const siteUrl = useSiteUrl();
   const { order, invitation: inv } = data;
@@ -19,8 +21,8 @@ export function EditPage() {
   const sections = [
     {
       href: flow("marosim"),
-      title: "Marosim ma’lumotlari",
-      desc: "Ismlar, sana va vaqt, marosim joyi va manzil",
+      title: t("Marosim ma’lumotlari"),
+      desc: t("Ismlar, sana va vaqt, marosim joyi va manzil"),
       rows: [
         { icon: <User size={16} />, v: [inv.personA, inv.personB].filter(Boolean).join(" & ") || "—" },
         { icon: <Calendar size={16} />, v: d ? `${d.day}${d.time ? `, ${d.time}` : ""}` : "—" },
@@ -29,20 +31,20 @@ export function EditPage() {
     },
     {
       href: flow("tafsilotlar"),
-      title: "Tafsilotlar",
-      desc: "Taklif matni, suratlar, imkoniyatlar va aloqa",
+      title: t("Tafsilotlar"),
+      desc: t("Taklif matni, suratlar, imkoniyatlar va aloqa"),
       rows: [
         { icon: <Edit size={16} />, v: inv.message ? `“${inv.message.slice(0, 70)}${inv.message.length > 70 ? "…" : ""}”` : "—" },
-        { icon: <Gallery size={16} />, v: `${(inv.photos ?? []).length} ta surat` },
-        { icon: <Profile2User size={16} />, v: `Mehmonlar javobi: ${inv.rsvpEnabled ? "yoqilgan" : "o‘chirilgan"}` },
-        { icon: <Music size={16} />, v: `Fon musiqasi: ${inv.musicEnabled ? "yoqilgan" : "o‘chirilgan"}` },
+        { icon: <Gallery size={16} />, v: t("{n} ta surat", { n: (inv.photos ?? []).length }) },
+        { icon: <Profile2User size={16} />, v: `${t("Mehmonlar javobi")}: ${inv.rsvpEnabled ? t("yoqilgan") : t("o‘chirilgan")}` },
+        { icon: <Music size={16} />, v: `${t("Fon musiqasi")}: ${inv.musicEnabled ? t("yoqilgan") : t("o‘chirilgan")}` },
       ],
     },
   ];
 
   return (
     <>
-      <InvitationHeader order={order} invitation={inv} title="Tahrirlash" />
+      <InvitationHeader order={order} invitation={inv} title={t("Tahrirlash")} />
       <div className="grid gap-4 xl:grid-cols-2">
         {sections.map((s) => (
           <section key={s.title} className="flex flex-col gap-4 rounded-card border border-line bg-bg-base p-5">
@@ -59,10 +61,10 @@ export function EditPage() {
               ))}
             </ul>
             {locked ? (
-              <span className="t-body-s text-ink-2">Arxivlangan taklifnomani tahrirlab bo‘lmaydi</span>
+              <span className="t-body-s text-ink-2">{t("Arxivlangan taklifnomani tahrirlab bo‘lmaydi")}</span>
             ) : (
               <Link href={s.href} className="btn btn-secondary w-fit !py-3">
-                <Edit size={16} /> Tahrirlash <ArrowRight size={15} />
+                <Edit size={16} /> {t("Tahrirlash")} <ArrowRight size={15} />
               </Link>
             )}
           </section>

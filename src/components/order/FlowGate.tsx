@@ -5,8 +5,9 @@
  * Haqiqiy buyurtma id'si URL'dan o‘qiladi (/buyurtma/<id>/... → qobiq /buyurtma/_/...),
  * ma’lumot GET /api/orders/:id dan olinadi va holatga qarab yo‘naltiriladi (avvalgi server `loadFlow` mantig‘i).
  */
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Link from "@/components/LocalLink";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useLpath, useT } from "@/lib/i18n";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { PageLoading, routeParam, useApi } from "@/lib/client";
 import type { Invitation, Order, Payment } from "@/lib/types";
@@ -85,18 +86,20 @@ function stepRedirect(step: Step, r: OrderResponse, editing: boolean): string | 
 }
 
 export function OrderNotFound() {
+  const t = useT();
+  const lp = useLpath();
   return (
     <div className="mx-auto flex min-h-[50vh] max-w-[480px] flex-col items-center justify-center gap-4 px-5 py-20 text-center">
-      <p className="font-serif text-[34px] font-light text-ink">Buyurtma topilmadi</p>
+      <p className="font-serif text-[34px] font-light text-ink">{t("Buyurtma topilmadi")}</p>
       <p className="t-body-m text-ink-2">
-        Havola eskirgan yoki buyurtma boshqa qurilmada ochilgan bo‘lishi mumkin. Kabinetingizga kirib, buyurtmalaringizni ko‘ring.
+        {t("Havola eskirgan yoki buyurtma boshqa qurilmada ochilgan bo‘lishi mumkin. Kabinetingizga kirib, buyurtmalaringizni ko‘ring.")}
       </p>
       <div className="flex flex-wrap justify-center gap-3">
-        <Link href="/kirish/?next=%2Fkabinet%2F" className="btn btn-primary">
-          Kabinetga kirish
+        <Link href={`/kirish/?next=${encodeURIComponent(lp("/kabinet/"))}`} className="btn btn-primary">
+          {t("Kabinetga kirish")}
         </Link>
         <Link href="/shablonlar/" className="btn btn-secondary">
-          Shablonlar
+          {t("Shablonlar")}
         </Link>
       </div>
     </div>
@@ -121,7 +124,8 @@ export function FlowGate({
   guard?: (c: FlowCtx) => string | null;
   children: (c: FlowCtx) => ReactNode;
 }) {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
   const search = useSearch();
   const [id, setId] = useState<string | null | undefined>(undefined);
   useEffect(() => setId(routeParam("buyurtma")), []);
@@ -155,9 +159,9 @@ export function FlowGate({
   if (error)
     return (
       <div className="mx-auto flex min-h-[50vh] max-w-[480px] flex-col items-center justify-center gap-4 px-5 text-center">
-        <p className="t-body-m text-ink-2">{error.message}</p>
+        <p className="t-body-m text-ink-2">{t(error.message)}</p>
         <button type="button" className="btn btn-secondary" onClick={() => reload()}>
-          Qayta urinish
+          {t("Qayta urinish")}
         </button>
       </div>
     );

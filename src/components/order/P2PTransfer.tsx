@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useLocale, useT } from "@/lib/i18n";
 import { ArrowRight, CloseCircle, Copy, DocumentText, Gallery, Timer1 } from "@/components/icons";
 import { useCopy } from "@/components/ui";
 import { formatPrice } from "@/lib/format";
@@ -46,7 +47,9 @@ export function P2PTransfer({
   card: P2PCard;
   rejectedNote?: string | null;
 }) {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
+  const locale = useLocale();
   const copy = useCopy();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -59,15 +62,15 @@ export function P2PTransfer({
   const pick = (f: File | undefined | null) => {
     setError(null);
     if (!f) return;
-    if (!/^image\/|^application\/pdf$/.test(f.type)) return setError("Faqat rasm yoki PDF yuklang");
-    if (f.size > 8 * 1024 * 1024) return setError("Fayl hajmi 8 MB dan oshmasin");
+    if (!/^image\/|^application\/pdf$/.test(f.type)) return setError(t("Faqat rasm yoki PDF yuklang"));
+    if (f.size > 8 * 1024 * 1024) return setError(t("Fayl hajmi 8 MB dan oshmasin"));
     setFile(f);
     setPreview(f.type.startsWith("image/") ? URL.createObjectURL(f) : null);
   };
 
   const send = async () => {
     if (!file) {
-      setError("Avval chek rasmini yuklang");
+      setError(t("Avval chek rasmini yuklang"));
       input.current?.click();
       return;
     }
@@ -82,7 +85,7 @@ export function P2PTransfer({
       router.push(`/buyurtma/${order.id}/tolov/p2p/tekshirilmoqda/`);
       router.refresh();
     } catch (e) {
-      setError((e as Error).message);
+      setError(t((e as Error).message));
       setBusy(false);
     }
   };
@@ -90,13 +93,13 @@ export function P2PTransfer({
   const rows: [string, React.ReactNode, string | null][] = [
     ["Karta raqami", card.card, card.card.replace(/\s/g, "")],
     ["Qabul qiluvchi", card.holder.replace(/\b(\p{L})(\p{L}*)/gu, (_, a: string, b: string) => a + b.toLowerCase()), null],
-    ["O‘tkaziladigan summa", <span key="s" className="font-serif text-[22px] font-medium text-maroon">{formatPrice(order.amount)}</span>, String(order.amount)],
+    ["O‘tkaziladigan summa", <span key="s" className="font-serif text-[22px] font-medium text-maroon">{formatPrice(order.amount, true, locale)}</span>, String(order.amount)],
     ["Izohga yozing", order.code, order.code],
   ];
 
   const button = (
     <button type="button" onClick={send} disabled={busy} className="btn btn-primary w-full">
-      {busy ? "Yuborilmoqda…" : "Chekni yubordim"} <ArrowRight size={16} />
+      {busy ? t("Yuborilmoqda…") : t("Chekni yubordim")} <ArrowRight size={16} />
     </button>
   );
   const err = error && (
@@ -131,7 +134,7 @@ export function P2PTransfer({
         <MobileTemplateCard template={template} live={live} order={order} />
         {rejectedNote && (
           <div role="alert" className="rounded-xl px-4 py-3.5 t-body-m" style={{ background: "var(--danger-bg)", color: "var(--color-danger)" }}>
-            <b className="font-semibold">Oldingi chek qabul qilinmadi:</b> {rejectedNote}. Iltimos, to‘g‘ri chekni qayta yuboring.
+            <b className="font-semibold">{t("Oldingi chek qabul qilinmadi:")}</b> {t(rejectedNote)}. {t("Iltimos, to‘g‘ri chekni qayta yuboring.")}
           </div>
         )}
         <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
@@ -140,16 +143,16 @@ export function P2PTransfer({
             {rows.map(([l, v, c]) => (
               <div key={l} className="flex items-center justify-between gap-3 py-2.5">
                 <div className="flex flex-col">
-                  <dt className="t-body-s text-ink-2">{l}</dt>
+                  <dt className="t-body-s text-ink-2">{t(l)}</dt>
                   <dd className="text-[15px] font-semibold text-ink">{v}</dd>
                 </div>
                 {c && (
                   <button
                     type="button"
-                    onClick={() => copy(c, `${l} nusxalandi`)}
+                    onClick={() => copy(c, t("{l} nusxalandi", { l: t(l) }))}
                     className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-bg-soft px-3 py-1.5 t-body-s font-medium text-maroon hover:bg-gold-soft"
                   >
-                    <Copy size={14} /> Nusxa
+                    <Copy size={14} /> {t("Nusxa")}
                   </button>
                 )}
               </div>
@@ -158,12 +161,12 @@ export function P2PTransfer({
         </div>
 
         <div className="flex flex-col gap-4">
-          <SectionTitle>Qanday o‘tkazaman?</SectionTitle>
+          <SectionTitle>{t("Qanday o‘tkazaman?")}</SectionTitle>
           <ol className="flex flex-col gap-3">
             {["Karta raqami va summani nusxalang", "Bank ilovangizda o‘tkazmani bajaring", "Chek rasmini pastga yuklang"].map((s, i) => (
               <li key={s} className="flex items-center gap-3 t-body-m text-ink">
                 <span className="flex size-[30px] shrink-0 items-center justify-center rounded-full border border-gold/60 font-serif text-[15px] text-gold">{i + 1}</span>
-                {s}
+                {t(s)}
               </li>
             ))}
           </ol>
@@ -195,7 +198,7 @@ export function P2PTransfer({
             <>
               {preview ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={preview} alt="Chek" className="max-h-48 rounded-xl object-contain shadow-soft" />
+                <img src={preview} alt={t("Chek")} className="max-h-48 rounded-xl object-contain shadow-soft" />
               ) : (
                 <span className="flex size-12 items-center justify-center rounded-full bg-bg-base text-maroon">
                   <DocumentText size={22} />
@@ -204,7 +207,7 @@ export function P2PTransfer({
               <p className="t-title text-ink">{file.name}</p>
               <div className="flex gap-2">
                 <button type="button" onClick={() => input.current?.click()} className="btn btn-secondary btn-sm">
-                  Boshqa fayl
+                  {t("Boshqa fayl")}
                 </button>
                 <button
                   type="button"
@@ -212,7 +215,7 @@ export function P2PTransfer({
                     setFile(null);
                     setPreview(null);
                   }}
-                  aria-label="Faylni olib tashlash"
+                  aria-label={t("Faylni olib tashlash")}
                   className="icon-btn"
                 >
                   <CloseCircle size={18} />
@@ -224,8 +227,8 @@ export function P2PTransfer({
               <span className="flex size-12 items-center justify-center rounded-full bg-bg-base text-maroon shadow-soft">
                 <Gallery size={22} />
               </span>
-              <span className="t-title text-ink">Chek rasmini yuklang</span>
-              <span className="t-body-s text-ink-2">Rasm yoki skrinshot · bosing yoki shu yerga tashlang</span>
+              <span className="t-title text-ink">{t("Chek rasmini yuklang")}</span>
+              <span className="t-body-s text-ink-2">{t("Rasm yoki skrinshot · bosing yoki shu yerga tashlang")}</span>
             </button>
           )}
         </div>
@@ -233,7 +236,7 @@ export function P2PTransfer({
           <span className="text-gold">
             <Timer1 size={16} />
           </span>
-          Odatda 15 daqiqa ichida tasdiqlaymiz. Tasdiqlangach, taklifnoma havolasi kabinetingizda va Telegramda paydo bo‘ladi.
+          {t("Odatda 15 daqiqa ichida tasdiqlaymiz. Tasdiqlangach, taklifnoma havolasi kabinetingizda va Telegramda paydo bo‘ladi.")}
         </p>
       </div>
       <MobileBar>

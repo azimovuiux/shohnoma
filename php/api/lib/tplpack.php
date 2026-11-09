@@ -415,5 +415,7 @@ function tpl_clean_extra(mixed $in, array $fields): array
             $out[$k] = $one($in[$k], $f, $f['label']);
         }
     }
+    // Taklifnoma tili (sxemadan tashqari, barcha shablonlar uchun)
+    if (isset($in['lang']) && in_array($in['lang'], ['uz', 'ru'], true)) $out['lang'] = $in['lang'];
     return $out;
 }

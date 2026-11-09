@@ -6,7 +6,7 @@
  */
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { User, Order, Invitation, Payment, Guest, Stats } from "./types";
-import { currentLocale, tr } from "@/lib/i18n";
+import { currentLocale, lpath, tr } from "@/lib/i18n";
 
 export type { User, Order, Invitation, Payment, Guest, Stats };
 
@@ -113,7 +113,7 @@ export function useRequireUser(admin = false) {
     if (loading || !me) return;
     if (!me.user) {
       const next = window.location.pathname + window.location.search;
-      window.location.replace(`/kirish/${admin ? "admin/" : ""}?next=${encodeURIComponent(next)}`);
+      window.location.replace(admin ? `/kirish/admin/?next=${encodeURIComponent(next)}` : lpath(currentLocale(), `/kirish/?next=${encodeURIComponent(next)}`));
     } else if (admin && !me.user.isAdmin) {
       window.location.replace("/");
     }

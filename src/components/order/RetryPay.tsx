@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useT } from "@/lib/i18n";
 import { ArrowRight } from "@/components/icons";
 import { PAY_URL_KEY, type Provider } from "./PayChoice";
 
 /** 14 — "Qayta urinish": o‘sha usul bilan to‘lovni qayta boshlash */
 export function RetryPay({ orderId, provider }: { orderId: string; provider: Provider }) {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const retry = async () => {
@@ -25,14 +27,14 @@ export function RetryPay({ orderId, provider }: { orderId: string; provider: Pro
       sessionStorage.setItem(PAY_URL_KEY(orderId), data.url);
       router.push(`/buyurtma/${orderId}/tolov/jarayonda/?usul=${provider}&ochish=1`);
     } catch (e) {
-      setError((e as Error).message);
+      setError(t((e as Error).message));
       setBusy(false);
     }
   };
   return (
     <>
       <button type="button" onClick={retry} disabled={busy} className="btn btn-primary">
-        {busy ? "Kuting…" : "Qayta urinish"} <ArrowRight size={16} />
+        {busy ? t("Kuting…") : t("Qayta urinish")} <ArrowRight size={16} />
       </button>
       {error && (
         <p role="alert" className="t-body-s text-danger sm:order-last sm:w-full">

@@ -2,11 +2,12 @@
 
 import { useEffect } from "react";
 import { PageLoading } from "@/lib/client";
+import { currentLocale, lpath } from "@/lib/i18n";
 
 export function RedirectToLogin() {
   useEffect(() => {
     const next = new URLSearchParams(location.search).get("next");
-    window.location.replace(`/kirish/${next ? `?next=${encodeURIComponent(next)}` : ""}`);
+    window.location.replace(lpath(currentLocale(), `/kirish/${next ? `?next=${encodeURIComponent(next)}` : ""}`));
   }, []);
   return <PageLoading className="flex-1" />;
 }

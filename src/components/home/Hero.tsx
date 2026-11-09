@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import Link from "@/components/LocalLink";
+import { useT } from "@/lib/i18n";
 import type { CSSProperties, ReactNode } from "react";
 import { ArrowRight } from "@/components/icons";
 import { site } from "@/lib/site";
@@ -56,11 +59,12 @@ function Img({ src, className = "", fit = "cover" }: { src: string; className?: 
 
 /** Qog‘oz taklifnoma (Figma «Qog‘oz taklifnoma», 420×580) */
 function Paper() {
+  const t = useT();
   return (
     <div className="flex size-full items-center justify-center border border-[#e9dcc6] bg-[#fffdf8] shadow-[0_30px_60px_rgba(77,46,26,0.2)]" style={{ paddingInline: u(40) }}>
       <div className="flex w-full flex-col items-center border border-[#d9b97a]/70 text-center" style={{ height: u(398), paddingTop: u(44), gap: u(6) }}>
         <span className="font-cormorant font-light italic leading-tight text-gold" style={{ fontSize: u(22) }}>
-          Nikoh to‘yi
+          {t("Nikoh to‘yi")}
         </span>
         <span className="font-script leading-[1.15] text-maroon" style={{ fontSize: u(62) }}>
           Taklifnoma
@@ -70,7 +74,7 @@ function Paper() {
           Jasur
         </span>
         <span className="font-cormorant font-light italic leading-tight text-gold" style={{ fontSize: u(20) }}>
-          va
+          {t("va")}
         </span>
         <span className="font-script leading-[1.1] text-ink" style={{ fontSize: u(46) }}>
           Madina
@@ -79,7 +83,7 @@ function Paper() {
           12 · 09 · 2026
         </span>
         <span className="font-cormorant font-light text-ink-2" style={{ fontSize: u(17) }}>
-          Toshkent, «Oqsaroy» to‘yxonasi
+          {t("Toshkent, «Oqsaroy» to‘yxonasi")}
         </span>
       </div>
     </div>
@@ -88,13 +92,14 @@ function Paper() {
 
 /** Qo‘ldagi telefon ekrani (Figma «Ekran — Bordo maktub», 188.55×394) */
 function PhoneScreen() {
+  const t = useT();
   return (
     <div
       className="absolute flex flex-col items-center bg-maroon text-center"
       style={{ left: u(176.74), top: u(59), width: u(188.55), height: u(394), borderRadius: u(26), paddingTop: u(30), paddingInline: u(12), gap: u(5) }}
     >
       <span className="font-cormorant font-light italic leading-tight text-[#d9b97a]" style={{ fontSize: u(13) }}>
-        Nikoh to‘yi
+        {t("Nikoh to‘yi")}
       </span>
       <span className="font-script leading-[1.2] text-[#fbf7f1]" style={{ fontSize: u(22) }}>
         Jasur &amp; Madina
@@ -116,13 +121,13 @@ function PhoneScreen() {
               {n}
             </span>
             <span className="leading-tight opacity-80" style={{ fontSize: u(8) }}>
-              {l}
+              {t(l)}
             </span>
           </span>
         ))}
       </span>
       <span className="bg-[#d9b97a] font-inter font-semibold text-maroon" style={{ fontSize: u(10), borderRadius: u(20), paddingBlock: u(7), paddingInline: u(16) }}>
-        Javob qoldirish
+        {t("Javob qoldirish")}
       </span>
     </div>
   );
@@ -167,6 +172,7 @@ function Stage() {
 }
 
 export function Hero() {
+  const t = useT();
   return (
     <section className="relative overflow-hidden bg-[#f7f1e7]">
       {/* lg+: butun kompozitsiya 1440×900 Figma kanvasi, ekran eniga proporsional (cqw) masshtablanadi */}
@@ -174,19 +180,19 @@ export function Hero() {
         {/* Matn */}
         <div data-reveal="stagger" className="relative z-10 flex flex-col items-start px-5 pt-10 lg:absolute lg:left-[8.3333%] lg:top-[23.4444%] lg:w-[48.6111%] lg:px-0 lg:pt-0">
           <h1 data-split className="flex flex-col font-serif text-[48px] font-normal leading-[0.9] tracking-[-0.02em] text-ink sm:text-[72px] lg:text-[7.0833cqw]">
-            <span>Har bir to‘y —</span>
-            <span>o‘z hikoyasi.</span>
-            <em className="italic text-maroon">Taklifnomasi ham.</em>
+            <span>{t("Har bir to‘y —")}</span>
+            <span>{t("o‘z hikoyasi.")}</span>
+            <em className="italic text-maroon">{t("Taklifnomasi ham.")}</em>
           </h1>
           <p className="mt-[26px] max-w-[460px] font-sans text-[16px] leading-[1.6] text-ink-2 lg:mt-[1.8cqw] lg:max-w-[max(400px,31.94cqw)] lg:text-[max(15px,1.25cqw)]">
-            Tayyor dizayn asosida 2 daqiqada yaratiladigan taklifnoma sayti. Bitta havolada — vaqt, xarita, musiqa va mehmonlar javobi.
+            {t("Tayyor dizayn asosida 2 daqiqada yaratiladigan taklifnoma sayti. Bitta havolada — vaqt, xarita, musiqa va mehmonlar javobi.")}
           </p>
           <div className="mt-9 flex flex-wrap gap-3 lg:mt-[max(24px,2.5cqw)]">
             <Link href="/#shablonlar" className="btn btn-primary">
-              Shablonlarni ko‘rish <ArrowRight size={16} />
+              {t("Shablonlarni ko‘rish")} <ArrowRight size={16} />
             </Link>
             <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-              Telegramda yozish
+              {t("Telegramda yozish")}
             </a>
           </div>
         </div>

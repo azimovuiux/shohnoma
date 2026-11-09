@@ -7,16 +7,18 @@ import { useMe } from "@/lib/client";
 import { site } from "@/lib/site";
 import { ding, primeAudio } from "@/lib/ding";
 import { TelegramIcon } from "./TelegramIcon";
+import { useLocale, useT, type Locale } from "@/lib/i18n";
 
 type Msg = { id: number; sender: "user" | "admin" | "bot"; text: string; createdAt: string; pending?: boolean };
 type Session = { id: string; name: string; phone: string };
 type ChatResp = { session: Session | null; messages: Msg[] };
 
-const time = (iso: string) => new Date(iso).toLocaleTimeString("uz-UZ", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tashkent" });
+const time = (iso: string, locale: Locale = "uz") => new Date(iso).toLocaleTimeString(locale === "ru" ? "ru-RU" : "uz-UZ", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tashkent" });
 const SEEN_KEY = "sh_chat_seen";
 
 /** Suzuvchi chat — har sahifada, o‘ng pastda. Ism + telefon → yozishma (admin panel va Telegram bot orqali javob) */
 export function FloatingContact() {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [session, setSession] = useState<Session | null | undefined>(undefined);
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -89,7 +91,7 @@ export function FloatingContact() {
       {open && (
         <div
           role="dialog"
-          aria-label="Chat"
+          aria-label={t("Chat")}
           className="fixed inset-0 z-[70] flex flex-col bg-bg-base animate-[fade-in_.2s] sm:inset-auto sm:bottom-24 sm:right-5 sm:h-[min(600px,calc(100dvh-140px))] sm:w-[380px] sm:rounded-[22px] sm:border sm:border-line sm:shadow-[0_24px_60px_-20px_rgba(38,20,10,0.35)] lg:bottom-[104px] lg:right-8"
         >
           <header className="flex items-center gap-3 bg-maroon sm:rounded-t-[22px] px-5 py-4 text-ink-inverse">
@@ -99,14 +101,14 @@ export function FloatingContact() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="t-title">Shohnoma</p>
-              <p className="t-body-s opacity-75">Odatda bir necha daqiqada javob beramiz</p>
+              <p className="t-body-s opacity-75">{t("Odatda bir necha daqiqada javob beramiz")}</p>
             </div>
-            <button type="button" onClick={() => setOpen(false)} className="flex size-9 items-center justify-center rounded-full hover:bg-ink-inverse/10" aria-label="Yopish">
+            <button type="button" onClick={() => setOpen(false)} className="flex size-9 items-center justify-center rounded-full hover:bg-ink-inverse/10" aria-label={t("Yopish")}>
               <CloseCircle size={22} />
             </button>
           </header>
           {session === undefined ? (
-            <div className="flex flex-1 items-center justify-center t-body-s text-ink-2">Yuklanmoqda…</div>
+            <div className="flex flex-1 items-center justify-center t-body-s text-ink-2">{t("Yuklanmoqda…")}</div>
           ) : session ? (
             <Conversation msgs={msgs} onSend={(m) => setMsgs((p) => [...p, m])} onSent={poll} onLost={() => setSession(null)} />
           ) : (
@@ -123,13 +125,13 @@ export function FloatingContact() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Chatni yopish" : "Savolingiz bormi? Yozing"}
+        aria-label={open ? t("Chatni yopish") : t("Savolingiz bormi? Yozing")}
         aria-expanded={open}
         className={`group fixed bottom-5 right-5 z-[71] items-center gap-2.5 lg:bottom-8 lg:right-8 ${open ? "hidden sm:flex" : "flex"}`}
       >
         {!open && (
           <span className="hidden rounded-full border border-line bg-bg-base px-4 py-2.5 text-[13px] font-medium leading-none text-ink shadow-[0_4px_6px_rgba(26,13,10,0.08)] lg:block">
-            Savolingiz bormi? Yozing
+            {t("Savolingiz bormi? Yozing")}
           </span>
         )}
         <span className="relative flex size-14 items-center justify-center rounded-full bg-maroon text-ink-inverse shadow-float transition-transform group-hover:-translate-y-0.5">
@@ -147,6 +149,7 @@ export function FloatingContact() {
 
 function StartForm({ onStarted }: { onStarted: (s: Session) => void }) {
   const { me } = useMe();
+  const t = useT();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [text, setText] = useState("");
@@ -161,8 +164,8 @@ function StartForm({ onStarted }: { onStarted: (s: Session) => void }) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim().length < 2) return setError("Ismingizni kiriting");
-    if (phoneDigits(phone).length !== 9) return setError("Telefon raqamni to‘liq kiriting");
+    if (name.trim().length < 2) return setError(t("Ismingizni kiriting"));
+    if (phoneDigits(phone).length !== 9) return setError(t("Telefon raqamni to‘liq kiriting"));
     setError(null);
     setBusy(true);
     try {
@@ -180,16 +183,16 @@ function StartForm({ onStarted }: { onStarted: (s: Session) => void }) {
   return (
     <form onSubmit={submit} noValidate className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
       <div className="rounded-[16px] bg-bg-soft p-4">
-        <p className="t-title text-ink">Assalomu alaykum! 👋</p>
-        <p className="t-body-s mt-1 text-ink-2">Ismingiz va raqamingizni qoldiring — savolingizga shu yerda javob beramiz.</p>
+        <p className="t-title text-ink">{t("Assalomu alaykum! 👋")}</p>
+        <p className="t-body-s mt-1 text-ink-2">{t("Ismingiz va raqamingizni qoldiring — savolingizga shu yerda javob beramiz.")}</p>
       </div>
-      <Field label="Ismingiz" required>
+      <Field label={t("Ismingiz")} required>
         <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" maxLength={80} autoFocus />
       </Field>
-      <Field label="Telefon raqam" required>
+      <Field label={t("Telefon raqam")} required>
         <PhoneInput value={phone} onChange={setPhone} />
       </Field>
-      <Field label="Savolingiz (ixtiyoriy)">
+      <Field label={t("Savolingiz (ixtiyoriy)")}>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -200,16 +203,18 @@ function StartForm({ onStarted }: { onStarted: (s: Session) => void }) {
       </Field>
       {error && <p className="t-body-s text-danger">{error}</p>}
       <button type="submit" disabled={busy} className="btn btn-primary w-full">
-        {busy ? "Yuborilmoqda…" : "Chatni boshlash"}
+        {busy ? t("Yuborilmoqda…") : t("Chatni boshlash")}
       </button>
       <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 t-body-s text-ink-2 hover:text-maroon">
-        <TelegramIcon size={15} /> yoki Telegramda yozing
+        <TelegramIcon size={15} /> {t("yoki Telegramda yozing")}
       </a>
     </form>
   );
 }
 
 function Conversation({ msgs, onSend, onSent, onLost }: { msgs: Msg[]; onSend: (m: Msg) => void; onSent: () => void; onLost: () => void }) {
+  const tt = useT();
+  const locale = useLocale();
   const [text, setText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const list = useRef<HTMLDivElement>(null);
@@ -232,7 +237,7 @@ function Conversation({ msgs, onSend, onSent, onLost }: { msgs: Msg[]; onSend: (
     } catch (e) {
       const m = (e as Error).message;
       setError(m);
-      if (/topilmadi/.test(m)) onLost();
+      if (/topilmadi|не найден/i.test(m)) onLost();
     }
   };
 
@@ -243,7 +248,7 @@ function Conversation({ msgs, onSend, onSent, onLost }: { msgs: Msg[]; onSend: (
           const mine = m.sender === "user";
           return (
             <div key={`${m.id}-${m.pending ? "p" : "s"}`} className={`flex flex-col ${mine ? "items-end" : "items-start"}`}>
-              {!mine && <span className="mb-1 px-1 t-body-s text-ink-2">{m.sender === "bot" ? "Shohnoma" : "Menejer"}</span>}
+              {!mine && <span className="mb-1 px-1 t-body-s text-ink-2">{m.sender === "bot" ? "Shohnoma" : tt("Menejer")}</span>}
               <div
                 className={`max-w-[85%] whitespace-pre-wrap break-words rounded-[18px] px-4 py-2.5 t-body-m ${
                   mine ? "rounded-br-[6px] bg-maroon text-ink-inverse" : "rounded-bl-[6px] border border-line bg-bg-base text-ink"
@@ -251,7 +256,7 @@ function Conversation({ msgs, onSend, onSent, onLost }: { msgs: Msg[]; onSend: (
               >
                 {m.text}
               </div>
-              <span className="mt-1 px-1 text-[11px] text-ink-2">{m.pending ? "yuborilmoqda…" : time(m.createdAt)}</span>
+              <span className="mt-1 px-1 text-[11px] text-ink-2">{m.pending ? tt("yuborilmoqda…") : time(m.createdAt, locale)}</span>
             </div>
           );
         })}
@@ -276,11 +281,11 @@ function Conversation({ msgs, onSend, onSent, onLost }: { msgs: Msg[]; onSend: (
           }}
           rows={1}
           maxLength={2000}
-          placeholder="Xabar yozing…"
-          aria-label="Xabar"
+          placeholder={tt("Xabar yozing…")}
+          aria-label={tt("Xabar")}
           className="max-h-32 min-h-11 flex-1 resize-none rounded-[14px] border border-line bg-bg-base px-4 py-2.5 t-body-m text-ink outline-none focus:border-maroon/55"
         />
-        <button type="submit" disabled={!text.trim()} className="flex size-11 shrink-0 items-center justify-center rounded-full bg-maroon text-ink-inverse transition-opacity disabled:opacity-40" aria-label="Yuborish">
+        <button type="submit" disabled={!text.trim()} className="flex size-11 shrink-0 items-center justify-center rounded-full bg-maroon text-ink-inverse transition-opacity disabled:opacity-40" aria-label={tt("Yuborish")}>
           <Send2 size={18} />
         </button>
       </form>

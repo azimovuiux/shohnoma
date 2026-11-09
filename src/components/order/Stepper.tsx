@@ -1,12 +1,16 @@
+"use client";
+
 import { TickCircle } from "@/components/icons";
+import { useT } from "@/lib/i18n";
 
 const steps = ["Marosim", "Tafsilotlar", "Ko‘rib chiqish", "To‘lov"];
 
 /** Buyurtma bosqichlari (spec §5.9) */
 export function Stepper({ current }: { current: 1 | 2 | 3 | 4 }) {
+  const t = useT();
   return (
     <>
-      <ol className="hidden items-center gap-3 lg:flex" aria-label="Buyurtma bosqichlari">
+      <ol className="hidden items-center gap-3 lg:flex" aria-label={t("Buyurtma bosqichlari")}>
         {steps.map((s, i) => {
           const n = i + 1;
           const done = n < current;
@@ -22,7 +26,7 @@ export function Stepper({ current }: { current: 1 | 2 | 3 | 4 }) {
                 >
                   {done ? <TickCircle size={18} /> : n}
                 </span>
-                <span className={`t-nav ${done || active ? "text-ink" : "text-ink-2"}`}>{s}</span>
+                <span className={`t-nav ${done || active ? "text-ink" : "text-ink-2"}`}>{t(s)}</span>
               </span>
             </li>
           );
@@ -35,7 +39,7 @@ export function Stepper({ current }: { current: 1 | 2 | 3 | 4 }) {
           ))}
         </div>
         <p className="t-annotation text-maroon">
-          {current} / 4 · {steps[current - 1]}
+          {current} / 4 · {t(steps[current - 1])}
         </p>
       </div>
     </>

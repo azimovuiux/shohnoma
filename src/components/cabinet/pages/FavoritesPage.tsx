@@ -1,13 +1,15 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { ArrowRight, Heart } from "@/components/icons";
 import { PageLoading, useApi, useMe } from "@/lib/client";
 import { getTemplate } from "@/lib/templates";
 import { FavoriteCard, FavoritesMigrate } from "../FavoriteCard";
+import { useT } from "@/lib/i18n";
 
 /** 23 — Sevimlilar */
 export function FavoritesPage() {
+  const t = useT();
   const { data, loading, reload } = useApi<{ ok: boolean; slugs: string[] | null }>("/api/me/favorites");
   const { reload: reloadMe } = useMe();
   const refresh = () => {
@@ -21,11 +23,11 @@ export function FavoritesPage() {
       <FavoritesMigrate onDone={refresh} />
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-col gap-1.5">
-          <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">Sevimlilar</h1>
-          <p className="t-body-m text-ink-2">{slugs.length} ta shablon saqlangan</p>
+          <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("Sevimlilar")}</h1>
+          <p className="t-body-m text-ink-2">{t("{n} ta shablon saqlangan", { n: slugs.length })}</p>
         </div>
         <Link href="/shablonlar/" className="btn btn-secondary !py-[13px]">
-          Katalogga o‘tish <ArrowRight size={16} />
+          {t("Katalogga o‘tish")} <ArrowRight size={16} />
         </Link>
       </div>
       {slugs.length === 0 ? (
@@ -33,10 +35,10 @@ export function FavoritesPage() {
           <span className="flex size-14 items-center justify-center rounded-full bg-gold-soft text-maroon">
             <Heart size={24} />
           </span>
-          <p className="font-serif text-[30px] font-light text-ink">Hali sevimli shablon yo‘q</p>
-          <p className="t-body-m max-w-[380px] text-ink-2">Katalogdagi kartalarda yurakchani bosing — yoqqan dizaynlar shu yerda saqlanadi.</p>
+          <p className="font-serif text-[30px] font-light text-ink">{t("Hali sevimli shablon yo‘q")}</p>
+          <p className="t-body-m max-w-[380px] text-ink-2">{t("Katalogdagi kartalarda yurakchani bosing — yoqqan dizaynlar shu yerda saqlanadi.")}</p>
           <Link href="/shablonlar/" className="btn btn-primary">
-            Shablonlarni ko‘rish <ArrowRight size={16} />
+            {t("Shablonlarni ko‘rish")} <ArrowRight size={16} />
           </Link>
         </div>
       ) : (

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowDown2, Clock, TickCircle } from "@/components/icons";
+import { useT } from "@/lib/i18n";
 
 /** Tashqariga bosilganda / Esc — yopiladi */
 function useDismiss<T extends HTMLElement>(open: boolean, close: () => void) {
@@ -60,6 +61,7 @@ export function TimeField({
   label?: string;
   compact?: boolean;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState(value);
   useEffect(() => setText(value), [value]);
@@ -98,7 +100,7 @@ export function TimeField({
           inputMode="numeric"
           autoComplete="off"
           placeholder="--:--"
-          aria-label={label}
+          aria-label={t(label)}
           aria-invalid={invalid || undefined}
           maxLength={5}
           onFocus={() => setOpen(true)}
@@ -117,19 +119,19 @@ export function TimeField({
           }}
           className={`h-full min-w-0 flex-1 bg-transparent t-body-m tabular-nums text-ink outline-none placeholder:text-ink-2/80 ${compact ? "pl-3" : "px-3.5"}`}
         />
-        <button type="button" tabIndex={-1} aria-label="Vaqtni tanlash" onClick={() => setOpen((x) => !x)} className={`flex h-full shrink-0 items-center text-ink-2 ${compact ? "pr-2.5" : "pr-3.5"}`}>
+        <button type="button" tabIndex={-1} aria-label={t("Vaqtni tanlash")} onClick={() => setOpen((x) => !x)} className={`flex h-full shrink-0 items-center text-ink-2 ${compact ? "pr-2.5" : "pr-3.5"}`}>
           <Clock size={18} />
         </button>
       </div>
       {open && (
-        <div className={`${panel} flex w-[176px] p-1.5`} role="dialog" aria-label="Vaqtni tanlash">
+        <div className={`${panel} flex w-[176px] p-1.5`} role="dialog" aria-label={t("Vaqtni tanlash")}>
           {[
             { ref: hourCol, items: HOURS, cur: h, on: (x: string) => pick(x, m || "00"), title: "Soat" },
             { ref: minCol, items: MINUTES.includes(m) || !m ? MINUTES : [...MINUTES, m].sort(), cur: m, on: (x: string) => pick(h || "18", x), title: "Daqiqa" },
           ].map((c) => (
             <div key={c.title} className="flex flex-1 flex-col">
-              <span className="px-2 pb-1 pt-1 text-center text-[11px] font-medium uppercase tracking-[0.06em] text-ink-2">{c.title}</span>
-              <div ref={c.ref} role="listbox" aria-label={c.title} className="no-scrollbar flex h-[216px] flex-col gap-0.5 overflow-y-auto overscroll-contain">
+              <span className="px-2 pb-1 pt-1 text-center text-[11px] font-medium uppercase tracking-[0.06em] text-ink-2">{t(c.title)}</span>
+              <div ref={c.ref} role="listbox" aria-label={t(c.title)} className="no-scrollbar flex h-[216px] flex-col gap-0.5 overflow-y-auto overscroll-contain">
                 {c.items.map((x) => (
                   <button
                     key={x}
@@ -174,6 +176,7 @@ export function SelectField<T extends string>({
   placeholder?: string;
   icon?: ReactNode;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
   const ref = useDismiss<HTMLDivElement>(open, () => setOpen(false));
@@ -209,7 +212,7 @@ export function SelectField<T extends string>({
         className={`${shell(invalid, open)} gap-2.5 px-3.5 text-left`}
       >
         {icon && <span className="shrink-0 text-ink-2">{icon}</span>}
-        <span className={`min-w-0 flex-1 truncate t-body-m ${current ? "text-ink" : "text-ink-2/80"}`}>{current?.label ?? placeholder}</span>
+        <span className={`min-w-0 flex-1 truncate t-body-m ${current ? "text-ink" : "text-ink-2/80"}`}>{current?.label ?? t(placeholder)}</span>
         <ArrowDown2 size={18} className={`shrink-0 text-ink-2 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (

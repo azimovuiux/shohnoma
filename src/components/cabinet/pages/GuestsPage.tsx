@@ -1,15 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowDown, ArrowLeft2, ArrowRight2, CloseCircle, Clock, Eye, TickCircle } from "@/components/icons";
 import { StatusBadge } from "@/components/ui";
 import { PageLoading, useApi } from "@/lib/client";
 import type { Guest, RsvpStatus, Stats } from "@/lib/types";
-import { initials, relativeTime, rsvpView } from "@/lib/display";
+import { initials, rsvpView } from "@/lib/display";
+import { useLocale, useT } from "@/lib/i18n";
 import { GuestSearch } from "../GuestSearch";
-import { useInvitationData } from "../data";
+import { relTime, useInvitationData } from "../data";
 
 type Resp = { ok: boolean; total: number; list: Guest[]; stats: Stats; views: number; wishes: Guest[] };
 
@@ -18,6 +19,66 @@ const statuses: RsvpStatus[] = ["coming", "maybe", "not_coming"];
 const chipLabel = { coming: "Boraman", maybe: "Aniq emas", not_coming: "Kela olmaydi" } as const;
 
 type SP = { status?: string; q?: string; page?: string; ko?: string };
+
+/** CSV (server o‘zbekcha beradi) — ruscha sarlavha va javob nomlari bilan qayta yozish */
+const CSV_RU: Record<string, string> = { Mehmon: "Гость", Kishi: "Кол-во", Javob: "Ответ", Tilak: "Пожелание", Vaqt: "Время" };
+const CSV_STATUS_RU: Record<string, string> = { Boraman: "Приду", "Hali aniq emas": "Пока не знаю", "Kela olmayman": "Не смогу прийти" };
+function csvToRu(text: string) {
+  // Excel UTF-8 ni to‘g‘ri o‘qishi uchun BOM (res.text() uni olib tashlaydi)
+  const src = text.replace(/^\uFEFF/, "");
+  let out = "\uFEFF";
+  let field = "";
+  let quoted = false;
+  let col = 0;
+  let row = 0;
+  const flush = () => {
+    const plain = !field.startsWith('"');
+    if (plain && row === 0 && CSV_RU[field]) field = CSV_RU[field];
+    else if (plain && row > 0 && col === 2 && CSV_STATUS_RU[field]) field = CSV_STATUS_RU[field];
+    out += field;
+    field = "";
+  };
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (quoted) {
+      field += c;
+      if (c === '"') {
+        if (src[i + 1] === '"') field += src[++i];
+        else quoted = false;
+      }
+    } else if (c === '"') {
+      field += c;
+      quoted = true;
+    } else if (c === ";") {
+      flush();
+      out += c;
+      col++;
+    } else if (c === "\r" || c === "\n") {
+      flush();
+      out += c;
+      if (c === "\n" || src[i + 1] !== "\n") {
+        row++;
+        col = 0;
+      }
+    } else field += c;
+  }
+  flush();
+  return out;
+}
+
+async function downloadCsvRu(url: string, filename: string) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error();
+  const name = /filename="([^"]+)"/.exec(res.headers.get("Content-Disposition") ?? "")?.[1] ?? filename;
+  const blob = new Blob([csvToRu(await res.text())], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name.replace(/^mehmonlar-/, "gosti-");
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
 
 export function GuestsPage() {
   return (
@@ -28,6 +89,8 @@ export function GuestsPage() {
 }
 
 function GuestsInner() {
+  const t = useT();
+  const locale = useLocale();
   const params = useSearchParams();
   const sp: SP = { status: params.get("status") ?? undefined, q: params.get("q") ?? undefined, page: params.get("page") ?? undefined, ko: params.get("ko") ?? undefined };
   const { data: bundle } = useInvitationData();
@@ -61,24 +124,24 @@ function GuestsInner() {
   };
 
   const cards = [
-    { icon: <Eye size={16} />, label: "Taklifnomani ochdi", value: String(views), color: "text-gold" },
-    { icon: <TickCircle size={16} />, label: "Boraman", value: `${stats.coming} kishi`, color: "text-success" },
-    { icon: <Clock size={16} />, label: "Aniq emas", value: String(stats.maybe), color: "text-gold" },
-    { icon: <CloseCircle size={16} />, label: "Kela olmaydi", value: String(stats.notComing), color: "text-muted" },
+    { icon: <Eye size={16} />, label: t("Taklifnomani ochdi"), value: String(views), color: "text-gold" },
+    { icon: <TickCircle size={16} />, label: t("Boraman"), value: t("{n} kishi", { n: stats.coming }), color: "text-success" },
+    { icon: <Clock size={16} />, label: t("Aniq emas"), value: String(stats.maybe), color: "text-gold" },
+    { icon: <CloseCircle size={16} />, label: t("Kela olmaydi"), value: String(stats.notComing), color: "text-muted" },
   ];
   const chips: { key?: RsvpStatus; label: string; n: number }[] = [
-    { label: "Barchasi", n: stats.total },
-    ...statuses.map((s) => ({ key: s, label: chipLabel[s], n: s === "coming" ? stats.coming : s === "maybe" ? stats.maybe : stats.notComing })),
+    { label: t("Barchasi"), n: stats.total },
+    ...statuses.map((s) => ({ key: s, label: t(chipLabel[s]), n: s === "coming" ? stats.coming : s === "maybe" ? stats.maybe : stats.notComing })),
   ];
-  const statusText = (s: RsvpStatus) => (s === "maybe" ? "Hali aniq emas" : rsvpView[s].label);
+  const statusText = (s: RsvpStatus) => t(s === "maybe" ? "Hali aniq emas" : rsvpView[s].label);
   const from = desk.total ? (page - 1) * PER + 1 : 0;
   const to = Math.min(desk.total, page * PER);
 
   return (
     <>
       <div className="flex flex-col gap-2">
-        <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">Mehmonlar javobi</h1>
-        <p className="t-body-m text-ink-2">Taklifnomani ochgan mehmonlar shu yerda javob va tilak qoldiradi</p>
+        <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("Mehmonlar javobi")}</h1>
+        <p className="t-body-m text-ink-2">{t("Taklifnomani ochgan mehmonlar shu yerda javob va tilak qoldiradi")}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
@@ -114,16 +177,28 @@ function GuestsInner() {
             <Suspense>
               <GuestSearch />
             </Suspense>
-            <a href={`/api/invitations/${inv.id}/guests`} className="btn btn-secondary btn-sm shrink-0 !py-3">
-              <ArrowDown size={16} /> Ro‘yxatni yuklab olish
+            <a
+              href={`/api/invitations/${inv.id}/guests`}
+              onClick={
+                locale === "ru"
+                  ? (e) => {
+                      e.preventDefault();
+                      const url = e.currentTarget.href;
+                      downloadCsvRu(url, `gosti-${inv.slug}.csv`).catch(() => (window.location.href = url));
+                    }
+                  : undefined
+              }
+              className="btn btn-secondary btn-sm shrink-0 !py-3"
+            >
+              <ArrowDown size={16} /> {t("Ro‘yxatni yuklab olish")}
             </a>
           </div>
         </div>
 
         {deskApi.loading && !deskApi.data ? (
-          <p className="border-t border-line py-8 text-center t-body-m text-ink-2">Yuklanmoqda…</p>
+          <p className="border-t border-line py-8 text-center t-body-m text-ink-2">{t("Yuklanmoqda…")}</p>
         ) : desk.total === 0 ? (
-          <p className="border-t border-line py-8 text-center t-body-m text-ink-2">{q || status ? "Hech narsa topilmadi" : "Hali javoblar yo‘q"}</p>
+          <p className="border-t border-line py-8 text-center t-body-m text-ink-2">{q || status ? t("Hech narsa topilmadi") : t("Hali javoblar yo‘q")}</p>
         ) : (
           <>
             {/* Desktop jadval */}
@@ -131,11 +206,11 @@ function GuestsInner() {
               <table className="w-full table-fixed text-left">
                 <thead>
                   <tr className="border-y border-line t-annotation text-ink-2">
-                    <th className="w-[26%] py-3 font-medium">Mehmon</th>
-                    <th className="w-[9%] py-3 font-medium">Kishi</th>
-                    <th className="w-[19%] py-3 font-medium">Javob</th>
-                    <th className="py-3 font-medium">Tilak</th>
-                    <th className="w-[13%] py-3 text-right font-medium">Vaqt</th>
+                    <th className="w-[26%] py-3 font-medium">{t("Mehmon")}</th>
+                    <th className="w-[9%] py-3 font-medium">{t("Kishi")}</th>
+                    <th className="w-[19%] py-3 font-medium">{t("Javob")}</th>
+                    <th className="py-3 font-medium">{t("Tilak")}</th>
+                    <th className="w-[13%] py-3 text-right font-medium">{t("Vaqt")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -154,18 +229,18 @@ function GuestsInner() {
                       <td className="py-3 pr-4">
                         <span className="line-clamp-2 font-serif text-[16px] italic leading-[1.35] text-ink">{g.wish || <span className="not-italic text-ink-2">—</span>}</span>
                       </td>
-                      <td className="py-3 text-right t-body-s text-ink-2">{relativeTime(g.createdAt)}</td>
+                      <td className="py-3 text-right t-body-s text-ink-2">{relTime(locale, g.createdAt)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               <div className="flex items-center justify-between pt-4">
                 <span className="t-body-s text-ink-2">
-                  {desk.total} ta javobdan {from}–{to} ko‘rsatilmoqda
+                  {t("{total} ta javobdan {from}–{to} ko‘rsatilmoqda", { total: desk.total, from, to })}
                 </span>
                 {pages > 1 && (
                   <div className="flex items-center gap-1.5">
-                    <Link aria-label="Oldingi" aria-disabled={page <= 1} href={href({ page: String(page - 1) })} scroll={false} className={`icon-btn !size-9 ${page <= 1 ? "pointer-events-none opacity-40" : ""}`}>
+                    <Link aria-label={t("Oldingi")} aria-disabled={page <= 1} href={href({ page: String(page - 1) })} scroll={false} className={`icon-btn !size-9 ${page <= 1 ? "pointer-events-none opacity-40" : ""}`}>
                       <ArrowLeft2 size={15} />
                     </Link>
                     {Array.from({ length: pages }, (_, i) => i + 1)
@@ -183,7 +258,7 @@ function GuestsInner() {
                           </Link>
                         </span>
                       ))}
-                    <Link aria-label="Keyingi" aria-disabled={page >= pages} href={href({ page: String(page + 1) })} scroll={false} className={`icon-btn !size-9 ${page >= pages ? "pointer-events-none opacity-40" : ""}`}>
+                    <Link aria-label={t("Keyingi")} aria-disabled={page >= pages} href={href({ page: String(page + 1) })} scroll={false} className={`icon-btn !size-9 ${page >= pages ? "pointer-events-none opacity-40" : ""}`}>
                       <ArrowRight2 size={15} />
                     </Link>
                   </div>
@@ -199,16 +274,16 @@ function GuestsInner() {
                     <span className="flex size-[34px] shrink-0 items-center justify-center rounded-full bg-bg-base text-[12px] font-semibold text-maroon">{initials(g.name)}</span>
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate text-[13px] font-semibold text-ink">{g.name}</span>
-                      <span className="text-[11px] text-ink-2">{relativeTime(g.createdAt)}</span>
+                      <span className="text-[11px] text-ink-2">{relTime(locale, g.createdAt)}</span>
                     </span>
-                    <StatusBadge tone={rsvpView[g.status].tone}>{g.status === "coming" ? `${g.count} kishi` : statusText(g.status)}</StatusBadge>
+                    <StatusBadge tone={rsvpView[g.status].tone}>{g.status === "coming" ? t("{n} kishi", { n: g.count }) : statusText(g.status)}</StatusBadge>
                   </div>
                   {g.wish && <p className="font-serif text-[16px] italic leading-[1.35] text-ink">“{g.wish}”</p>}
                 </div>
               ))}
               {mob.total > mob.list.length && (
                 <Link href={href({ ko: String(ko + PER), page: undefined })} scroll={false} className="btn btn-secondary w-full">
-                  Yana ko‘rsatish ({mob.total - mob.list.length})
+                  {t("Yana ko‘rsatish")} ({mob.total - mob.list.length})
                 </Link>
               )}
             </div>
@@ -219,7 +294,15 @@ function GuestsInner() {
       {wishes.length > 0 && (
         <section className="flex flex-col gap-4">
           <h2 className="font-serif text-[30px] font-light leading-[1.1] text-ink">
-            Mehmonlar <em className="italic text-maroon">tilaklari</em>
+            {locale === "ru" ? (
+              <>
+                Пожелания <em className="italic text-maroon">гостей</em>
+              </>
+            ) : (
+              <>
+                Mehmonlar <em className="italic text-maroon">tilaklari</em>
+              </>
+            )}
           </h2>
           <div className="grid gap-3 md:grid-cols-3">
             {wishes.map((w) => (

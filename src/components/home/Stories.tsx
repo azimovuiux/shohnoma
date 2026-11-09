@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import {
   Edit,
@@ -13,6 +15,7 @@ import {
 } from "@/components/icons";
 import { GirihPattern } from "@/components/Ornament";
 import { Photo } from "./Photo";
+import { useT } from "@/lib/i18n";
 
 function StoryText({
   n,
@@ -27,6 +30,7 @@ function StoryText({
   text: string;
   bullets: { icon: ReactNode; label: string }[];
 }) {
+  const t = useT();
   return (
     <div className="flex max-w-[500px] flex-col gap-[26px]" data-reveal="stagger" style={{ ["--d" as string]: "200ms" }}>
       <div className="flex items-center gap-3.5">
@@ -34,15 +38,15 @@ function StoryText({
         <span className="h-px w-16 bg-gold" />
       </div>
       <h2 data-split className="flex flex-col font-serif font-light">
-        <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">{plain}</span>
-        <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{italic}</em>
+        <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">{t(plain)}</span>
+        <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{t(italic)}</em>
       </h2>
-      <p className="t-body-l max-w-[470px] text-ink-2">{text}</p>
+      <p className="t-body-l max-w-[470px] text-ink-2">{t(text)}</p>
       <ul data-split className="flex flex-col gap-3.5">
         {bullets.map((b, i) => (
           <li key={b.label} className="flex items-center gap-3.5">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">{b.icon}</span>
-            <span className="t-title text-ink">{b.label}</span>
+            <span className="t-title text-ink">{t(b.label)}</span>
           </li>
         ))}
       </ul>
@@ -70,6 +74,7 @@ function UICard({ icon, title, children, className = "", ri = "right", delay = 6
 
 /* ── Hikoya 1 ── */
 function Visual1() {
+  const t = useT();
   return (
     <div data-reveal="group" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
       <div data-ri="fade" className="absolute -left-[17%] -top-[8.6%] h-[53%] w-[85%]">
@@ -93,7 +98,7 @@ function Visual1() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/story-1.webp"
-              alt={i === 0 ? "Yosh juftlik divanda telefonga qarab tabassum qilmoqda" : ""}
+              alt={i === 0 ? t("Yosh juftlik divanda telefonga qarab tabassum qilmoqda") : ""}
               aria-hidden={i !== 0}
               loading="lazy"
               draggable={false}
@@ -108,11 +113,11 @@ function Visual1() {
           </div>
         );
       })}
-      <UICard icon={<Edit size={17} />} title="Ma’lumotlar" ri="right" delay={700} className="absolute left-[30%] top-[61.4%] w-[268px] max-w-[66%] sm:left-[57%] sm:max-w-none">
+      <UICard icon={<Edit size={17} />} title={t("Ma’lumotlar")} ri="right" delay={700} className="absolute left-[30%] top-[61.4%] w-[268px] max-w-[66%] sm:left-[57%] sm:max-w-none">
         {[
-          ["Ismlar", "Jasur & Madina"],
-          ["Sana", "12 sentabr, 18:00"],
-          ["Manzil", "Oqsaroy to‘yxonasi"],
+          [t("Ismlar"), "Jasur & Madina"],
+          [t("Sana"), t("12 sentabr, 18:00")],
+          [t("Manzil"), t("Oqsaroy to‘yxonasi")],
         ].map(([l, v]) => (
           <div key={l} className="flex items-center gap-2.5 rounded-[10px] bg-bg-soft px-3 py-2.5">
             <div className="flex flex-1 flex-col">
@@ -129,13 +134,14 @@ function Visual1() {
 
 /* ── Hikoya 2 ── */
 function Visual2() {
+  const t = useT();
   return (
     <div data-reveal="group" className="relative mx-auto aspect-[580/700] w-full max-w-[580px]">
       <div data-ri="fade" className="absolute left-[14.5%] top-[11.4%] h-[70.9%] w-[85.5%]">
         <GirihPattern id="g-story2" cell={44} color="#d9b97a" opacity={0.5} className="absolute inset-0" />
       </div>
       <Photo
-        alt="Krem kostyumdagi ayol telefonga qarab tabassum qilmoqda"
+        alt={t("Krem kostyumdagi ayol telefonga qarab tabassum qilmoqda")}
         src="/images/story-2.webp"
         className="absolute left-[29.3%] top-[4.3%] h-[91.4%] w-[65.5%] rounded-full"
         tone="cream"
@@ -143,7 +149,7 @@ function Visual2() {
         riDelay={150}
       />
       <Photo
-        alt="Telefon tutgan qo‘l"
+        alt={t("Telefon tutgan qo‘l")}
         src="/images/story-2-hand.webp"
         className="absolute left-[69%] top-[71.4%] aspect-square w-[32.8%] rounded-full border-[6px] border-white shadow-[0_10px_20px_rgba(31,15,10,0.15)]"
         tone="rose"
@@ -155,16 +161,16 @@ function Visual2() {
           <span className="flex size-[34px] items-center justify-center rounded-full bg-maroon text-[14px] font-semibold text-ink-inverse">J</span>
           <div className="flex flex-col gap-px">
             <span className="text-[13px] font-semibold text-ink">Jasur</span>
-            <span className="text-[11px] text-ink-2">hozirgina</span>
+            <span className="text-[11px] text-ink-2">{t("hozirgina")}</span>
           </div>
         </div>
-        <p className="text-[13px] leading-[1.5] text-ink">Salom, Nilufar! To‘yimizga taklif qilamiz — albatta keling.</p>
+        <p className="text-[13px] leading-[1.5] text-ink">{t("Salom, Nilufar! To‘yimizga taklif qilamiz — albatta keling.")}</p>
         <div className="flex items-center gap-3 rounded-xl bg-bg-soft p-2.5">
           <span className="flex h-[54px] w-11 shrink-0 items-center justify-center rounded-lg bg-maroon">
             <span className="size-3.5 rounded-full bg-[#c9a25e]" />
           </span>
           <div className="flex min-w-0 flex-col">
-            <span className="text-[12px] font-semibold text-ink">Jasur &amp; Madina — taklifnoma</span>
+            <span className="text-[12px] font-semibold text-ink">{t("Jasur & Madina — taklifnoma")}</span>
             <span className="truncate text-[11px] text-ink-2">shohnoma.uz/jasur-madina</span>
           </div>
         </div>
@@ -175,6 +181,7 @@ function Visual2() {
 
 /* ── Hikoya 3 ── */
 function Visual3() {
+  const t = useT();
   const guests = [
     { i: "D", name: "Dilnoza opa", status: "Boraman · 2 kishi", ok: true },
     { i: "S", name: "Sardor aka", status: "Boraman", ok: true },
@@ -196,10 +203,10 @@ function Visual3() {
           mask: "radial-gradient(circle 6px at center, #0000 98%, #000) -11px -11px / 22px 22px round, linear-gradient(#000 0 0) content-box",
         }}
       >
-        <Photo alt="Ikki dugona telefonga qarab kulmoqda" src="/images/story-3.webp" className="absolute inset-0" tone="cream" />
+        <Photo alt={t("Ikki dugona telefonga qarab kulmoqda")} src="/images/story-3.webp" className="absolute inset-0" tone="cream" />
         <span className="absolute inset-[18px] border border-white/70" />
       </div>
-      <UICard icon={<Profile2User size={17} />} title="Mehmonlar javobi" ri="up" delay={700} className="absolute left-[30%] top-[54%] w-[290px] max-w-[70%] sm:left-[50%] sm:max-w-none">
+      <UICard icon={<Profile2User size={17} />} title={t("Mehmonlar javobi")} ri="up" delay={700} className="absolute left-[30%] top-[54%] w-[290px] max-w-[70%] sm:left-[50%] sm:max-w-none">
         <div className="grid grid-cols-3 gap-2">
           {[
             ["128", "Boraman", "text-maroon"],
@@ -208,7 +215,7 @@ function Visual3() {
           ].map(([n, l, c]) => (
             <div key={l} className="flex flex-col gap-0.5 rounded-[10px] bg-bg-soft p-2.5">
               <span className={`font-serif text-[24px] font-medium leading-[1.2] ${c}`}>{n}</span>
-              <span className="text-[10px] leading-[1.5] text-ink-2">{l}</span>
+              <span className="text-[10px] leading-[1.5] text-ink-2">{t(l)}</span>
             </div>
           ))}
         </div>
@@ -220,12 +227,12 @@ function Visual3() {
         {guests.map((g) => (
           <div key={g.name} className="flex items-center gap-2.5">
             <span className="flex size-[30px] items-center justify-center rounded-full bg-gold-soft text-[12px] font-semibold text-maroon">{g.i}</span>
-            <span className="flex-1 truncate text-[13px] font-semibold text-ink">{g.name}</span>
+            <span className="flex-1 truncate text-[13px] font-semibold text-ink">{t(g.name)}</span>
             <span
               className="rounded-full px-2.5 py-[5px] text-[11px] leading-[1.5]"
               style={g.ok ? { color: "var(--color-success)", background: "var(--success-bg)" } : { color: "var(--color-pending)", background: "var(--pending-bg)" }}
             >
-              {g.status}
+              {t(g.status)}
             </span>
           </div>
         ))}

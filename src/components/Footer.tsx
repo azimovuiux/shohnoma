@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import Link from "@/components/LocalLink";
+import { useT } from "@/lib/i18n";
 import { LogoMark } from "@/components/Logo";
 import { Call, Instagram, ShieldTick, Whatsapp } from "@/components/icons";
 import { TelegramIcon } from "./TelegramIcon";
@@ -43,21 +46,22 @@ const socials = [
 
 /** To‘liq footer (Figma 75:6312) — maroon-deep fon */
 export function Footer() {
+  const t = useT();
   return (
     <footer className="overflow-hidden bg-maroon-deep text-ink-inverse">
       <div className="mx-auto max-w-[1440px] px-5 pt-16 lg:px-10 xl:px-[120px] lg:pt-24">
         <div className="flex flex-col gap-12 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-[18px]">
-            <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Shohnoma — bosh sahifa">
+            <Link href="/" className="inline-flex items-center gap-2.5" aria-label={t("Shohnoma — bosh sahifa")}>
               <LogoMark light className="h-11 w-auto" />
             </Link>
-            <p className="t-body-s w-[260px] opacity-70">Marosimlar uchun shohona taklifnoma saytlari.</p>
+            <p className="t-body-s w-[260px] opacity-70">{t("Marosimlar uchun shohona taklifnoma saytlari.")}</p>
             <div className="flex gap-2.5">
               {socials.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
-                  aria-label={s.label}
+                  aria-label={t(s.label)}
                   className="flex size-10 items-center justify-center rounded-full border border-ink-inverse/30 transition-colors hover:bg-white/10"
                 >
                   {s.icon}
@@ -68,10 +72,10 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:gap-[133px]">
             {columns.map((c) => (
               <div key={c.title} className="flex w-[180px] max-w-full flex-col gap-3.5">
-                <p className="t-annotation text-[#e2c48c]">{c.title}</p>
+                <p className="t-annotation text-[#e2c48c]">{t(c.title)}</p>
                 {c.links.map((l) => (
                   <Link key={l.label} href={l.href} className="t-body-m opacity-85 transition-opacity hover:opacity-100">
-                    {l.label}
+                    {t(l.label)}
                   </Link>
                 ))}
               </div>
@@ -98,12 +102,13 @@ export function Footer() {
 
 /** Qisqa footer — buyurtma oqimi va kabinet uchun */
 export function FooterCompact() {
+  const t = useT();
   return (
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-6 t-body-s text-ink-2 lg:flex-row lg:items-center lg:justify-between lg:px-10 xl:px-[120px]">
         <span className="inline-flex items-center gap-2">
           <ShieldTick size={16} color="var(--color-gold)" />
-          Ma’lumotlaringiz faqat taklifnoma uchun ishlatiladi
+          {t("Ma’lumotlaringiz faqat taklifnoma uchun ishlatiladi")}
         </span>
         <span>© 2026 Shohnoma · Payme · Click · Google Pay · P2P</span>
       </div>

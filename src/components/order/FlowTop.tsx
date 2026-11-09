@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import Link from "@/components/LocalLink";
 import type { ReactNode } from "react";
 import { ArrowLeft } from "@/components/icons";
 import { Stepper } from "./Stepper";

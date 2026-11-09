@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { CloseCircle, TickCircle, Timer1 } from "@/components/icons";
 import { star8Path } from "@/lib/ornament";

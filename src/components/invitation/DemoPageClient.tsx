@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
+import { useT } from "@/lib/i18n";
 import { ArrowLeft, ArrowRight } from "@/components/icons";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
 import { InvitationSite } from "./InvitationSite";
 import { demoData } from "./data";
 import { useTemplate } from "@/lib/useTemplates";
@@ -11,15 +12,16 @@ import { PageLoading, useRouteParam } from "@/lib/client";
 /** Shablonning jonli namunasi. slug "_" — admin qo‘shgan shablon (URL'dan o‘qiladi) */
 export function DemoPageClient({ slug }: { slug: string }) {
   const fromUrl = useRouteParam("namuna");
-  const router = useRouter();
+  const router = useLocalRouter();
+  const tt = useT();
   const t = useTemplate(slug === "_" ? fromUrl.value : slug);
   if (!t) {
     if (slug === "_" && !fromUrl.ready) return <PageLoading className="min-h-dvh" />;
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center gap-5 px-5 text-center">
-        <h1 className="font-cormorant text-[40px] font-light text-ink">Shablon topilmadi</h1>
+        <h1 className="font-cormorant text-[40px] font-light text-ink">{tt("Shablon topilmadi")}</h1>
         <Link href="/shablonlar/" className="btn btn-primary">
-          Katalogga qaytish
+          {tt("Katalogga qaytish")}
         </Link>
       </div>
     );
@@ -41,7 +43,7 @@ export function DemoPageClient({ slug }: { slug: string }) {
         {/* Saytga qaytish: saytdan kelgan bo‘lsa — orqaga, aks holda katalogga */}
         <button
           type="button"
-          aria-label="Saytga qaytish"
+          aria-label={tt("Saytga qaytish")}
           onClick={() => {
             const fromSite = typeof document !== "undefined" && document.referrer.startsWith(location.origin) && history.length > 1;
             if (fromSite) router.back();
@@ -55,7 +57,7 @@ export function DemoPageClient({ slug }: { slug: string }) {
           href={`/buyurtma/${t.slug}/marosim/`}
           className="btn btn-primary pointer-events-auto !h-[52px] !rounded-full !px-7 shadow-[0_14px_40px_-12px_rgba(38,10,18,0.55)] ring-1 ring-white/25"
         >
-          Shu shablonni ishlatish <ArrowRight size={16} />
+          {tt("Shu shablonni ishlatish")} <ArrowRight size={16} />
         </Link>
       </div>
     </>

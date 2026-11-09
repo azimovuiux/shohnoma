@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useT } from "@/lib/i18n";
 import { ArrowRight, Card, Mobile, MoneySend, TickCircle, Wallet, WalletCheck } from "@/components/icons";
 import type { Template } from "@/lib/templates";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
@@ -23,7 +24,8 @@ const meta: Record<Provider, { label: string; text: string; icon: React.ReactNod
 export const PAY_URL_KEY = (id: string) => `shohnoma:pay:${id}`;
 
 export function PayChoice({ order, template, providers }: { order: FlowOrder; template: Template; providers: Provider[] }) {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
   const [p, setP] = useState<Provider>(providers[0]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,14 +50,14 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
       sessionStorage.setItem(PAY_URL_KEY(order.id), data.url);
       router.push(`/buyurtma/${order.id}/tolov/jarayonda/?usul=${p}&ochish=1`);
     } catch (e) {
-      setError((e as Error).message);
+      setError(t((e as Error).message));
       setBusy(false);
     }
   };
 
   const button = (
     <button type="button" onClick={pay} disabled={busy} className="btn btn-primary w-full">
-      {busy ? "Kuting…" : meta[p].cta} <ArrowRight size={16} />
+      {busy ? t("Kuting…") : t(meta[p].cta)} <ArrowRight size={16} />
     </button>
   );
   const err = error && (
@@ -88,8 +90,8 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
     >
       <div className="flex flex-col gap-4">
         <MobileTemplateCard template={template} live={live} order={order} />
-        <SectionTitle>Qanday to‘lamoqchisiz?</SectionTitle>
-        <div role="radiogroup" aria-label="To‘lov usuli" className="flex flex-col gap-3">
+        <SectionTitle>{t("Qanday to‘lamoqchisiz?")}</SectionTitle>
+        <div role="radiogroup" aria-label={t("To‘lov usuli")} className="flex flex-col gap-3">
           {providers.map((k) => {
             const active = p === k;
             return (
@@ -105,8 +107,8 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
               >
                 <span className={active ? "text-maroon" : "text-ink-2"}>{meta[k].icon}</span>
                 <span className="flex flex-1 flex-col gap-0.5">
-                  <span className="t-title text-ink">{meta[k].label}</span>
-                  <span className="t-body-s text-ink-2">{meta[k].text}</span>
+                  <span className="t-title text-ink">{t(meta[k].label)}</span>
+                  <span className="t-body-s text-ink-2">{t(meta[k].text)}</span>
                 </span>
                 {active ? <TickCircle size={20} color="var(--color-maroon)" /> : <span className="size-[18px] rounded-full border border-ink/70" />}
               </button>
@@ -117,7 +119,7 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
           <span className="shrink-0 text-gold">
             <WalletCheck size={20} />
           </span>
-          To‘lovni tanlangan xizmatda yakunlaysiz. Tasdiqlangach, tayyor taklifnoma havolasini olasiz.
+          {t("To‘lovni tanlangan xizmatda yakunlaysiz. Tasdiqlangach, tayyor taklifnoma havolasini olasiz.")}
         </p>
       </div>
       <MobileBar>

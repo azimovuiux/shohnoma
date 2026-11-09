@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { PageLoading, useMe, useRequireUser } from "@/lib/client";
 import { DocumentText, Heart, LogoutCurve, Messages, UserTick } from "@/components/icons";
 import { site } from "@/lib/site";
 import { formatPhoneDisplay, initials } from "@/lib/display";
+import { currentLocale, lpath, useLpath, useT } from "@/lib/i18n";
 
 type Props = { name: string | null; phone: string | null; telegramUser: string | null; orders: number; favorites: number };
 
@@ -19,7 +20,7 @@ const items = [
 export function useLogout() {
   return async () => {
     await fetch("/api/auth/logout", { method: "POST" });
-    window.location.assign("/");
+    window.location.assign(lpath(currentLocale(), "/"));
   };
 }
 
@@ -41,6 +42,8 @@ export function CabinetShell({ children }: { children: ReactNode }) {
 
 /** Kabinet darajasidagi chap panel (desktop 264px) va mobil segment tablar — spec §5.11 (1) */
 export function CabinetNav(p: Props) {
+  const t = useT();
+  const lp = useLpath();
   const path = usePathname();
   const logout = useLogout();
   const row = "flex w-full items-center gap-3 rounded-xl px-3 py-[11px] text-[13px] font-medium leading-none transition-colors";
@@ -53,12 +56,12 @@ export function CabinetNav(p: Props) {
             {initials(p.name ?? "S")}
           </span>
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="truncate t-title text-ink">{p.name || "Mening kabinetim"}</span>
+            <span className="truncate t-title text-ink">{p.name || t("Mening kabinetim")}</span>
             <span className="t-body-s text-ink-2">{p.phone ? formatPhoneDisplay(p.phone) : p.telegramUser}</span>
           </div>
         </div>
         {items.map((it) => {
-          const active = samePath(path, it.href);
+          const active = samePath(path, lp(it.href));
           const Icon = it.icon;
           return (
             <Link
@@ -68,7 +71,7 @@ export function CabinetNav(p: Props) {
               className={`${row} ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink hover:bg-bg-base/60"}`}
             >
               <Icon size={18} />
-              <span className="flex-1">{it.label}</span>
+              <span className="flex-1">{t(it.label)}</span>
               {it.count && (
                 <span
                   className={`rounded-full px-2 py-0.5 text-[11px] font-normal leading-[1.5] ${active ? "bg-maroon/10 text-maroon" : "bg-bg-base text-ink-2"}`}
@@ -81,16 +84,16 @@ export function CabinetNav(p: Props) {
         })}
         <span className="my-1 h-px bg-line-dark/10" />
         <a href={site.telegram} target="_blank" rel="noopener noreferrer" className={`${row} text-ink hover:bg-bg-base/60`}>
-          <Messages size={18} /> Yordam
+          <Messages size={18} /> {t("Yordam")}
         </a>
         <button type="button" onClick={logout} className={`${row} text-ink-2 hover:bg-bg-base/60`}>
-          <LogoutCurve size={18} /> Chiqish
+          <LogoutCurve size={18} /> {t("Chiqish")}
         </button>
       </aside>
 
-      <nav className="flex rounded-full bg-bg-soft p-1 lg:hidden" aria-label="Kabinet">
+      <nav className="flex rounded-full bg-bg-soft p-1 lg:hidden" aria-label={t("Kabinet")}>
         {items.map((it) => {
-          const active = samePath(path, it.href);
+          const active = samePath(path, lp(it.href));
           return (
             <Link
               key={it.href}
@@ -98,7 +101,7 @@ export function CabinetNav(p: Props) {
               aria-current={active ? "page" : undefined}
               className={`flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full t-nav ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2"}`}
             >
-              {it.label === "Buyurtmalarim" ? "Buyurtmalar" : it.label}
+              {it.label === "Buyurtmalarim" ? t("Buyurtmalar") : t(it.label)}
               {it.count && <span className="text-[11px] opacity-70">{p[it.count]}</span>}
             </Link>
           );

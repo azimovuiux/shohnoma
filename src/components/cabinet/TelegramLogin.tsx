@@ -5,6 +5,7 @@ import { TelegramIcon } from "@/components/TelegramIcon";
 import { api, useToast } from "@/components/ui";
 import { site } from "@/lib/site";
 import { useConfig } from "@/lib/client";
+import { lpath, useLocale, useT } from "@/lib/i18n";
 
 type Status = "idle" | "waiting" | "opened" | "expired";
 
@@ -13,7 +14,10 @@ type Status = "idle" | "waiting" | "opened" | "expired";
  * Tugma → Telegram ochiladi → botda «📱 Raqamni yuborish» → sayt o‘zi kiradi (holat har 2 soniyada tekshiriladi).
  * Kabinetda (onDone bilan) — joriy hisobga Telegramni ulaydi.
  */
-export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }: { next?: string; label?: string; onDone?: () => void }) {
+export function TelegramLogin({ next, label: rawLabel = "Telegram orqali kirish", onDone }: { next?: string; label?: string; onDone?: () => void }) {
+  const t = useT();
+  const locale = useLocale();
+  const label = t(rawLabel);
   const { data: cfg, loading: cfgLoading } = useConfig();
   const toast = useToast();
   const [status, setStatus] = useState<Status>("idle");
@@ -33,7 +37,7 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
           if (onDone) {
             setStatus("idle");
             onDone();
-          } else window.location.replace(next || "/kabinet/");
+          } else window.location.replace(lpath(locale, next || "/kabinet/"));
         } else if (r.status === "expired" || r.status === "none") {
           window.clearInterval(timer.current!);
           setStatus("expired");
@@ -71,9 +75,9 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
           <TelegramIcon size={18} /> {label}
         </button>
         <p className="t-body-s text-ink-2">
-          Telegram orqali kirish tez orada ishga tushadi. Savollar bo‘lsa —{" "}
+          {t("Telegram orqali kirish tez orada ishga tushadi. Savollar bo‘lsa —")}{" "}
           <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="text-maroon underline">
-            Telegramda yozing
+            {t("Telegramda yozing")}
           </a>
           .
         </p>
@@ -90,16 +94,16 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
             <span className="absolute inset-0 animate-ping rounded-full bg-[#2AABEE]/30" />
           </span>
           <div className="flex flex-col">
-            <span className="t-title text-ink">{status === "opened" ? "Botda raqamingizni yuboring" : "Telegram ochildi"}</span>
+            <span className="t-title text-ink">{status === "opened" ? t("Botda raqamingizni yuboring") : t("Telegram ochildi")}</span>
             <span className="t-body-s text-ink-2">
-              {status === "opened" ? "«📱 Raqamni yuborish» tugmasini bosing — sayt o‘zi kiradi." : "Botda «Start» tugmasini bosing."}
+              {status === "opened" ? t("«📱 Raqamni yuborish» tugmasini bosing — sayt o‘zi kiradi.") : t("Botda «Start» tugmasini bosing.")}
             </span>
           </div>
         </div>
         <div className="flex gap-2">
           {url && (
             <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-sm flex-1 bg-[#2AABEE] text-white hover:bg-[#229ED9]">
-              Telegramni ochish
+              {t("Telegramni ochish")}
             </a>
           )}
           <button
@@ -110,7 +114,7 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
             }}
             className="btn btn-secondary btn-sm"
           >
-            Bekor qilish
+            {t("Bekor qilish")}
           </button>
         </div>
       </div>
@@ -120,9 +124,9 @@ export function TelegramLogin({ next, label = "Telegram orqali kirish", onDone }
   return (
     <div className="flex w-full flex-col gap-2">
       <button type="button" onClick={start} disabled={busy} className="btn w-full bg-[#2AABEE] text-white hover:bg-[#229ED9]">
-        <TelegramIcon size={18} /> {busy ? "Ochilmoqda…" : label}
+        <TelegramIcon size={18} /> {busy ? t("Ochilmoqda…") : label}
       </button>
-      {status === "expired" && <p className="t-body-s text-danger">Vaqt tugadi. Qayta urinib ko‘ring.</p>}
+      {status === "expired" && <p className="t-body-s text-danger">{t("Vaqt tugadi. Qayta urinib ko‘ring.")}</p>}
     </div>
   );
 }

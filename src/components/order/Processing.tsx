@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { lpath, useLocale, useT } from "@/lib/i18n";
 import { ArrowRight, MoneySend } from "@/components/icons";
 import { formatPrice } from "@/lib/format";
 import { StatusScreen, InfoCard } from "./StatusScreen";
@@ -31,7 +32,9 @@ export function Processing({
   templateName: string;
   amount: number;
 }) {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
+  const locale = useLocale();
   const n = names[provider] ?? names.payme;
   const [error, setError] = useState<string | null>(null);
   const [opening, setOpening] = useState(false);
@@ -54,7 +57,7 @@ export function Processing({
         if (!res.ok || !data.url) throw new Error(data.error || "To‘lov sahifasi ochilmadi");
         url = data.url;
       } catch (e) {
-        setError((e as Error).message);
+        setError(t((e as Error).message));
         setOpening(false);
         return;
       }
@@ -67,7 +70,7 @@ export function Processing({
     if (!autoOpen || opened.current) return;
     opened.current = true;
     // keyingi qaytishda yana ochilmasligi uchun parametrni olib tashlaymiz
-    window.history.replaceState(null, "", `${base}/tolov/jarayonda?usul=${provider}`);
+    window.history.replaceState(null, "", lpath(locale, `${base}/tolov/jarayonda?usul=${provider}`));
     const t = setTimeout(open, 1400);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,28 +100,28 @@ export function Processing({
     <StatusScreen
       kind="progress"
       icon={<MoneySend size={30} />}
-      title={`${n.to} o‘tmoqdasiz`}
-      text={`To‘lovni ${n.name} sahifasida yakunlang. Tugagach, avtomatik shu yerga qaytasiz — sahifani yopmang.`}
+      title={t(`${n.to} o‘tmoqdasiz`)}
+      text={t("To‘lovni {name} sahifasida yakunlang. Tugagach, avtomatik shu yerga qaytasiz — sahifani yopmang.", { name: n.name })}
     >
       <div className="flex items-center gap-2.5 text-ink-2">
         {step("Shohnoma", false)}
         <ArrowRight size={14} />
         {step(n.name, true)}
         <ArrowRight size={14} />
-        {step("Tayyor", false)}
+        {step(t("Tayyor"), false)}
       </div>
       <InfoCard
         rows={[
-          ["Buyurtma", `№ ${code} · ${templateName}`],
-          ["To‘lanadigan summa", <span key="a" className="font-serif text-[22px] font-medium text-maroon">{formatPrice(amount)}</span>],
+          [t("Buyurtma"), `№ ${code} · ${templateName}`],
+          [t("To‘lanadigan summa"), <span key="a" className="font-serif text-[22px] font-medium text-maroon">{formatPrice(amount, true, locale)}</span>],
         ]}
       />
       <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
         <button type="button" onClick={open} disabled={opening && autoOpen && !error} className="btn btn-primary">
-          {n.open} <ArrowRight size={16} />
+          {t(n.open)} <ArrowRight size={16} />
         </button>
         <Link href={`${base}/tolov/`} className="btn btn-secondary">
-          {waitedLong ? "Boshqa usulni tanlash" : "Bekor qilish"}
+          {waitedLong ? t("Boshqa usulni tanlash") : t("Bekor qilish")}
         </Link>
       </div>
       {error && (
@@ -128,8 +131,8 @@ export function Processing({
       )}
       <p className="t-body-s text-ink-2">
         {waitedLong
-          ? "To‘lov hali tasdiqlanmadi. To‘lagan bo‘lsangiz, biroz kuting — sahifa o‘zi yangilanadi."
-          : `Sahifa ochilmadimi? «${n.open}» tugmasini bosing`}
+          ? t("To‘lov hali tasdiqlanmadi. To‘lagan bo‘lsangiz, biroz kuting — sahifa o‘zi yangilanadi.")
+          : t("Sahifa ochilmadimi? «{button}» tugmasini bosing", { button: t(n.open) })}
       </p>
     </StatusScreen>
   );

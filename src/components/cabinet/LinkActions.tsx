@@ -3,13 +3,15 @@
 import { Copy, Export, Instagram, Send2, Whatsapp } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { useCopy, useToast } from "@/components/ui";
+import { useT } from "@/lib/i18n";
 
 /** "shohnoma.uz/jasur-madina" + nusxalash */
 export function CopyLink({ url, className = "" }: { url: string; className?: string }) {
+  const t = useT();
   const copy = useCopy();
   const shown = url.replace(/^https?:\/\//, "");
   return (
-    <button type="button" onClick={() => copy(url)} className={`group inline-flex min-w-0 items-center gap-2 text-left ${className}`} aria-label="Havolani nusxalash">
+    <button type="button" onClick={() => copy(url, t("Havola nusxalandi"))} className={`group inline-flex min-w-0 items-center gap-2 text-left ${className}`} aria-label={t("Havolani nusxalash")}>
       <span className="truncate text-[13px] font-medium leading-none text-maroon">{shown}</span>
       <Copy size={15} className="shrink-0 text-ink-2 group-hover:text-maroon" />
     </button>
@@ -18,11 +20,12 @@ export function CopyLink({ url, className = "" }: { url: string; className?: str
 
 /** Umumiy ulashish (navigator.share), bo‘lmasa nusxalash */
 export function ShareButton({ url, title, className = "icon-btn !size-11" }: { url: string; title: string; className?: string }) {
+  const t = useT();
   const copy = useCopy();
   return (
     <button
       type="button"
-      aria-label="Ulashish"
+      aria-label={t("Ulashish")}
       className={className}
       onClick={async () => {
         if (navigator.share) {
@@ -33,7 +36,7 @@ export function ShareButton({ url, title, className = "icon-btn !size-11" }: { u
             return;
           }
         }
-        copy(url);
+        copy(url, t("Havola nusxalandi"));
       }}
     >
       <Send2 size={16} />
@@ -42,6 +45,7 @@ export function ShareButton({ url, title, className = "icon-btn !size-11" }: { u
 }
 
 export function ShareRow({ url, title }: { url: string; title: string }) {
+  const t = useT();
   const copy = useCopy();
   const toast = useToast();
   const text = encodeURIComponent(`${title}\n${url}`);
@@ -56,7 +60,7 @@ export function ShareRow({ url, title }: { url: string; title: string }) {
         className={cls}
         aria-label="Instagram"
         onClick={async () => {
-          await copy(url, "Havola nusxalandi — Instagram'da joylashtiring");
+          await copy(url, t("Havola nusxalandi — Instagram'da joylashtiring"));
           void toast;
         }}
       >
@@ -68,13 +72,13 @@ export function ShareRow({ url, title }: { url: string; title: string }) {
       <button
         type="button"
         className={cls}
-        aria-label="Ulashish"
+        aria-label={t("Ulashish")}
         onClick={async () => {
           if (navigator.share) {
             try {
               await navigator.share({ title, url });
             } catch {}
-          } else copy(url);
+          } else copy(url, t("Havola nusxalandi"));
         }}
       >
         <Export size={16} />

@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
+import { useLocale, useT } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, CloseCircle, Eye, Messages, Mobile, Monitor, TickCircle } from "@/components/icons";
 import type { Template } from "@/lib/templates";
@@ -13,8 +14,9 @@ import { isDarkTheme } from "@/components/TemplateCard";
 import { site } from "@/lib/site";
 
 export function DeviceToggle({ value, onChange }: { value: "laptop" | "phone"; onChange: (v: "laptop" | "phone") => void }) {
+  const tt = useT();
   return (
-    <div className="inline-flex rounded-full bg-bg-soft p-1" role="tablist" aria-label="Ko‘rinish">
+    <div className="inline-flex rounded-full bg-bg-soft p-1" role="tablist" aria-label={tt("Ko‘rinish")}>
       {(
         [
           ["laptop", "Laptop", <Monitor key="m" size={15} />],
@@ -31,7 +33,7 @@ export function DeviceToggle({ value, onChange }: { value: "laptop" | "phone"; o
             value === k ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2"
           }`}
         >
-          {icon} {label}
+          {icon} {tt(label)}
         </button>
       ))}
     </div>
@@ -68,6 +70,8 @@ export function QuickView({
   const [device, setDevice] = useState<"laptop" | "phone">("laptop");
   const dialog = useRef<HTMLDivElement>(null);
   const off = discountPercent(t.priceOld, t.price);
+  const tt = useT();
+  const locale = useLocale();
 
   useEffect(() => {
     const prev = document.activeElement as HTMLElement | null;
@@ -106,7 +110,7 @@ export function QuickView({
         tabIndex={-1}
         role="dialog"
         aria-modal="true"
-        aria-label={`${t.name} — tezkor ko‘rish`}
+        aria-label={tt("{name} — tezkor ko‘rish", { name: t.name })}
         onClick={(e) => e.stopPropagation()}
         className="grid max-h-[92dvh] w-full max-w-[1180px] overflow-y-auto rounded-t-[24px] bg-bg-base outline-none animate-[sheet-up_.28s_ease-out] lg:grid-cols-[1.45fr_1fr] lg:rounded-[24px] lg:animate-none"
       >
@@ -114,38 +118,38 @@ export function QuickView({
           <div className="flex w-full items-center justify-between">
             <DeviceToggle value={device} onChange={setDevice} />
             <div className="flex items-center gap-2 t-body-s text-ink-2">
-              <button type="button" onClick={onPrev} disabled={index <= 0} className="icon-btn !size-9 bg-bg-base disabled:opacity-40" aria-label="Oldingi">
+              <button type="button" onClick={onPrev} disabled={index <= 0} className="icon-btn !size-9 bg-bg-base disabled:opacity-40" aria-label={tt("Oldingi")}>
                 <ArrowLeft size={16} />
               </button>
               {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-              <button type="button" onClick={onNext} disabled={index >= total - 1} className="icon-btn !size-9 bg-bg-base disabled:opacity-40" aria-label="Keyingi">
+              <button type="button" onClick={onNext} disabled={index >= total - 1} className="icon-btn !size-9 bg-bg-base disabled:opacity-40" aria-label={tt("Keyingi")}>
                 <ArrowRight size={16} />
               </button>
             </div>
           </div>
-          <Link href={`/shablonlar/${t.slug}/?view=${device}`} className="flex flex-1 items-center justify-center py-4" aria-label="Kattalashtirish">
+          <Link href={`/shablonlar/${t.slug}/?view=${device}`} className="flex flex-1 items-center justify-center py-4" aria-label={tt("Kattalashtirish")}>
             <TemplatePreviewStage t={t} device={device} />
           </Link>
-          <p className="t-body-s text-ink-2">Ekranni kattalashtirish uchun bosing</p>
+          <p className="t-body-s text-ink-2">{tt("Ekranni kattalashtirish uchun bosing")}</p>
         </div>
 
         <div className="relative flex flex-col gap-6 p-6 lg:p-9">
-          <button type="button" onClick={onClose} aria-label="Yopish" className="absolute right-5 top-5 text-ink-2 hover:text-ink">
+          <button type="button" onClick={onClose} aria-label={tt("Yopish")} className="absolute right-5 top-5 text-ink-2 hover:text-ink">
             <CloseCircle size={24} />
           </button>
           <div className="flex flex-col gap-2 pr-8">
             <span className="font-serif text-[15px] text-gold">{String(t.number).padStart(2, "0")}</span>
             <h2 className="font-serif text-[38px] font-light leading-none text-ink">{t.name}</h2>
             <div className="mt-1 flex flex-wrap gap-1.5">
-              <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{ceremonyLabel[t.ceremony]}</span>
-              <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{styleLabel[t.style]}</span>
-              {off > 0 && <span className="rounded-full bg-maroon px-2.5 py-1 t-body-s text-ink-inverse">Aksiya −{off}%</span>}
+              <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(ceremonyLabel[t.ceremony])}</span>
+              <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(styleLabel[t.style])}</span>
+              {off > 0 && <span className="rounded-full bg-maroon px-2.5 py-1 t-body-s text-ink-inverse">{tt("Aksiya")} −{off}%</span>}
             </div>
           </div>
-          <p className="t-body-m text-ink-2">{t.description}</p>
+          <p className="t-body-m text-ink-2">{(locale === "ru" && t.descriptionRu) || t.description}</p>
 
           <div className="flex flex-col gap-2.5">
-            <p className="t-title text-ink">Ranglar</p>
+            <p className="t-title text-ink">{tt("Ranglar")}</p>
             <div className="flex gap-2">
               {t.palette.map((c) => (
                 <span key={c} title={c} className="size-7 rounded-full border border-line" style={{ background: c }} />
@@ -154,31 +158,31 @@ export function QuickView({
           </div>
 
           <div className="flex flex-col gap-2.5">
-            <p className="t-title text-ink">Saytda nimalar bor</p>
+            <p className="t-title text-ink">{tt("Saytda nimalar bor")}</p>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
               {templateFeatures.map((f) => (
                 <li key={f} className="flex items-center gap-2 t-body-s text-ink">
-                  <TickCircle size={15} color="var(--color-gold)" /> {f}
+                  <TickCircle size={15} color="var(--color-gold)" /> {tt(f)}
                 </li>
               ))}
             </ul>
           </div>
 
           <div className="flex items-baseline gap-3 border-t border-line pt-5">
-            <span className="font-serif text-[30px] font-medium leading-none text-maroon">{formatPrice(t.price)}</span>
-            {off > 0 && <s className="t-body-m text-ink-2">{formatPrice(t.priceOld, false)}</s>}
+            <span className="font-serif text-[30px] font-medium leading-none text-maroon">{formatPrice(t.price, true, locale)}</span>
+            {off > 0 && <s className="t-body-m text-ink-2">{formatPrice(t.priceOld, false, locale)}</s>}
           </div>
 
           <div className="flex flex-col gap-2.5">
             <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary w-full">
-              Shu shablonni tanlash <ArrowRight size={16} />
+              {tt("Shu shablonni tanlash")} <ArrowRight size={16} />
             </Link>
             <div className="flex gap-2.5">
               <Link href={`/namuna/${t.slug}/`} className="btn btn-secondary btn-sm flex-1">
-                <Eye size={15} /> Jonli demo
+                <Eye size={15} /> {tt("Jonli demo")}
               </Link>
               <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm flex-1">
-                <Messages size={15} /> Savol berish
+                <Messages size={15} /> {tt("Savol berish")}
               </a>
             </div>
           </div>

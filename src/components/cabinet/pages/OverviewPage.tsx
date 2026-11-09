@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { ArrowRight, Calendar, CloseCircle, Clock, Edit, Gallery, Link2, Location, Music, Timer1, TickCircle } from "@/components/icons";
@@ -9,24 +9,26 @@ import { InvitationHeader, invTitle } from "../InvitationHeader";
 import { InvitationThumb } from "../InvitationThumb";
 import { CopyLink, ShareRow } from "../LinkActions";
 import { isPaidStatus } from "@/lib/types";
-import { useInvitationData, useSiteUrl } from "../data";
-import { daysUntil, initials, relativeTime, rsvpView } from "@/lib/display";
+import { relTime, useInvitationData, useSiteUrl } from "../data";
+import { daysUntil, initials, rsvpView } from "@/lib/display";
+import { useLocale, useT } from "@/lib/i18n";
 
 /** Mehmon uchun shaxsiy havola: taklifnoma «Hurmatli …» deb shu ism bilan ochiladi (?m=) */
 function GuestLink({ url }: { url: string }) {
+  const t = useT();
   const [name, setName] = useState("");
   const personal = name.trim() ? `${url}?m=${encodeURIComponent(name.trim())}` : "";
   return (
     <div className="flex flex-col gap-2 rounded-xl border border-dashed border-line px-3 py-3">
       <label htmlFor="guest-name" className="t-body-s text-ink-2">
-        Mehmon uchun shaxsiy havola — taklifnoma uning ismi bilan ochiladi
+        {t("Mehmon uchun shaxsiy havola — taklifnoma uning ismi bilan ochiladi")}
       </label>
       <input
         id="guest-name"
         value={name}
         onChange={(e) => setName(e.target.value)}
         maxLength={80}
-        placeholder="Masalan: Dilshod aka va Gulnora opa"
+        placeholder={t("Masalan: Dilshod aka va Gulnora opa")}
         className="h-10 rounded-lg border border-line bg-bg-base px-3 t-body-m text-ink outline-none focus:border-maroon/55"
       />
       {personal && <CopyLink url={personal} className="min-w-0 justify-between" />}
@@ -36,6 +38,7 @@ function GuestLink({ url }: { url: string }) {
 
 /** QR kod — brauzerda yaratiladi (SVG ko‘rinish, PNG/SVG yuklab olish) */
 function QrBlock({ url, slug }: { url: string; slug: string }) {
+  const t = useT();
   const [svg, setSvg] = useState<string | null>(null);
   useEffect(() => {
     QRCode.toString(url, { margin: 2, color: { dark: "#1B1813", light: "#FFFFFF" }, type: "svg" })
@@ -56,21 +59,23 @@ function QrBlock({ url, slug }: { url: string; slug: string }) {
   return (
     <div className="flex shrink-0 flex-col items-center gap-2">
       {svg ? (
-        <span role="img" aria-label="Taklifnoma QR kodi" className="block size-24 [&>svg]:size-full" dangerouslySetInnerHTML={{ __html: svg }} />
+        <span role="img" aria-label={t("Taklifnoma QR kodi")} className="block size-24 [&>svg]:size-full" dangerouslySetInnerHTML={{ __html: svg }} />
       ) : (
         <span className="block size-24 rounded-lg bg-bg-soft" />
       )}
       <button type="button" onClick={png} className="text-[12px] font-medium text-maroon hover:underline">
-        QR kodni yuklash
+        {t("QR kodni yuklash")}
       </button>
       <button type="button" onClick={svgDl} className="text-[11px] text-ink-2 hover:text-maroon">
-        SVG (bosma uchun)
+        {t("SVG (bosma uchun)")}
       </button>
     </div>
   );
 }
 
 export function OverviewPage() {
+  const t = useT();
+  const locale = useLocale();
   const { data } = useInvitationData();
   const siteUrl = useSiteUrl();
   const { order, invitation: inv, stats } = data;
@@ -81,18 +86,18 @@ export function OverviewPage() {
   const flow = (step: "marosim" | "tafsilotlar") => `/buyurtma/${order.id}/${step}/?qaytish=kabinet`;
 
   const statCards = [
-    { icon: <Timer1 size={16} />, label: "To‘yga qadar", value: days === null ? "—" : days === 0 ? "Bugun" : `${days} kun`, color: "text-gold" },
-    { icon: <TickCircle size={16} />, label: "Boraman", value: `${stats.coming} kishi`, color: "text-success" },
-    { icon: <Clock size={16} />, label: "Aniq emas", value: String(stats.maybe), color: "text-gold" },
-    { icon: <CloseCircle size={16} />, label: "Kela olmaydi", value: String(stats.notComing), color: "text-muted" },
+    { icon: <Timer1 size={16} />, label: t("To‘yga qadar"), value: days === null ? "—" : days === 0 ? t("Bugun") : t("{n} kun", { n: days }), color: "text-gold" },
+    { icon: <TickCircle size={16} />, label: t("Boraman"), value: t("{n} kishi", { n: stats.coming }), color: "text-success" },
+    { icon: <Clock size={16} />, label: t("Aniq emas"), value: String(stats.maybe), color: "text-gold" },
+    { icon: <CloseCircle size={16} />, label: t("Kela olmaydi"), value: String(stats.notComing), color: "text-muted" },
   ];
   const quick = [
-    { icon: <Edit size={16} />, label: "Ismlar va matn", href: flow("marosim") },
-    { icon: <Calendar size={16} />, label: "Sana va dastur", href: flow("marosim") },
-    { icon: <Location size={16} />, label: "Manzil", href: flow("marosim") },
-    { icon: <Gallery size={16} />, label: "Suratlar", href: flow("tafsilotlar") },
-    { icon: <Music size={16} />, label: "Musiqa", href: flow("tafsilotlar") },
-    { icon: <Link2 size={16} />, label: "Havola manzili", href: `/kabinet/t/${inv.id}/tahrirlash/#havola` },
+    { icon: <Edit size={16} />, label: t("Ismlar va matn"), href: flow("marosim") },
+    { icon: <Calendar size={16} />, label: t("Sana va dastur"), href: flow("marosim") },
+    { icon: <Location size={16} />, label: t("Manzil"), href: flow("marosim") },
+    { icon: <Gallery size={16} />, label: t("Suratlar"), href: flow("tafsilotlar") },
+    { icon: <Music size={16} />, label: t("Musiqa"), href: flow("tafsilotlar") },
+    { icon: <Link2 size={16} />, label: t("Havola manzili"), href: `/kabinet/t/${inv.id}/tahrirlash/#havola` },
   ];
 
   return (
@@ -112,7 +117,7 @@ export function OverviewPage() {
 
       <div className="flex flex-col gap-4 xl:flex-row">
         <section className="flex min-w-0 flex-1 flex-col gap-4 rounded-card border border-line bg-bg-base p-5">
-          <p className="text-[15px] font-semibold leading-[1.35] text-ink">Taklifnoma havolasi</p>
+          <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("Taklifnoma havolasi")}</p>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <InvitationThumb templateSlug={order.templateSlug} inv={inv} className="hidden w-[94px] sm:block" />
             <div className="flex min-w-0 flex-1 flex-col gap-2.5">
@@ -122,11 +127,11 @@ export function OverviewPage() {
                     <Link2 size={15} className="shrink-0 text-ink-2" />
                     <CopyLink url={url} className="min-w-0 flex-1 justify-between" />
                   </div>
-                  <ShareRow url={url} title={`${invTitle(inv)} — taklifnoma`} />
+                  <ShareRow url={url} title={`${invTitle(inv, t)} — ${t("taklifnoma")}`} />
                   <GuestLink url={url} />
                 </>
               ) : (
-                <p className="t-body-m text-ink-2">Havola to‘lov tasdiqlangach beriladi.</p>
+                <p className="t-body-m text-ink-2">{t("Havola to‘lov tasdiqlangach beriladi.")}</p>
               )}
             </div>
             {paid && <QrBlock url={url} slug={inv.slug} />}
@@ -134,7 +139,7 @@ export function OverviewPage() {
         </section>
 
         <section className="flex flex-col gap-3.5 rounded-card border border-line bg-bg-base p-5 xl:w-[380px]">
-          <p className="text-[15px] font-semibold leading-[1.35] text-ink">Tezkor tahrirlash</p>
+          <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("Tezkor tahrirlash")}</p>
           <div className="grid grid-cols-3 gap-2.5">
             {quick.map((q) => (
               <Link key={q.label} href={q.href} className="flex flex-col gap-2.5 rounded-[14px] bg-bg-soft p-3.5 transition-colors hover:bg-gold-soft">
@@ -148,14 +153,14 @@ export function OverviewPage() {
 
       <section className="flex flex-col gap-1 rounded-card border border-line bg-bg-base p-5">
         <div className="flex items-center justify-between pb-2">
-          <p className="text-[15px] font-semibold leading-[1.35] text-ink">So‘nggi javoblar</p>
+          <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("So‘nggi javoblar")}</p>
           <Link href={`/kabinet/t/${inv.id}/mehmonlar/`} className="inline-flex items-center gap-1 text-[12px] font-medium text-maroon hover:underline">
-            Barchasi <ArrowRight size={13} />
+            {t("Barchasi")} <ArrowRight size={13} />
           </Link>
         </div>
         {recent.list.length === 0 ? (
           <p className="border-t border-line py-4 t-body-m text-ink-2">
-            {paid ? "Hali javoblar yo‘q. Havolani mehmonlarga yuboring — javoblar shu yerda ko‘rinadi." : "Sayt ochilgach, mehmonlar javobi shu yerda ko‘rinadi."}
+            {paid ? t("Hali javoblar yo‘q. Havolani mehmonlarga yuboring — javoblar shu yerda ko‘rinadi.") : t("Sayt ochilgach, mehmonlar javobi shu yerda ko‘rinadi.")}
           </p>
         ) : (
           recent.list.map((g) => {
@@ -164,8 +169,8 @@ export function OverviewPage() {
               <div key={g.id} className="flex items-center gap-3 border-t border-line py-2.5">
                 <span className="flex size-[34px] shrink-0 items-center justify-center rounded-full bg-gold-soft text-[12px] font-semibold text-maroon">{initials(g.name)}</span>
                 <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-ink">{g.name}</span>
-                <StatusBadge tone={v.tone}>{g.status === "coming" ? `${v.label} · ${g.count} kishi` : v.label}</StatusBadge>
-                <span className="hidden w-[90px] text-right text-[11px] text-ink-2 sm:block">{relativeTime(g.createdAt)}</span>
+                <StatusBadge tone={v.tone}>{g.status === "coming" ? `${t(v.label)} · ${t("{n} kishi", { n: g.count })}` : t(v.label)}</StatusBadge>
+                <span className="hidden w-[90px] text-right text-[11px] text-ink-2 sm:block">{relTime(locale, g.createdAt)}</span>
               </div>
             );
           })

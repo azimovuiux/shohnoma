@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useLocale, useT } from "@/lib/i18n";
 import { Add, ArrowRight, Calendar, CloseCircle, Location, Trash } from "@/components/icons";
 import { ceremonyLabel, type Ceremony, type Template } from "@/lib/templates";
 import { FlowField, IconInput, bareInput, flowInput, SectionTitle } from "./fields";
@@ -17,11 +18,24 @@ import { ExtraFields, extraErrors, extraReady, type Extra } from "./ExtraFields"
 
 const ceremonies = (Object.keys(ceremonyLabel) as Ceremony[]).filter((c) => c in ceremonyLabel);
 
+/** Taklifnoma (mehmonlar ko‘radigan sayt) tili — extra.lang da saqlanadi */
+type InviteLang = "uz" | "ru";
+const inviteLangs: { value: InviteLang; label: string }[] = [
+  { value: "uz", label: "O‘zbekcha" },
+  { value: "ru", label: "Русский" },
+];
+
 type Errors = Partial<Record<"personA" | "personB" | "day" | "time" | "venueName" | "address" | "mapUrl", string>>;
 
 export function MarosimForm({ order, template, editing }: { order: FlowOrder; template: Template; editing: boolean }) {
-  const router = useRouter();
-  const [o, setO] = useState(order);
+  const router = useLocalRouter();
+  const t = useT();
+  const locale = useLocale();
+  // Til tanlanmagan bo‘lsa: yangi buyurtmada — sayt tili; mavjud taklifnomani tahrirlashda — o‘zbekcha (hozirgi ko‘rinishi)
+  const langMissing = order.extra?.lang !== "uz" && order.extra?.lang !== "ru";
+  const [o, setO] = useState<FlowOrder>(() =>
+    langMissing ? { ...order, extra: { ...(order.extra ?? {}), lang: editing ? "uz" : locale } } : order,
+  );
   const [errors, setErrors] = useState<Errors>({});
   const [extraErr, setExtraErr] = useState<Record<string, string>>({});
   const fields = template.fields ?? [];
@@ -45,15 +59,15 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
 
   const validate = () => {
     const e: Errors = {};
-    if (!o.personA.trim()) e.personA = o.ceremony === "tugilgan-kun" ? "Ismni kiriting" : "Ismni kiriting";
-    if (needsPersonB(o.ceremony) && !o.personB.trim()) e.personB = "Ismni kiriting";
-    if (!o.day) e.day = "Sanani kiriting";
-    if (!o.time) e.time = "Vaqtni kiriting";
-    if (!o.venueName.trim()) e.venueName = "Marosim joyini kiriting";
-    if (!o.address.trim()) e.address = "Manzilni kiriting";
-    if (o.mapUrl && !/^https?:\/\//.test(o.mapUrl)) e.mapUrl = "Havola https:// bilan boshlansin";
+    if (!o.personA.trim()) e.personA = t("Ismni kiriting");
+    if (needsPersonB(o.ceremony) && !o.personB.trim()) e.personB = t("Ismni kiriting");
+    if (!o.day) e.day = t("Sanani kiriting");
+    if (!o.time) e.time = t("Vaqtni kiriting");
+    if (!o.venueName.trim()) e.venueName = t("Marosim joyini kiriting");
+    if (!o.address.trim()) e.address = t("Manzilni kiriting");
+    if (o.mapUrl && !/^https?:\/\//.test(o.mapUrl)) e.mapUrl = t("Havola https:// bilan boshlansin");
     setErrors(e);
-    const xe = extraErrors(fields, o.extra as Extra);
+    const xe = extraErrors(fields, o.extra as Extra, t);
     setExtraErr(xe);
     return Object.keys(e).length === 0 && Object.keys(xe).length === 0;
   };
@@ -63,6 +77,8 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
       document.querySelector("[aria-invalid=true]")?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
+    // standart til hali saqlanmagan bo‘lsa — hozir saqlaymiz
+    if (langMissing) queue({ extra: o.extra });
     setBusy(true);
     const ok = await flush();
     setBusy(false);
@@ -77,7 +93,13 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
     if (p.every((i) => /^\d{2}:\d{2}$/.test(i.time) && i.title.trim())) queue({ program: p });
   };
 
-  const actionLabel = editing ? "Saqlash" : "Davom etish";
+  const actionLabel = editing ? t("Saqlash") : t("Davom etish");
+  const lang: InviteLang = o.extra?.lang === "ru" ? "ru" : "uz";
+  const setLang = (v: InviteLang) => {
+    const x = { ...(o.extra as Extra), lang: v };
+    setO((p) => ({ ...p, extra: x }));
+    if (extraReady(fields, x)) queue({ extra: x });
+  };
   const button = (
     <button type="button" onClick={next} disabled={busy} className="btn btn-primary w-full">
       {actionLabel} <ArrowRight size={16} />
@@ -105,18 +127,22 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
       <div className="flex flex-col gap-[26px]">
         <MobileTemplateCard template={template} live={live} order={o} />
 
-        <FlowField label="Marosim turi" required htmlFor="f-ceremony">
+        <FlowField label={t("Marosim turi")} required htmlFor="f-ceremony">
           <SelectField
             id="f-ceremony"
-            label="Marosim turi"
+            label={t("Marosim turi")}
             value={o.ceremony}
             onChange={(v) => set("ceremony", v)}
-            options={ceremonies.map((c) => ({ value: c, label: ceremonyLabel[c] }))}
+            options={ceremonies.map((c) => ({ value: c, label: t(ceremonyLabel[c]) }))}
           />
         </FlowField>
 
+        <FlowField label={t("Taklifnoma tili")} htmlFor="f-lang" hint={t("Mehmonlar taklifnomani shu tilda ko‘radi.")}>
+          <SelectField id="f-lang" label={t("Taklifnoma tili")} value={lang} onChange={setLang} options={inviteLangs} />
+        </FlowField>
+
         <div className="grid grid-cols-2 gap-3">
-          <FlowField label={labels.a} required error={errors.personA} htmlFor="f-a" className={labels.b ? "" : "col-span-2"}>
+          <FlowField label={t(labels.a)} required error={errors.personA} htmlFor="f-a" className={labels.b ? "" : "col-span-2"}>
             <input
               id="f-a"
               value={o.personA}
@@ -129,12 +155,12 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
             />
           </FlowField>
           {labels.b && (
-            <FlowField label={labels.b} required={!labels.bOptional} error={errors.personB} htmlFor="f-b">
+            <FlowField label={t(labels.b)} required={!labels.bOptional} error={errors.personB} htmlFor="f-b">
               <input
                 id="f-b"
                 value={o.personB}
                 onChange={(e) => set("personB", e.target.value)}
-                placeholder={o.ceremony === "sunnat" ? "Jamshid va Nodira" : "Madina"}
+                placeholder={o.ceremony === "sunnat" ? t("Jamshid va Nodira") : "Madina"}
                 autoComplete="off"
                 maxLength={80}
                 aria-invalid={!!errors.personB}
@@ -145,7 +171,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <FlowField label="Sana" required error={errors.day} htmlFor="f-day">
+          <FlowField label={t("Sana")} required error={errors.day} htmlFor="f-day">
             <IconInput icon={<Calendar size={18} />} invalid={!!errors.day}>
               <input
                 id="f-day"
@@ -158,24 +184,24 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
               />
             </IconInput>
           </FlowField>
-          <FlowField label="Boshlanishi" required error={errors.time} htmlFor="f-time">
+          <FlowField label={t("Boshlanishi")} required error={errors.time} htmlFor="f-time">
             <TimeField
               id="f-time"
               value={o.time}
               invalid={!!errors.time}
-              label="Boshlanish vaqti"
+              label={t("Boshlanish vaqti")}
               onChange={(v) => set("time", v, o.day ? { day: o.day, time: v } : { time: v })}
             />
           </FlowField>
         </div>
 
-        <FlowField label="Marosim joyi" required error={errors.venueName} htmlFor="f-venue">
+        <FlowField label={t("Marosim joyi")} required error={errors.venueName} htmlFor="f-venue">
           <IconInput icon={<Location size={18} />} invalid={!!errors.venueName}>
             <input
               id="f-venue"
               value={o.venueName}
               onChange={(e) => set("venueName", e.target.value)}
-              placeholder="Oqsaroy to‘yxonasi"
+              placeholder={t("Oqsaroy to‘yxonasi")}
               maxLength={160}
               aria-invalid={!!errors.venueName}
               className={bareInput}
@@ -183,12 +209,12 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
           </IconInput>
         </FlowField>
 
-        <FlowField label="Manzil" required error={errors.address} htmlFor="f-address">
+        <FlowField label={t("Manzil")} required error={errors.address} htmlFor="f-address">
           <input
             id="f-address"
             value={o.address}
             onChange={(e) => set("address", e.target.value)}
-            placeholder="Toshkent shahri"
+            placeholder={t("Toshkent shahri")}
             maxLength={200}
             aria-invalid={!!errors.address}
             className={flowInput}
@@ -196,8 +222,8 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
         </FlowField>
 
         <div className="flex flex-col gap-2 rounded-xl bg-bg-soft p-4">
-          <p className="t-title text-ink">Xaritadagi havola</p>
-          <p className="t-body-s text-ink-2">Mehmonlar manzilni oson topishi uchun xarita havolasini qo‘shing.</p>
+          <p className="t-title text-ink">{t("Xaritadagi havola")}</p>
+          <p className="t-body-s text-ink-2">{t("Mehmonlar manzilni oson topishi uchun xarita havolasini qo‘shing.")}</p>
           {showMap ? (
             <div className="flex flex-col gap-1.5">
               <span className="flex items-center gap-2">
@@ -208,12 +234,12 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
                   inputMode="url"
                   autoFocus={!order.mapUrl}
                   aria-invalid={!!errors.mapUrl}
-                  aria-label="Xarita havolasi"
+                  aria-label={t("Xarita havolasi")}
                   className={`${flowInput} !h-12 !rounded-full`}
                 />
                 <button
                   type="button"
-                  aria-label="Havolani olib tashlash"
+                  aria-label={t("Havolani olib tashlash")}
                   onClick={() => {
                     set("mapUrl", "", { mapUrl: null });
                     setShowMap(false);
@@ -231,7 +257,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
               onClick={() => setShowMap(true)}
               className="flex items-center gap-2 rounded-full border border-line bg-bg-base p-3 text-left t-nav text-ink hover:bg-white"
             >
-              <Add size={18} /> Xarita havolasini qo‘shish
+              <Add size={18} /> {t("Xarita havolasini qo‘shish")}
             </button>
           )}
         </div>
@@ -240,18 +266,18 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
 
         {editing && !hasOwnProgram && (
           <div id="dastur" className="flex scroll-mt-28 flex-col gap-4">
-            <SectionTitle>Marosim dasturi</SectionTitle>
+            <SectionTitle>{t("Marosim dasturi")}</SectionTitle>
             {program.map((p, i) => (
               <div key={i} className="flex items-center gap-2">
                 <TimeField compact value={p.time} onChange={(v) => setProgram(program.map((x, j) => (j === i ? { ...x, time: v } : x)))} />
                 <input
                   value={p.title}
-                  aria-label="Bosqich nomi"
+                  aria-label={t("Bosqich nomi")}
                   maxLength={120}
                   onChange={(e) => setProgram(program.map((x, j) => (j === i ? { ...x, title: e.target.value } : x)))}
                   className={flowInput}
                 />
-                <button type="button" aria-label="O‘chirish" onClick={() => setProgram(program.filter((_, j) => j !== i))} className="icon-btn shrink-0">
+                <button type="button" aria-label={t("O‘chirish")} onClick={() => setProgram(program.filter((_, j) => j !== i))} className="icon-btn shrink-0">
                   <Trash size={16} />
                 </button>
               </div>
@@ -259,16 +285,16 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
             {program.length < 12 && (
               <button
                 type="button"
-                onClick={() => setProgram([...program, { time: "20:00", title: "Bazm" }])}
+                onClick={() => setProgram([...program, { time: "20:00", title: t("Bazm") }])}
                 className="flex w-fit items-center gap-2 rounded-full border border-line px-4 py-2.5 t-nav text-ink hover:bg-bg-soft"
               >
-                <Add size={16} /> Bosqich qo‘shish
+                <Add size={16} /> {t("Bosqich qo‘shish")}
               </button>
             )}
           </div>
         )}
 
-        <p className="t-body-s text-ink-2">* To‘ldirilishi shart bo‘lgan maydonlar</p>
+        <p className="t-body-s text-ink-2">{t("* To‘ldirilishi shart bo‘lgan maydonlar")}</p>
       </div>
 
       <MobileBar>

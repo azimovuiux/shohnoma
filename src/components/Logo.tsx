@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+
+import Link from "@/components/LocalLink";
+import { useT } from "@/lib/i18n";
 import type { CSSProperties } from "react";
 
 /** Figma "Shohnoma" logosi (160:15609) — konvert belgisi + yozuv. Ranglar: --logo-main / --logo-shade (to‘q fonda almashtiriladi). */
@@ -13,8 +16,9 @@ export function LogoMark({ className = "", light = false, title = "Shohnoma" }: 
 }
 
 export function Logo({ className = "", light = false }: { className?: string; light?: boolean }) {
+  const t = useT();
   return (
-    <Link href="/" className={`inline-flex items-center ${className}`} aria-label="Shohnoma — bosh sahifa">
+    <Link href="/" className={`inline-flex items-center ${className}`} aria-label={t("Shohnoma — bosh sahifa")}>
       <LogoMark className="h-8 w-auto lg:h-10" light={light} />
     </Link>
   );

@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ArrowDown2, ArrowLeft, Edit, Eye, Grid2, Profile2User, Receipt2 } from "@/components/icons";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { invitationTemplate } from "./InvitationThumb";
 import { splitDate } from "@/lib/display";
+import { useLpath, useT } from "@/lib/i18n";
 
 type Item = { id: string; personA: string; personB: string | null; date: string; venueName: string; status: string; templateSlug: string };
 
@@ -25,13 +26,16 @@ function Mini({ it }: { it: Item }) {
   );
 }
 
-const title = (it: Item) => [it.personA, it.personB].filter(Boolean).join(" & ") || "Yangi taklifnoma";
+const names = (it: Item) => [it.personA, it.personB].filter(Boolean).join(" & ");
 
 /** Taklifnoma ichidagi panel (spec §5.11 (2)) — kabinet menyusi bu yerda ko‘rinmaydi */
 export function InvitationNav({ current, others, responses, siteUrl, paid }: { current: Item; others: Item[]; responses: number; siteUrl: string; paid: boolean }) {
+  const t = useT();
+  const lp = useLpath();
+  const title = (it: Item) => names(it) || t("Yangi taklifnoma");
   const path = usePathname();
   const base = `/kabinet/t/${current.id}`;
-  const same = (a: string, b: string) => a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
+  const same = (a: string, b: string) => a.replace(/\/+$/, "") === lp(b).replace(/\/+$/, "");
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -53,7 +57,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
     <>
       <aside className="hidden w-[264px] shrink-0 flex-col gap-1.5 self-start rounded-card bg-bg-soft px-4 py-5 lg:flex">
         <Link href="/kabinet/" className="flex items-center gap-2 pb-2.5 pl-1 t-nav text-ink-2 hover:text-maroon">
-          <ArrowLeft size={16} /> Barcha taklifnomalar
+          <ArrowLeft size={16} /> {t("Barcha taklifnomalar")}
         </Link>
         <div ref={ref} className="relative">
           <button
@@ -68,7 +72,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
               <span className="truncate font-serif text-[19px] font-medium leading-[1.2] text-ink">{title(current)}</span>
               <span className="flex items-center gap-1.5 text-[11px] leading-[1.5] text-ink-2">
                 <span className={`size-1.5 rounded-full ${paid ? "bg-success" : "bg-pending"}`} />
-                {statusShort(current.status)}
+                {t(statusShort(current.status))}
                 {d ? ` · ${d.day}` : ""}
               </span>
             </span>
@@ -82,7 +86,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
                   <span className="flex min-w-0 flex-col">
                     <span className="truncate font-serif text-[17px] font-medium text-ink">{title(o)}</span>
                     <span className="text-[11px] text-ink-2">
-                      {statusShort(o.status)}
+                      {t(statusShort(o.status))}
                       {splitDate(o.date) ? ` · ${splitDate(o.date)!.day}` : ""}
                     </span>
                   </span>
@@ -92,15 +96,15 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
           )}
         </div>
         <span className="h-2.5" />
-        {tabs.map((t) => {
-          const active = same(path, t.href);
-          const Icon = t.icon;
+        {tabs.map((tab) => {
+          const active = same(path, tab.href);
+          const Icon = tab.icon;
           return (
-            <Link key={t.href} href={t.href} aria-current={active ? "page" : undefined} className={`${row} ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink hover:bg-bg-base/60"}`}>
+            <Link key={tab.href} href={tab.href} aria-current={active ? "page" : undefined} className={`${row} ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink hover:bg-bg-base/60"}`}>
               <Icon size={18} />
-              <span className="flex-1">{t.label}</span>
-              {t.n !== null && (
-                <span className={`rounded-full px-2 py-0.5 text-[11px] font-normal leading-[1.5] ${active ? "bg-maroon/10 text-maroon" : "bg-bg-base text-ink-2"}`}>{t.n}</span>
+              <span className="flex-1">{t(tab.label)}</span>
+              {tab.n !== null && (
+                <span className={`rounded-full px-2 py-0.5 text-[11px] font-normal leading-[1.5] ${active ? "bg-maroon/10 text-maroon" : "bg-bg-base text-ink-2"}`}>{tab.n}</span>
               )}
             </Link>
           );
@@ -108,7 +112,7 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
         <span className="h-3.5" />
         {paid && (
           <a href={siteUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary w-full !py-3">
-            <Eye size={16} /> Saytni ochish
+            <Eye size={16} /> {t("Saytni ochish")}
           </a>
         )}
       </aside>
@@ -116,20 +120,20 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
       {/* Mobil */}
       <div className="flex flex-col gap-4 lg:hidden">
         <Link href="/kabinet/" className="flex items-center gap-2 t-nav text-ink-2">
-          <ArrowLeft size={16} /> Barcha taklifnomalar
+          <ArrowLeft size={16} /> {t("Barcha taklifnomalar")}
         </Link>
-        <nav className="no-scrollbar -mx-5 flex overflow-x-auto border-b border-line px-5" aria-label="Taklifnoma">
-          {tabs.map((t) => {
-            const active = same(path, t.href);
+        <nav className="no-scrollbar -mx-5 flex overflow-x-auto border-b border-line px-5" aria-label={t("Taklifnoma")}>
+          {tabs.map((tab) => {
+            const active = same(path, tab.href);
             return (
               <Link
-                key={t.href}
-                href={t.href}
+                key={tab.href}
+                href={tab.href}
                 aria-current={active ? "page" : undefined}
                 className={`-mb-px shrink-0 border-b-2 px-3 pb-3 pt-1 t-nav ${active ? "border-maroon text-maroon" : "border-transparent text-ink-2"}`}
               >
-                {t.short}
-                {t.n !== null ? ` (${t.n})` : ""}
+                {t(tab.short)}
+                {tab.n !== null ? ` (${tab.n})` : ""}
               </Link>
             );
           })}

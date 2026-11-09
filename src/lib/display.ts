@@ -1,18 +1,21 @@
 /** Ko‘rsatish formatlari (spec §13): sana 12.09.2026, vaqt 18:00, telefon +998 90 123 45 67 */
 
 export const monthsUz = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
+/** Ruscha oy nomlari (qaratqich kelishigida: «12 сентября») */
+export const monthsRu = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
 
 /** "2026-09-12T18:00" → { day: "12.09.2026", time: "18:00", long: "12 sentabr 2026", dots: "12 · 09 · 2026" } */
-export function splitDate(local: string | null | undefined) {
+export function splitDate(local: string | null | undefined, locale: "uz" | "ru" = "uz") {
   const m = (local ?? "").match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}:\d{2}))?/);
   if (!m) return null;
   const [, y, mo, d, t] = m;
+  const months = locale === "ru" ? monthsRu : monthsUz;
   return {
     iso: `${y}-${mo}-${d}`,
     day: `${d}.${mo}.${y}`,
     time: t ?? "",
-    long: `${Number(d)} ${monthsUz[Number(mo) - 1]} ${y}`,
-    short: `${Number(d)} ${monthsUz[Number(mo) - 1]}`,
+    long: `${Number(d)} ${months[Number(mo) - 1]} ${y}`,
+    short: `${Number(d)} ${months[Number(mo) - 1]}`,
     dots: `${d} · ${mo} · ${y}`,
   };
 }
@@ -33,12 +36,13 @@ export function formatPhoneDisplay(p: string | null | undefined) {
 }
 
 /** Nisbiy vaqt: "hozirgina", "5 daqiqa oldin", "kecha 14:20", "12.09 18:00" */
-export function relativeTime(date: Date | string) {
+export function relativeTime(date: Date | string, locale: "uz" | "ru" = "uz") {
   const d = typeof date === "string" ? new Date(date) : date;
   const diff = (Date.now() - d.getTime()) / 1000;
-  if (diff < 60) return "hozirgina";
-  if (diff < 3600) return `${Math.floor(diff / 60)} daqiqa oldin`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)} soat oldin`;
+  const ru = locale === "ru";
+  if (diff < 60) return ru ? "только что" : "hozirgina";
+  if (diff < 3600) return ru ? `${Math.floor(diff / 60)} мин назад` : `${Math.floor(diff / 60)} daqiqa oldin`;
+  if (diff < 86400) return ru ? `${Math.floor(diff / 3600)} ч назад` : `${Math.floor(diff / 3600)} soat oldin`;
   const t = new Date(d.getTime() + 5 * 3600_000).toISOString();
   return `${t.slice(8, 10)}.${t.slice(5, 7)} ${t.slice(11, 16)}`;
 }

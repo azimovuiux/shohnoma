@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
+import { useLocale, useT } from "@/lib/i18n";
 import { useEffect, useState } from "react";
 import { ArrowRight, Eye, Heart, MonitorMobbile, PlayCircle, Tag } from "@/components/icons";
 import { GirihPattern } from "./Ornament";
@@ -51,6 +52,7 @@ function loadServerFavs() {
 export function useFavorite(slug: string) {
   const [fav, setFav] = useState(false);
   const toast = useToast();
+  const tt = useT();
   useEffect(() => {
     let alive = true;
     const sync = async () => {
@@ -81,7 +83,7 @@ export function useFavorite(slug: string) {
       } catch {}
     }
     favListeners.forEach((f) => f());
-    toast(next ? "Sevimlilarga qo‘shildi" : "Sevimlilardan olib tashlandi");
+    toast(next ? tt("Sevimlilarga qo‘shildi") : tt("Sevimlilardan olib tashlandi"));
   };
   return [fav, toggle] as const;
 }
@@ -113,6 +115,8 @@ export function DevicePreview({ t, className = "" }: { t: Template; className?: 
 export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Template; onQuickView?: (t: Template) => void; reveal?: boolean; delay?: number }) {
   const [fav, toggleFav] = useFavorite(t.slug);
   const off = discountPercent(t.priceOld, t.price);
+  const tt = useT();
+  const locale = useLocale();
 
   return (
     <article
@@ -126,22 +130,22 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
             onClick={() => onQuickView(t)}
             className="absolute inset-x-0 bottom-4 mx-auto flex w-fit items-center gap-2 rounded-full bg-bg-base/95 px-4 py-2.5 t-nav text-ink opacity-0 shadow-soft transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
           >
-            <Eye size={15} /> Tezkor ko‘rish
+            <Eye size={15} /> {tt("Tezkor ko‘rish")}
           </button>
         )}
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
           {off > 0 && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-maroon px-3 py-1.5 text-[12px] font-medium leading-none text-[#e2c48c]">
-              <Tag size={13} /> Aksiya&nbsp;&nbsp;−{off}%
+              <Tag size={13} /> {tt("Aksiya")}&nbsp;&nbsp;−{off}%
             </span>
           )}
-          <span className="rounded-full bg-white/90 px-3 py-1.5 text-[12px] leading-none text-ink">{styleLabel[t.style]}</span>
+          <span className="rounded-full bg-white/90 px-3 py-1.5 text-[12px] leading-none text-ink">{tt(styleLabel[t.style])}</span>
         </div>
         <button
           type="button"
           onClick={toggleFav}
           aria-pressed={fav}
-          aria-label={fav ? "Sevimlilardan olib tashlash" : "Sevimlilarga qo‘shish"}
+          aria-label={fav ? tt("Sevimlilardan olib tashlash") : tt("Sevimlilarga qo‘shish")}
           className={`absolute right-3.5 top-3.5 flex size-9 items-center justify-center rounded-full bg-white/90 transition-transform hover:scale-105 ${fav ? "text-maroon" : "text-ink"}`}
         >
           <Heart size={16} variant={fav ? "Bold" : "Linear"} />
@@ -153,14 +157,14 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
           <h3 className="font-serif text-[26px] font-medium leading-[1.2] text-ink lg:text-[32px]">{t.name}</h3>
           <div className="flex flex-wrap items-center gap-2.5 text-[13px] leading-[1.5] text-ink-2">
             <span className="inline-flex items-center gap-1.5">
-              <Heart size={14} /> {ceremonyLabel[t.ceremony]}
+              <Heart size={14} /> {tt(ceremonyLabel[t.ceremony])}
             </span>
             <span className="size-[3px] rounded-full bg-ink-2" />
             <span className="inline-flex items-center gap-1.5">
-              <MonitorMobbile size={14} /> Telefon va laptop
+              <MonitorMobbile size={14} /> {tt("Telefon va laptop")}
             </span>
             <span className="size-[3px] rounded-full bg-ink-2" />
-            <span className="flex" aria-label="Ranglar">
+            <span className="flex" aria-label={tt("Ranglar")}>
               {t.palette.slice(0, 3).map((c, i) => (
                 <span key={c} className="size-3.5 rounded-full ring-2 ring-bg-base" style={{ background: c, marginLeft: i ? -4 : 0 }} />
               ))}
@@ -168,17 +172,17 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
           </div>
         </div>
         <div className="flex items-baseline gap-2.5">
-          <span className="font-serif text-[26px] font-medium leading-[1.2] text-maroon lg:text-[30px]">{formatPrice(t.price)}</span>
-          {off > 0 && <s className="whitespace-nowrap text-[13px] leading-[1.5] text-ink-2">{formatPrice(t.priceOld)}</s>}
+          <span className="font-serif text-[26px] font-medium leading-[1.2] text-maroon lg:text-[30px]">{formatPrice(t.price, true, locale)}</span>
+          {off > 0 && <s className="whitespace-nowrap text-[13px] leading-[1.5] text-ink-2">{formatPrice(t.priceOld, true, locale)}</s>}
         </div>
       </div>
 
       <div className="flex gap-2.5">
         <Link href={`/namuna/${t.slug}/`} className="btn btn-secondary flex-1 !px-3 !py-3.5">
-          <PlayCircle size={16} /> Jonli ko‘rish
+          <PlayCircle size={16} /> {tt("Jonli ko‘rish")}
         </Link>
         <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary flex-1 !px-3 !py-3.5">
-          Tanlash <ArrowRight size={16} />
+          {tt("Tanlash")} <ArrowRight size={16} />
         </Link>
       </div>
     </article>

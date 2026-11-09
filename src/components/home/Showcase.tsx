@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
+import { useT } from "@/lib/i18n";
 import { useState } from "react";
 import { ArrowRight, Cake, Crown1, Gallery, Heart, Lovely } from "@/components/icons";
 import { type Ceremony } from "@/lib/templates";
@@ -19,9 +20,10 @@ const chips: { value: Ceremony | ""; label: string; icon?: React.ReactNode }[] =
 export function Showcase() {
   const [ceremony, setCeremony] = useState<Ceremony | "">("");
   const templates = useTemplates();
-  const featured = templates.filter((t) => t.featured).slice(0, 10);
+  const t = useT();
+  const featured = templates.filter((x) => x.featured).slice(0, 10);
   // Bosh sahifada 10 ta; marosim tanlansa — shu marosimning barcha shablonlari
-  const list = ceremony ? templates.filter((t) => t.ceremony === ceremony) : featured;
+  const list = ceremony ? templates.filter((x) => x.ceremony === ceremony) : featured;
 
   return (
     <section id="shablonlar" className="scroll-mt-20 bg-bg-base py-20 lg:py-[120px]">
@@ -30,7 +32,7 @@ export function Showcase() {
           <div data-split className="flex flex-col gap-4">
             <SectionTitle plain="Tayyor" italic="dizaynlar" />
             <p className="t-body-m max-w-[440px] text-ink-2">
-              Har biri telefon va laptopda chiroyli ochiladi — muhr, musiqa va jonli animatsiyalar bilan.
+              {t("Har biri telefon va laptopda chiroyli ochiladi — muhr, musiqa va jonli animatsiyalar bilan.")}
             </p>
           </div>
           <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:px-0 lg:pb-0">
@@ -47,7 +49,7 @@ export function Showcase() {
                   }`}
                 >
                   {c.icon && <span className={active ? "" : "text-gold"}>{c.icon}</span>}
-                  {c.label}
+                  {t(c.label)}
                 </button>
               );
             })}
@@ -55,14 +57,14 @@ export function Showcase() {
         </div>
 
         <div className="mt-12 grid gap-x-6 gap-y-7 lg:mt-16 lg:grid-cols-2">
-          {list.map((t, i) => (
-            <TemplateCard key={t.slug} t={t} reveal delay={(i % 2) * 120} />
+          {list.map((tpl, i) => (
+            <TemplateCard key={tpl.slug} t={tpl} reveal delay={(i % 2) * 120} />
           ))}
         </div>
 
         <div data-reveal="up" className="mt-12 flex justify-center lg:mt-16">
           <Link href="/shablonlar/" className="btn border border-line-dark px-7 text-ink hover:bg-bg-soft">
-            <Gallery size={16} /> Barcha {templates.length} ta shablon <ArrowRight size={16} />
+            <Gallery size={16} /> {t("Barcha {n} ta shablon", { n: templates.length })} <ArrowRight size={16} />
           </Link>
         </div>
       </div>

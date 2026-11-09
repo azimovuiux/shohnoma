@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useLpath, useT } from "@/lib/i18n";
 import { ArrowRight } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { site } from "@/lib/site";
@@ -23,7 +24,9 @@ export function P2PChecking({
   amount: string;
   loggedIn: boolean;
 }) {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
+  const lp = useLpath();
   const [rejected, setRejected] = useState<string | null>(null);
   const base = `/buyurtma/${orderId}`;
 
@@ -35,7 +38,7 @@ export function P2PChecking({
         return false;
       }
       if (d.status === "p2p_rejected") {
-        setRejected(d.payment?.note || "Chek ma’lumotlari mos kelmadi");
+        setRejected(d.payment?.note || t("Chek ma’lumotlari mos kelmadi"));
         return false;
       }
     },
@@ -44,14 +47,18 @@ export function P2PChecking({
 
   if (rejected)
     return (
-      <StatusScreen kind="error" title="Chek qabul qilinmadi" text={`Sabab: ${rejected}. To‘g‘ri chekni qayta yuboring yoki Telegramda yozing.`}>
+      <StatusScreen
+        kind="error"
+        title={t("Chek qabul qilinmadi")}
+        text={t("Sabab: {reason}. To‘g‘ri chekni qayta yuboring yoki Telegramda yozing.", { reason: t(rejected) })}
+      >
         <OrderLine left={line} amount={amount} />
         <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
           <Link href={`${base}/tolov/p2p/`} className="btn btn-primary">
-            Chekni qayta yuborish <ArrowRight size={16} />
+            {t("Chekni qayta yuborish")} <ArrowRight size={16} />
           </Link>
           <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-            <TelegramIcon size={16} /> Telegramda yozish
+            <TelegramIcon size={16} /> {t("Telegramda yozish")}
           </a>
         </div>
       </StatusScreen>
@@ -60,23 +67,23 @@ export function P2PChecking({
   return (
     <StatusScreen
       kind="waiting"
-      title="To‘lovingiz tekshirilmoqda"
-      text="Chekingizni oldik. Odatda 15 daqiqa ichida tasdiqlaymiz — sahifani yopsangiz ham bo‘ladi, havola Telegram orqali keladi."
+      title={t("To‘lovingiz tekshirilmoqda")}
+      text={t("Chekingizni oldik. Odatda 15 daqiqa ichida tasdiqlaymiz — sahifani yopsangiz ham bo‘ladi, havola Telegram orqali keladi.")}
     >
       <Timeline
         items={[
-          { title: "Chek yuborildi", sub: sentAt, state: "done" },
-          { title: "To‘lov tekshirilmoqda", sub: "Taxminan 15 daqiqa", state: "active" },
-          { title: "Taklifnoma ishga tushadi", sub: "Havola kabinetda va Telegramda", state: "todo" },
+          { title: t("Chek yuborildi"), sub: sentAt, state: "done" },
+          { title: t("To‘lov tekshirilmoqda"), sub: t("Taxminan 15 daqiqa"), state: "active" },
+          { title: t("Taklifnoma ishga tushadi"), sub: t("Havola kabinetda va Telegramda"), state: "todo" },
         ]}
       />
       <OrderLine left={line} amount={amount} />
       <div className="flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
-        <Link href={loggedIn ? "/kabinet/" : `/kirish/?next=${encodeURIComponent("/kabinet/")}`} className="btn btn-primary">
-          Buyurtmalarimga o‘tish <ArrowRight size={16} />
+        <Link href={loggedIn ? "/kabinet/" : `/kirish/?next=${encodeURIComponent(lp("/kabinet/"))}`} className="btn btn-primary">
+          {t("Buyurtmalarimga o‘tish")} <ArrowRight size={16} />
         </Link>
         <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-          <TelegramIcon size={16} /> Telegramda yozish
+          <TelegramIcon size={16} /> {t("Telegramda yozish")}
         </a>
       </div>
     </StatusScreen>

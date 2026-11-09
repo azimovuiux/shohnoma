@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
+import { useT } from "@/lib/i18n";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Add,
@@ -72,13 +73,14 @@ function Chip({ active, children, onClick }: { active: boolean; children: ReactN
 }
 
 function Section({ n, title, hint, error, children, id }: { n: string; title: string; hint?: string; error?: string; children: ReactNode; id?: string }) {
+  const t = useT();
   return (
     <section id={id} className="flex scroll-mt-28 flex-col gap-3.5">
       <h2 className="flex items-center gap-3">
         <span className="font-serif text-[18px] font-medium leading-[1.2] text-gold">{n}</span>
-        <span className="text-[15px] font-semibold leading-[1.35] text-ink">{title}</span>
+        <span className="text-[15px] font-semibold leading-[1.35] text-ink">{t(title)}</span>
       </h2>
-      {hint && <p className="t-body-s text-ink-2">{hint}</p>}
+      {hint && <p className="t-body-s text-ink-2">{t(hint)}</p>}
       {children}
       {error && <p className="t-body-s text-danger">{error}</p>}
     </section>
@@ -87,6 +89,7 @@ function Section({ n, title, hint, error, children, id }: { n: string; title: st
 
 /** Uslub kartasi — namuna rasmi (public/images/brief/<value>.webp) */
 function StyleCard({ label, value, active, onClick }: { label: string; value: string; active: boolean; onClick: () => void }) {
+  const t = useT();
   return (
     <button
       type="button"
@@ -101,7 +104,7 @@ function StyleCard({ label, value, active, onClick }: { label: string; value: st
         <img src={`/images/brief/${value}.webp`} alt="" className="absolute inset-0 size-full object-cover" />
       </span>
       <span className="flex items-center justify-between px-0.5">
-        <span className="text-[12px] font-semibold leading-[1.35] text-ink">{label}</span>
+        <span className="text-[12px] font-semibold leading-[1.35] text-ink">{t(label)}</span>
         {active && <TickCircle size={16} color="var(--color-maroon)" />}
       </span>
     </button>
@@ -109,6 +112,7 @@ function StyleCard({ label, value, active, onClick }: { label: string; value: st
 }
 
 function HowItWorksPanel({ sending, onSubmit }: { sending: boolean; onSubmit?: () => void }) {
+  const t = useT();
   const steps = [
     { icon: <DocumentText size={16} />, title: "Brif yuborasiz", text: "2–3 daqiqa" },
     { icon: <Messages size={16} />, title: "Dizayner bog‘lanadi", text: "24 soat ichida" },
@@ -118,26 +122,26 @@ function HowItWorksPanel({ sending, onSubmit }: { sending: boolean; onSubmit?: (
   return (
     <div className="flex flex-col gap-5 rounded-[24px] bg-bg-soft p-6">
       <div className="flex flex-col gap-4">
-        <p className="font-serif text-[22px] font-medium leading-[1.2] text-ink">Qanday ishlaydi</p>
+        <p className="font-serif text-[22px] font-medium leading-[1.2] text-ink">{t("Qanday ishlaydi")}</p>
         <ol className="flex flex-col gap-4">
           {steps.map((s) => (
             <li key={s.title} className="flex items-center gap-3">
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-bg-base text-maroon">{s.icon}</span>
               <span className="flex flex-col gap-0.5">
-                <span className="text-[13px] font-semibold leading-[1.35] text-ink">{s.title}</span>
-                <span className="text-[11px] leading-[1.5] text-ink-2">{s.text}</span>
+                <span className="text-[13px] font-semibold leading-[1.35] text-ink">{t(s.title)}</span>
+                <span className="text-[11px] leading-[1.5] text-ink-2">{t(s.text)}</span>
               </span>
             </li>
           ))}
         </ol>
         <div className="flex items-center justify-between border-t border-line pt-3.5">
-          <span className="text-[13px] leading-[1.6] text-ink-2">Maxsus dizayn</span>
-          <span className="font-serif text-[22px] font-medium leading-[1.2] text-maroon">490 000 so‘mdan</span>
+          <span className="text-[13px] leading-[1.6] text-ink-2">{t("Maxsus dizayn")}</span>
+          <span className="font-serif text-[22px] font-medium leading-[1.2] text-maroon">{t("490 000 so‘mdan")}</span>
         </div>
       </div>
       {onSubmit && (
         <button type="button" onClick={onSubmit} disabled={sending} className="btn btn-primary w-full !py-[13px]">
-          <Send2 size={16} /> {sending ? "Yuborilmoqda…" : "Brifni yuborish"}
+          <Send2 size={16} /> {sending ? t("Yuborilmoqda…") : t("Brifni yuborish")}
         </button>
       )}
       <div className="flex gap-2">
@@ -145,15 +149,16 @@ function HowItWorksPanel({ sending, onSubmit }: { sending: boolean; onSubmit?: (
           <TelegramIcon size={16} /> Telegram
         </a>
         <a href={site.phoneHref} className="btn btn-secondary flex-1 !px-3 !py-[13px]">
-          <Call size={16} /> Qo‘ng‘iroq
+          <Call size={16} /> {t("Qo‘ng‘iroq")}
         </a>
       </div>
-      <p className="t-body-s text-ink-2">Brif bepul. To‘lov faqat eskizni tasdiqlaganingizdan keyin.</p>
+      <p className="t-body-s text-ink-2">{t("Brif bepul. To‘lov faqat eskizni tasdiqlaganingizdan keyin.")}</p>
     </div>
   );
 }
 
 function Success({ name, via }: { name: string; via: ContactVia }) {
+  const t = useT();
   const viaText = { telegram: "Telegram orqali yozamiz", call: "qo‘ng‘iroq qilamiz", sms: "SMS yuboramiz" }[via];
   return (
     <div className="mx-auto flex max-w-[560px] flex-col items-center px-5 py-16 text-center lg:py-24">
@@ -167,32 +172,33 @@ function Success({ name, via }: { name: string; via: ContactVia }) {
         </span>
       </div>
       <h1 className="mt-8 font-serif text-[38px] font-light leading-[1.05] text-ink lg:text-[52px]">
-        Brifingiz <em className="italic text-maroon">qabul qilindi</em>
+        {t("Brifingiz")} <em className="italic text-maroon">{t("qabul qilindi")}</em>
       </h1>
       <p className="t-body-l mt-4 text-ink-2">
-        Rahmat{name ? `, ${name}` : ""}! Dizaynerimiz 24 soat ichida {viaText} va g‘oyangizni birga aniqlaymiz.
+        {t("Rahmat")}
+        {name ? `, ${name}` : ""}! {t("Dizaynerimiz 24 soat ichida {via} va g‘oyangizni birga aniqlaymiz.", { via: t(viaText) })}
       </p>
       <ol className="mt-8 flex w-full flex-col gap-3 rounded-panel bg-bg-soft p-5 text-left">
         {[
           ["Dizayner bog‘lanadi", "24 soat ichida, tanlagan usulingizda"],
           ["Eskizni ko‘rasiz", "2–3 kun ichida, 2 marta tuzatish bilan"],
           ["Tasdiqlab, to‘laysiz", "Shundan so‘ng sayt havolasi va QR kod tayyor bo‘ladi"],
-        ].map(([t, d], i) => (
-          <li key={t} className="flex items-start gap-3">
+        ].map(([s, d], i) => (
+          <li key={s} className="flex items-start gap-3">
             <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-bg-base font-serif text-[15px] text-gold">{i + 1}</span>
             <span className="flex flex-col">
-              <span className="t-title text-ink">{t}</span>
-              <span className="t-body-s text-ink-2">{d}</span>
+              <span className="t-title text-ink">{t(s)}</span>
+              <span className="t-body-s text-ink-2">{t(d)}</span>
             </span>
           </li>
         ))}
       </ol>
       <div className="mt-8 flex w-full flex-col gap-2.5 sm:flex-row">
         <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-primary flex-1">
-          <TelegramIcon size={16} /> Telegramda yozish
+          <TelegramIcon size={16} /> {t("Telegramda yozish")}
         </a>
         <Link href="/" className="btn btn-secondary flex-1">
-          <Home2 size={16} /> Bosh sahifa
+          <Home2 size={16} /> {t("Bosh sahifa")}
         </Link>
       </div>
     </div>
@@ -213,6 +219,7 @@ function Thumb({ file }: { file: File }) {
 type Errors = Partial<Record<"ceremony" | "budget" | "name" | "phone" | "files" | "form", string>>;
 
 export function BriefForm() {
+  const t = useT();
   const [ceremony, setCeremony] = useState<Ceremony | "">("");
   const [date, setDate] = useState("");
   const [guests, setGuests] = useState("");
@@ -239,22 +246,22 @@ export function BriefForm() {
     const ok: File[] = [];
     let err = "";
     for (const f of Array.from(list)) {
-      if (!/^image\/(jpeg|png|webp|heic|heif)$/.test(f.type)) err = "Faqat rasm (JPG, PNG, WEBP) yuklang";
-      else if (f.size > 8 * 1024 * 1024) err = "Har bir rasm 8 MB dan oshmasin";
+      if (!/^image\/(jpeg|png|webp|heic|heif)$/.test(f.type)) err = t("Faqat rasm (JPG, PNG, WEBP) yuklang");
+      else if (f.size > 8 * 1024 * 1024) err = t("Har bir rasm 8 MB dan oshmasin");
       else ok.push(f);
     }
     const next = [...files, ...ok].slice(0, MAX_FILES);
-    if (files.length + ok.length > MAX_FILES) err = `Ko‘pi bilan ${MAX_FILES} ta rasm`;
+    if (files.length + ok.length > MAX_FILES) err = t("Ko‘pi bilan {n} ta rasm", { n: MAX_FILES });
     setFiles(next);
     setErrors((e) => ({ ...e, files: err || undefined }));
   };
 
   const submit = async () => {
     const e: Errors = {};
-    if (!ceremony) e.ceremony = "Marosim turini tanlang";
-    if (!budget) e.budget = "Taxminiy byudjetni tanlang";
-    if (!name.trim()) e.name = "Ismingizni kiriting";
-    if (phoneDigits(phone).length !== 9) e.phone = "Telefon raqam to‘liq emas";
+    if (!ceremony) e.ceremony = t("Marosim turini tanlang");
+    if (!budget) e.budget = t("Taxminiy byudjetni tanlang");
+    if (!name.trim()) e.name = t("Ismingizni kiriting");
+    if (phoneDigits(phone).length !== 9) e.phone = t("Telefon raqam to‘liq emas");
     setErrors(e);
     if (Object.keys(e).length) {
       const first = e.ceremony ? "brif-01" : e.budget ? "brif-05" : "brif-06";
@@ -283,7 +290,7 @@ export function BriefForm() {
       files.forEach((f) => fd.append("files[]", f));
       const res = await fetch("/api/briefs", { method: "POST", body: fd });
       const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
-      if (!res.ok || data.ok === false) throw new Error(data.error || "Brif yuborilmadi. Qayta urinib ko‘ring.");
+      if (!res.ok || data.ok === false) throw new Error(t(data.error || "Brif yuborilmadi. Qayta urinib ko‘ring."));
       setDone(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
@@ -299,11 +306,11 @@ export function BriefForm() {
     <div className="mx-auto max-w-[1440px] px-5 lg:px-10 xl:px-[120px]">
       <div className="flex flex-col gap-7 pb-2 pt-8 lg:pt-9">
         <Link href="/" className="inline-flex w-fit items-center gap-2 t-nav text-ink-2 hover:text-maroon">
-          <ArrowLeft size={16} /> Bosh sahifa
+          <ArrowLeft size={16} /> {t("Bosh sahifa")}
         </Link>
         <div className="flex flex-col gap-2.5">
-          <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[52px]">O‘zingizga xos taklifnoma</h1>
-          <p className="t-body-l text-ink-2">Bir necha savolga javob bering — dizaynerimiz g‘oyangizni noldan chizib beradi.</p>
+          <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[52px]">{t("O‘zingizga xos taklifnoma")}</h1>
+          <p className="t-body-l text-ink-2">{t("Bir necha savolga javob bering — dizaynerimiz g‘oyangizni noldan chizib beradi.")}</p>
         </div>
       </div>
 
@@ -320,16 +327,16 @@ export function BriefForm() {
             <div className="flex flex-wrap gap-2">
               {ceremonies.map((c) => (
                 <Chip key={c.value} active={ceremony === c.value} onClick={() => setCeremony(c.value)}>
-                  {c.label}
+                  {t(c.label)}
                 </Chip>
               ))}
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="Sana">
+              <Field label={t("Sana")}>
                 <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} min={new Date().toISOString().slice(0, 10)} />
               </Field>
-              <Field label="Taxminiy mehmonlar soni">
-                <Input inputMode="numeric" placeholder="300 kishi" value={guests} onChange={(e) => setGuests(e.target.value.replace(/[^\d]/g, "").slice(0, 4))} />
+              <Field label={t("Taxminiy mehmonlar soni")}>
+                <Input inputMode="numeric" placeholder={t("300 kishi")} value={guests} onChange={(e) => setGuests(e.target.value.replace(/[^\d]/g, "").slice(0, 4))} />
               </Field>
             </div>
           </Section>
@@ -357,8 +364,8 @@ export function BriefForm() {
                     key={c.value}
                     type="button"
                     aria-pressed={active}
-                    aria-label={c.label}
-                    title={c.label}
+                    aria-label={t(c.label)}
+                    title={t(c.label)}
                     onClick={() => toggle(chosenColors, c.value, setChosenColors)}
                     className={`flex size-[38px] items-center justify-center rounded-full transition-shadow ${active ? "ring-[1.5px] ring-maroon ring-offset-2 ring-offset-bg-base" : ""}`}
                   >
@@ -370,7 +377,7 @@ export function BriefForm() {
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-line py-1.5 pl-1.5 pr-2.5 text-[12px] font-medium text-ink">
                   <span className="size-6 rounded-full border border-black/5" style={{ background: customColor }} />
                   {customColor.toUpperCase()}
-                  <button type="button" onClick={() => setCustomColor(null)} aria-label="O‘chirish" className="text-ink-2 hover:text-ink">
+                  <button type="button" onClick={() => setCustomColor(null)} aria-label={t("O‘chirish")} className="text-ink-2 hover:text-ink">
                     <CloseCircle size={14} />
                   </button>
                 </span>
@@ -380,7 +387,7 @@ export function BriefForm() {
                   onClick={() => colorInput.current?.click()}
                   className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-[9px] text-[12px] font-medium text-ink hover:bg-bg-soft"
                 >
-                  <Add size={14} /> Boshqa
+                  <Add size={14} /> {t("Boshqa")}
                 </button>
               )}
               <input ref={colorInput} type="color" className="sr-only" tabIndex={-1} aria-hidden onChange={(e) => setCustomColor(e.target.value)} />
@@ -392,7 +399,7 @@ export function BriefForm() {
               value={ideas}
               onChange={(e) => setIdeas(e.target.value)}
               maxLength={3000}
-              placeholder="Masalan: oq-oltin ranglar, bog‘da o‘tadigan kechki to‘y, musiqa — «Yor-yor»…"
+              placeholder={t("Masalan: oq-oltin ranglar, bog‘da o‘tadigan kechki to‘y, musiqa — «Yor-yor»…")}
               className="!min-h-[104px]"
             />
             <button
@@ -405,9 +412,10 @@ export function BriefForm() {
                 <Gallery size={18} />
               </span>
               <span className="flex flex-col gap-[3px]">
-                <span className="text-[13px] font-semibold leading-[1.35] text-ink">Yoqqan rasm yoki taklifnomalarni yuklang</span>
+                <span className="text-[13px] font-semibold leading-[1.35] text-ink">{t("Yoqqan rasm yoki taklifnomalarni yuklang")}</span>
                 <span className="t-body-s text-ink-2">
-                  Pinterest, Instagram skrinshotlari — 10 tagacha{files.length ? ` · ${files.length} ta tanlandi` : ""}
+                  {t("Pinterest, Instagram skrinshotlari — 10 tagacha")}
+                  {files.length ? ` · ${t("{n} ta tanlandi", { n: files.length })}` : ""}
                 </span>
               </span>
             </button>
@@ -430,7 +438,7 @@ export function BriefForm() {
                     <button
                       type="button"
                       onClick={() => setFiles(files.filter((_, j) => j !== i))}
-                      aria-label="Rasmni olib tashlash"
+                      aria-label={t("Rasmni olib tashlash")}
                       className="absolute right-1 top-1 flex size-6 items-center justify-center rounded-full bg-bg-base/90 text-ink"
                     >
                       <CloseCircle size={14} />
@@ -445,7 +453,7 @@ export function BriefForm() {
             <div className="flex flex-wrap gap-2">
               {budgets.map((b) => (
                 <Chip key={b} active={budget === b} onClick={() => setBudget(b)}>
-                  {b}
+                  {t(b)}
                 </Chip>
               ))}
             </div>
@@ -453,17 +461,17 @@ export function BriefForm() {
 
           <Section id="brif-06" n="06" title="Siz bilan qanday bog‘lanamiz?">
             <div className="grid gap-3 sm:grid-cols-2">
-              <Field label="Ismingiz" error={errors.name}>
-                <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Madina" aria-invalid={!!errors.name} maxLength={120} />
+              <Field label={t("Ismingiz")} error={errors.name}>
+                <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder={t("Madina")} aria-invalid={!!errors.name} maxLength={120} />
               </Field>
-              <Field label="Telefon" error={errors.phone}>
+              <Field label={t("Telefon")} error={errors.phone}>
                 <PhoneInput value={phone} onChange={setPhone} invalid={!!errors.phone} />
               </Field>
             </div>
             <div className="flex flex-wrap gap-2">
               {contactOptions.map((c) => (
                 <Chip key={c.value} active={via === c.value} onClick={() => setVia(c.value)}>
-                  {c.label}
+                  {t(c.label)}
                 </Chip>
               ))}
             </div>
@@ -481,9 +489,9 @@ export function BriefForm() {
           {/* Mobil: yuborish tugmasi forma ostida */}
           <div className="flex flex-col gap-3 lg:hidden">
             <button type="submit" disabled={sending} className="btn btn-primary w-full">
-              <Send2 size={16} /> {sending ? "Yuborilmoqda…" : "Brifni yuborish"}
+              <Send2 size={16} /> {sending ? t("Yuborilmoqda…") : t("Brifni yuborish")}
             </button>
-            <p className="t-body-s text-center text-ink-2">Brif bepul. To‘lov faqat eskizni tasdiqlaganingizdan keyin.</p>
+            <p className="t-body-s text-center text-ink-2">{t("Brif bepul. To‘lov faqat eskizni tasdiqlaganingizdan keyin.")}</p>
           </div>
         </form>
 

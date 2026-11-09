@@ -5,6 +5,7 @@ import { ArrowDown2, ArrowRight, Call, Instagram, Send2, TickCircle, Whatsapp } 
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { ceremonyLabel, type Ceremony } from "@/lib/templates";
 import { site } from "@/lib/site";
+import { useT } from "@/lib/i18n";
 
 const channels = [
   { icon: <TelegramIcon size={20} />, name: "Telegram", action: "Yozish", href: site.telegram },
@@ -26,6 +27,7 @@ export function formatPhone(raw: string) {
 }
 
 export function Contact() {
+  const t = useT();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [ceremony, setCeremony] = useState<Ceremony | "">("");
@@ -38,8 +40,8 @@ export function Contact() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs: typeof errors = {};
-    if (!name.trim()) errs.name = "Ismingizni kiriting";
-    if (phone.replace(/\D/g, "").length !== 9) errs.phone = "Telefon raqam to‘liq emas";
+    if (!name.trim()) errs.name = t("Ismingizni kiriting");
+    if (phone.replace(/\D/g, "").length !== 9) errs.phone = t("Telefon raqam to‘liq emas");
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setState("sending");
@@ -60,10 +62,10 @@ export function Contact() {
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:flex-row lg:gap-16">
         <div data-reveal="stagger" className="flex flex-col gap-7 lg:w-[520px] lg:shrink-0">
           <h2 data-split className="flex flex-col font-serif font-light">
-            <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">Savol yoki</span>
-            <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">fikringiz bormi?</em>
+            <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">{t("Savol yoki")}</span>
+            <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{t("fikringiz bormi?")}</em>
           </h2>
-          <p className="t-body-m max-w-[420px] text-ink-2">Qulay usulni tanlang — yozing, qo‘ng‘iroq qiling yoki xabar qoldiring.</p>
+          <p className="t-body-m max-w-[420px] text-ink-2">{t("Qulay usulni tanlang — yozing, qo‘ng‘iroq qiling yoki xabar qoldiring.")}</p>
           <ul className="grid grid-cols-2 gap-3 sm:gap-4">
             {channels.map((c) => (
               <li key={c.name}>
@@ -75,9 +77,9 @@ export function Contact() {
                 >
                   <span className="flex size-11 items-center justify-center rounded-full bg-maroon text-ink-inverse">{c.icon}</span>
                   <span className="flex flex-col gap-1">
-                    <span className="text-[15px] font-semibold leading-[1.35] text-ink">{c.name}</span>
+                    <span className="text-[15px] font-semibold leading-[1.35] text-ink">{t(c.name)}</span>
                     <span className="inline-flex items-center gap-1.5 t-body-s text-ink-2">
-                      {c.action} <ArrowRight size={13} />
+                      {t(c.action)} <ArrowRight size={13} />
                     </span>
                   </span>
                 </a>
@@ -92,30 +94,30 @@ export function Contact() {
               <span className="flex size-16 items-center justify-center rounded-full" style={{ background: "var(--success-bg)", color: "var(--color-success)" }}>
                 <TickCircle size={30} />
               </span>
-              <p className="font-serif text-[28px] font-medium text-ink">Rahmat, xabaringiz yetib keldi!</p>
-              <p className="t-body-m max-w-[360px] text-ink-2">Tez orada {replyLabel[replyVia].toLowerCase()} orqali bog‘lanamiz.</p>
+              <p className="font-serif text-[28px] font-medium text-ink">{t("Rahmat, xabaringiz yetib keldi!")}</p>
+              <p className="t-body-m max-w-[360px] text-ink-2">{t(`Tez orada ${replyLabel[replyVia].toLowerCase()} orqali bog‘lanamiz.`)}</p>
             </div>
           ) : (
             <>
               <div className="flex flex-col gap-1.5">
-                <p className="font-serif text-[28px] font-medium leading-[1.2] text-ink">Xabar qoldiring</p>
-                <p className="t-body-s text-ink-2">Ma’lumotlaringizni qoldiring — o‘zimiz bog‘lanamiz.</p>
+                <p className="font-serif text-[28px] font-medium leading-[1.2] text-ink">{t("Xabar qoldiring")}</p>
+                <p className="t-body-s text-ink-2">{t("Ma’lumotlaringizni qoldiring — o‘zimiz bog‘lanamiz.")}</p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-2">
-                  <span className="t-body-s text-ink-2">Ismingiz</span>
+                  <span className="t-body-s text-ink-2">{t("Ismingiz")}</span>
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     autoComplete="name"
-                    placeholder="Masalan, Madina"
+                    placeholder={t("Masalan, Madina")}
                     aria-invalid={!!errors.name}
                     className={`${inputCls} ${errors.name ? "!border-danger" : ""}`}
                   />
                   {errors.name && <span className="t-body-s text-danger">{errors.name}</span>}
                 </label>
                 <label className="flex flex-col gap-2">
-                  <span className="t-body-s text-ink-2">Telefon raqam</span>
+                  <span className="t-body-s text-ink-2">{t("Telefon raqam")}</span>
                   <span
                     className={`flex items-center gap-2.5 rounded-xl border bg-bg-base px-4 focus-within:border-maroon/55 ${
                       errors.phone ? "border-danger" : "border-line"
@@ -137,13 +139,13 @@ export function Contact() {
                 </label>
               </div>
               <label className="flex flex-col gap-2">
-                <span className="t-body-s text-ink-2">Marosim turi</span>
+                <span className="t-body-s text-ink-2">{t("Marosim turi")}</span>
                 <span className="relative">
                   <select value={ceremony} onChange={(e) => setCeremony(e.target.value as Ceremony | "")} className={`${inputCls} appearance-none pr-10`}>
-                    <option value="">Tanlang</option>
+                    <option value="">{t("Tanlang")}</option>
                     {(Object.keys(ceremonyLabel) as Ceremony[]).map((c) => (
                       <option key={c} value={c}>
-                        {ceremonyLabel[c]}
+                        {t(ceremonyLabel[c])}
                       </option>
                     ))}
                   </select>
@@ -151,19 +153,19 @@ export function Contact() {
                 </span>
               </label>
               <label className="flex flex-col gap-2">
-                <span className="t-body-s text-ink-2">Fikr yoki savolingiz</span>
+                <span className="t-body-s text-ink-2">{t("Fikr yoki savolingiz")}</span>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
-                  placeholder="Qanday taklifnoma xohlaysiz? Istaklaringizni yozing…"
+                  placeholder={t("Qanday taklifnoma xohlaysiz? Istaklaringizni yozing…")}
                   className={`${inputCls} h-28 resize-none`}
                 />
               </label>
               {/* honeypot */}
               <input value={hp} onChange={(e) => setHp(e.target.value)} name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="w-full t-body-s text-ink-2 sm:w-auto">Qanday javob beraylik?</span>
+                <span className="w-full t-body-s text-ink-2 sm:w-auto">{t("Qanday javob beraylik?")}</span>
                 {(Object.keys(replyLabel) as ReplyVia[]).map((r) => (
                   <button
                     key={r}
@@ -174,16 +176,16 @@ export function Contact() {
                       replyVia === r ? "bg-maroon text-ink-inverse" : "border border-line bg-bg-base text-ink"
                     }`}
                   >
-                    {replyLabel[r]}
+                    {t(replyLabel[r])}
                   </button>
                 ))}
               </div>
               <button type="submit" disabled={state === "sending"} className="btn btn-primary w-full">
-                {state === "sending" ? "Yuborilmoqda…" : "Yuborish"} <Send2 size={16} />
+                {state === "sending" ? t("Yuborilmoqda…") : t("Yuborish")} <Send2 size={16} />
               </button>
               {state === "error" && (
                 <p className="t-body-s text-danger">
-                  Xabar yuborilmadi. Iltimos, qayta urinib ko‘ring yoki Telegramda yozing.
+                  {t("Xabar yuborilmadi. Iltimos, qayta urinib ko‘ring yoki Telegramda yozing.")}
                 </p>
               )}
             </>

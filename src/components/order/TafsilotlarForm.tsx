@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useT } from "@/lib/i18n";
 import { ArrowRight, CloseCircle, GalleryAdd, Gallery } from "@/components/icons";
 import { PhoneInput, Toggle, phoneDigits, phoneToLocal, useToast } from "@/components/ui";
 import type { Template } from "@/lib/templates";
@@ -18,7 +19,8 @@ import { MusicPicker } from "./MusicPicker";
 const MAX_PHOTOS = 10;
 
 export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder; template: Template; editing: boolean }) {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
   const toast = useToast();
   const [o, setO] = useState(order);
   const [phone, setPhone] = useState(phoneToLocal(order.contactPhone));
@@ -44,7 +46,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
     if (!files?.length) return;
     const list = Array.from(files).slice(0, MAX_PHOTOS - o.photos.length);
     if (!list.length) {
-      toast(`Ko‘pi bilan ${MAX_PHOTOS} ta surat`, "error");
+      toast(t("Ko‘pi bilan {n} ta surat", { n: MAX_PHOTOS }), "error");
       return;
     }
     await flush();
@@ -58,7 +60,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
         if (!res.ok || !data.photos) throw new Error(data.error || "Surat yuklanmadi");
         setO((p) => ({ ...p, photos: data.photos! }));
       } catch (e) {
-        toast((e as Error).message, "error");
+        toast(t((e as Error).message), "error");
       } finally {
         setUploading((n) => n - 1);
       }
@@ -73,13 +75,13 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url }),
     });
-    if (!res.ok) toast("Surat o‘chirilmadi", "error");
+    if (!res.ok) toast(t("Surat o‘chirilmadi"), "error");
   };
 
   const next = async () => {
     const e: typeof errors = {};
-    if (phoneDigits(phone).length !== 9) e.phone = phone ? "Telefon raqam to‘liq emas" : "Telefon raqamingizni kiriting";
-    if (!o.message.trim()) e.message = "Taklif matnini kiriting";
+    if (phoneDigits(phone).length !== 9) e.phone = phone ? t("Telefon raqam to‘liq emas") : t("Telefon raqamingizni kiriting");
+    if (!o.message.trim()) e.message = t("Taklif matnini kiriting");
     setErrors(e);
     if (Object.keys(e).length) {
       document.querySelector("[aria-invalid=true]")?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -96,7 +98,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
 
   const button = (
     <button type="button" onClick={next} disabled={busy || uploading > 0} className="btn btn-primary w-full">
-      {editing ? "Saqlash" : "Tekshirishga o‘tish"} <ArrowRight size={16} />
+      {editing ? t("Saqlash") : t("Tekshirishga o‘tish")} <ArrowRight size={16} />
     </button>
   );
 
@@ -117,8 +119,8 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
             ["Ismlar", namesOf(o)],
             ["Sana", dayTime(o.day, o.time)],
             ["Joy", o.venueName],
-            ["Mehmonlar javobi", o.rsvpEnabled ? "Yoqilgan" : "O‘chirilgan"],
-            ["Fon musiqasi", o.musicEnabled ? "Yoqilgan" : "O‘chirilgan"],
+            ["Mehmonlar javobi", o.rsvpEnabled ? t("Yoqilgan") : t("O‘chirilgan")],
+            ["Fon musiqasi", o.musicEnabled ? t("Yoqilgan") : t("O‘chirilgan")],
           ]}
           action={button}
           extra={<SaveIndicator state={state} error={saveError} />}
@@ -128,7 +130,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
       <div className="flex flex-col gap-[26px]">
         <MobileTemplateCard template={template} live={live} order={o} />
 
-        <FlowField label="Taklif matni" error={errors.message} hint="Tayyor matnni o‘zingizga moslab o‘zgartirishingiz mumkin." htmlFor="f-msg">
+        <FlowField label={t("Taklif matni")} error={errors.message} hint={t("Tayyor matnni o‘zingizga moslab o‘zgartirishingiz mumkin.")} htmlFor="f-msg">
           <textarea
             id="f-msg"
             value={o.message}
@@ -148,9 +150,9 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
             <span className="text-gold">
               <Gallery size={24} />
             </span>
-            <p className="t-title text-ink">Suratlaringizni qo‘shing</p>
+            <p className="t-title text-ink">{t("Suratlaringizni qo‘shing")}</p>
             <p className="t-body-s text-ink-2">
-              Ixtiyoriy · telefoningizdagi suratlardan tanlang{o.photos.length ? ` · ${o.photos.length} / ${MAX_PHOTOS}` : ""}
+              {t("Ixtiyoriy · telefoningizdagi suratlardan tanlang")}{o.photos.length ? ` · ${o.photos.length} / ${MAX_PHOTOS}` : ""}
             </p>
             {o.photos.length > 0 && (
               <ul className="mt-2 grid w-full grid-cols-4 gap-2 sm:grid-cols-5">
@@ -161,7 +163,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
                     <button
                       type="button"
                       onClick={() => removePhoto(p)}
-                      aria-label="Suratni o‘chirish"
+                      aria-label={t("Suratni o‘chirish")}
                       className="absolute right-1 top-1 flex size-7 items-center justify-center rounded-full bg-bg-base/90 text-ink"
                     >
                       <CloseCircle size={16} />
@@ -183,37 +185,37 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
                 disabled={uploading > 0}
                 className="mt-1 flex w-full items-center justify-center gap-2 rounded-full border border-line bg-bg-base px-4 py-3 t-button text-ink hover:bg-white disabled:opacity-60"
               >
-                {uploading > 0 ? "Yuklanmoqda…" : o.photos.length ? (<><GalleryAdd size={16} /> Yana qo‘shish</>) : "Surat tanlash"}
+                {uploading > 0 ? t("Yuklanmoqda…") : o.photos.length ? (<><GalleryAdd size={16} /> {t("Yana qo‘shish")}</>) : t("Surat tanlash")}
               </button>
             )}
           </div>
         </div>
 
         <div className="flex flex-col gap-3">
-          <SectionTitle>Taklifnoma imkoniyatlari</SectionTitle>
-          {toggles.map((t) => (
-            <div key={t.key} className="flex items-center gap-4 rounded-xl bg-bg-soft px-[13px] py-4">
+          <SectionTitle>{t("Taklifnoma imkoniyatlari")}</SectionTitle>
+          {toggles.map((tg) => (
+            <div key={tg.key} className="flex items-center gap-4 rounded-xl bg-bg-soft px-[13px] py-4">
               <div className="flex flex-1 flex-col gap-1">
-                <p className="t-title text-ink">{t.title}</p>
-                <p className="t-body-s text-ink-2">{t.text}</p>
+                <p className="t-title text-ink">{t(tg.title)}</p>
+                <p className="t-body-s text-ink-2">{t(tg.text)}</p>
               </div>
-              <Toggle checked={o[t.key]} onChange={(v) => set(t.key, v)} label={t.title} />
+              <Toggle checked={o[tg.key]} onChange={(v) => set(tg.key, v)} label={t(tg.title)} />
             </div>
           ))}
           {o.musicEnabled && <MusicPicker value={o.musicTrack} defaultId={template.musicId} onChange={(id) => set("musicTrack", id)} />}
         </div>
 
         <div className="flex flex-col gap-4">
-          <SectionTitle>Siz bilan bog‘lanish</SectionTitle>
-          <FlowField label="Telefon raqamingiz" required error={errors.phone} htmlFor="f-phone">
+          <SectionTitle>{t("Siz bilan bog‘lanish")}</SectionTitle>
+          <FlowField label={t("Telefon raqamingiz")} required error={errors.phone} htmlFor="f-phone">
             <PhoneInput id="f-phone" value={phone} onChange={onPhone} invalid={!!errors.phone} />
           </FlowField>
-          <FlowField label="Telegram foydalanuvchi nomi" hint="Buyurtma haqidagi xabarlarni shu raqamga yuboramiz." htmlFor="f-tg">
+          <FlowField label={t("Telegram foydalanuvchi nomi")} hint={t("Buyurtma haqidagi xabarlarni shu raqamga yuboramiz.")} htmlFor="f-tg">
             <input
               id="f-tg"
               value={o.contactTg}
               onChange={(e) => set("contactTg", e.target.value.replace(/\s/g, ""))}
-              placeholder="@foydalanuvchi"
+              placeholder={t("@foydalanuvchi")}
               autoComplete="off"
               maxLength={64}
               className={flowInput}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { FinaleFlowers } from "./Flowers";
+import { useT } from "@/lib/i18n";
 
 /**
  * "Gullar ochiladi — yakuniy so‘z" (Figma 132:20870). Tugmalarsiz.
@@ -9,6 +10,7 @@ import { FinaleFlowers } from "./Flowers";
  */
 export function Finale() {
   const ref = useRef<HTMLElement>(null);
+  const t = useT();
 
   useEffect(() => {
     const el = ref.current;
@@ -46,11 +48,11 @@ export function Finale() {
       <FinaleFlowers />
       <div className="finale-text absolute inset-x-0 top-[330px] mx-auto flex w-[340px] flex-col items-center gap-1 text-center lg:top-[308px] lg:w-[600px]">
         <h2 id="finale-title" className="flex flex-col font-serif font-light">
-          <span className="text-[42px] leading-[1.04] tracking-[-0.005em] text-ink lg:text-[72px]">Baxtli kuningiz</span>
-          <em className="text-[40px] italic leading-none tracking-[-0.01em] text-maroon lg:text-[68px]">shu yerdan boshlanadi</em>
+          <span className="text-[42px] leading-[1.04] tracking-[-0.005em] text-ink lg:text-[72px]">{t("Baxtli kuningiz")}</span>
+          <em className="text-[40px] italic leading-none tracking-[-0.01em] text-maroon lg:text-[68px]">{t("shu yerdan boshlanadi")}</em>
         </h2>
         <p className="mt-3 text-[14px] leading-[1.6] text-ink-2 lg:text-[17px]">
-          Shablonni tanlang, ma’lumotlarni kiriting — taklifnomangiz bir necha daqiqada tayyor.
+          {t("Shablonni tanlang, ma’lumotlarni kiriting — taklifnomangiz bir necha daqiqada tayyor.")}
         </p>
       </div>
     </section>

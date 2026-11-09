@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/components/LocalLink";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowDown2,
@@ -17,9 +17,9 @@ import {
   LogoutCurve,
   Setting2,
 } from "@/components/icons";
-import { useRouter } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
 import { useMe } from "@/lib/client";
-import { switchPath, useLocale } from "@/lib/i18n";
+import { switchPath, useLocale, useT } from "@/lib/i18n";
 
 export type HeaderUser = {
   name: string | null;
@@ -40,6 +40,7 @@ type Lang = "uz" | "ru";
 function LangSwitcher({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
   const lang = useLocale();
+  const t = useT();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,7 +67,7 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label="Tilni tanlash"
+        aria-label={t("Tilni tanlash")}
         className={`inline-flex items-center gap-1.5 rounded-full border border-line t-nav text-ink hover:bg-bg-soft ${
           compact ? "h-10 px-2.5" : "h-[42px] px-3"
         }`}
@@ -115,6 +116,7 @@ function MobileMenu({
   user: HeaderUser;
   onLogout: () => void;
 }) {
+  const t = useT();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
@@ -135,7 +137,7 @@ function MobileMenu({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Menyu"
+      aria-label={t("Menyu")}
       className="fixed inset-0 z-[60] flex flex-col bg-bg-base lg:hidden"
     >
       <div className="flex h-[69px] items-center justify-between border-b border-line px-5">
@@ -144,7 +146,7 @@ function MobileMenu({
           type="button"
           onClick={onClose}
           className="icon-btn !h-10 !w-10"
-          aria-label="Yopish"
+          aria-label={t("Yopish")}
         >
           <CloseCircle size={20} />
         </button>
@@ -157,7 +159,7 @@ function MobileMenu({
             </span>
             <div className="flex min-w-0 flex-col">
               <span className="truncate t-title text-ink">
-                {user.name || "Mening kabinetim"}
+                {user.name || t("Mening kabinetim")}
               </span>
               <span className="t-body-s text-ink-2">
                 {user.phone
@@ -181,7 +183,7 @@ function MobileMenu({
                 <span className="font-serif text-[20px] font-medium leading-none text-maroon">
                   {n ?? "·"}
                 </span>
-                {label}
+                {t(label as string)}
               </Link>
             ))}
           </div>
@@ -195,7 +197,7 @@ function MobileMenu({
             onClick={onClose}
             className="border-b border-line py-4 font-serif text-[34px] font-light leading-none text-ink"
           >
-            {l.label}
+            {t(l.label)}
           </Link>
         ))}
       </nav>
@@ -206,7 +208,7 @@ function MobileMenu({
             onClick={onLogout}
             className="t-nav text-ink-2 hover:text-maroon"
           >
-            Akkauntdan chiqish
+            {t("Akkauntdan chiqish")}
           </button>
         ) : (
           <Link
@@ -214,7 +216,7 @@ function MobileMenu({
             onClick={onClose}
             className="btn btn-primary w-full"
           >
-            <ProfileCircle size={18} /> Kirish
+            <ProfileCircle size={18} /> {t("Kirish")}
           </Link>
         )}
         <div className="flex items-center justify-between">
@@ -243,12 +245,12 @@ function MobileMenu({
             <a
               href={site.phoneHref}
               className="icon-btn !h-10 !w-10"
-              aria-label="Qo‘ng‘iroq"
+              aria-label={t("Qo‘ng‘iroq")}
             >
               <Call size={18} />
             </a>
           </div>
-          <span className="t-body-s text-ink-2">{site.workHours}</span>
+          <span className="t-body-s text-ink-2">{t(site.workHours)}</span>
         </div>
       </div>
     </div>
@@ -262,6 +264,7 @@ function AccountMenu({
   user: NonNullable<HeaderUser>;
   onLogout: () => void;
 }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -289,7 +292,7 @@ function AccountMenu({
         <span className="flex size-6 items-center justify-center rounded-full bg-ink-inverse text-[11px] font-semibold text-maroon">
           {initials(user.name ?? "S")}
         </span>
-        Kabinet
+        {t("Kabinet")}
       </button>
       {open && (
         <div
@@ -298,7 +301,7 @@ function AccountMenu({
         >
           <div className="px-3 pb-2.5 pt-2">
             <p className="truncate t-title text-ink">
-              {user.name || "Mening kabinetim"}
+              {user.name || t("Mening kabinetim")}
             </p>
             <p className="t-body-s text-ink-2">
               {user.phone ? formatPhoneDisplay(user.phone) : user.telegramUser}
@@ -310,7 +313,7 @@ function AccountMenu({
             className={item}
             onClick={() => setOpen(false)}
           >
-            <Receipt2 size={18} /> <span className="flex-1">Buyurtmalarim</span>{" "}
+            <Receipt2 size={18} /> <span className="flex-1">{t("Buyurtmalarim")}</span>{" "}
             <span className="t-body-s text-ink-2">{user.orders}</span>
           </Link>
           <Link
@@ -319,7 +322,7 @@ function AccountMenu({
             className={item}
             onClick={() => setOpen(false)}
           >
-            <Heart size={18} /> <span className="flex-1">Sevimlilar</span>{" "}
+            <Heart size={18} /> <span className="flex-1">{t("Sevimlilar")}</span>{" "}
             <span className="t-body-s text-ink-2">{user.favorites}</span>
           </Link>
           <Link
@@ -328,7 +331,7 @@ function AccountMenu({
             className={item}
             onClick={() => setOpen(false)}
           >
-            <ProfileCircle size={18} /> Profil
+            <ProfileCircle size={18} /> {t("Profil")}
           </Link>
           {user.isAdmin && (
             <Link
@@ -337,7 +340,7 @@ function AccountMenu({
               className={item}
               onClick={() => setOpen(false)}
             >
-              <Setting2 size={18} /> Admin panel
+              <Setting2 size={18} /> {t("Admin panel")}
             </Link>
           )}
           <div className="my-1 h-px bg-line" />
@@ -348,7 +351,7 @@ function AccountMenu({
             rel="noopener noreferrer"
             className={item}
           >
-            <MessageQuestion size={18} /> Yordam
+            <MessageQuestion size={18} /> {t("Yordam")}
           </a>
           <button
             role="menuitem"
@@ -356,7 +359,7 @@ function AccountMenu({
             onClick={onLogout}
             className={`${item} w-full text-left`}
           >
-            <LogoutCurve size={18} /> Chiqish
+            <LogoutCurve size={18} /> {t("Chiqish")}
           </button>
         </div>
       )}
@@ -365,7 +368,8 @@ function AccountMenu({
 }
 
 export function Header() {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const t = useT();
   const { me, reload, loading: meLoading } = useMe();
   const user: HeaderUser = me?.user
     ? {
@@ -404,7 +408,7 @@ export function Header() {
 
           <nav
             className="hidden items-center gap-6 lg:flex xl:gap-8"
-            aria-label="Asosiy"
+            aria-label={t("Asosiy")}
           >
             {mainNav.map((l) => (
               <Link
@@ -412,7 +416,7 @@ export function Header() {
                 href={l.href}
                 className="t-nav text-ink transition-colors hover:text-maroon"
               >
-                {l.label}
+                {t(l.label)}
               </Link>
             ))}
           </nav>
@@ -425,7 +429,7 @@ export function Header() {
             <a
               href={site.phoneHref}
               className="icon-btn max-xl:!hidden"
-              aria-label="Qo‘ng‘iroq"
+              aria-label={t("Qo‘ng‘iroq")}
             >
               <Call size={18} />
             </a>
@@ -435,7 +439,7 @@ export function Header() {
               <span className="ml-1 h-9 w-[104px]" aria-hidden />
             ) : (
               <Link href="/kirish/" className="btn btn-primary btn-sm ml-1">
-                <ProfileCircle size={18} /> Kirish
+                <ProfileCircle size={18} /> {t("Kirish")}
               </Link>
             )}
           </div>
@@ -453,7 +457,7 @@ export function Header() {
               type="button"
               onClick={() => setMenuOpen(true)}
               className="icon-btn !h-10 !w-10"
-              aria-label="Menyuni ochish"
+              aria-label={t("Menyuni ochish")}
             >
               <HambergerMenu size={20} />
             </button>

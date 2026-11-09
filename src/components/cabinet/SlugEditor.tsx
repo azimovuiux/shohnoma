@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Link2 } from "@/components/icons";
 import { api, useToast } from "@/components/ui";
+import { useT } from "@/lib/i18n";
 
 /** Havola manzili (slug) — faqat to‘langan taklifnoma uchun */
 export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId: string; slug: string; host: string; enabled: boolean; onSaved?: () => void }) {
+  const t = useT();
   const toast = useToast();
   const [value, setValue] = useState(enabled ? slug : "");
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +19,7 @@ export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId:
     setError(null);
     try {
       await api(`/api/orders/${orderId}`, { method: "PATCH", json: { slug: value } });
-      toast("Havola saqlandi");
+      toast(t("Havola saqlandi"));
       onSaved?.();
     } catch (err) {
       setError((err as Error).message);
@@ -33,8 +35,8 @@ export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId:
           <Link2 size={18} />
         </span>
         <div className="flex flex-col">
-          <p className="text-[15px] font-semibold leading-[1.35] text-ink">Havola manzili</p>
-          <p className="t-body-s text-ink-2">Mehmonlarga yuboriladigan sayt manzili</p>
+          <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("Havola manzili")}</p>
+          <p className="t-body-s text-ink-2">{t("Mehmonlarga yuboriladigan sayt manzili")}</p>
         </div>
       </div>
       {enabled ? (
@@ -47,7 +49,7 @@ export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId:
               <input
                 value={value}
                 onChange={(e) => (setValue(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "")), setError(null))}
-                aria-label="Havola manzili"
+                aria-label={t("Havola manzili")}
                 aria-invalid={!!error}
                 maxLength={60}
                 className="h-full min-w-0 flex-1 bg-transparent pr-4 t-body-m text-ink outline-none"
@@ -56,17 +58,17 @@ export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId:
             {error ? (
               <span className="t-body-s text-danger">{error}</span>
             ) : (
-              <span className="t-body-s text-ink-2">Faqat lotin harflari, raqamlar va “-”. Eski havola o‘zgartirilgach ishlamay qoladi — yangi havolani mehmonlarga qayta yuboring.</span>
+              <span className="t-body-s text-ink-2">{t("Faqat lotin harflari, raqamlar va “-”. Eski havola o‘zgartirilgach ishlamay qoladi — yangi havolani mehmonlarga qayta yuboring.")}</span>
             )}
           </label>
           <div>
             <button type="submit" disabled={busy || value === slug || value.length < 3} className="btn btn-primary">
-              {busy ? "Saqlanmoqda…" : "Saqlash"}
+              {busy ? t("Saqlanmoqda…") : t("Saqlash")}
             </button>
           </div>
         </>
       ) : (
-        <p className="t-body-m text-ink-2">Havola manzili to‘lov tasdiqlangach beriladi va shu yerda o‘zgartiriladi.</p>
+        <p className="t-body-m text-ink-2">{t("Havola manzili to‘lov tasdiqlangach beriladi va shu yerda o‘zgartiriladi.")}</p>
       )}
     </form>
   );

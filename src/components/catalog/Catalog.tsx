@@ -1,7 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "@/components/LocalLink";
+import { useSearchParams } from "next/navigation";
+import { useLocalRouter } from "@/lib/useLocalRouter";
+import { useT } from "@/lib/i18n";
 import { useMemo, useState } from "react";
 import { ArrowDown2, ArrowRight, Brush, CloseCircle, Filter, Mobile, SearchNormal1, Card } from "@/components/icons";
 import {
@@ -72,6 +74,7 @@ function Chip({ active, children, onClick }: { active: boolean; children: React.
 }
 
 function CustomDesignBanner() {
+  const t = useT();
   return (
     <div className="flex flex-col items-start justify-between gap-6 rounded-card bg-maroon p-8 text-ink-inverse md:col-span-2 lg:col-span-3 lg:flex-row lg:items-center lg:px-12 lg:py-10">
       <div className="flex items-center gap-5">
@@ -79,18 +82,19 @@ function CustomDesignBanner() {
           <Brush size={24} />
         </span>
         <p className="font-serif text-[30px] font-light leading-[1.1] lg:text-[38px]">
-          Mos dizayn topilmadimi? <em className="italic text-gold-soft">yaratib beramiz</em>
+          {t("Mos dizayn topilmadimi?")} <em className="italic text-gold-soft">{t("yaratib beramiz")}</em>
         </p>
       </div>
       <Link href="/maxsus-dizayn/" className="btn bg-bg-base text-maroon hover:bg-white">
-        Brifni to‘ldirish <ArrowRight size={16} />
+        {t("Brifni to‘ldirish")} <ArrowRight size={16} />
       </Link>
     </div>
   );
 }
 
 export function Catalog() {
-  const router = useRouter();
+  const router = useLocalRouter();
+  const tt = useT();
   const params = useSearchParams();
   const ceremony = (params.get("marosim") as Ceremony | null) ?? "";
   const style = (params.get("uslub") as Style | null) ?? "";
@@ -120,13 +124,15 @@ export function Catalog() {
         (!needle ||
           t.name.toLocaleLowerCase("uz").includes(needle) ||
           styleLabel[t.style].toLocaleLowerCase("uz").includes(needle) ||
-          ceremonyLabel[t.ceremony].toLocaleLowerCase("uz").includes(needle)),
+          ceremonyLabel[t.ceremony].toLocaleLowerCase("uz").includes(needle) ||
+          tt(styleLabel[t.style]).toLocaleLowerCase("ru").includes(needle) ||
+          tt(ceremonyLabel[t.ceremony]).toLocaleLowerCase("ru").includes(needle)),
     );
     if (sort === "cheap") list.sort((a, b) => a.price - b.price);
     else if (sort === "expensive") list.sort((a, b) => b.price - a.price);
     else list.sort((a, b) => b.number - a.number);
     return list;
-  }, [templates, ceremony, style, color, q, sort]);
+  }, [templates, ceremony, style, color, q, sort, tt]);
 
   const clearAll = () => {
     setQ("");
@@ -139,18 +145,18 @@ export function Catalog() {
     <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-8 lg:px-10 xl:px-[120px] lg:pt-12">
       <nav aria-label="Breadcrumb" className="t-body-s text-ink-2">
         <Link href="/" className="hover:text-maroon">
-          Bosh sahifa
+          {tt("Bosh sahifa")}
         </Link>{" "}
-        / <span className="text-ink">Shablonlar</span>
+        / <span className="text-ink">{tt("Shablonlar")}</span>
       </nav>
 
       <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="font-serif text-[42px] font-light leading-[1.04] text-ink lg:text-[64px]">
-            Barcha <em className="italic text-maroon">shablonlar</em>
+            {tt("Barcha")} <em className="italic text-maroon">{tt("shablonlar")}</em>
           </h1>
           <p className="t-body-l mt-3 max-w-[520px] text-ink-2">
-            {templates.length} ta tayyor dizayn — har biri telefon va laptopda birdek chiroyli ochiladi.
+            {tt("{n} ta tayyor dizayn — har biri telefon va laptopda birdek chiroyli ochiladi.", { n: templates.length })}
           </p>
         </div>
         <label className="relative flex w-full items-center lg:w-[380px]">
@@ -160,7 +166,7 @@ export function Catalog() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onBlur={() => setParam("q", q.trim())}
-            placeholder="Shablon nomi yoki uslub bo‘yicha qidirish"
+            placeholder={tt("Shablon nomi yoki uslub bo‘yicha qidirish")}
             className="h-12 w-full rounded-full border border-line bg-bg-base pl-11 pr-4 t-body-m text-ink outline-none placeholder:text-ink-2 focus:border-maroon/55"
           />
         </label>
@@ -170,41 +176,41 @@ export function Catalog() {
       <div className="mt-8 flex flex-col gap-4 border-b border-line pb-6 xl:flex-row xl:items-center xl:justify-between">
         <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:px-0 xl:flex-nowrap">
           <Chip active={!ceremony} onClick={() => setParam("marosim", "")}>
-            Barchasi <span className="opacity-70">{byCeremony("")}</span>
+            {tt("Barchasi")} <span className="opacity-70">{byCeremony("")}</span>
           </Chip>
           {ceremonies.map((c) => (
             <Chip key={c} active={ceremony === c} onClick={() => setParam("marosim", c)}>
-              {ceremonyLabel[c]} <span className="opacity-70">{byCeremony(c)}</span>
+              {tt(ceremonyLabel[c])} <span className="opacity-70">{byCeremony(c)}</span>
             </Chip>
           ))}
         </div>
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
-          <Select label="Uslub" value={style} options={styles.map((s) => ({ value: s, label: styleLabel[s] }))} onChange={(v) => setParam("uslub", v)} />
-          <Select label="Rang" value={color} options={colors.map((c) => ({ value: c, label: colorLabel[c] }))} onChange={(v) => setParam("rang", v)} />
+          <Select label={tt("Uslub")} value={style} options={styles.map((s) => ({ value: s, label: tt(styleLabel[s]) }))} onChange={(v) => setParam("uslub", v)} />
+          <Select label={tt("Rang")} value={color} options={colors.map((c) => ({ value: c, label: tt(colorLabel[c]) }))} onChange={(v) => setParam("rang", v)} />
           <Select
-            label="Saralash"
+            label={tt("Saralash")}
             value={sort}
-            options={(Object.keys(sortLabel) as Sort[]).map((s) => ({ value: s, label: `Saralash: ${sortLabel[s]}` }))}
+            options={(Object.keys(sortLabel) as Sort[]).map((s) => ({ value: s, label: `${tt("Saralash")}: ${tt(sortLabel[s])}` }))}
             onChange={(v) => setParam("sort", v || "new")}
           />
         </div>
         <button type="button" onClick={() => setSheet(true)} className="btn btn-secondary btn-sm w-fit lg:hidden">
-          <Filter size={16} /> Filtr
+          <Filter size={16} /> {tt("Filtr")}
         </button>
       </div>
 
-      <p className="t-body-s mt-6 text-ink-2">{filtered.length} ta shablon topildi</p>
+      <p className="t-body-s mt-6 text-ink-2">{tt("{n} ta shablon topildi", { n: filtered.length })}</p>
 
       {filtered.length === 0 ? (
         <div className="mt-10 flex flex-col items-center gap-4 rounded-card bg-bg-soft px-6 py-16 text-center">
-          <p className="font-serif text-[32px] font-light text-ink">Hech narsa topilmadi</p>
-          <p className="t-body-m max-w-[420px] text-ink-2">Filtrlarni o‘zgartirib ko‘ring yoki o‘zingizga xos dizayn buyurtma qiling.</p>
+          <p className="font-serif text-[32px] font-light text-ink">{tt("Hech narsa topilmadi")}</p>
+          <p className="t-body-m max-w-[420px] text-ink-2">{tt("Filtrlarni o‘zgartirib ko‘ring yoki o‘zingizga xos dizayn buyurtma qiling.")}</p>
           <div className="flex flex-wrap justify-center gap-3">
             <button type="button" onClick={clearAll} className="btn btn-secondary btn-sm">
-              Filtrni tozalash
+              {tt("Filtrni tozalash")}
             </button>
             <Link href="/maxsus-dizayn/" className="btn btn-primary btn-sm">
-              Maxsus dizayn <ArrowRight size={15} />
+              {tt("Maxsus dizayn")} <ArrowRight size={15} />
             </Link>
           </div>
         </div>
@@ -231,8 +237,8 @@ export function Catalog() {
           <div key={b.title} className="flex gap-3.5">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-gold-deep">{b.icon}</span>
             <div>
-              <p className="t-title text-ink">{b.title}</p>
-              <p className="t-body-s mt-1 text-ink-2">{b.text}</p>
+              <p className="t-title text-ink">{tt(b.title)}</p>
+              <p className="t-body-s mt-1 text-ink-2">{tt(b.text)}</p>
             </div>
           </div>
         ))}
@@ -281,6 +287,7 @@ function FilterSheet({
   onApply: (v: { marosim: string; uslub: string; rang: string }) => void;
 }) {
   const templates = useTemplates();
+  const tt = useT();
   const [v, setV] = useState({ marosim: ceremony as string, uslub: style as string, rang: color as string });
   const count = templates.filter(
     (t) => (!v.marosim || t.ceremony === v.marosim) && (!v.uslub || t.style === v.uslub) && (!v.rang || t.theme.color === v.rang),
@@ -304,26 +311,26 @@ function FilterSheet({
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Filtr"
+        aria-label={tt("Filtr")}
         className="flex max-h-[85dvh] w-full flex-col gap-6 overflow-y-auto rounded-t-[24px] bg-bg-base px-5 pb-6 pt-3 animate-[sheet-up_.28s_ease-out]"
         onClick={(e) => e.stopPropagation()}
       >
         <span className="mx-auto h-1 w-10 rounded-full bg-line" />
         <div className="flex items-center justify-between">
-          <p className="font-serif text-[28px] font-light text-ink">Filtr</p>
-          <button type="button" onClick={onClose} aria-label="Yopish" className="text-ink-2">
+          <p className="font-serif text-[28px] font-light text-ink">{tt("Filtr")}</p>
+          <button type="button" onClick={onClose} aria-label={tt("Yopish")} className="text-ink-2">
             <CloseCircle size={22} />
           </button>
         </div>
-        {group("Marosim", "marosim", ceremonies.map((c) => ({ value: c, label: ceremonyLabel[c] })))}
-        {group("Uslub", "uslub", styles.map((s) => ({ value: s, label: styleLabel[s] })))}
-        {group("Asosiy rang", "rang", colors.map((c) => ({ value: c, label: colorLabel[c] })))}
+        {group(tt("Marosim"), "marosim", ceremonies.map((c) => ({ value: c, label: tt(ceremonyLabel[c]) })))}
+        {group(tt("Uslub"), "uslub", styles.map((s) => ({ value: s, label: tt(styleLabel[s]) })))}
+        {group(tt("Asosiy rang"), "rang", colors.map((c) => ({ value: c, label: tt(colorLabel[c]) })))}
         <div className="flex gap-2.5 pt-2">
           <button type="button" className="btn btn-secondary flex-1" onClick={() => setV({ marosim: "", uslub: "", rang: "" })}>
-            Tozalash
+            {tt("Tozalash")}
           </button>
           <button type="button" className="btn btn-primary flex-[1.6]" onClick={() => onApply(v)}>
-            {count} ta shablonni ko‘rsatish
+            {tt("{n} ta shablonni ko‘rsatish", { n: count })}
           </button>
         </div>
       </div>
