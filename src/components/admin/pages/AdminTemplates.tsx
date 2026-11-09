@@ -6,8 +6,7 @@ import { useApi } from "@/lib/client";
 import { ceremonyLabel, styleLabel, type Template } from "@/lib/templates";
 import { formatPrice } from "@/lib/format";
 import { Toggle, api, useToast } from "@/components/ui";
-import { Add, DocumentUpload, Edit, Eye, Trash } from "@/components/icons";
-import { ZipUpload } from "../ZipUpload";
+import { Edit, Eye, Trash } from "@/components/icons";
 import { PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { AdminError, AdminLoading, AdminTitle, Empty } from "../shared";
@@ -18,7 +17,6 @@ export function AdminTemplates() {
   const { data, loading, error, reload } = useApi<{ ok: boolean; templates: AdminTemplate[] }>("/api/admin/templates");
   const toast = useToast();
   const [busy, setBusy] = useState<string | null>(null);
-  const [zip, setZip] = useState(false);
   if (loading && !data) return <AdminLoading />;
   if (!data) return <AdminError message={error?.message} onRetry={() => reload()} />;
   const list = data.templates;
@@ -54,16 +52,6 @@ export function AdminTemplates() {
       <AdminTitle
         title="Shablonlar"
         sub={`${list.filter((t) => t.active).length} ta faol, jami ${list.length} ta. O‘zgarishlar saytda darhol ko‘rinadi.`}
-        right={
-          <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setZip(true)} className="btn btn-primary btn-sm">
-              <DocumentUpload size={16} /> HTML shablon yuklash (ZIP)
-            </button>
-            <Link href="/admin/shablonlar/tahrir/" className="btn btn-secondary btn-sm">
-              <Add size={16} /> Ranglar bilan yaratish
-            </Link>
-          </div>
-        }
       />
       {list.length === 0 ? (
         <Empty>Hali shablon yo‘q</Empty>
@@ -116,7 +104,6 @@ export function AdminTemplates() {
           ))}
         </ul>
       )}
-      <ZipUpload open={zip} onClose={() => setZip(false)} onDone={() => reload(true)} />
     </>
   );
 }

@@ -7,7 +7,31 @@ import { useLocalRouter } from "@/lib/useLocalRouter";
 import { InvitationSite } from "./InvitationSite";
 import { demoData } from "./data";
 import { useTemplate } from "@/lib/useTemplates";
-import { PageLoading, useRouteParam } from "@/lib/client";
+import { PageLoading, useApi, useRouteParam } from "@/lib/client";
+import { useEffect, useMemo, useState } from "react";
+import { getTemplate } from "@/lib/templates";
+import { toFlowOrder, type OrderResponse } from "@/components/order/FlowGate";
+import { toInvitationData } from "@/components/order/toInvitationData";
+
+/** Buyurtma ko‘rinishi (?buyurtma=<id>): mijozning o‘z ma’lumotlari bilan haqiqiy sayt — yangi tabda, tugmalarsiz */
+function OrderPreview({ id }: { id: string }) {
+  const tt = useT();
+  const { data, error } = useApi<OrderResponse>(`/api/orders/${encodeURIComponent(id)}`);
+  const t = data ? getTemplate(data.order.templateSlug) : undefined;
+  const inv = useMemo(() => (data ? toInvitationData(toFlowOrder(data)) : null), [data]);
+  if (error || (data && !t))
+    return (
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-5 px-5 text-center">
+        <h1 className="font-cormorant text-[40px] font-light text-ink">{tt("Buyurtma topilmadi")}</h1>
+      </div>
+    );
+  if (!data || !t || !inv) return <PageLoading className="min-h-dvh" />;
+  return t.kind === "html" ? (
+    <iframe src={`/api/orders/${encodeURIComponent(id)}/preview`} title={t.name} className="block h-dvh w-full border-0" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" />
+  ) : (
+    <InvitationSite key={t.slug} template={t} data={inv} mode="preview" />
+  );
+}
 
 /** Shablonning jonli namunasi. slug "_" — admin qo‘shgan shablon (URL'dan o‘qiladi) */
 export function DemoPageClient({ slug }: { slug: string }) {
@@ -15,6 +39,10 @@ export function DemoPageClient({ slug }: { slug: string }) {
   const router = useLocalRouter();
   const tt = useT();
   const t = useTemplate(slug === "_" ? fromUrl.value : slug);
+  const [orderId, setOrderId] = useState<string | null | undefined>(undefined);
+  useEffect(() => setOrderId(new URLSearchParams(location.search).get("buyurtma")), []);
+  if (orderId === undefined) return <PageLoading className="min-h-dvh" />;
+  if (orderId) return <OrderPreview id={orderId} />;
   if (!t) {
     if (slug === "_" && !fromUrl.ready) return <PageLoading className="min-h-dvh" />;
     return (
