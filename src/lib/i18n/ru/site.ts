@@ -130,6 +130,7 @@ export const ru: Record<string, string> = {
   // Bosh sahifa — dizaynlar
   Tayyor: "Готовые",
   dizaynlar: "дизайны",
+  "Tayyor dizaynlar": "Готовые|дизайны",
   "Har biri telefon va laptopda chiroyli ochiladi — muhr, musiqa va jonli animatsiyalar bilan.": "Каждый красиво открывается на телефоне и ноутбуке — с печатью, музыкой и живой анимацией.",
   "Barcha {n} ta shablon": "Все шаблоны ({n})",
   // Bosh sahifa — hikoyalar
