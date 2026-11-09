@@ -53,6 +53,18 @@ export function LoginForm({ next }: { next: string }) {
           </Link>
           .
         </p>
+      ) : locale === "en" ? (
+        <p className="t-body-s text-ink-2">
+          By logging in, you agree to the{" "}
+          <Link href="/shartlar/" className="underline hover:text-maroon">
+            terms of use
+          </Link>{" "}
+          and{" "}
+          <Link href="/maxfiylik/" className="underline hover:text-maroon">
+            privacy policy
+          </Link>
+          .
+        </p>
       ) : (
         <p className="t-body-s text-ink-2">
           Kirish orqali{" "}

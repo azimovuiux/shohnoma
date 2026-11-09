@@ -144,7 +144,7 @@ export function QuickView({
               {off > 0 && <span className="rounded-full bg-maroon px-2.5 py-1 t-body-s text-ink-inverse">{tt("Aksiya")} −{off}%</span>}
             </div>
           </div>
-          <p className="t-body-m text-ink-2">{(locale === "ru" && t.descriptionRu) || t.description}</p>
+          <p className="t-body-m text-ink-2">{(locale === "ru" && t.descriptionRu) || (locale === "en" && t.descriptionEn) || t.description}</p>
 
           <div className="flex flex-col gap-2.5">
             <p className="t-title text-ink">{tt("Saytda nimalar bor")}</p>

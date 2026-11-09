@@ -53,6 +53,28 @@ export const ANOR_DEMO_RU: typeof ANOR_DEMO = {
   ],
 };
 
+export const ANOR_DEMO_EN: typeof ANOR_DEMO = {
+  guest: "Mr and Mrs Karimov",
+  message: "On the day two hearts and two families gather at one table — the day of our nikah — we would be happy to see you among our dearest guests.",
+  hosts: "The Karimov and Rahimov families",
+  address: "108 Amir Temur Street, Yunusabad, Tashkent",
+  program: [
+    { time: "17:00", title: "Guest arrival", note: "Drinks and live music" },
+    { time: "17:40", title: "Nikah ceremony", note: "Fotiha and ring exchange" },
+    { time: "18:30", title: "Banquet", note: "Celebration dinner" },
+    { time: "20:00", title: "First dance", note: "The couple’s waltz" },
+    { time: "21:30", title: "Wedding cake", note: "A sweet moment" },
+    { time: "22:30", title: "Fireworks", note: "End of the evening" },
+  ],
+  dressCode: "Klassik",
+  storyText: "A story that began in the university library when we both asked for the same book — now for a lifetime.",
+  story: [
+    { year: "2021", caption: "First met" },
+    { year: "2024", caption: "Engagement" },
+    { year: "2026", caption: "Nikah" },
+  ],
+};
+
 /** Dress-kod: kalitlar (DB'dagi qiymat) o‘zbekcha qoladi; ko‘rsatiladigan matnlar useT() bilan tarjima qilinadi */
 export const DRESS: Record<string, { title: string; sub: string; note: string; imgs: { src: string; label: string }[] }> = {
   Klassik: {

@@ -41,7 +41,7 @@ export function TemplateDetail({ t }: { t: Template }) {
             <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt("Telefon va laptop")}</span>
           </div>
         </div>
-        <p className="t-body-l text-ink-2">{(locale === "ru" && t.descriptionRu) || t.description}</p>
+        <p className="t-body-l text-ink-2">{(locale === "ru" && t.descriptionRu) || (locale === "en" && t.descriptionEn) || t.description}</p>
 
         <div className="flex flex-col gap-3">
           <p className="t-title text-ink">{tt("Saytda nimalar bor")}</p>

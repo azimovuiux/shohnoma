@@ -21,6 +21,8 @@ export function ProfilePage() {
     ? ""
     : locale === "ru"
       ? `${monthsRuGen[c.getUTCMonth()]} ${c.getUTCFullYear()} г.`
+      : locale === "en"
+        ? c.toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" })
       : `${c.getUTCFullYear()}-yil ${monthsUz[c.getUTCMonth()]}`;
 
   return (

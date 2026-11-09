@@ -74,7 +74,7 @@ function Paper() {
           {t("Nikoh to‘yi")}
         </span>
         <span className={`${script} whitespace-nowrap leading-[1.15] text-maroon`} style={{ fontSize: u(ru ? 50 : 62) }}>
-          {ru ? "Приглашение" : "Taklifnoma"}
+          {ru ? "Приглашение" : t("Taklifnoma")}
         </span>
         <span className="bg-[#d9b97a]" style={{ width: u(56), height: 1 }} />
         <span className={`${script} leading-[1.1] text-ink`} style={{ fontSize: u(46) }}>

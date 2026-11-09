@@ -13,7 +13,7 @@ type Msg = { id: number; sender: "user" | "admin" | "bot"; text: string; created
 type Session = { id: string; name: string; phone: string };
 type ChatResp = { session: Session | null; messages: Msg[] };
 
-const time = (iso: string, locale: Locale = "uz") => new Date(iso).toLocaleTimeString(locale === "ru" ? "ru-RU" : "uz-UZ", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tashkent" });
+const time = (iso: string, locale: Locale = "uz") => new Date(iso).toLocaleTimeString(locale === "ru" ? "ru-RU" : locale === "en" ? "en-GB" : "uz-UZ", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tashkent" });
 const SEEN_KEY = "sh_chat_seen";
 
 /** Suzuvchi chat — har sahifada, o‘ng pastda. Ism + telefon → yozishma (admin panel va Telegram bot orqali javob) */

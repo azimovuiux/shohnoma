@@ -12,7 +12,7 @@ import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from 
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 import { DRESS, calendarWords, coordsFrom, downloadIcs, untilPhrase, type ProgramItem } from "../anor/data";
 import { timerUnits } from "@/components/invitation/data";
-import { P, PARVOZ_DEMO, PARVOZ_DEMO_RU, minusHour, monShort, wavePath, wavePoint } from "./data";
+import { P, PARVOZ_DEMO, PARVOZ_DEMO_RU, PARVOZ_DEMO_EN, minusHour, monShort, wavePath, wavePoint } from "./data";
 import st from "./parvoz.module.css";
 
 const U = (n: number) => `calc(var(--u) * ${n})`;
@@ -28,7 +28,7 @@ function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" 
   const demo = mode === "demo";
   const t = useT();
   const lang = useLocale();
-  const DEMO = lang === "ru" ? PARVOZ_DEMO_RU : PARVOZ_DEMO;
+  const DEMO = lang === "ru" ? PARVOZ_DEMO_RU : lang === "en" ? PARVOZ_DEMO_EN : PARVOZ_DEMO;
   const ex = (data.extra ?? {}) as Record<string, unknown>;
   const str = (k: string) => (typeof ex[k] === "string" ? (ex[k] as string).trim() : "");
   const sd = splitDate(data.date);

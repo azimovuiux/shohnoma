@@ -297,6 +297,10 @@ function GuestsInner() {
               <>
                 Пожелания <em className="italic text-maroon">гостей</em>
               </>
+            ) : locale === "en" ? (
+              <>
+                Guest <em className="italic text-maroon">wishes</em>
+              </>
             ) : (
               <>
                 Mehmonlar <em className="italic text-maroon">tilaklari</em>

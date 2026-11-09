@@ -246,6 +246,8 @@ const MONTHS_UZ = ["Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun", "Iyul", "
 const MONTHS_RU = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
 const WD_UZ = ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"];
 const WD_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+const MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const WD_EN = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
 const pad2 = (n: number) => String(n).padStart(2, "0");
 const isoToDmy = (iso: string) => (/^\d{4}-\d{2}-\d{2}$/.test(iso) ? `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}` : "");
 function dmyToIso(s: string): string {
@@ -285,8 +287,8 @@ export function DateField({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const months = locale === "ru" ? MONTHS_RU : MONTHS_UZ;
-  const wd = locale === "ru" ? WD_RU : WD_UZ;
+  const months = locale === "ru" ? MONTHS_RU : locale === "en" ? MONTHS_EN : MONTHS_UZ;
+  const wd = locale === "ru" ? WD_RU : locale === "en" ? WD_EN : WD_UZ;
   const first = new Date(Date.UTC(view.y, view.m, 1));
   const lead = (first.getUTCDay() + 6) % 7; // dushanbadan
   const days = new Date(Date.UTC(view.y, view.m + 1, 0)).getUTCDate();
@@ -302,7 +304,7 @@ export function DateField({
           value={text}
           inputMode="numeric"
           autoComplete="off"
-          placeholder={locale === "ru" ? "дд/мм/гггг" : "kk/oo/yyyy"}
+          placeholder={locale === "ru" ? "дд/мм/гггг" : locale === "en" ? "dd/mm/yyyy" : "kk/oo/yyyy"}
           aria-label={label}
           aria-invalid={invalid || undefined}
           maxLength={10}

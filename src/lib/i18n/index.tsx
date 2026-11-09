@@ -7,6 +7,10 @@ import { ru as order } from "./ru/order";
 import { ru as cabinet } from "./ru/cabinet";
 import { ru as invite } from "./ru/invite";
 import { en as inviteEn } from "./en/invite";
+import { en as commonEn } from "./en/common";
+import { en as siteEn } from "./en/site";
+import { en as orderEn } from "./en/order";
+import { en as cabinetEn } from "./en/cabinet";
 
 /**
  * Sayt tillari. O‘zbekcha — asosiy (manzil prefikssiz), ruscha — /ru/... ostida.
@@ -15,33 +19,35 @@ import { en as inviteEn } from "./en/invite";
  * O‘zgaruvchilar: t("{n} ta shablon", { n: 3 }).
  */
 export type Locale = "uz" | "ru" | "en";
-/** Sayt tillari (ingliz tili — faqat taklifnoma sahifalari uchun) */
-export const LOCALES: Locale[] = ["uz", "ru"];
+export const LOCALES: Locale[] = ["uz", "ru", "en"];
 
 const DICT: Record<string, string> = { ...common, ...site, ...order, ...cabinet, ...invite };
+const DICT_EN: Record<string, string> = { ...commonEn, ...siteEn, ...orderEn, ...cabinetEn, ...inviteEn };
 
 export function tr(locale: Locale, s: string, vars?: Record<string, string | number>): string {
-  let out = locale === "ru" ? (DICT[s] ?? s) : locale === "en" ? (inviteEn[s] ?? s) : s;
+  let out = locale === "ru" ? (DICT[s] ?? s) : locale === "en" ? (DICT_EN[s] ?? s) : s;
   if (vars) for (const [k, v] of Object.entries(vars)) out = out.split(`{${k}}`).join(String(v));
   return out;
 }
 
 /** Ichki havolaga til prefiksi: lpath("ru", "/shablonlar/") → "/ru/shablonlar/" */
 export function lpath(locale: Locale, href: string): string {
-  if (locale !== "ru" || !href.startsWith("/") || href.startsWith("//")) return href;
-  if (/^\/(ru(\/|$|\?|#)|api\/|files\/|admin(\/|$)|templates\/|images\/|_next\/)/.test(href)) return href;
-  return href === "/" ? "/ru/" : `/ru${href.startsWith("/#") ? `/${href.slice(1)}` : href}`;
+  if (locale === "uz" || !href.startsWith("/") || href.startsWith("//")) return href;
+  if (/^\/((ru|en)(\/|$|\?|#)|api\/|files\/|admin(\/|$)|templates\/|images\/|pay\/|_next\/)/.test(href)) return href;
+  return href === "/" ? `/${locale}/` : `/${locale}${href.startsWith("/#") ? `/${href.slice(1)}` : href}`;
 }
 
 /** Joriy manzildan til (faqat brauzerda — React tashqarisidagi kod uchun) */
 export function currentLocale(): Locale {
-  return typeof window !== "undefined" && /^\/ru(\/|$)/.test(window.location.pathname) ? "ru" : "uz";
+  if (typeof window === "undefined") return "uz";
+  const m = window.location.pathname.match(/^\/(ru|en)(\/|$)/);
+  return m ? (m[1] as Locale) : "uz";
 }
 
 /** Manzilni boshqa tilga: /ru/shablonlar/ ↔ /shablonlar/ */
 export function switchPath(path: string, to: Locale): string {
-  const bare = path.replace(/^\/ru(?=\/|$)/, "") || "/";
-  return to === "ru" ? lpath("ru", bare) : bare;
+  const bare = path.replace(/^\/(ru|en)(?=\/|$)/, "") || "/";
+  return to === "uz" ? bare : lpath(to, bare);
 }
 
 const Ctx = createContext<Locale>("uz");

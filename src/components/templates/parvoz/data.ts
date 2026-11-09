@@ -43,6 +43,25 @@ export const PARVOZ_DEMO_RU: typeof PARVOZ_DEMO = {
   quote: "Как бы ни был долог путь, самое прекрасное место назначения — друг в друге.",
 };
 
+export const PARVOZ_DEMO_EN: typeof PARVOZ_DEMO = {
+  guest: "",
+  message: "We invite you on the most important flight of our lives — our nikah. We would love to have you with us on this day.",
+  venueTitle: "Sky Terrace Restaurant",
+  address: "107 Amir Temur Street, 21st floor, Tashkent",
+  venueNote: "Free parking for guests",
+  program: [
+    { time: "16:30", title: "Guest arrival", note: "Welcome drinks, live music and first photos" },
+    { time: "17:30", title: "Nikah ceremony", note: "Witness the most important moment" },
+    { time: "18:30", title: "Wedding banquet", note: "Dinner, dancing and warm wishes" },
+    { time: "21:00", title: "Wedding cake", note: "A sweet moment and a toast together" },
+    { time: "22:30", title: "Fireworks", note: "We end the evening together under the sky" },
+  ],
+  dressCode: "Klassik",
+  story1: "First met · 2021",
+  story2: "Engagement · 2025",
+  quote: "However long the journey, the most beautiful destination is each other.",
+};
+
 const MON = ["YAN", "FEV", "MAR", "APR", "MAY", "IYN", "IYL", "AVG", "SEN", "OKT", "NOY", "DEK"];
 const MON_RU = ["ЯНВ", "ФЕВ", "МАР", "АПР", "МАЙ", "ИЮН", "ИЮЛ", "АВГ", "СЕН", "ОКТ", "НОЯ", "ДЕК"];
 /** Chipta uchun qisqa oy: «SEN» / «СЕН» */

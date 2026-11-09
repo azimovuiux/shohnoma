@@ -74,6 +74,74 @@ export function TermsContent() {
         </section>
       </>
     );
+  if (locale === "en")
+    return (
+      <>
+        <section>
+          <h2>1. General provisions</h2>
+          <p>
+            These terms set out how to use the invitation website creation service provided through the shohnoma.uz website (hereinafter —
+            “Shohnoma”, “we”). By placing an order or making a payment, you agree to these terms and the{" "}
+            <Link href="/maxfiylik/" className="text-maroon hover:underline">
+              Privacy Policy
+            </Link>
+            .
+          </p>
+        </section>
+        <section>
+          <h2>2. Description of the service</h2>
+          <ul>
+            <li>The customer chooses a ready-made template, enters the celebration details (names, date, venue, text, photos) and makes a payment.</li>
+            <li>Once the payment is confirmed, the customer receives a personal link to send to guests (for example, shohnoma.uz/jasur-madina) and a QR code.</li>
+            <li>Guests open the invitation via the link and can leave a reply: “Joyfully accept / Regretfully decline”.</li>
+            <li>The custom design service is agreed separately based on a brief; the brief is free, and payment is made after the sketch is approved.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>3. Prices and payment</h2>
+          <ul>
+            <li>Prices on the website are shown in Uzbek soums. Promotional prices apply for the period stated.</li>
+            <li>Payment is accepted via Payme, Click, Google Pay or card-to-card (P2P) transfer.</li>
+            <li>For a P2P transfer, you must write the order code in the payment comment and upload the receipt. Receipts are usually checked within 15 minutes during working hours.</li>
+            <li>The invitation website becomes publicly available once the payment is confirmed.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>4. Refunds</h2>
+          <p>
+            Before the invitation website is launched, you can cancel the order and request a refund. Once the website has been launched and the link
+            has been sent to guests, the service is considered provided. If a technical fault occurs through our fault and is not fixed, the payment is
+            refunded. Requests are accepted via Telegram or by phone.
+          </p>
+        </section>
+        <section>
+          <h2>5. Customer obligations</h2>
+          <ul>
+            <li>The customer is responsible for the accuracy of the information entered and for having the rights to the uploaded photos.</li>
+            <li>Posting unlawful or offensive content, or content that violates the rights of third parties, is prohibited — such websites may be closed without warning.</li>
+            <li>The list of guest replies may be used only for organising the celebration.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>6. Website validity period</h2>
+          <p>
+            The invitation website stays open for at least 3 months after the day of the celebration, after which it may be archived. An archived website
+            is closed to guests, while the data remains saved in the customer’s account.
+          </p>
+        </section>
+        <section>
+          <h2>7. Limitation of liability</h2>
+          <p>
+            We take all measures to keep the website running without interruption, but we are not liable for failures on the part of internet providers,
+            payment systems or third-party services. Our liability does not exceed the amount paid for the order.
+          </p>
+        </section>
+        <section>
+          <h2>8. Changes</h2>
+          <p>These terms may be updated. A new version takes effect from the day it is published on the website; previous terms apply to orders already paid for.</p>
+        </section>
+      </>
+    );
   return (
     <>
       <section>

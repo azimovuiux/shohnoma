@@ -20,7 +20,7 @@ import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/co
 import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 import { DRESS, calendarWords, coordsFrom, downloadIcs, untilPhrase, type ProgramItem } from "../anor/data";
-import { Z, ZUMRAD_DEMO, ZUMRAD_DEMO_RU, ogee } from "./data";
+import { Z, ZUMRAD_DEMO, ZUMRAD_DEMO_RU, ZUMRAD_DEMO_EN, ogee } from "./data";
 import st from "./zumrad.module.css";
 
 const U = (n: number) => `calc(var(--u) * ${n})`;
@@ -36,7 +36,7 @@ function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" 
   const demo = mode === "demo";
   const t = useT();
   const lang = useLocale();
-  const DEMO = lang === "ru" ? ZUMRAD_DEMO_RU : ZUMRAD_DEMO;
+  const DEMO = lang === "ru" ? ZUMRAD_DEMO_RU : lang === "en" ? ZUMRAD_DEMO_EN : ZUMRAD_DEMO;
   const ex = (data.extra ?? {}) as Record<string, unknown>;
   const str = (k: string) => (typeof ex[k] === "string" ? (ex[k] as string).trim() : "");
   const sd = splitDate(data.date);

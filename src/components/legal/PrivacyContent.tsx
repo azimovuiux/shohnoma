@@ -75,6 +75,76 @@ export function PrivacyContent() {
         </section>
       </>
     );
+  if (locale === "en")
+    return (
+      <>
+        <section>
+          <p>
+            Shohnoma respects your personal data and uses it <strong>only for your invitation</strong>. Data is processed in accordance with the Law
+            of the Republic of Uzbekistan “On Personal Data”.
+          </p>
+        </section>
+        <section>
+          <h2>1. What data we collect</h2>
+          <ul>
+            <li>
+              <strong>From the customer:</strong> phone number, name, Telegram username (optional).
+            </li>
+            <li>
+              <strong>For the invitation:</strong> names, date and venue of the celebration, invitation text, photos, programme.
+            </li>
+            <li>
+              <strong>From guests:</strong> name, number of people, reply and wishes (optional).
+            </li>
+            <li>
+              <strong>Payment data:</strong> order amount, payment method, photo of the P2P receipt. We do not store card details — they are processed
+              by Payme or Click.
+            </li>
+            <li>
+              <strong>Technical:</strong> number of times the invitation is opened (a simple counter), a cookie for the login session.
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>2. How we use the data</h2>
+          <ul>
+            <li>Creating the invitation website and showing it to guests.</li>
+            <li>Confirming logins and payments, and sending notifications about new guest replies and reminders by SMS or Telegram.</li>
+            <li>Keeping records of orders and payments, and responding to enquiries.</li>
+          </ul>
+          <p>We do not sell or share your data with third parties for advertising purposes.</p>
+        </section>
+        <section>
+          <h2>3. Who can see the data</h2>
+          <ul>
+            <li>The invitation website is open to anyone who has the link; it is not indexed by search engines.</li>
+            <li>Guests’ replies and wishes are visible only to the invitation owner (the customer) in their account.</li>
+            <li>Shohnoma staff access the data only to verify payments and provide support.</li>
+            <li>The SMS service (Eskiz.uz), Telegram and payment systems receive only the data they need to perform their function.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>4. Retention period</h2>
+          <p>
+            The invitation and guests’ replies are kept for 12 months after the celebration and are then deleted or anonymised. Payment records are kept
+            for the period required by law. You can ask us to delete your account and data earlier.
+          </p>
+        </section>
+        <section>
+          <h2>5. Security</h2>
+          <p>
+            The website runs over HTTPS, logins are confirmed only through the Telegram bot, and access to the database is restricted.
+          </p>
+        </section>
+        <section>
+          <h2>6. Your rights</h2>
+          <p>
+            You have the right to request to view, correct or delete your data. To do so, contact us via Telegram or by phone — we will reply within 3
+            working days.
+          </p>
+        </section>
+      </>
+    );
   return (
     <>
       <section>

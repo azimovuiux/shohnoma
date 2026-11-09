@@ -15,7 +15,7 @@ export function NotFoundContent() {
   useEffect(() => {
     const l = currentLocale();
     setLocale(l);
-    if (l === "ru") document.documentElement.lang = "ru";
+    if (l !== "uz") document.documentElement.lang = l;
   }, []);
   return (
     <LocaleProvider locale={locale}>

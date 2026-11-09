@@ -40,6 +40,24 @@ export const ZUMRAD_DEMO_RU: typeof ZUMRAD_DEMO = {
   caption: "Навсегда",
 };
 
+export const ZUMRAD_DEMO_EN: typeof ZUMRAD_DEMO = {
+  guest: "Mr and Mrs Karimov",
+  message: "On the happiest day of our lives — our nikah — we would love to have you by our side. Celebrating this day together with you means the world to us.",
+  hosts: "The Karimov and Rahimov families",
+  address: "108 Amir Temur Street, Yunusabad, Tashkent",
+  program: [
+    { time: "17:00", title: "Guest arrival", note: "Drinks and live music" },
+    { time: "17:40", title: "Nikah ceremony", note: "Fotiha and ring exchange" },
+    { time: "18:30", title: "Banquet", note: "Celebration dinner" },
+    { time: "20:00", title: "First dance", note: "The couple’s waltz" },
+    { time: "21:30", title: "Wedding cake", note: "A sweet moment" },
+    { time: "22:30", title: "Fireworks", note: "End of the evening" },
+  ],
+  dressCode: "Klassik",
+  storyText: "A story that began in the university library — now a story for a lifetime.",
+  caption: "Forever",
+};
+
 /** Onion-ravoq (Figma «Osmon» maskasi, 300×380) — istalgan o‘lchamga */
 export function ogee(w: number, h: number, inset = 0) {
   const sx = (w - inset * 2) / 300;

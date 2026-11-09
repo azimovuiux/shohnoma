@@ -13,7 +13,7 @@ import type { InvitationSiteProps } from "@/components/invitation/types";
 import { timerUnits } from "@/components/invitation/data";
 import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
 import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
-import { A, ANOR_DEMO, ANOR_DEMO_RU, DRESS, calendarWords, coordsFrom, downloadIcs, programIcon, untilPhrase, weekOf, type ProgramItem, type StoryItem } from "./data";
+import { A, ANOR_DEMO, ANOR_DEMO_RU, ANOR_DEMO_EN, DRESS, calendarWords, coordsFrom, downloadIcs, programIcon, untilPhrase, weekOf, type ProgramItem, type StoryItem } from "./data";
 import st from "./anor.module.css";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 
@@ -28,7 +28,7 @@ function useAnorData({ template, data, mode }: Pick<InvitationSiteProps, "templa
   const demo = mode === "demo";
   const t = useT();
   const lang = useLocale();
-  const DEMO = lang === "ru" ? ANOR_DEMO_RU : ANOR_DEMO;
+  const DEMO = lang === "ru" ? ANOR_DEMO_RU : lang === "en" ? ANOR_DEMO_EN : ANOR_DEMO;
   const ex = (data.extra ?? {}) as Record<string, unknown>;
   const str = (k: string) => (typeof ex[k] === "string" ? (ex[k] as string).trim() : "");
   const sd = splitDate(data.date);

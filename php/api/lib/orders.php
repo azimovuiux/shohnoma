@@ -8,7 +8,7 @@ const DEFAULT_PROGRAM = [
     'sunnat' => [['time' => '10:00', 'title' => 'Mehmonlarni kutib olish'], ['time' => '11:00', 'title' => 'Osh va tabriklar'], ['time' => '13:00', 'title' => 'Bazm']],
     'tugilgan-kun' => [['time' => '19:00', 'title' => 'Mehmonlarni kutib olish'], ['time' => '19:30', 'title' => 'Tabriklar va tort'], ['time' => '21:00', 'title' => 'Bazm']],
 ];
-const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite'];
+const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', 'en', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite'];
 
 function is_paid_status(string $s): bool { return $s === 'paid' || $s === 'active'; }
 

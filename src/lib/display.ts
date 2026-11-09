@@ -42,9 +42,10 @@ export function relativeTime(date: Date | string, locale: "uz" | "ru" | "en" = "
   const d = typeof date === "string" ? new Date(date) : date;
   const diff = (Date.now() - d.getTime()) / 1000;
   const ru = locale === "ru";
-  if (diff < 60) return ru ? "только что" : "hozirgina";
-  if (diff < 3600) return ru ? `${Math.floor(diff / 60)} мин назад` : `${Math.floor(diff / 60)} daqiqa oldin`;
-  if (diff < 86400) return ru ? `${Math.floor(diff / 3600)} ч назад` : `${Math.floor(diff / 3600)} soat oldin`;
+  const en = locale === "en";
+  if (diff < 60) return ru ? "только что" : en ? "just now" : "hozirgina";
+  if (diff < 3600) return ru ? `${Math.floor(diff / 60)} мин назад` : en ? `${Math.floor(diff / 60)} min ago` : `${Math.floor(diff / 60)} daqiqa oldin`;
+  if (diff < 86400) return ru ? `${Math.floor(diff / 3600)} ч назад` : en ? `${Math.floor(diff / 3600)} h ago` : `${Math.floor(diff / 3600)} soat oldin`;
   const t = new Date(d.getTime() + 5 * 3600_000).toISOString();
   return `${t.slice(8, 10)}.${t.slice(5, 7)} ${t.slice(11, 16)}`;
 }

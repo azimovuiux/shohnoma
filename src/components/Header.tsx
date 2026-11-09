@@ -33,10 +33,10 @@ export type HeaderUser = {
 import { formatPhoneDisplay, initials } from "@/lib/display";
 import { Logo } from "./Logo";
 import { TelegramIcon } from "./TelegramIcon";
-import { FlagRU, FlagUZ } from "./Flag";
+import { FlagGB, FlagRU, FlagUZ } from "./Flag";
 import { mainNav, site } from "@/lib/site";
 
-type Lang = "uz" | "ru";
+type Lang = "uz" | "ru" | "en";
 
 function LangSwitcher({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
@@ -73,7 +73,7 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
           compact ? "h-10 px-2.5" : "h-[42px] px-3"
         }`}
       >
-        {lang === "uz" ? <FlagUZ /> : <FlagRU />}
+        {lang === "uz" ? <FlagUZ /> : lang === "ru" ? <FlagRU /> : <FlagGB />}
         <span>{lang.toUpperCase()}</span>
         {!compact && <ArrowDown2 size={14} />}
       </button>
@@ -86,6 +86,7 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
             [
               ["uz", "O‘zbekcha", <FlagUZ key="uz" />],
               ["ru", "Русский", <FlagRU key="ru" />],
+              ["en", "English", <FlagGB key="en" />],
             ] as const
           ).map(([code, label, flag]) => (
             <button

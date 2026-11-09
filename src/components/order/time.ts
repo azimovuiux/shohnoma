@@ -7,8 +7,8 @@ export function tashkentStamp(d: Date | string | null | undefined, mode: "relati
   const hm = t.slice(11, 16);
   const full = `${t.slice(8, 10)}.${t.slice(5, 7)}.${t.slice(0, 4)}, ${hm}`;
   if (mode === "full") return full;
-  if (t.slice(0, 10) === now.slice(0, 10)) return `${locale === "ru" ? "Сегодня" : "Bugun"}, ${hm}`;
+  if (t.slice(0, 10) === now.slice(0, 10)) return `${locale === "ru" ? "Сегодня" : locale === "en" ? "Today" : "Bugun"}, ${hm}`;
   const y = new Date(Date.now() + 5 * 3600_000 - 86400_000).toISOString();
-  if (t.slice(0, 10) === y.slice(0, 10)) return `${locale === "ru" ? "Вчера" : "Kecha"}, ${hm}`;
+  if (t.slice(0, 10) === y.slice(0, 10)) return `${locale === "ru" ? "Вчера" : locale === "en" ? "Yesterday" : "Kecha"}, ${hm}`;
   return full;
 }

@@ -42,6 +42,7 @@ function templates(bool $fresh = false): array
         if (($d['kind'] ?? '') !== 'html' && isset($code[$r['slug']])) {
             if (isset($code[$r['slug']]['fields'])) $d['fields'] = $code[$r['slug']]['fields'];
             if (empty($d['descriptionRu']) && !empty($code[$r['slug']]['descriptionRu'])) $d['descriptionRu'] = $code[$r['slug']]['descriptionRu'];
+            if (empty($d['descriptionEn']) && !empty($code[$r['slug']]['descriptionEn'])) $d['descriptionEn'] = $code[$r['slug']]['descriptionEn'];
             // Koddagi rasmlar (kartadagi mokap/scroll preview): bazada yo‘q bo‘lsa — qo‘shiladi;
             // bazada ham asl /templates/ rasmi turgan bo‘lsa — koddagi versiyali (?v=xesh) manzil olinadi,
             // admin o‘zi yuklagan rasm (/files/...) esa o‘zgarmaydi

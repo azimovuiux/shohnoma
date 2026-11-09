@@ -75,6 +75,10 @@ export interface Template {
     laptopRu?: string;
     phoneScrollRu?: string;
     laptopScrollRu?: string;
+    phoneEn?: string;
+    laptopEn?: string;
+    phoneScrollEn?: string;
+    laptopScrollEn?: string;
   };
   /** Katalogda ko‘rinadimi (admin) */
   active?: boolean;
@@ -89,6 +93,8 @@ export interface Template {
   previewUrl?: string;
   /** Ruscha tavsif (/ru/ sahifalarida) */
   descriptionRu?: string;
+  /** Inglizcha tavsif (/en/ sahifalarida) */
+  descriptionEn?: string;
   /** Standart fon musiqasi — kutubxonadagi trek ID si (admin tanlaydi) */
   musicId?: string | null;
   /** Server: shablonda musiqa tanlanmagan bo‘lsa — kutubxonadagi birinchi trek */
@@ -107,6 +113,7 @@ const builtin: Template[] = [
     featured: true,
     description: "Bordo baxmal, muhrlangan maktub va anor bezaklari. Muhr ochilgach — ravoqli muqova, otkritka-manzil, polaroid hikoya va chipta-javob.",
     descriptionRu: "Бордовый бархат, запечатанное письмо и гранатовые узоры. После вскрытия печати — арочная обложка, открытка с адресом, история в полароидах и билет-ответ.",
+    descriptionEn: "Burgundy velvet, a sealed letter and pomegranate ornaments. Once the seal is broken — an arched cover, a card with the address, a story in polaroids and a reply ticket.",
     palette: ["#7A1E2C", "#4A0F1A", "#C9A25E", "#F3ECE0"],
     sample: { a: "Azizbek", b: "Sevara", date: "12 · 09 · 2026", venue: "«Navro‘z» saroyi", time: "17:00" },
     theme: { bg: ["#7a1e2c", "#4a0f1a"], ink: "#f3ece0", accent: "#c9a25e", soft: "#e8d3a8", script: "cormorant", color: "bordo" },
@@ -151,6 +158,7 @@ const builtin: Template[] = [
     featured: true,
     description: "Zumrad yashil damask, oltin muhrli konvert va bog‘ manzarasi. Konvert ochilgach — madrasa ravog‘i, parda ortidagi bog‘, ravoqli suratlar va konvert-javob.",
     descriptionRu: "Изумрудный дамаск, конверт с золотой печатью и садовый пейзаж. После открытия конверта — арка медресе, сад за занавесом, фото в арках и конверт-ответ.",
+    descriptionEn: "Emerald damask, an envelope with a golden seal and a garden scene. Once the envelope opens — a madrasa arch, a garden behind the curtain, photos in arches and a reply envelope.",
     palette: ["#123C2E", "#0C2A20", "#C6A15B", "#F7F3EA"],
     sample: { a: "Azizbek", b: "Sevara", date: "12 · 09 · 2026", venue: "«Navro‘z» saroyi", time: "17:00" },
     theme: { bg: ["#123c2e", "#0c2a20"], ink: "#f7f3ea", accent: "#c6a15b", soft: "#e2c88e", script: "cormorant", color: "yashil" },
@@ -185,6 +193,7 @@ const builtin: Template[] = [
     featured: true,
     description: "Osmon va bulutlar orasidan ochiladigan taklifnoma. Samolyot bulutlar ortiga uchib ketgach — chipta ko‘rinishidagi taklif, illyuminator ortidagi taklif matni, to‘yga qadar sanoq, to‘y dasturi va mehmonlar javobi.",
     descriptionRu: "Приглашение, которое открывается среди неба и облаков. Когда самолёт скрывается за облаками — приглашение в виде билета, текст в иллюминаторе, отсчёт до торжества, программа и ответы гостей.",
+    descriptionEn: "An invitation that opens among the sky and clouds. When the plane disappears into the clouds — an invitation in the form of a ticket, text in a porthole, a countdown, the programme and guest replies.",
     palette: ["#1C2B45", "#A8BCD6", "#EFA97E", "#F6F1E8"],
     sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "Sky Terrace", time: "17:30" },
     theme: { bg: ["#1c2b45", "#17233a"], ink: "#f4e9d8", accent: "#efa97e", soft: "#a8bcd6", script: "cormorant", color: "moviy" },
@@ -237,13 +246,33 @@ export const builtinTemplates: Template[] = builtin.map((t) => ({
         .filter(([, f]) => tplImgVersions[`${t.slug}-ru-${f}.webp`])
         .map(([k, f]) => [k, tplImg(`${t.slug}-ru-${f}.webp`)]),
     ),
+    // Inglizcha posterlar (fayl bor bo‘lsa)
+    ...Object.fromEntries(
+      (
+        [
+          ["phoneEn", "phone"],
+          ["laptopEn", "laptop"],
+          ["phoneScrollEn", "phone-long"],
+          ["laptopScrollEn", "laptop-long"],
+        ] as const
+      )
+        .filter(([, f]) => tplImgVersions[`${t.slug}-en-${f}.webp`])
+        .map(([k, f]) => [k, tplImg(`${t.slug}-en-${f}.webp`)]),
+    ),
   },
 }));
 
 /** Joriy tilga mos mokap rasmlari: ruschada *Ru variantlari bo‘lsa — o‘shalar */
 export function tplImages(t: Pick<Template, "images">, locale: "uz" | "ru" | "en") {
   const im = t.images;
-  if (!im || locale !== "ru") return im;
+  if (!im || locale === "uz") return im;
+  if (locale === "en")
+    return {
+      phone: im.phoneEn ?? im.phone,
+      laptop: im.laptopEn ?? im.laptop,
+      phoneScroll: im.phoneScrollEn ?? im.phoneScroll,
+      laptopScroll: im.laptopScrollEn ?? im.laptopScroll,
+    };
   return {
     phone: im.phoneRu ?? im.phone,
     laptop: im.laptopRu ?? im.laptop,

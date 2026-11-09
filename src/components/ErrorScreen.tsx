@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
  */
 export function ErrorScreen({ error, reset }: { error: Error & { digest?: string }; reset?: () => void }) {
   const [show, setShow] = useState(false);
-  const ru = typeof location !== "undefined" && /^\/ru(\/|$)/.test(location.pathname);
+  const lc = typeof location !== "undefined" ? (location.pathname.match(/^\/(ru|en)(\/|$)/)?.[1] ?? "uz") : "uz";
+  const ru = lc === "ru";
+  const en = lc === "en";
   useEffect(() => {
     console.error(error);
     const k = "sh_err_reload";
@@ -23,16 +25,16 @@ export function ErrorScreen({ error, reset }: { error: Error & { digest?: string
   if (!show) return null;
   return (
     <div style={{ minHeight: "70vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, padding: 24, textAlign: "center", fontFamily: "inherit" }}>
-      <p style={{ fontSize: 20, color: "#2b1d1a" }}>{ru ? "Что-то пошло не так" : "Nimadir xato ketdi"}</p>
+      <p style={{ fontSize: 20, color: "#2b1d1a" }}>{ru ? "Что-то пошло не так" : en ? "Something went wrong" : "Nimadir xato ketdi"}</p>
       <p style={{ fontSize: 15, color: "#6b5d58", maxWidth: 420 }}>
-        {ru ? "Пожалуйста, обновите страницу." : "Iltimos, sahifani yangilang."}
+        {ru ? "Пожалуйста, обновите страницу." : en ? "Please reload the page." : "Iltimos, sahifani yangilang."}
       </p>
       <button
         type="button"
         onClick={() => (reset ? (sessionStorage.removeItem("sh_err_reload"), location.reload()) : location.reload())}
         style={{ padding: "12px 22px", borderRadius: 999, background: "#6e1f2a", color: "#fff", fontSize: 15, border: 0, cursor: "pointer" }}
       >
-        {ru ? "Обновить страницу" : "Sahifani yangilash"}
+        {ru ? "Обновить страницу" : en ? "Reload page" : "Sahifani yangilash"}
       </button>
     </div>
   );

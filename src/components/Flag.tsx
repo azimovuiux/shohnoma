@@ -28,3 +28,18 @@ export function FlagRU({ size = 20 }: { size?: number }) {
     </svg>
   );
 }
+
+export function FlagGB({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden className="rounded-full">
+      <clipPath id="fgb"><circle cx="10" cy="10" r="10" /></clipPath>
+      <g clipPath="url(#fgb)">
+        <rect width="20" height="20" fill="#012169" />
+        <path d="M-2 -2 L22 22 M22 -2 L-2 22" stroke="#fff" strokeWidth="4" />
+        <path d="M-2 -2 L22 22 M22 -2 L-2 22" stroke="#C8102E" strokeWidth="1.6" />
+        <path d="M10 -2 V22 M-2 10 H22" stroke="#fff" strokeWidth="6" />
+        <path d="M10 -2 V22 M-2 10 H22" stroke="#C8102E" strokeWidth="3.4" />
+      </g>
+    </svg>
+  );
+}

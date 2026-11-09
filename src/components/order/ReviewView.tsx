@@ -113,7 +113,7 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
     ["Sana va vaqt", dayTime(order.day, order.time), `${base}/marosim/`],
     ["Manzil", order.venueName, `${base}/marosim/`],
     ["Aloqa", formatPhoneDisplay(order.contactPhone), `${base}/tafsilotlar/`],
-    ["Taklifnoma tili", order.extra?.lang === "ru" ? "Русский" : "O‘zbekcha", `${base}/marosim/`],
+    ["Taklifnoma tili", order.extra?.lang === "ru" ? "Русский" : order.extra?.lang === "en" ? "English" : "O‘zbekcha", `${base}/marosim/`],
     ["Mehmonlar javobi", order.rsvpEnabled ? t("Yoqilgan") : t("O‘chirilgan"), `${base}/tafsilotlar/`],
     ["Fon musiqasi", order.musicEnabled ? t("Yoqilgan") : t("O‘chirilgan"), `${base}/tafsilotlar/`],
   ];
