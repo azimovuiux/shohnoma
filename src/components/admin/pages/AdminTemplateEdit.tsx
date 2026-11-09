@@ -391,7 +391,7 @@ export function AdminTemplateEdit() {
           )}
         </div>
 
-        <aside className="flex flex-col gap-5 lg:sticky lg:top-[140px] lg:self-start">
+        <aside className="flex flex-col gap-5 lg:sticky lg:top-[140px] lg:max-h-[calc(100vh-160px)] lg:self-start lg:overflow-y-auto lg:overscroll-contain lg:[scrollbar-width:thin]">
           <div className="flex flex-col items-center gap-5 rounded-panel bg-bg-soft p-6">
             <span className="t-annotation text-ink-2">Ko‘rinishi</span>
             <LaptopFrame className="w-full">

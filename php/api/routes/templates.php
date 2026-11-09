@@ -42,7 +42,8 @@ function tpl_image(mixed $v): ?string
 {
     $v = trim((string)($v ?? ''));
     if ($v === '') return null;
-    if (!preg_match('#^/(files/templates/[a-z0-9]+\.(webp|png|jpg)|templates/[a-z0-9-]+\.webp)$#', $v)) fail('Rasm manzili noto‘g‘ri', 422);
+    // asl rasmlar keshdan chiqarish uchun versiya bilan keladi: /templates/anor-phone.webp?v=1a2b3c4d
+    if (!preg_match('#^/(files/templates/[a-z0-9]+\.(webp|png|jpg)|templates/[a-z0-9-]+\.webp)(\?v=[a-f0-9]{4,16})?$#', $v)) fail('Rasm manzili noto‘g‘ri', 422);
     return $v;
 }
 

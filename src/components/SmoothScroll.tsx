@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 /**
@@ -10,8 +11,11 @@ import Lenis from "lenis";
  * dialoglar ichida g‘ildirak native qoladi.
  */
 export function SmoothScroll() {
+  const admin = (usePathname() ?? "").startsWith("/admin");
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Admin panelda silliq scroll kerak emas — formalar, sticky panel va ichki scroll native ishlasin
+    if (admin) return;
 
     const lenis = new Lenis({
       autoRaf: true,
@@ -31,6 +35,6 @@ export function SmoothScroll() {
       mo.disconnect();
       lenis.destroy();
     };
-  }, []);
+  }, [admin]);
   return null;
 }
