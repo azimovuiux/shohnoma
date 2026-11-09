@@ -45,7 +45,7 @@ function create_draft_order(string $templateSlug, ?array $owner = null, ?int $am
         try {
             db()->beginTransaction();
             q('INSERT INTO orders (id, seq, code, user_id, guest_token, template_slug, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-                $id, $next, sprintf('SH-%05d', $next), $user['id'] ?? null, $guest, $templateSlug, $amount ?? (int)$t['price'], 'draft',
+                $id, $next, sprintf('SH-%05d', $next), $user['id'] ?? null, $guest, $templateSlug, $amount ?? tpl_price($t), 'draft',
             ]);
             q('INSERT INTO invitations (id, order_id, slug, ceremony, message, program, photos, contact_phone, contact_tg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                 new_id(), $id, 'qoralama-' . substr($id, 0, 10), $t['ceremony'], DEFAULT_MESSAGE,
@@ -78,6 +78,7 @@ function owned_order(string $orderId): ?array
 {
     $b = load_order($orderId);
     if (!$b) return null;
+    $b['order'] = order_reprice($b['order']);
     $u = current_user();
     if ($u && ($b['order']['user_id'] === $u['id'] || $u['is_admin'])) return $b;
     $guest = $_COOKIE[GUEST_COOKIE] ?? '';
@@ -224,6 +225,7 @@ function mark_order_paid(string $orderId, string $provider, ?string $paymentId =
     if (str_starts_with($slug, 'qoralama-')) $slug = unique_slug(implode('-', array_filter([$inv['person_a'], $inv['person_b']])), $inv['id']);
 
     q("UPDATE orders SET status = 'active', paid_at = UTC_TIMESTAMP() WHERE id = ?", [$orderId]);
+    if (!empty($b['order']['promo_code'])) q('UPDATE promo_codes SET used = used + 1 WHERE code = ?', [$b['order']['promo_code']]);
     q('UPDATE invitations SET slug = ? WHERE id = ?', [$slug, $inv['id']]);
     if ($paymentId) q("UPDATE payments SET status = 'paid', paid_at = UTC_TIMESTAMP() WHERE id = ?", [$paymentId]);
 

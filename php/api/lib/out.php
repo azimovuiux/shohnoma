@@ -18,6 +18,8 @@ function order_out(array $o): array
         'templateSlug' => $o['template_slug'],
         'status' => $o['status'],
         'amount' => (int)$o['amount'],
+        'promoCode' => $o['promo_code'] ?? null,
+        'promoDiscount' => (int)($o['promo_discount'] ?? 0),
         'paidAt' => iso($o['paid_at']),
         'createdAt' => iso($o['created_at']),
         'updatedAt' => iso($o['updated_at']),

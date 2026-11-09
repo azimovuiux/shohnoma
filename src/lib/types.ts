@@ -35,6 +35,8 @@ export interface Order {
   templateSlug: string;
   status: OrderStatus;
   amount: number;
+  promoCode?: string | null;
+  promoDiscount?: number;
   paidAt: string | null;
   createdAt: string;
   updatedAt: string;

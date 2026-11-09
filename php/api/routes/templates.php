@@ -4,7 +4,7 @@ declare(strict_types=1);
 /* ── Ommaviy: shablonlar ro‘yxati JS sifatida (<head> da, React'dan oldin yuklanadi) ── */
 route('GET', '/templates.js', function () {
     try {
-        $list = array_values(templates());
+        $list = array_map('tpl_public', array_values(templates()));
     } catch (Throwable $e) {
         error_log('[shohnoma] templates.js: ' . $e->getMessage());
         $list = [];
@@ -22,7 +22,7 @@ route('GET', '/templates.js', function () {
 });
 
 route('GET', '/templates', function () {
-    json_out(['ok' => true, 'templates' => array_values(array_filter(templates(), fn($t) => $t['active']))]);
+    json_out(['ok' => true, 'templates' => array_map('tpl_public', array_values(array_filter(templates(), fn($t) => $t['active'])))]);
 });
 
 /* ── Admin: shablonlarni boshqarish ── */

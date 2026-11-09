@@ -6,6 +6,8 @@ export interface FlowOrder {
   code: string;
   status: string;
   amount: number;
+  promoCode?: string | null;
+  promoDiscount?: number;
   templateSlug: string;
   invitationId: string;
   slug: string;

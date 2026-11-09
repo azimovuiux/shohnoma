@@ -41,6 +41,7 @@ route('GET', '/me/orders', function () {
         $i = one('SELECT * FROM invitations WHERE order_id = ?', [$o['id']]);
         if (!$i) continue;
         $p = latest_payment($o['id']);
+        $o = order_reprice($o);
         $items[] = ['order' => order_out($o), 'invitation' => invitation_out($i), 'stats' => invitation_stats($i['id']), 'payment' => $p ? payment_out($p) : null];
     }
     json_out(['ok' => true, 'items' => $items]);

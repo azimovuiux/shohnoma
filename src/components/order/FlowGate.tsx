@@ -45,6 +45,8 @@ export function toFlowOrder(r: OrderResponse): FlowOrder {
     code: r.order.code,
     status: r.order.status,
     amount: r.order.amount,
+    promoCode: r.order.promoCode ?? null,
+    promoDiscount: r.order.promoDiscount ?? 0,
     templateSlug: r.order.templateSlug,
     invitationId: inv.id,
     slug: inv.slug,

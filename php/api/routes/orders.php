@@ -23,11 +23,36 @@ route('PATCH', '/orders/:id', function ($p) {
         $t = is_string($body['templateSlug']) ? template_get($body['templateSlug']) : null;
         if (!$t) fail('Shablon topilmadi', 404);
         if (is_paid_status($b['order']['status'])) fail('To‘lovdan so‘ng shablonni almashtirib bo‘lmaydi', 409);
-        q('UPDATE orders SET template_slug = ?, amount = ? WHERE id = ?', [$t['slug'], (int)$t['price'], $b['order']['id']]);
+        q('UPDATE orders SET template_slug = ?, amount = ?, promo_code = NULL, promo_discount = 0 WHERE id = ?', [$t['slug'], tpl_price($t), $b['order']['id']]);
         unset($body['templateSlug']);
     }
     $inv = apply_invitation_patch($b, $body);
     json_out(['ok' => true, 'invitation' => invitation_out($inv)]);
+});
+
+/* ── Promokod: to‘lovdan oldin qo‘llash / olib tashlash ── */
+const PROMO_STATUSES = ['draft', 'pending_payment', 'payment_failed', 'p2p_rejected'];
+
+route('POST', '/orders/:id/promo', function ($p) {
+    $b = owned_order_or_404($p['id']);
+    $o = $b['order'];
+    if (!in_array($o['status'], PROMO_STATUSES, true)) fail('Bu bosqichda promokod qo‘llab bo‘lmaydi', 409);
+    $promo = promo_find((string)(body()['code'] ?? ''));
+    if (is_string($promo)) fail($promo, 422);
+    $base = (int)$o['amount'] + (int)$o['promo_discount'];
+    $disc = promo_discount($promo, $base);
+    if ($disc <= 0) fail('Bu promokod ushbu buyurtmaga chegirma bermaydi', 422);
+    q('UPDATE orders SET amount = ?, promo_code = ?, promo_discount = ? WHERE id = ?', [$base - $disc, $promo['code'], $disc, $o['id']]);
+    json_out(['ok' => true, 'amount' => $base - $disc, 'promoCode' => $promo['code'], 'promoDiscount' => $disc]);
+});
+
+route('DELETE', '/orders/:id/promo', function ($p) {
+    $b = owned_order_or_404($p['id']);
+    $o = $b['order'];
+    if (!in_array($o['status'], PROMO_STATUSES, true)) fail('Bu bosqichda promokodni o‘zgartirib bo‘lmaydi', 409);
+    $amount = (int)$o['amount'] + (int)$o['promo_discount'];
+    q('UPDATE orders SET amount = ?, promo_code = NULL, promo_discount = 0 WHERE id = ?', [$amount, $o['id']]);
+    json_out(['ok' => true, 'amount' => $amount]);
 });
 
 route('POST', '/orders/:id/photos', function ($p) {

@@ -2,7 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { useLocalRouter } from "@/lib/useLocalRouter";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
+import { formatPrice } from "@/lib/format";
+import { api } from "@/components/ui";
 import { ArrowRight, Card, Mobile, MoneySend, TickCircle, Wallet, WalletCheck } from "@/components/icons";
 import type { Template } from "@/lib/templates";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
@@ -14,9 +16,9 @@ import type { FlowOrder } from "./types";
 
 export type Provider = "payme" | "click" | "google_pay" | "p2p";
 
-const meta: Record<Provider, { label: string; text: string; icon: React.ReactNode; cta: string }> = {
+const meta: Record<Provider, { label: string; text: string; icon: React.ReactNode; cta: string; logo?: string }> = {
   payme: { label: "Payme", text: "Payme ilovasi yoki karta orqali", icon: <Wallet size={20} />, cta: "Payme orqali to‘lash" },
-  click: { label: "Click", text: "Click ilovasi yoki karta orqali", icon: <Card size={20} />, cta: "Click orqali to‘lash" },
+  click: { label: "Click", text: "Click ilovasi yoki karta orqali", icon: <Card size={20} />, cta: "Click orqali to‘lash", logo: "/pay/click.svg" },
   google_pay: { label: "Google Pay", text: "Telefon hamyoni orqali", icon: <Mobile size={20} />, cta: "Google Pay orqali to‘lash" },
   p2p: { label: "P2P o‘tkazma", text: "Kartadan kartaga o‘tkazish", icon: <MoneySend size={20} />, cta: "Kartaga o‘tkazish" },
 };
@@ -30,6 +32,8 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const live = useMemo(() => liveTemplate(template, order), [template, order]);
+  const [promo, setPromo] = useState({ amount: order.amount, code: order.promoCode ?? null, discount: order.promoDiscount ?? 0 });
+  const locale = useLocale();
 
   const pay = async () => {
     setBusy(true);
@@ -73,11 +77,12 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
           template={template}
           live={live}
           order={order}
-          amount={order.amount}
+          amount={promo.amount}
           rows={[
             ["Buyurtma", `№ ${order.code}`],
             ["Ismlar", namesOf(order)],
             ["Sana", dayTime(order.day, order.time)],
+            ...(promo.code ? ([[t("Promokod {code}", { code: promo.code }), `−${formatPrice(promo.discount, true, locale)}`]] as [string, string][]) : []),
           ]}
           action={
             <>
@@ -105,9 +110,14 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
                   active ? "border-maroon bg-bg-soft" : "border-line bg-bg-base hover:bg-bg-soft/60"
                 }`}
               >
-                <span className={active ? "text-maroon" : "text-ink-2"}>{meta[k].icon}</span>
+                {!meta[k].logo && <span className={active ? "text-maroon" : "text-ink-2"}>{meta[k].icon}</span>}
                 <span className="flex flex-1 flex-col gap-0.5">
-                  <span className="t-title text-ink">{t(meta[k].label)}</span>
+                  {meta[k].logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={meta[k].logo} alt={meta[k].label} width={86} height={22} className="h-[22px] w-auto self-start" />
+                  ) : (
+                    <span className="t-title text-ink">{t(meta[k].label)}</span>
+                  )}
                   <span className="t-body-s text-ink-2">{t(meta[k].text)}</span>
                 </span>
                 {active ? <TickCircle size={20} color="var(--color-maroon)" /> : <span className="size-[18px] rounded-full border border-ink/70" />}
@@ -115,6 +125,7 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
             );
           })}
         </div>
+        <PromoBox orderId={order.id} state={promo} onChange={setPromo} />
         <p className="mt-2 flex items-start gap-2.5 t-body-s text-ink-2">
           <span className="shrink-0 text-gold">
             <WalletCheck size={20} />
@@ -127,5 +138,89 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
         {err}
       </MobileBar>
     </FlowColumns>
+  );
+}
+
+type PromoState = { amount: number; code: string | null; discount: number };
+
+/** Promokod: kiritish → narxdan chegirma; qo‘llangan bo‘lsa — olib tashlash */
+function PromoBox({ orderId, state, onChange }: { orderId: string; state: PromoState; onChange: (s: PromoState) => void }) {
+  const t = useT();
+  const locale = useLocale();
+  const [open, setOpen] = useState(false);
+  const [code, setCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const apply = async () => {
+    setBusy(true);
+    setErr(null);
+    try {
+      const r = await api<{ amount: number; promoCode: string; promoDiscount: number }>(`/api/orders/${orderId}/promo`, { method: "POST", json: { code } });
+      onChange({ amount: r.amount, code: r.promoCode, discount: r.promoDiscount });
+      setCode("");
+      setOpen(false);
+    } catch (e) {
+      setErr((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+  const remove = async () => {
+    setBusy(true);
+    try {
+      const r = await api<{ amount: number }>(`/api/orders/${orderId}/promo`, { method: "DELETE" });
+      onChange({ amount: r.amount, code: null, discount: 0 });
+    } catch (e) {
+      setErr((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+  if (state.code)
+    return (
+      <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-success/40 bg-success/5 px-4 py-3">
+        <span className="flex items-center gap-2 t-body-m text-ink">
+          <TickCircle size={18} color="var(--color-success)" />
+          {t("Promokod {code} qo‘llandi: −{sum}", { code: state.code, sum: formatPrice(state.discount, true, locale) })}
+        </span>
+        <button type="button" disabled={busy} onClick={remove} className="t-body-s text-ink-2 hover:text-maroon">
+          {t("Olib tashlash")}
+        </button>
+      </div>
+    );
+  if (!open)
+    return (
+      <button type="button" onClick={() => setOpen(true)} className="w-fit t-body-m font-medium text-maroon hover:underline">
+        {t("Promokodingiz bormi?")}
+      </button>
+    );
+  return (
+    <form
+      className="flex flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (code.trim()) void apply();
+      }}
+    >
+      <div className="flex gap-2">
+        <input
+          autoFocus
+          value={code}
+          onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 40))}
+          placeholder={t("Promokod")}
+          aria-label={t("Promokod")}
+          autoComplete="off"
+          className="h-[52px] min-w-0 flex-1 rounded-xl border border-line bg-bg-base px-4 font-mono text-[16px] tracking-[0.06em] text-ink outline-none focus:border-maroon"
+        />
+        <button type="submit" disabled={busy || !code.trim()} className="btn btn-secondary !h-[52px] shrink-0">
+          {busy ? t("Kuting…") : t("Qo‘llash")}
+        </button>
+      </div>
+      {err && (
+        <p role="alert" className="t-body-s text-danger">
+          {t(err)}
+        </p>
+      )}
+    </form>
   );
 }
