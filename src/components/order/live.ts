@@ -2,7 +2,7 @@ import { designSlug, type Template } from "@/lib/templates";
 import type { FlowOrder } from "./types";
 
 /** Mokap uchun: shablon namunasini forma ma’lumotlari bilan almashtirish */
-export const hasCustomDesign = (t: Template) => ["anor", "zumrad"].includes(designSlug(t));
+export const hasCustomDesign = (t: Template) => ["anor", "zumrad", "parvoz"].includes(designSlug(t));
 
 export function liveTemplate(t: Template, o: Pick<FlowOrder, "personA" | "personB" | "day" | "time" | "venueName" | "ceremony"> & Partial<Pick<FlowOrder, "id" | "address" | "message" | "extra" | "program" | "photos">>): Template {
   const [y, m, d] = (o.day || "").split("-");

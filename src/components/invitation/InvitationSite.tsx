@@ -18,6 +18,7 @@ import { Layer, RsvpForm, ThankYou, fetchSavedAnswer, loadSavedRsvp, useSavedAns
 import st from "./invitation.module.css";
 import { AnorSite } from "@/components/templates/anor/AnorSite";
 import { ZumradSite } from "@/components/templates/zumrad/ZumradSite";
+import { ParvozSite } from "@/components/templates/parvoz/ParvozSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -52,7 +53,7 @@ export function InvitationSite(props: InvitationSiteProps) {
   const ds = designSlug(props.template);
   return (
     <LocaleProvider locale={lang}>
-      {ds === "anor" ? <AnorSite {...props} /> : ds === "zumrad" ? <ZumradSite {...props} /> : <GenericSite {...props} />}
+      {ds === "anor" ? <AnorSite {...props} /> : ds === "zumrad" ? <ZumradSite {...props} /> : ds === "parvoz" ? <ParvozSite {...props} /> : <GenericSite {...props} />}
     </LocaleProvider>
   );
 }

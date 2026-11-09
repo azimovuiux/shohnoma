@@ -174,6 +174,41 @@ const builtin: Template[] = [
       { key: "caption", type: "text", label: "Polaroid yozuvi", placeholder: "Bir umrga", max: 24, hint: "1-surat polaroid bo‘lib chiqadi, 2–3-suratlar — ravoq ichida" },
     ],
   },
+  {
+    number: 3,
+    slug: "parvoz",
+    name: "Parvoz",
+    ceremony: "nikoh",
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Osmon, bulutlar va «Baxt reysi». Samolyot bulutlar ortiga uchib ketgach — bording-pass chipta, illyuminatordan taklif, jo‘nash tablosi-taymer, parvoz rejasi va check-in javob.",
+    descriptionRu: "Небо, облака и «Рейс счастья». Когда самолёт скрывается за облаками — посадочный талон, приглашение в иллюминаторе, табло вылета с таймером, план полёта и регистрация-ответ.",
+    palette: ["#1C2B45", "#A8BCD6", "#EFA97E", "#F6F1E8"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "Sky Terrace", time: "17:30" },
+    theme: { bg: ["#1c2b45", "#17233a"], ink: "#f4e9d8", accent: "#efa97e", soft: "#a8bcd6", script: "cormorant", color: "moviy" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Kutib olish", max: 60 },
+          note: { type: "text", label: "Izoh", placeholder: "Welcome-drink va jonli musiqa", max: 80 },
+        },
+      },
+      { key: "venueNote", type: "text", label: "Manzil izohi", placeholder: "Mehmonlar uchun bepul avtoturargoh mavjud", max: 80, hint: "Bo‘sh qolsa — matn chiqmaydi" },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Tanlanmasa — bo‘lim ko‘rinmaydi" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi", max: 160 },
+      { key: "story1", type: "text", label: "1-surat yozuvi", placeholder: "Uchrashuv · 2021", max: 28, hint: "1–2-suratlar «Lahzalar» bo‘limida polaroid bo‘lib chiqadi" },
+      { key: "story2", type: "text", label: "2-surat yozuvi", placeholder: "Unashtiruv · 2025", max: 28 },
+      { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Yo‘l qanchalik uzoq bo‘lmasin, eng go‘zal manzil — bir-birimiz.", max: 160, hint: "Bo‘sh qolsa — matn chiqmaydi" },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
