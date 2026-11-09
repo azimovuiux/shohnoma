@@ -1,9 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { LiveDevices } from "./LiveDevices";
+import { LiveDevices, LivePreviewButton } from "./LiveDevices";
 import type { FlowOrder } from "./types";
-import { Eye } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { ceremonyLabel, styleLabel, type Template } from "@/lib/templates";
 import { formatPrice } from "@/lib/format";
@@ -45,9 +44,12 @@ export function OrderSummary({
             {t(ceremonyLabel[live.ceremony])} · {t(styleLabel[template.style])}
           </span>
         </div>
-        <span className="inline-flex shrink-0 items-center gap-1.5 pb-0.5 t-body-s text-gold">
-          <Eye size={14} /> {t("Jonli ko‘rinish")}
-        </span>
+        <LivePreviewButton
+          template={template}
+          live={live}
+          order={order}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-maroon/30 px-3 py-1.5 t-body-s font-medium text-maroon transition-colors hover:bg-maroon hover:text-ink-inverse"
+        />
       </div>
       <div className="h-px bg-line" />
       <dl className="flex flex-col gap-3">
@@ -95,9 +97,13 @@ export function MobileTemplateCard({ template, live, order }: { template: Templa
           <span className="t-body-s text-ink-2">{t("Tanlangan shablon")}</span>
           <span className="font-serif text-[24px] font-medium leading-[1.2] text-ink">{template.name}</span>
         </div>
-        <span className="inline-flex shrink-0 items-center gap-1.5 t-body-s text-gold">
-          <Eye size={14} /> {t("Jonli")}
-        </span>
+        <LivePreviewButton
+          template={template}
+          live={live}
+          order={order}
+          label={t("Ko‘rish")}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-maroon/30 px-3 py-1.5 t-body-s font-medium text-maroon"
+        />
       </div>
     </div>
   );

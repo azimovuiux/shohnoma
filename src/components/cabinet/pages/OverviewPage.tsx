@@ -4,34 +4,82 @@ import Link from "@/components/LocalLink";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { ArrowRight, Calendar, CloseCircle, Clock, Edit, Gallery, Link2, Location, Music, Timer1, TickCircle } from "@/components/icons";
-import { StatusBadge } from "@/components/ui";
+import { StatusBadge, useCopy } from "@/components/ui";
 import { InvitationHeader, invTitle } from "../InvitationHeader";
 import { InvitationThumb } from "../InvitationThumb";
-import { CopyLink, ShareRow } from "../LinkActions";
+import { CopyLink, ShareButton, ShareRow } from "../LinkActions";
 import { isPaidStatus } from "@/lib/types";
 import { relTime, useInvitationData, useSiteUrl } from "../data";
 import { daysUntil, initials, rsvpView } from "@/lib/display";
 import { useLocale, useT } from "@/lib/i18n";
 
 /** Mehmon uchun shaxsiy havola: taklifnoma «Hurmatli …» deb shu ism bilan ochiladi (?m=) */
-function GuestLink({ url }: { url: string }) {
+/** Shaxsiy havolalar: mehmon ismi bilan ochiladigan taklifnoma (?m=Ism). Yaratilganlari shu brauzerda eslab qolinadi */
+function GuestLinks({ url, slug, title }: { url: string; slug: string; title: string }) {
   const t = useT();
+  const copy = useCopy();
+  const key = `sh_guests_${slug}`;
   const [name, setName] = useState("");
-  const personal = name.trim() ? `${url}?m=${encodeURIComponent(name.trim())}` : "";
+  const [list, setList] = useState<string[]>([]);
+  useEffect(() => {
+    try {
+      setList(JSON.parse(localStorage.getItem(key) || "[]"));
+    } catch {}
+  }, [key]);
+  const save = (l: string[]) => {
+    setList(l);
+    try {
+      localStorage.setItem(key, JSON.stringify(l));
+    } catch {}
+  };
+  const link = (n: string) => `${url}?m=${encodeURIComponent(n)}`;
+  const add = () => {
+    const n = name.trim();
+    if (!n) return;
+    save([n, ...list.filter((x) => x !== n)].slice(0, 50));
+    copy(link(n), t("Shaxsiy havola nusxalandi"));
+    setName("");
+  };
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-dashed border-line px-3 py-3">
-      <label htmlFor="guest-name" className="t-body-s text-ink-2">
-        {t("Mehmon uchun shaxsiy havola — taklifnoma uning ismi bilan ochiladi")}
-      </label>
-      <input
-        id="guest-name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        maxLength={80}
-        placeholder={t("Masalan: Dilshod aka va Gulnora opa")}
-        className="h-10 rounded-lg border border-line bg-bg-base px-3 t-body-m text-ink outline-none focus:border-maroon/55"
-      />
-      {personal && <CopyLink url={personal} className="min-w-0 justify-between" />}
+    <div className="flex flex-col gap-3">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          add();
+        }}
+        className="flex gap-2"
+      >
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          maxLength={80}
+          placeholder={t("Masalan: Dilshod aka")}
+          aria-label={t("Mehmon ismi")}
+          className="h-11 min-w-0 flex-1 rounded-full border border-line bg-bg-base px-4 t-body-m text-ink outline-none focus:border-maroon/55"
+        />
+        <button type="submit" disabled={!name.trim()} className="btn btn-primary btn-sm shrink-0 disabled:opacity-50">
+          {t("Havola yaratish")}
+        </button>
+      </form>
+      {list.length > 0 && (
+        <ul className="flex flex-col divide-y divide-line rounded-xl border border-line">
+          {list.map((n) => (
+            <li key={n} className="flex items-center gap-2 px-3 py-2">
+              <span className="min-w-0 flex-1 truncate t-body-m text-ink">{n}</span>
+              <a href={link(n)} target="_blank" rel="noopener noreferrer" className="t-body-s text-ink-2 hover:text-maroon">
+                {t("Ochish")}
+              </a>
+              <button type="button" onClick={() => copy(link(n), t("Shaxsiy havola nusxalandi"))} className="t-body-s font-medium text-maroon hover:underline">
+                {t("Nusxalash")}
+              </button>
+              <ShareButton url={link(n)} title={`${n}, ${title}`} className="icon-btn !size-8" />
+              <button type="button" onClick={() => save(list.filter((x) => x !== n))} aria-label={t("O‘chirish")} className="text-ink-2 hover:text-danger">
+                <CloseCircle size={16} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
@@ -123,12 +171,20 @@ export function OverviewPage() {
             <div className="flex min-w-0 flex-1 flex-col gap-2.5">
               {paid ? (
                 <>
-                  <div className="flex items-center gap-2 rounded-xl bg-bg-soft px-3 py-2.5">
-                    <Link2 size={15} className="shrink-0 text-ink-2" />
-                    <CopyLink url={url} className="min-w-0 flex-1 justify-between" />
+                  <div className="flex flex-col gap-2">
+                    <p className="t-body-s font-semibold text-ink">{t("Umumiy havola")}</p>
+                    <p className="-mt-1 text-[12px] text-ink-2">{t("Hammaga bir xil — guruh va kanallarga yuborish uchun")}</p>
+                    <div className="flex items-center gap-2 rounded-xl bg-bg-soft px-3 py-2.5">
+                      <Link2 size={15} className="shrink-0 text-ink-2" />
+                      <CopyLink url={url} className="min-w-0 flex-1 justify-between" />
+                    </div>
+                    <ShareRow url={url} title={`${invTitle(inv, t)} — ${t("taklifnoma")}`} />
                   </div>
-                  <ShareRow url={url} title={`${invTitle(inv, t)} — ${t("taklifnoma")}`} />
-                  <GuestLink url={url} />
+                  <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
+                    <p className="t-body-s font-semibold text-ink">{t("Shaxsiy havola — mehmon ismi bilan")}</p>
+                    <p className="-mt-1 text-[12px] text-ink-2">{t("Taklifnoma «Hurmatli …» deb mehmonning ismi bilan ochiladi")}</p>
+                    <GuestLinks url={url} slug={inv.slug} title={`${invTitle(inv, t)} — ${t("taklifnoma")}`} />
+                  </div>
                 </>
               ) : (
                 <p className="t-body-m text-ink-2">{t("Havola to‘lov tasdiqlangach beriladi.")}</p>

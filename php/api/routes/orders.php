@@ -33,9 +33,18 @@ route('PATCH', '/orders/:id', function ($p) {
 route('POST', '/orders/:id/photos', function ($p) {
     $b = owned_order_or_404($p['id']);
     $photos = jdec($b['invitation']['photos']);
-    if (count($photos) >= 10) fail('Ko‘pi bilan 10 ta surat', 422);
+    // slot berilsa va u band bo‘lsa — o‘sha joydagi surat almashtiriladi (shablondagi o‘rni saqlanadi)
+    $slot = isset($_POST['slot']) && is_numeric($_POST['slot']) ? (int)$_POST['slot'] : -1;
+    $replace = $slot >= 0 && $slot < count($photos);
+    if (!$replace && count($photos) >= 10) fail('Ko‘pi bilan 10 ta surat', 422);
     $url = save_upload($_FILES['file'] ?? null, 'photos');
-    $photos[] = $url;
+    if ($replace) {
+        $old = $photos[$slot];
+        $photos[$slot] = $url;
+        delete_upload($old);
+    } else {
+        $photos[] = $url;
+    }
     q('UPDATE invitations SET photos = ? WHERE id = ?', [json_encode($photos), $b['invitation']['id']]);
     json_out(['ok' => true, 'url' => $url, 'photos' => $photos]);
 });

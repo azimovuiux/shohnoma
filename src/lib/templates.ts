@@ -304,3 +304,24 @@ export const templateFeatures = [
   "Manzil va xarita",
   "Mehmonlar javobi",
 ];
+
+/** Har bir dizaynda suratlar qayerga tushadi (buyurtma formasida joy-joy ko‘rsatiladi) */
+export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
+  anor: [
+    { title: "Asosiy surat", where: "Muqovada, ravoq ichida" },
+    { title: "Hikoya · 1", where: "«Bizning hikoyamiz» polaroidi" },
+    { title: "Hikoya · 2", where: "«Bizning hikoyamiz» polaroidi" },
+    { title: "Hikoya · 3", where: "«Bizning hikoyamiz» polaroidi" },
+  ],
+  zumrad: [
+    { title: "Asosiy surat", where: "Ochilishdagi polaroid" },
+    { title: "Lahza · 1", where: "«Bizning lahzalar» ravog‘i" },
+    { title: "Lahza · 2", where: "«Bizning lahzalar» polaroidi" },
+  ],
+  parvoz: [
+    { title: "Surat · 1", where: "«Lahzalar» — katta polaroid" },
+    { title: "Surat · 2", where: "«Lahzalar» — kichik polaroid" },
+  ],
+};
+export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
+  PHOTO_SLOTS[designSlug(t)] ?? Array.from({ length: 6 }, (_, i) => ({ title: `Surat · ${i + 1}`, where: "Fotogalereya" }));
