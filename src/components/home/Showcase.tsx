@@ -31,9 +31,6 @@ export function Showcase() {
         <div data-reveal="stagger" className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div data-split className="flex flex-col gap-4">
             <SectionTitle plain="Tayyor" italic="dizaynlar" />
-            <p className="t-body-m max-w-[440px] text-ink-2">
-              {t("Har biri telefon va laptopda chiroyli ochiladi — muhr, musiqa va jonli animatsiyalar bilan.")}
-            </p>
           </div>
           <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:px-0 lg:pb-0">
             {chips.map((c) => {

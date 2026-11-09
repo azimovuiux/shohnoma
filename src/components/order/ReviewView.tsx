@@ -193,9 +193,6 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
           ) : (
             <div className="flex h-[640px] flex-col items-center justify-center gap-4 py-8">
               <PhonePreview order={order} template={template} className="w-[262px]" />
-              <p className="inline-flex items-center gap-2 t-body-s text-ink-2">
-                <ArrowDown2 size={14} /> {t("Telefonda pastga surib, butun saytni ko‘ring")}
-              </p>
             </div>
           )}
         </div>
@@ -203,9 +200,6 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
         {/* Mobil — to‘liq sahifa telefon ichida */}
         <div className="flex flex-col items-center gap-3 rounded-[24px] bg-bg-soft px-4 py-6 lg:hidden">
           <PhonePreview order={order} template={template} className="w-[250px]" />
-          <p className="inline-flex items-center gap-2 t-body-s text-ink-2">
-            <ArrowDown2 size={14} /> {t("Pastga surib, butun saytni ko‘ring")}
-          </p>
         </div>
 
         <SectionTitle>{t("Hammasi to‘g‘rimi?")}</SectionTitle>

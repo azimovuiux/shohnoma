@@ -36,7 +36,6 @@ export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId:
         </span>
         <div className="flex flex-col">
           <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("Havola manzili")}</p>
-          <p className="t-body-s text-ink-2">{t("Mehmonlarga yuboriladigan sayt manzili")}</p>
         </div>
       </div>
       {enabled ? (
@@ -58,7 +57,7 @@ export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId:
             {error ? (
               <span className="t-body-s text-danger">{error}</span>
             ) : (
-              <span className="t-body-s text-ink-2">{t("Faqat lotin harflari, raqamlar va “-”. Eski havola o‘zgartirilgach ishlamay qoladi — yangi havolani mehmonlarga qayta yuboring.")}</span>
+              <span className="t-body-s text-ink-2">{t("Lotin harflari, raqam va “-”. Eski havola ishlamay qoladi.")}</span>
             )}
           </label>
           <div>
@@ -68,7 +67,7 @@ export function SlugEditor({ orderId, slug, host, enabled, onSaved }: { orderId:
           </div>
         </>
       ) : (
-        <p className="t-body-m text-ink-2">{t("Havola manzili to‘lov tasdiqlangach beriladi va shu yerda o‘zgartiriladi.")}</p>
+        <p className="t-body-m text-ink-2">{t("Havola to‘lovdan keyin beriladi.")}</p>
       )}
     </form>
   );

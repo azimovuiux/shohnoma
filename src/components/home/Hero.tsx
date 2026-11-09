@@ -208,7 +208,7 @@ export function Hero() {
             )}
           </h1>
           <p className="mt-[26px] max-w-[460px] font-sans text-[16px] leading-[1.6] text-ink-2 lg:mt-[1.8cqw] lg:max-w-[max(400px,31.94cqw)] lg:text-[max(15px,1.25cqw)]">
-            {t("Tayyor dizayn asosida 2 daqiqada yaratiladigan taklifnoma sayti. Bitta havolada — vaqt, xarita, musiqa va mehmonlar javobi.")}
+            {t("Vaqt, xarita, musiqa va mehmonlar javobi — bitta havolada.")}
           </p>
           <div className="mt-9 flex flex-wrap gap-3 lg:mt-[max(24px,2.5cqw)]">
             <Link href="/#shablonlar" className="btn btn-primary">

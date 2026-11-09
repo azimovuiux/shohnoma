@@ -101,7 +101,7 @@ export function FloatingContact() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="t-title">Shohnoma</p>
-              <p className="t-body-s opacity-75">{t("Odatda bir necha daqiqada javob beramiz")}</p>
+              <p className="t-body-s opacity-75">{t("Onlayn")}</p>
             </div>
             <button type="button" onClick={() => setOpen(false)} className="flex size-9 items-center justify-center rounded-full hover:bg-ink-inverse/10" aria-label={t("Yopish")}>
               <CloseCircle size={22} />
@@ -184,7 +184,6 @@ function StartForm({ onStarted }: { onStarted: (s: Session) => void }) {
     <form onSubmit={submit} noValidate className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
       <div className="rounded-[16px] bg-bg-soft p-4">
         <p className="t-title text-ink">{t("Assalomu alaykum! 👋")}</p>
-        <p className="t-body-s mt-1 text-ink-2">{t("Ismingiz va raqamingizni qoldiring — savolingizga shu yerda javob beramiz.")}</p>
       </div>
       <Field label={t("Ismingiz")} required>
         <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" maxLength={80} autoFocus />

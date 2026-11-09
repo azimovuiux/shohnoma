@@ -36,7 +36,6 @@ export function OrderSummary({
       <LiveDevices template={template} live={live} order={order} />
       <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
         <div className="flex min-w-0 flex-col gap-1">
-          <span className="t-body-s text-ink-2">{t("Tanlangan shablon")}</span>
           <span className="font-serif text-[26px] font-medium leading-[1.2] text-ink">{template.name}</span>
           <span className="t-body-s text-ink-2">
             {t(ceremonyLabel[live.ceremony])} · {t(styleLabel[template.style])}
@@ -77,7 +76,6 @@ export function MobileTemplateCard({ template, live, order }: { template: Templa
       <LiveDevices template={template} live={live} order={order} />
       <div className="flex items-center justify-between gap-3 px-1">
         <div className="flex flex-col gap-0.5">
-          <span className="t-body-s text-ink-2">{t("Tanlangan shablon")}</span>
           <span className="font-serif text-[24px] font-medium leading-[1.2] text-ink">{template.name}</span>
         </div>
         <LivePreviewButton

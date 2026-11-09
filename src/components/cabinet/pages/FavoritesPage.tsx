@@ -36,7 +36,6 @@ export function FavoritesPage() {
             <Heart size={24} />
           </span>
           <p className="font-serif text-[30px] font-light text-ink">{t("Hali sevimli shablon yo‘q")}</p>
-          <p className="t-body-m max-w-[380px] text-ink-2">{t("Katalogdagi kartalarda yurakchani bosing — yoqqan dizaynlar shu yerda saqlanadi.")}</p>
           <Link href="/shablonlar/" className="btn btn-primary">
             {t("Shablonlarni ko‘rish")} <ArrowRight size={16} />
           </Link>

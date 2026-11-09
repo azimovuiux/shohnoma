@@ -109,7 +109,6 @@ export function Features() {
             <span className="text-[36px] leading-[1.04] lg:text-[52px]">{t("Har bir taklifnomada")}</span>
             <em className="text-[42px] italic leading-none text-[#e2c48c] lg:text-[64px]">{t("nimalar bor?")}</em>
           </h2>
-          <p className="t-body-m text-ink-inverse/80">{t("Mehmonlaringizga kerak bo‘ladigan hamma narsa — bitta sahifada.")}</p>
         </div>
 
         <div className="grid w-full items-center gap-10 lg:grid-cols-[1fr_330px_1fr] lg:gap-[35px]">

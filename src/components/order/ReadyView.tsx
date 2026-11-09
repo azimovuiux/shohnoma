@@ -114,7 +114,6 @@ export function ReadyView({
               <span className="block text-[40px] lg:text-[52px]">{t("Taklifnomangiz")}</span>
               <em className="block text-[48px] italic text-maroon lg:text-[64px]">{t("tayyor!")}</em>
             </h1>
-            <p className="t-body-m text-ink-2">{t("Baxtli kuningizni yaqinlaringiz bilan ulashing.")}</p>
           </div>
 
           <div className="flex flex-col gap-2.5">
@@ -132,7 +131,7 @@ export function ReadyView({
                 onClick={() => downloadQr(url, "png", `qr-${order.slug}`)}
                 className="inline-flex w-fit items-center gap-2 text-maroon hover:underline"
               >
-                <Scan size={15} /> {t("QR kodni yuklab olish (bosma taklifnoma uchun)")}
+                <Scan size={15} /> {t("QR kodni yuklab olish")}
               </button>
               <button type="button" onClick={() => downloadQr(url, "svg", `qr-${order.slug}`)} className="text-ink-2 hover:text-maroon hover:underline">
                 SVG
@@ -176,23 +175,9 @@ export function ReadyView({
           <div className="h-px bg-line" />
 
           <div className="flex flex-col gap-4">
-            <h2 className="font-serif text-[26px] font-normal text-ink">{t("Endi nima qilaman?")}</h2>
-            {[
-              [<Send2 key="1" size={18} />, "Havolani yuboring", "Telegram, Instagram yoki WhatsApp orqali"],
-              [<Profile2User key="2" size={18} />, "Javoblarni kuzating", "Kim kelishini buyurtma sahifasida ko‘rasiz"],
-              [<Edit key="3" size={18} />, "Kerak bo‘lsa tahrirlang", "Sana, manzil yoki matnni o‘zgartirish mumkin"],
-            ].map(([icon, title, s]) => (
-              <div key={title as string} className="flex items-center gap-3.5">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">{icon}</span>
-                <span className="flex flex-col">
-                  <span className="t-title text-ink">{t(title as string)}</span>
-                  <span className="t-body-s text-ink-2">{t(s as string)}</span>
-                </span>
-              </div>
-            ))}
             <Link
               href={loggedIn ? `/kabinet/t/${order.invitationId}/` : `/kirish/?next=${encodeURIComponent(lp(`/kabinet/t/${order.invitationId}/`))}`}
-              className="btn btn-secondary mt-1 w-full"
+              className="btn btn-secondary w-full"
             >
               <ReceiptText size={17} /> {t("Buyurtmani boshqarish")}
             </Link>

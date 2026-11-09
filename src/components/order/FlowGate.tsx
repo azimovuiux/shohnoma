@@ -94,7 +94,7 @@ export function OrderNotFound() {
     <div className="mx-auto flex min-h-[50vh] max-w-[480px] flex-col items-center justify-center gap-4 px-5 py-20 text-center">
       <p className="font-serif text-[34px] font-light text-ink">{t("Buyurtma topilmadi")}</p>
       <p className="t-body-m text-ink-2">
-        {t("Havola eskirgan yoki buyurtma boshqa qurilmada ochilgan bo‘lishi mumkin. Kabinetingizga kirib, buyurtmalaringizni ko‘ring.")}
+        {t("Havola eskirgan bo‘lishi mumkin.")}
       </p>
       <div className="flex flex-wrap justify-center gap-3">
         <Link href={`/kirish/?next=${encodeURIComponent(lp("/kabinet/"))}`} className="btn btn-primary">

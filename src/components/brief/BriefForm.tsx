@@ -74,14 +74,11 @@ function Chip({ active, children, onClick }: { active: boolean; children: ReactN
   );
 }
 
-function Section({ n, title, hint, error, children, id }: { n: string; title: string; hint?: string; error?: string; children: ReactNode; id?: string }) {
+function Section({ title, hint, error, children, id }: { title: string; hint?: string; error?: string; children: ReactNode; id?: string }) {
   const t = useT();
   return (
     <section id={id} className="flex scroll-mt-28 flex-col gap-3.5">
-      <h2 className="flex items-center gap-3">
-        <span className="font-serif text-[18px] font-medium leading-[1.2] text-gold">{n}</span>
-        <span className="text-[15px] font-semibold leading-[1.35] text-ink">{t(title)}</span>
-      </h2>
+      <h2 className="text-[15px] font-semibold leading-[1.35] text-ink">{t(title)}</h2>
       {hint && <p className="t-body-s text-ink-2">{t(hint)}</p>}
       {children}
       {error && <p className="t-body-s text-danger">{error}</p>}
@@ -154,7 +151,7 @@ function HowItWorksPanel({ sending, onSubmit }: { sending: boolean; onSubmit?: (
           <Call size={16} /> {t("Qo‘ng‘iroq")}
         </a>
       </div>
-      <p className="t-body-s text-ink-2">{t("Brif bepul. To‘lov faqat eskizni tasdiqlaganingizdan keyin.")}</p>
+      <p className="t-body-s text-ink-2">{t("Brif bepul.")}</p>
     </div>
   );
 }
@@ -178,23 +175,8 @@ function Success({ name, via }: { name: string; via: ContactVia }) {
       </h1>
       <p className="t-body-l mt-4 text-ink-2">
         {t("Rahmat")}
-        {name ? `, ${name}` : ""}! {t("Dizaynerimiz 24 soat ichida {via} va g‘oyangizni birga aniqlaymiz.", { via: t(viaText) })}
+        {name ? `, ${name}` : ""}! {t("24 soat ichida {via}.", { via: t(viaText) })}
       </p>
-      <ol className="mt-8 flex w-full flex-col gap-3 rounded-panel bg-bg-soft p-5 text-left">
-        {[
-          ["Dizayner bog‘lanadi", "24 soat ichida, tanlagan usulingizda"],
-          ["Eskizni ko‘rasiz", "2–3 kun ichida, 2 marta tuzatish bilan"],
-          ["Tasdiqlab, to‘laysiz", "Shundan so‘ng sayt havolasi va QR kod tayyor bo‘ladi"],
-        ].map(([s, d], i) => (
-          <li key={s} className="flex items-start gap-3">
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-bg-base font-serif text-[15px] text-gold">{i + 1}</span>
-            <span className="flex flex-col">
-              <span className="t-title text-ink">{t(s)}</span>
-              <span className="t-body-s text-ink-2">{t(d)}</span>
-            </span>
-          </li>
-        ))}
-      </ol>
       <div className="mt-8 flex w-full flex-col gap-2.5 sm:flex-row">
         <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-primary flex-1">
           <TelegramIcon size={16} /> {t("Telegramda yozish")}
@@ -312,7 +294,6 @@ export function BriefForm() {
         </Link>
         <div className="flex flex-col gap-2.5">
           <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[52px]">{t("O‘zingizga xos taklifnoma")}</h1>
-          <p className="t-body-l text-ink-2">{t("Bir necha savolga javob bering — dizaynerimiz g‘oyangizni noldan chizib beradi.")}</p>
         </div>
       </div>
 
@@ -325,7 +306,7 @@ export function BriefForm() {
           }}
           className="flex min-w-0 flex-col gap-10 lg:flex-1 xl:w-[720px] xl:flex-none"
         >
-          <Section id="brif-01" n="01" title="Qaysi marosim?" error={errors.ceremony}>
+          <Section id="brif-01" title="Qaysi marosim?" error={errors.ceremony}>
             <div className="flex flex-wrap gap-2">
               {ceremonies.map((c) => (
                 <Chip key={c.value} active={ceremony === c.value} onClick={() => setCeremony(c.value)}>
@@ -343,7 +324,7 @@ export function BriefForm() {
             </div>
           </Section>
 
-          <Section n="02" title="Qaysi uslub yoqadi?" hint="Bir nechtasini tanlashingiz mumkin — dizayner shundan boshlaydi.">
+          <Section title="Qaysi uslub yoqadi?" hint="Bir nechtasini tanlash mumkin">
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
               {styles.map((s) => (
                 <StyleCard
@@ -357,7 +338,7 @@ export function BriefForm() {
             </div>
           </Section>
 
-          <Section n="03" title="Ranglar">
+          <Section title="Ranglar">
             <div className="flex flex-wrap items-center gap-2.5">
               {colors.map((c) => {
                 const active = chosenColors.includes(c.value);
@@ -396,7 +377,7 @@ export function BriefForm() {
             </div>
           </Section>
 
-          <Section n="04" title="G‘oyalaringiz" error={errors.files}>
+          <Section title="G‘oyalaringiz" error={errors.files}>
             <Textarea
               value={ideas}
               onChange={(e) => setIdeas(e.target.value)}
@@ -416,7 +397,7 @@ export function BriefForm() {
               <span className="flex flex-col gap-[3px]">
                 <span className="text-[13px] font-semibold leading-[1.35] text-ink">{t("Yoqqan rasm yoki taklifnomalarni yuklang")}</span>
                 <span className="t-body-s text-ink-2">
-                  {t("Pinterest, Instagram skrinshotlari — 10 tagacha")}
+                  {t("10 tagacha rasm")}
                   {files.length ? ` · ${t("{n} ta tanlandi", { n: files.length })}` : ""}
                 </span>
               </span>
@@ -451,7 +432,7 @@ export function BriefForm() {
             )}
           </Section>
 
-          <Section id="brif-05" n="05" title="Taxminiy byudjet" error={errors.budget}>
+          <Section id="brif-05" title="Taxminiy byudjet" error={errors.budget}>
             <div className="flex flex-wrap gap-2">
               {budgets.map((b) => (
                 <Chip key={b} active={budget === b} onClick={() => setBudget(b)}>
@@ -461,7 +442,7 @@ export function BriefForm() {
             </div>
           </Section>
 
-          <Section id="brif-06" n="06" title="Siz bilan qanday bog‘lanamiz?">
+          <Section id="brif-06" title="Siz bilan qanday bog‘lanamiz?">
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label={t("Ismingiz")} error={errors.name}>
                 <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder={t("Madina")} aria-invalid={!!errors.name} maxLength={120} />
@@ -493,7 +474,6 @@ export function BriefForm() {
             <button type="submit" disabled={sending} className="btn btn-primary w-full">
               <Send2 size={16} /> {sending ? t("Yuborilmoqda…") : t("Brifni yuborish")}
             </button>
-            <p className="t-body-s text-center text-ink-2">{t("Brif bepul. To‘lov faqat eskizni tasdiqlaganingizdan keyin.")}</p>
           </div>
         </form>
 

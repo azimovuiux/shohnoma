@@ -22,7 +22,6 @@ export function EditPage() {
     {
       href: flow("marosim"),
       title: t("Marosim ma’lumotlari"),
-      desc: t("Ismlar, sana va vaqt, marosim joyi va manzil"),
       rows: [
         { icon: <User size={16} />, v: [inv.personA, inv.personB].filter(Boolean).join(" & ") || "—" },
         { icon: <Calendar size={16} />, v: d ? `${d.day}${d.time ? `, ${d.time}` : ""}` : "—" },
@@ -32,7 +31,6 @@ export function EditPage() {
     {
       href: flow("tafsilotlar"),
       title: t("Tafsilotlar"),
-      desc: t("Taklif matni, suratlar, imkoniyatlar va aloqa"),
       rows: [
         { icon: <Edit size={16} />, v: inv.message ? `“${inv.message.slice(0, 70)}${inv.message.length > 70 ? "…" : ""}”` : "—" },
         { icon: <Gallery size={16} />, v: t("{n} ta surat", { n: (inv.photos ?? []).length }) },
@@ -50,7 +48,6 @@ export function EditPage() {
           <section key={s.title} className="flex flex-col gap-4 rounded-card border border-line bg-bg-base p-5">
             <div className="flex flex-col gap-1">
               <p className="text-[15px] font-semibold leading-[1.35] text-ink">{s.title}</p>
-              <p className="t-body-s text-ink-2">{s.desc}</p>
             </div>
             <ul className="flex flex-col gap-2">
               {s.rows.map((r, i) => (

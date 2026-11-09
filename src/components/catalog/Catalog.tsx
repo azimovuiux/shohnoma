@@ -152,7 +152,7 @@ export function Catalog() {
             {tt("Barcha")} <em className="italic text-maroon">{tt("shablonlar")}</em>
           </h1>
           <p className="t-body-l mt-3 max-w-[520px] text-ink-2">
-            {tt("{n} ta tayyor dizayn — har biri telefon va laptopda birdek chiroyli ochiladi.", { n: templates.length })}
+            {tt("{n} ta tayyor dizayn", { n: templates.length })}
           </p>
         </div>
         <label className="relative flex w-full items-center lg:w-[380px]">
@@ -199,7 +199,6 @@ export function Catalog() {
       {filtered.length === 0 ? (
         <div className="mt-10 flex flex-col items-center gap-4 rounded-card bg-bg-soft px-6 py-16 text-center">
           <p className="font-serif text-[32px] font-light text-ink">{tt("Hech narsa topilmadi")}</p>
-          <p className="t-body-m max-w-[420px] text-ink-2">{tt("Filtrlarni o‘zgartirib ko‘ring yoki o‘zingizga xos dizayn buyurtma qiling.")}</p>
           <div className="flex flex-wrap justify-center gap-3">
             <button type="button" onClick={clearAll} className="btn btn-secondary btn-sm">
               {tt("Filtrni tozalash")}
@@ -220,24 +219,6 @@ export function Catalog() {
           ))}
         </div>
       )}
-
-      {/* Afzalliklar */}
-      <div className="mt-20 grid gap-6 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          { icon: <Mobile size={20} />, title: "Telefon va laptopga mos", text: "Har bir shablon ikkala ekranda ham chiroyli." },
-          { icon: <Brush size={20} />, title: "Ma’lumotlarni o‘zingiz kiritasiz", text: "Ismlar, sana, manzil — bir necha daqiqada." },
-          { icon: <Card size={20} />, title: "Qulay to‘lov", text: "Payme, Click, Google Pay yoki P2P." },
-          { icon: <TelegramIcon size={20} />, title: "Savol bo‘lsa — yozing", text: "Telegramda tez javob beramiz." },
-        ].map((b) => (
-          <div key={b.title} className="flex gap-3.5">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-gold-deep">{b.icon}</span>
-            <div>
-              <p className="t-title text-ink">{tt(b.title)}</p>
-              <p className="t-body-s mt-1 text-ink-2">{tt(b.text)}</p>
-            </div>
-          </div>
-        ))}
-      </div>
 
       {quick && (
         <QuickView

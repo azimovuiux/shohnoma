@@ -87,7 +87,7 @@ export function ExtraFields({ fields, value, onChange, errors = {} }: { fields: 
                 </button>
               )}
               <p className="t-body-s text-ink-2">
-                {cols.map(([, s]) => t(s.label) + (s.required ? " *" : "")).join(" · ")} — {t("ko‘pi bilan {n} ta", { n: f.max })}
+                {t("Ko‘pi bilan {n} ta", { n: f.max })}
               </p>
               {err && <p className="t-body-s text-danger">{err}</p>}
             </div>

@@ -98,9 +98,9 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
     </button>
   );
 
-  const toggles: { key: "rsvpEnabled" | "musicEnabled"; title: string; text: string }[] = [
-    { key: "rsvpEnabled", title: "Mehmonlar javobi", text: "Mehmonlar ishtirokini tasdiqlashi mumkin." },
-    { key: "musicEnabled", title: "Fon musiqasi", text: "Ro‘yxatdan o‘zingizga yoqqan kuyni tanlang." },
+  const toggles: { key: "rsvpEnabled" | "musicEnabled"; title: string }[] = [
+    { key: "rsvpEnabled", title: "Mehmonlar javobi" },
+    { key: "musicEnabled", title: "Fon musiqasi" },
   ];
 
   return (
@@ -126,7 +126,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
       <div className="flex flex-col gap-[26px]">
         <MobileTemplateCard template={template} live={live} order={o} />
 
-        <FlowField label={t("Taklif matni")} error={errors.message} hint={t("Tayyor matnni o‘zingizga moslab o‘zgartirishingiz mumkin.")} htmlFor="f-msg">
+        <FlowField label={t("Taklif matni")} error={errors.message} htmlFor="f-msg">
           <textarea
             id="f-msg"
             value={o.message}
@@ -143,7 +143,6 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
 
         <div className="flex flex-col gap-3">
           <SectionTitle>{t("Suratlar")}</SectionTitle>
-          <p className="t-body-s text-ink-2">{t("Har bir surat taklifnomaning qaysi joyiga tushishi ostida yozilgan. Joyni bosing va suratni tanlang.")}</p>
           <input
             ref={slotRef}
             type="file"
@@ -221,7 +220,6 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
             <div key={tg.key} className="flex items-center gap-4 rounded-xl bg-bg-soft px-[13px] py-4">
               <div className="flex flex-1 flex-col gap-1">
                 <p className="t-title text-ink">{t(tg.title)}</p>
-                <p className="t-body-s text-ink-2">{t(tg.text)}</p>
               </div>
               <Toggle checked={o[tg.key]} onChange={(v) => set(tg.key, v)} label={t(tg.title)} />
             </div>
@@ -234,7 +232,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
           <FlowField label={t("Telefon raqamingiz")} required error={errors.phone} htmlFor="f-phone">
             <PhoneInput id="f-phone" value={phone} onChange={onPhone} invalid={!!errors.phone} />
           </FlowField>
-          <FlowField label={t("Telegram foydalanuvchi nomi")} hint={t("Buyurtma haqidagi xabarlarni shu raqamga yuboramiz.")} htmlFor="f-tg">
+          <FlowField label={t("Telegram foydalanuvchi nomi")} htmlFor="f-tg">
             <input
               id="f-tg"
               value={o.contactTg}

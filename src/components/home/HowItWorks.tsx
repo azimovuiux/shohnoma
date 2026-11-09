@@ -46,7 +46,6 @@ export function HowItWorks() {
       <div className="mx-auto flex max-w-[1200px] flex-col gap-14 lg:gap-[72px]">
         <div data-reveal="stagger" className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <SectionTitle plain="Qanday" italic="ishlaydi" />
-          <p className="t-body-m max-w-[400px] text-ink-2 lg:text-right">{t("Buyurtmadan tayyor havolagacha — to‘rt oddiy qadam.")}</p>
         </div>
 
         <ol data-reveal="stagger" style={{ ["--d" as string]: "150ms" }} className="grid gap-10 sm:grid-cols-2 xl:grid-cols-4 xl:gap-0">
@@ -55,11 +54,7 @@ export function HowItWorks() {
               <ArchIcon>{s.icon}</ArchIcon>
               {i < steps.length - 1 && <Connector />}
               <div className="flex flex-col gap-2.5">
-                <div className="flex items-baseline gap-2.5">
-                  <span className="font-serif text-[26px] font-light italic leading-none text-gold">{String(i + 1).padStart(2, "0")}</span>
-                  <h3 className="t-display-card text-ink">{t(s.title)}</h3>
-                </div>
-                <p className="t-body-m max-w-[250px] text-ink-2">{t(s.text)}</p>
+                <h3 className="t-display-card text-ink">{t(s.title)}</h3>
               </div>
             </li>
           ))}
@@ -72,7 +67,6 @@ export function HowItWorks() {
             </span>
             <div className="flex flex-col gap-1">
               <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("To‘lov usullari")}</p>
-              <p className="t-body-s text-ink-2">{t("To‘lov tasdiqlangach, tayyor sayt havolasi sizga yuboriladi.")}</p>
             </div>
           </div>
           <ul className="flex flex-wrap gap-2.5">

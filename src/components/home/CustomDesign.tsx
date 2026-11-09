@@ -2,7 +2,7 @@
 
 import Link from "@/components/LocalLink";
 import { useT } from "@/lib/i18n";
-import { AddCircle, Brush, Calendar, DocumentText, Gallery, TickCircle, Wallet } from "@/components/icons";
+import { AddCircle, Calendar, DocumentText, Gallery, TickCircle, Wallet } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { Star8 } from "@/components/Ornament";
 import { Photo } from "./Photo";
@@ -53,21 +53,8 @@ export function CustomDesign() {
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{t("dizayn kerakmi?")}</em>
           </h2>
           <p className="t-body-l max-w-[500px] text-ink-2">
-            {t("Qisqa brifni to‘ldiring: uslub, ranglar va marosim tafsilotlarini bilib olib, faqat siz uchun taklifnoma tayyorlaymiz.")}
+            {t("Brifni to‘ldiring — dizaynni siz uchun noldan chizamiz.")}
           </p>
-          <ul className="grid max-w-[540px] gap-4 sm:grid-cols-2">
-            {[
-              [<Brush key="b" size={18} />, "Uslub va ranglar"],
-              [<Calendar key="c" size={18} />, "Sana, vaqt va manzil"],
-              [<Gallery key="g" size={18} />, "Rasmlar va matnlar"],
-              [<Wallet key="w" size={18} />, "Muddat va byudjet"],
-            ].map(([icon, label]) => (
-              <li key={label as string} className="flex items-center gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">{icon}</span>
-                <span className="t-title text-ink">{t(label as string)}</span>
-              </li>
-            ))}
-          </ul>
           <div className="flex flex-wrap items-center gap-[22px]">
             <Link href="/maxsus-dizayn/" className="btn btn-primary">
               <DocumentText size={17} /> {t("Brifni to‘ldirish")}

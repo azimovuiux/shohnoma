@@ -101,7 +101,7 @@ export function Processing({
       kind="progress"
       icon={<MoneySend size={30} />}
       title={t(`${n.to} o‘tmoqdasiz`)}
-      text={t("To‘lovni {name} sahifasida yakunlang. Tugagach, avtomatik shu yerga qaytasiz — sahifani yopmang.", { name: n.name })}
+      text={t("To‘lovni {name} sahifasida yakunlang. Bu sahifani yopmang.", { name: n.name })}
     >
       <div className="flex items-center gap-2.5 text-ink-2">
         {step("Shohnoma", false)}

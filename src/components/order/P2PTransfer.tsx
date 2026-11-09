@@ -160,18 +160,6 @@ export function P2PTransfer({
           </dl>
         </div>
 
-        <div className="flex flex-col gap-4">
-          <SectionTitle>{t("Qanday o‘tkazaman?")}</SectionTitle>
-          <ol className="flex flex-col gap-3">
-            {["Karta raqami va summani nusxalang", "Bank ilovangizda o‘tkazmani bajaring", "Chek rasmini pastga yuklang"].map((s, i) => (
-              <li key={s} className="flex items-center gap-3 t-body-m text-ink">
-                <span className="flex size-[30px] shrink-0 items-center justify-center rounded-full border border-gold/60 font-serif text-[15px] text-gold">{i + 1}</span>
-                {t(s)}
-              </li>
-            ))}
-          </ol>
-        </div>
-
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -228,7 +216,7 @@ export function P2PTransfer({
                 <Gallery size={22} />
               </span>
               <span className="t-title text-ink">{t("Chek rasmini yuklang")}</span>
-              <span className="t-body-s text-ink-2">{t("Rasm yoki skrinshot · bosing yoki shu yerga tashlang")}</span>
+              <span className="t-body-s text-ink-2">{t("Rasm yoki skrinshot")}</span>
             </button>
           )}
         </div>
@@ -236,7 +224,7 @@ export function P2PTransfer({
           <span className="text-gold">
             <Timer1 size={16} />
           </span>
-          {t("Odatda 15 daqiqa ichida tasdiqlaymiz. Tasdiqlangach, taklifnoma havolasi kabinetingizda va Telegramda paydo bo‘ladi.")}
+          {t("Odatda 15 daqiqada tasdiqlanadi.")}
         </p>
       </div>
       <MobileBar>

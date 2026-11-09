@@ -51,9 +51,6 @@ export function Finale() {
           <span className="text-[42px] leading-[1.04] tracking-[-0.005em] text-ink lg:text-[72px]">{t("Baxtli kuningiz")}</span>
           <em className="text-[40px] italic leading-none tracking-[-0.01em] text-maroon lg:text-[68px]">{t("shu yerdan boshlanadi")}</em>
         </h2>
-        <p className="mt-3 text-[14px] leading-[1.6] text-ink-2 lg:text-[17px]">
-          {t("Shablonni tanlang, ma’lumotlarni kiriting — taklifnomangiz bir necha daqiqada tayyor.")}
-        </p>
       </div>
     </section>
   );

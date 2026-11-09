@@ -126,12 +126,6 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
           })}
         </div>
         <PromoBox orderId={order.id} state={promo} onChange={setPromo} />
-        <p className="mt-2 flex items-start gap-2.5 t-body-s text-ink-2">
-          <span className="shrink-0 text-gold">
-            <WalletCheck size={20} />
-          </span>
-          {t("To‘lovni tanlangan xizmatda yakunlaysiz. Tasdiqlangach, tayyor taklifnoma havolasini olasiz.")}
-        </p>
       </div>
       <MobileBar>
         {button}

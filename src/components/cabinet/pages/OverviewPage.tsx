@@ -173,7 +173,6 @@ export function OverviewPage() {
                 <>
                   <div className="flex flex-col gap-2">
                     <p className="t-body-s font-semibold text-ink">{t("Umumiy havola")}</p>
-                    <p className="-mt-1 text-[12px] text-ink-2">{t("Hammaga bir xil — guruh va kanallarga yuborish uchun")}</p>
                     <div className="flex items-center gap-2 rounded-xl bg-bg-soft px-3 py-2.5">
                       <Link2 size={15} className="shrink-0 text-ink-2" />
                       <CopyLink url={url} className="min-w-0 flex-1 justify-between" />
@@ -182,12 +181,12 @@ export function OverviewPage() {
                   </div>
                   <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
                     <p className="t-body-s font-semibold text-ink">{t("Shaxsiy havola — mehmon ismi bilan")}</p>
-                    <p className="-mt-1 text-[12px] text-ink-2">{t("Taklifnoma «Hurmatli …» deb mehmonning ismi bilan ochiladi")}</p>
+                    <p className="-mt-1 text-[12px] text-ink-2">{t("Mehmon ismi bilan ochiladi")}</p>
                     <GuestLinks url={url} slug={inv.slug} title={`${invTitle(inv, t)} — ${t("taklifnoma")}`} />
                   </div>
                 </>
               ) : (
-                <p className="t-body-m text-ink-2">{t("Havola to‘lov tasdiqlangach beriladi.")}</p>
+                <p className="t-body-m text-ink-2">{t("Havola to‘lovdan keyin beriladi.")}</p>
               )}
             </div>
             {paid && <QrBlock url={url} slug={inv.slug} />}
@@ -216,7 +215,7 @@ export function OverviewPage() {
         </div>
         {recent.list.length === 0 ? (
           <p className="border-t border-line py-4 t-body-m text-ink-2">
-            {paid ? t("Hali javoblar yo‘q. Havolani mehmonlarga yuboring — javoblar shu yerda ko‘rinadi.") : t("Sayt ochilgach, mehmonlar javobi shu yerda ko‘rinadi.")}
+            {t("Hali javoblar yo‘q")}
           </p>
         ) : (
           recent.list.map((g) => {

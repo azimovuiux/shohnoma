@@ -130,7 +130,6 @@ export function QuickView({
           <Link href={`/shablonlar/${t.slug}/?view=${device}`} className="flex flex-1 items-center justify-center py-4" aria-label={tt("Kattalashtirish")}>
             <TemplatePreviewStage t={t} device={device} />
           </Link>
-          <p className="t-body-s text-ink-2">{tt("Ekranni kattalashtirish uchun bosing")}</p>
         </div>
 
         <div className="relative flex flex-col gap-6 p-6 lg:p-9">
@@ -138,7 +137,6 @@ export function QuickView({
             <CloseCircle size={24} />
           </button>
           <div className="flex flex-col gap-2 pr-8">
-            <span className="font-serif text-[15px] text-gold">{String(t.number).padStart(2, "0")}</span>
             <h2 className="font-serif text-[38px] font-light leading-none text-ink">{t.name}</h2>
             <div className="mt-1 flex flex-wrap gap-1.5">
               <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(ceremonyLabel[t.ceremony])}</span>

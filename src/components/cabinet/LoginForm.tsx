@@ -37,17 +37,9 @@ export function LoginForm({ next }: { next: string }) {
       <div className="flex flex-col gap-2.5">
         <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("Kirish yoki ro‘yxatdan o‘tish")}</h1>
         <p className="t-body-m text-ink-2">
-          {t("Buyurtmalaringiz, havolangiz va mehmonlar javobi shu yerda. Telegram orqali bir bosishda kiring — hisob avtomatik ochiladi.")}
+          {t("Telegram orqali bir bosishda kiring.")}
         </p>
       </div>
-      <ol className="flex flex-col gap-2.5 rounded-[16px] bg-bg-soft p-4 t-body-s text-ink-2">
-        {["Pastdagi tugmani bosing — Telegram ochiladi", "Botda «Start» tugmasini bosing", "«📱 Raqamni yuborish» — va sayt o‘zi kiradi"].map((s, i) => (
-          <li key={s} className="flex items-center gap-3">
-            <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-bg-base t-nav text-maroon">{i + 1}</span>
-            {t(s)}
-          </li>
-        ))}
-      </ol>
       <TelegramLogin next={next} />
       {locale === "ru" ? (
         <p className="t-body-s text-ink-2">

@@ -19,10 +19,6 @@ export function LegalPage({ title, italic, updated, children }: { title: string;
           <em className="text-[36px] italic leading-none text-maroon sm:text-[42px] lg:text-[64px]">{t(italic)}</em>
         </h1>
         <p className="mt-4 t-body-s text-ink-2">{t("Oxirgi yangilanish: {date}", { date: t(updated) })}</p>
-        <p className="mt-6 flex items-start gap-2.5 rounded-xl px-4 py-3 t-body-s text-pending" style={{ background: "var(--pending-bg)" }}>
-          <InfoCircle size={16} className="mt-0.5 shrink-0" />
-          {t("Qoralama matn — e’lon qilinishidan oldin Shohnoma ma’muriyati va yurist tomonidan ko‘rib chiqilishi kerak.")}
-        </p>
         <div className="legal mt-10 flex flex-col gap-8 t-body-l text-ink-2 [&_h2]:font-serif [&_h2]:text-[28px] [&_h2]:font-light [&_h2]:leading-[1.1] [&_h2]:text-ink [&_li]:pl-1 [&_ol]:list-decimal [&_ol]:pl-5 [&_section]:flex [&_section]:flex-col [&_section]:gap-3 [&_strong]:font-semibold [&_strong]:text-ink [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-1.5">
           {children}
         </div>

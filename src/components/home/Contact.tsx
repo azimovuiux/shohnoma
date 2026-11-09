@@ -65,7 +65,6 @@ export function Contact() {
             <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">{t("Savol yoki")}</span>
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{t("fikringiz bormi?")}</em>
           </h2>
-          <p className="t-body-m max-w-[420px] text-ink-2">{t("Qulay usulni tanlang — yozing, qo‘ng‘iroq qiling yoki xabar qoldiring.")}</p>
           <ul className="grid grid-cols-2 gap-3 sm:gap-4">
             {channels.map((c) => (
               <li key={c.name}>
@@ -101,7 +100,6 @@ export function Contact() {
             <>
               <div className="flex flex-col gap-1.5">
                 <p className="font-serif text-[28px] font-medium leading-[1.2] text-ink">{t("Xabar qoldiring")}</p>
-                <p className="t-body-s text-ink-2">{t("Ma’lumotlaringizni qoldiring — o‘zimiz bog‘lanamiz.")}</p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-2">

@@ -141,7 +141,6 @@ function GuestsInner() {
     <>
       <div className="flex flex-col gap-2">
         <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("Mehmonlar javobi")}</h1>
-        <p className="t-body-m text-ink-2">{t("Taklifnomani ochgan mehmonlar shu yerda javob va tilak qoldiradi")}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">

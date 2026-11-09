@@ -137,7 +137,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
           />
         </FlowField>
 
-        <FlowField label={t("Taklifnoma tili")} htmlFor="f-lang" hint={t("Mehmonlar taklifnomani shu tilda ko‘radi.")}>
+        <FlowField label={t("Taklifnoma tili")} htmlFor="f-lang">
           <SelectField id="f-lang" label={t("Taklifnoma tili")} value={lang} onChange={setLang} options={inviteLangs} />
         </FlowField>
 
@@ -221,7 +221,6 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
 
         <div className="flex flex-col gap-2 rounded-xl bg-bg-soft p-4">
           <p className="t-title text-ink">{t("Xaritadagi havola")}</p>
-          <p className="t-body-s text-ink-2">{t("Mehmonlar manzilni oson topishi uchun xarita havolasini qo‘shing.")}</p>
           {showMap ? (
             <div className="flex flex-col gap-1.5">
               <span className="flex items-center gap-2">
@@ -291,8 +290,6 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
             )}
           </div>
         )}
-
-        <p className="t-body-s text-ink-2">{t("* To‘ldirilishi shart bo‘lgan maydonlar")}</p>
       </div>
 
       <MobileBar>

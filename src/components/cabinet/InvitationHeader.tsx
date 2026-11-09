@@ -35,7 +35,7 @@ export function InvitationHeader({ order, invitation: inv, title }: { order: Ord
         <div className="flex flex-col gap-4 rounded-panel p-5 sm:flex-row sm:items-center sm:justify-between" style={{ background: "var(--pending-bg)" }}>
           <p className="flex items-center gap-2.5 t-body-m text-pending">
             <Clock size={18} />
-            {order.status === "p2p_review" ? tr("Chekingiz tekshirilmoqda — tasdiqlangach sayt ochiladi.") : tr("Qoralama · ma’lumotlar saqlangan — to‘lovdan so‘ng sayt ochiladi.")}
+            {order.status === "p2p_review" ? tr("Chek tekshirilmoqda") : tr("Sayt to‘lovdan keyin ochiladi")}
           </p>
           {order.status === "p2p_review" ? (
             <Link href={`/buyurtma/${order.id}/tolov/p2p/tekshirilmoqda/`} className="btn btn-secondary btn-sm shrink-0 bg-bg-base">

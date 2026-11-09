@@ -42,9 +42,7 @@ export function MarosimPageClient() {
                 : { href: `/shablonlar/${template.slug}/`, label: t("Shablonga qaytish") }
             }
             step={editing ? undefined : 1}
-            title={editing ? t("Ma’lumotlarni tahrirlash") : t("Baxtli kuningiz")}
-            sub={t("Ismlar, sana va manzilni kiriting — o‘ng tomonda taklifnoma qanday chiqishini ko‘rasiz.")}
-            subMobile={t("Ismlar, sana va manzilni kiriting.")}
+            title={editing ? t("Ma’lumotlarni tahrirlash") : t("Marosim ma’lumotlari")}
           />
           <MarosimForm order={order} template={template} editing={editing} />
         </>
@@ -67,8 +65,7 @@ export function TafsilotlarPageClient() {
                 : { href: `/buyurtma/${order.id}/marosim/`, label: t("Ma’lumotlarga qaytish") }
             }
             step={editing ? undefined : 2}
-            title={editing ? t("Tafsilotlarni tahrirlash") : t("Sizga xos tafsilotlar")}
-            sub={t("Taklifnomani shaxsiylashtiring va bog‘lanish ma’lumotlarini qoldiring.")}
+            title={editing ? t("Tafsilotlarni tahrirlash") : t("Tafsilotlar")}
           />
           <TafsilotlarForm order={order} template={template} editing={editing} />
         </>
@@ -87,9 +84,7 @@ export function ReviewPageClient() {
           <FlowTop
             back={{ href: `/buyurtma/${order.id}/tafsilotlar/`, label: t("Tafsilotlarga qaytish") }}
             step={3}
-            title={t("Saytingiz shunday ko‘rinadi")}
-            sub={t("Laptop va telefonda ko‘rib chiqing — biror narsani o‘zgartirish kerak bo‘lsa, qalamchani bosing.")}
-            subMobile={t("Biror narsani o‘zgartirish kerak bo‘lsa, qalamchani bosing.")}
+            title={t("Ko‘rib chiqish")}
           />
           <ReviewView order={order} template={template} />
         </>
@@ -112,8 +107,7 @@ export function PayPageClient() {
             <FlowTop
               back={{ href: `/buyurtma/${order.id}/korib-chiqish/`, label: t("Tekshiruvga qaytish") }}
               step={4}
-              title={t("So‘nggi qadam")}
-              sub={t("Qulay to‘lov usulini tanlang.")}
+              title={t("To‘lov")}
             />
             {cfg.data.providers.length ? (
               <PayChoice order={order} template={template} providers={cfg.data.providers as Provider[]} />
@@ -169,7 +163,7 @@ export function PaidPageClient() {
       {({ order, raw, base }) => {
         const p = raw.payment;
         return (
-          <StatusScreen kind="success" title={t("To‘lov qabul qilindi")} text={t("Rahmat! Taklifnomangiz ishga tushdi — havola va QR kod tayyor.")}>
+          <StatusScreen kind="success" title={t("To‘lov qabul qilindi")} text={t("Taklifnomangiz ishga tushdi.")}>
             <InfoCard
               rows={[
                 [t("To‘langan summa"), <span key="s" className="font-serif text-[22px] font-medium text-maroon">{formatPrice(order.amount, true, locale)}</span>],
@@ -211,7 +205,7 @@ export function FailedPageClient() {
           <StatusScreen
             kind="error"
             title={t("To‘lov o‘tmadi")}
-            text={t("Kartadan pul yechilmadi. Kiritgan ma’lumotlaringiz saqlangan — qayta urinib ko‘ring yoki boshqa usulni tanlang.")}
+            text={t("Kartadan pul yechilmadi.")}
           >
             <div className="w-full max-w-[520px] rounded-panel bg-bg-soft p-5 text-left">
               <p className="t-title text-ink">{t("Nima qilish mumkin")}</p>
@@ -257,7 +251,6 @@ export function P2PPageClient() {
               back={{ href: `/buyurtma/${order.id}/tolov/`, label: t("To‘lov usuliga qaytish") }}
               step={4}
               title={t("Kartaga o‘tkazma")}
-              sub={t("Istalgan bank ilovasidan o‘tkazing va chekni yuboring.")}
             />
             <P2PTransfer order={order} template={template} card={cfg.data.p2p} rejectedNote={rejected} />
           </>
@@ -309,7 +302,7 @@ export function ApprovedPageClient() {
           <StatusScreen
             kind="success"
             title={t("Chekingiz tasdiqlandi")}
-            text={t("O‘tkazmangiz qabul qilindi. Taklifnomangiz ishga tushdi, havola Telegram orqali ham yuborildi.")}
+            text={t("Taklifnomangiz ishga tushdi.")}
           >
             <Timeline
               items={[

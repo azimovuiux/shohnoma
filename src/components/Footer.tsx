@@ -106,10 +106,6 @@ export function FooterCompact() {
   return (
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-6 t-body-s text-ink-2 lg:flex-row lg:items-center lg:justify-between lg:px-10 xl:px-[120px]">
-        <span className="inline-flex items-center gap-2">
-          <ShieldTick size={16} color="var(--color-gold)" />
-          {t("Ma’lumotlaringiz faqat taklifnoma uchun ishlatiladi")}
-        </span>
         <span>© 2026 Shohnoma · Payme · Click · Google Pay · P2P</span>
       </div>
     </footer>

@@ -18,7 +18,6 @@ export function Faq() {
             <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">{t("Ko‘p so‘raladigan")}</span>
             <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{t("savollar")}</em>
           </h2>
-          <p className="t-body-m max-w-[340px] text-ink-2">{t("Javob topolmadingizmi? Bizga yozing — yordam beramiz.")}</p>
           <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex w-fit items-center gap-2 t-nav text-maroon hover:underline">
             <TelegramIcon size={16} /> {t("Telegramda savol berish")} <ArrowRight size={14} />
           </a>

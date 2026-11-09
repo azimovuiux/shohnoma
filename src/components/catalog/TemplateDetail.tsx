@@ -34,7 +34,6 @@ export function TemplateDetail({ t }: { t: Template }) {
 
       <div className="flex flex-col gap-7 lg:pt-4">
         <div className="flex flex-col gap-3">
-          <span className="font-serif text-[16px] text-gold">{String(t.number).padStart(2, "0")}</span>
           <h1 className="font-serif text-[44px] font-light leading-none text-ink lg:text-[60px]">{t.name}</h1>
           <div className="flex flex-wrap gap-1.5">
             <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(ceremonyLabel[t.ceremony])}</span>

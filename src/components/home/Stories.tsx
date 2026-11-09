@@ -8,7 +8,6 @@ import {
   TickCircle,
   Send2,
   Mobile,
-  Card,
   UserTick,
   Profile2User,
   MessageText,
@@ -18,30 +17,21 @@ import { Photo } from "./Photo";
 import { useT } from "@/lib/i18n";
 
 function StoryText({
-  n,
   plain,
   italic,
-  text,
   bullets,
 }: {
-  n: string;
   plain: string;
   italic: string;
-  text: string;
   bullets: { icon: ReactNode; label: string }[];
 }) {
   const t = useT();
   return (
     <div className="flex max-w-[500px] flex-col gap-[26px]" data-reveal="stagger" style={{ ["--d" as string]: "200ms" }}>
-      <div className="flex items-center gap-3.5">
-        <span className="font-serif text-[40px] font-light italic leading-none tracking-[-0.01em] text-gold">{n}</span>
-        <span className="h-px w-16 bg-gold" />
-      </div>
       <h2 data-split className="flex flex-col font-serif font-light">
         <span className="-mb-1 text-[36px] leading-[1.04] text-ink lg:text-[52px]">{t(plain)}</span>
         <em className="text-[42px] italic leading-none text-maroon lg:text-[64px]">{t(italic)}</em>
       </h2>
-      <p className="t-body-l max-w-[470px] text-ink-2">{t(text)}</p>
       <ul data-split className="flex flex-col gap-3.5">
         {bullets.map((b, i) => (
           <li key={b.label} className="flex items-center gap-3.5">
@@ -248,14 +238,12 @@ export function Stories() {
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-28 sm:gap-36 lg:flex-row lg:justify-between lg:gap-14">
           <Visual1 />
           <StoryText
-            n="01"
             plain="Tanlang va"
             italic="to‘ldiring"
-            text="Kechqurun, choy ustida, birgalikda — yoqqan dizaynni tanlaysiz, ismlaringiz, sana va manzilni yozasiz. Taklifnoma ko‘z oldingizda tayyor bo‘lib boradi."
             bullets={[
               { icon: <Edit size={18} />, label: "Ismlar, sana va manzil" },
               { icon: <Gallery size={18} />, label: "O‘z suratlaringiz" },
-              { icon: <Eye size={18} />, label: "Tayyor ko‘rinishini darhol ko‘rasiz" },
+              { icon: <Eye size={18} />, label: "Jonli ko‘rinish" },
             ]}
           />
         </div>
@@ -263,14 +251,11 @@ export function Stories() {
       <section className="overflow-x-clip bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[120px]">
         <div className="mx-auto flex max-w-[1200px] flex-col-reverse items-center gap-14 lg:flex-row lg:justify-between">
           <StoryText
-            n="02"
             plain="Bir havola —"
             italic="hammaga"
-            text="To‘lovdan so‘ng tayyor havolani olasiz va uni Telegram yoki Instagramda yuborasiz. Kursdoshlaringiz ham, chet eldagi do‘stlaringiz ham taklifnomani bir bosishda ochadi."
             bullets={[
               { icon: <Send2 size={18} />, label: "Telegram va Instagram orqali" },
               { icon: <Mobile size={18} />, label: "Ilovasiz, har qanday telefonda" },
-              { icon: <Card size={18} />, label: "Payme, Click, Google Pay yoki P2P" },
             ]}
           />
           <Visual2 />
@@ -280,10 +265,8 @@ export function Stories() {
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-36 sm:gap-48 lg:flex-row lg:justify-between lg:gap-14">
           <Visual3 />
           <StoryText
-            n="03"
             plain="Kim kelishini"
             italic="oldindan biling"
-            text="Mehmonlar bir tugma bilan javob beradi va tilaklarini qoldiradi. Siz esa ro‘yxatni bir joyda ko‘rib, joy va dasturxonni xotirjam rejalashtirasiz."
             bullets={[
               { icon: <UserTick size={18} />, label: "Javoblar bitta ro‘yxatda" },
               { icon: <Profile2User size={18} />, label: "Necha kishi kelishi aniq" },

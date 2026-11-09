@@ -116,7 +116,6 @@ export function OrdersPage() {
             <Gallery size={24} />
           </span>
           <p className="font-serif text-[30px] font-light text-ink">{tr("Hali taklifnoma yo‘q")}</p>
-          <p className="t-body-m max-w-[380px] text-ink-2">{tr("Yoqqan dizaynni tanlang, ma’lumotlaringizni kiriting — taklifnomangiz bir necha daqiqada tayyor.")}</p>
           <Link href="/shablonlar/" className="btn btn-primary">
             {tr("Shablonlarni ko‘rish")} <ArrowRight size={16} />
           </Link>
@@ -156,11 +155,7 @@ export function OrdersPage() {
                         ))}
                       </div>
                     </>
-                  ) : (
-                    <p className="flex items-center gap-2 t-body-s text-pending">
-                      <Clock size={15} /> {tr("Ma’lumotlar saqlangan — to‘lovdan so‘ng sayt ochiladi")}
-                    </p>
-                  )}
+                  ) : null}
                 </div>
               </div>
               <div className="flex w-full shrink-0 flex-col gap-2.5 sm:w-[256px]">

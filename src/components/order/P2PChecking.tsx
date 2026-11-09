@@ -68,7 +68,7 @@ export function P2PChecking({
     <StatusScreen
       kind="waiting"
       title={t("To‘lovingiz tekshirilmoqda")}
-      text={t("Chekingizni oldik. Odatda 15 daqiqa ichida tasdiqlaymiz — sahifani yopsangiz ham bo‘ladi, havola Telegram orqali keladi.")}
+      text={t("Chekingizni oldik. Sahifani yopsangiz ham bo‘ladi.")}
     >
       <Timeline
         items={[

@@ -40,7 +40,7 @@ export function LeaveGuard() {
     <Modal open={!!to} onClose={close} label={t("Sahifadan chiqasizmi?")}>
       <div className="flex flex-col gap-4 p-6">
         <p className="font-serif text-[28px] font-light leading-[1.1] text-ink">{t("Sahifadan chiqasizmi?")}</p>
-        <p className="t-body-m text-ink-2">{t("Kiritgan ma’lumotlaringiz avtomatik saqlanadi — keyinroq kabinetdagi «Buyurtmalarim» bo‘limidan davom ettirishingiz mumkin.")}</p>
+        <p className="t-body-m text-ink-2">{t("Ma’lumotlar saqlanadi — kabinetdan davom ettirasiz.")}</p>
         <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end">
           <button type="button" className="btn btn-secondary" onClick={() => to && (location.href = to)}>
             {t("Ha, chiqish")}

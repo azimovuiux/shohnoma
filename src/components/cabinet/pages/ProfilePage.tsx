@@ -27,7 +27,6 @@ export function ProfilePage() {
     <>
       <div className="flex flex-col gap-1.5">
         <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("Profil")}</h1>
-        <p className="t-body-m text-ink-2">{t("Shaxsiy ma’lumotlar, bildirishnomalar va to‘lovlar tarixi")}</p>
       </div>
       <ProfileForm
         key={user.id + (user.telegramId ?? "")}

@@ -27,7 +27,6 @@ export function PaymentsPage() {
     <>
       <div className="flex flex-col gap-1.5">
         <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("To‘lovlar")}</h1>
-        <p className="t-body-m text-ink-2">{t("Barcha to‘lovlaringiz, ularning holati va cheklar")}</p>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">

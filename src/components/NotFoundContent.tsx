@@ -39,9 +39,7 @@ function NotFoundBody() {
         </div>
         <h1 className="mt-8 font-serif text-[34px] font-light leading-[1.05] text-ink lg:text-[52px]">{t("Bu sahifa topilmadi")}</h1>
         <p className="t-body-l mt-4 text-ink-2">
-          {t(
-            "Havola eskirgan yoki xato yozilgan bo‘lishi mumkin. Taklifnoma qidirayotgan bo‘lsangiz — havolani yuborgan odamdan qayta so‘rang.",
-          )}
+          {t("Havola eskirgan yoki xato yozilgan.")}
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link href="/shablonlar/" className="btn btn-primary">
