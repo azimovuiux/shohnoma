@@ -425,11 +425,12 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
         >
           <Logo />
 
+          {!app && (
           <nav
             className="hidden items-center gap-6 lg:flex xl:gap-8"
             aria-label={t("Asosiy")}
           >
-            {(app ? appNav.slice(1) : mainNav).map((l) => (
+            {mainNav.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
@@ -439,6 +440,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
               </Link>
             ))}
           </nav>
+          )}
 
           <div className="hidden items-center gap-2.5 lg:flex">
             <LangSwitcher />
