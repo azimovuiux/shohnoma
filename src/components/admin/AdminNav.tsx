@@ -7,6 +7,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
   const path = usePathname();
   const tabs = [
     { href: "/admin/", label: "Umumiy", n: 0 },
+    { href: "/admin/statistika/", label: "Statistika", n: 0 },
     { href: "/admin/buyurtmalar/", label: "Buyurtmalar", n: 0 },
     { href: "/admin/foydalanuvchilar/", label: "Foydalanuvchilar", n: 0 },
     { href: "/admin/shablonlar/", label: "Shablonlar", n: 0 },

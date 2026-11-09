@@ -33,6 +33,7 @@ import { ToastProvider } from "@/components/ui";
 import { MeProvider } from "@/lib/client";
 import { RevealObserver } from "@/components/RevealObserver";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { Tracker } from "@/components/Tracker";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://shohnoma.uz"),
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ToastProvider>{children}</ToastProvider>
           <RevealObserver />
           <SmoothScroll />
+          <Tracker />
         </MeProvider>
       </body>
     </html>
