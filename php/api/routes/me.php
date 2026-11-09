@@ -9,7 +9,7 @@ route('GET', '/me', function () {
         'user' => user_out($u),
         'counts' => [
             'orders' => (int)scalar('SELECT COUNT(*) FROM orders WHERE user_id = ?', [$u['id']]),
-            'favorites' => (int)scalar('SELECT COUNT(*) FROM favorites WHERE user_id = ?', [$u['id']]),
+            'favorites' => (int)scalar('SELECT COUNT(*) FROM favorites f JOIN templates t ON t.slug = f.template_slug AND t.is_active = 1 WHERE f.user_id = ?', [$u['id']]),
         ],
     ]);
 });
@@ -82,7 +82,7 @@ route('GET', '/me/payments', function () {
 route('GET', '/me/favorites', function () {
     $u = current_user();
     if (!$u) json_out(['ok' => true, 'slugs' => null]);
-    json_out(['ok' => true, 'slugs' => array_column(all('SELECT template_slug FROM favorites WHERE user_id = ? ORDER BY created_at DESC', [$u['id']]), 'template_slug')]);
+    json_out(['ok' => true, 'slugs' => array_column(all('SELECT f.template_slug FROM favorites f JOIN templates t ON t.slug = f.template_slug AND t.is_active = 1 WHERE f.user_id = ? ORDER BY f.created_at DESC', [$u['id']]), 'template_slug')]);
 });
 
 route('POST', '/me/favorites', function () {

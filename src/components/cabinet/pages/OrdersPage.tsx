@@ -5,7 +5,7 @@ import { PageLoading, useApi } from "@/lib/client";
 import { isPaidStatus, type Invitation, type Order, type Payment, type Stats } from "@/lib/types";
 import { useSiteUrl } from "../data";
 import { Add, ArrowRight, Clock, Edit, Gallery, Profile2User, SearchNormal1, Trash } from "@/components/icons";
-import { StatusBadge, api, useToast } from "@/components/ui";
+import { StatusBadge, api, confirmDialog, useToast } from "@/components/ui";
 import { useState } from "react";
 import type { OrderStatus } from "@/lib/types";
 import { InvitationThumb } from "../InvitationThumb";
@@ -58,7 +58,7 @@ export function OrdersPage() {
       (!needle || [x.invitation.personA, x.invitation.personB, x.order.code, x.invitation.slug, getTemplate(x.order.templateSlug)?.name].some((v) => v?.toLowerCase().includes(needle))),
   );
   const remove = async (order: Order, title: string) => {
-    if (!window.confirm(tr("«{name}» buyurtmasi butunlay o‘chirilsinmi? Kiritilgan ma’lumotlar qaytarilmaydi.", { name: title }))) return;
+    if (!(await confirmDialog({ title: tr("Buyurtmani o‘chirasizmi?"), text: tr("«{name}» buyurtmasi butunlay o‘chiriladi. Kiritilgan ma’lumotlar qaytarilmaydi.", { name: title }), ok: tr("O‘chirish"), danger: true }))) return;
     setBusy(order.id);
     try {
       await api(`/api/me/orders/${order.id}`, { method: "DELETE" });

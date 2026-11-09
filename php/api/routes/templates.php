@@ -180,6 +180,7 @@ route('DELETE', '/admin/templates/:slug', function ($p) {
     if ($n = tpl_usage($cur['slug'])) fail("Bu shablon bilan $n ta buyurtma bor — o‘chirib bo‘lmaydi. Uni nofaol qiling.", 409);
     foreach (($cur['images'] ?? []) as $url) if (is_string($url)) delete_upload($url);
     q('DELETE FROM templates WHERE slug = ?', [$cur['slug']]);
+    q('DELETE FROM favorites WHERE template_slug = ?', [$cur['slug']]);
     json_out(['ok' => true]);
 });
 

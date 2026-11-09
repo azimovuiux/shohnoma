@@ -2,7 +2,7 @@
 
 import { useAdminRefresh } from "./shared";
 import { useState } from "react";
-import { api, useToast } from "@/components/ui";
+import { api, confirmDialog, useToast } from "@/components/ui";
 
 /** Holatni o‘zgartirish (PATCH) — buyurtma / brif / xabar */
 export function StatusSelect({
@@ -27,7 +27,7 @@ export function StatusSelect({
       onChange={async (e) => {
         const next = e.target.value;
         const label = options.find((o) => o.value === next)?.label ?? next;
-        if (confirmFor.includes(next) && !window.confirm(`Holatni “${label}” ga o‘zgartirasizmi?`)) return;
+        if (confirmFor.includes(next) && !(await confirmDialog({ title: `Holatni “${label}” ga o‘zgartirasizmi?`, ok: "O‘zgartirish" }))) return;
         setBusy(true);
         try {
           await api(endpoint, { method: "PATCH", json: { status: next } });

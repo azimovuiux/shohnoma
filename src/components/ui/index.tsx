@@ -198,6 +198,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastCtx.Provider value={push}>
       {children}
+      <ConfirmHost />
       <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-24 z-[80] flex flex-col items-center gap-2 px-5 lg:bottom-10">
         {items.map((t) => (
           <div key={t.id} className="flex items-center gap-2.5 rounded-2xl border border-line bg-bg-base px-4 py-3 t-body-m text-ink shadow-menu animate-[fade-in_.2s]">
@@ -267,6 +268,87 @@ export function Modal({
         {children}
       </div>
     </div>
+  );
+}
+
+/* ── Tasdiqlash oynasi (brauzerning confirm/prompt oynalari o‘rniga) ── */
+
+export type ConfirmOpts = {
+  title: string;
+  text?: string;
+  ok?: string;
+  cancel?: string;
+  /** qizil (o‘chirish kabi qaytarib bo‘lmaydigan amallar) */
+  danger?: boolean;
+  /** shu matn aynan yozilmaguncha tasdiqlash tugmasi o‘chiq (masalan, buyurtma kodi) */
+  typeToConfirm?: string;
+};
+type ConfirmReq = ConfirmOpts & { resolve: (ok: boolean) => void };
+let openConfirm: ((r: ConfirmReq) => void) | null = null;
+
+/** await confirmDialog({...}) → true (tasdiqlandi) | false */
+export function confirmDialog(opts: ConfirmOpts): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (openConfirm) openConfirm({ ...opts, resolve });
+    else resolve(false);
+  });
+}
+
+function ConfirmHost() {
+  const [req, setReq] = useState<ConfirmReq | null>(null);
+  const [typed, setTyped] = useState("");
+  useEffect(() => {
+    openConfirm = (r) => {
+      setTyped("");
+      setReq((prev) => {
+        prev?.resolve(false);
+        return r;
+      });
+    };
+    return () => {
+      openConfirm = null;
+    };
+  }, []);
+  const done = useCallback(
+    (ok: boolean) =>
+      setReq((r) => {
+        r?.resolve(ok);
+        return null;
+      }),
+    [],
+  );
+  const close = useCallback(() => done(false), [done]);
+  const lc = currentLocale();
+  const okDisabled = !!req?.typeToConfirm && typed.trim().toUpperCase() !== req.typeToConfirm.toUpperCase();
+  return (
+    <Modal open={!!req} onClose={close} label={req?.title ?? ""}>
+      {req && (
+        <form
+          className="flex flex-col gap-4 p-6"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!okDisabled) done(true);
+          }}
+        >
+          <p className="font-serif text-[26px] font-light leading-[1.15] text-ink">{req.title}</p>
+          {req.text && <p className="whitespace-pre-line t-body-m text-ink-2">{req.text}</p>}
+          {req.typeToConfirm && (
+            <label className="flex flex-col gap-1.5">
+              <span className="t-body-s text-ink-2">{tr(lc, "Tasdiqlash uchun yozing:")} <b className="text-ink">{req.typeToConfirm}</b></span>
+              <input autoFocus value={typed} onChange={(e) => setTyped(e.target.value)} className={inputClass} autoComplete="off" />
+            </label>
+          )}
+          <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end">
+            <button type="button" className="btn btn-secondary" onClick={close} autoFocus={!req.typeToConfirm}>
+              {req.cancel ?? tr(lc, "Bekor qilish")}
+            </button>
+            <button type="submit" disabled={okDisabled} className="btn btn-primary">
+              {req.ok ?? tr(lc, "Tasdiqlash")}
+            </button>
+          </div>
+        </form>
+      )}
+    </Modal>
   );
 }
 

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { useApi, useMe } from "@/lib/client";
 import type { Invitation, Order } from "@/lib/types";
-import { Field, Input, StatusBadge, Textarea, Toggle, api, useToast } from "@/components/ui";
+import { Field, Input, StatusBadge, Textarea, Toggle, api, confirmDialog, useToast } from "@/components/ui";
 import { ArrowLeft, ExportSquare } from "@/components/icons";
 import { formatPhoneDisplay, orderStatusView, splitDate } from "@/lib/display";
 import { formatPrice } from "@/lib/format";
@@ -96,7 +96,7 @@ function Actions({ u }: { u: AdminUser }) {
   const { me } = useMe();
   const self = me?.user?.id === u.id;
   const impersonate = async () => {
-    if (!confirm(`${userTitle(u)} sifatida kirasizmi? Admin sessiyangiz yopiladi — qaytish uchun qayta kirasiz.`)) return;
+    if (!(await confirmDialog({ title: `${userTitle(u)} sifatida kirasizmi?`, text: "Admin sessiyangiz yopiladi — qaytish uchun qayta kirasiz.", ok: "Kirish" }))) return;
     try {
       await api(`/api/admin/users/${u.id}/impersonate`, { method: "POST" });
       window.location.href = "/kabinet/";
@@ -105,7 +105,7 @@ function Actions({ u }: { u: AdminUser }) {
     }
   };
   const remove = async () => {
-    if (!confirm(`${userTitle(u)} o‘chirilsinmi? Buyurtmalari saqlanadi, lekin egasiz qoladi.`)) return;
+    if (!(await confirmDialog({ title: `${userTitle(u)} o‘chirilsinmi?`, text: "Buyurtmalari saqlanadi, lekin egasiz qoladi.", ok: "O‘chirish", danger: true }))) return;
     try {
       await api(`/api/admin/users/${u.id}`, { method: "DELETE" });
       toast("Foydalanuvchi o‘chirildi");

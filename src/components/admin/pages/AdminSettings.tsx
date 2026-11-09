@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
-import { Field, Input, api, useToast } from "@/components/ui";
+import { Field, Input, api, confirmDialog, useToast } from "@/components/ui";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { TickCircle } from "@/components/icons";
 import { AdminError, AdminLoading, AdminTitle } from "../shared";
@@ -159,7 +159,7 @@ function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<str
   };
 
   const disconnect = async () => {
-    if (!confirm("Botni o‘chirasizmi? Telegram orqali kirish va xabarnomalar to‘xtaydi.")) return;
+    if (!(await confirmDialog({ title: "Botni o‘chirasizmi?", text: "Telegram orqali kirish va xabarnomalar to‘xtaydi.", ok: "O‘chirish", danger: true }))) return;
     try {
       await save({ TELEGRAM_BOT_TOKEN: "", TELEGRAM_ADMIN_CHAT_ID: "" }, "Bot o‘chirildi");
     } catch (e) {

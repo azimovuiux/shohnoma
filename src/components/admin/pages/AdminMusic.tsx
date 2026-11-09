@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { apiGet } from "@/lib/client";
-import { api, useToast } from "@/components/ui";
+import { api, confirmDialog, useToast } from "@/components/ui";
 import { DocumentUpload, Music, Pause, Play, Trash } from "@/components/icons";
 import { audioDuration, fmtDuration, usePreviewPlayer, type Track } from "@/lib/music";
 import { AdminError, AdminLoading, AdminTitle, Empty } from "../shared";
@@ -65,8 +65,8 @@ export function AdminMusic() {
   };
 
   const remove = async (t: Track) => {
-    const note = t.used ? `\n${t.used} ta taklifnoma shu musiqani tanlagan — ular shablonning standart musiqasiga o‘tadi.` : "";
-    if (!confirm(`«${t.title}» o‘chirilsinmi?${note}`)) return;
+    const note = t.used ? `${t.used} ta taklifnoma shu musiqani tanlagan — ular shablonning standart musiqasiga o‘tadi.` : "";
+    if (!(await confirmDialog({ title: `«${t.title}» o‘chirilsinmi?`, text: note || undefined, ok: "O‘chirish", danger: true }))) return;
     try {
       await api(`/api/admin/music/${t.id}`, { method: "DELETE" });
       if (player.playing === t.id) player.stop();

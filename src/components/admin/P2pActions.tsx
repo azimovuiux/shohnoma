@@ -2,7 +2,7 @@
 
 import { useAdminRefresh } from "./shared";
 import { useState } from "react";
-import { api, Field, Modal, Textarea, useToast } from "@/components/ui";
+import { api, confirmDialog, Field, Modal, Textarea, useToast } from "@/components/ui";
 import { CloseCircle, TickCircle } from "@/components/icons";
 
 const reasons = ["Summa mos kelmadi", "Izohda buyurtma kodi yo‘q", "Chek o‘qilmaydi", "To‘lov kartaga tushmadi"];
@@ -34,7 +34,7 @@ export function P2pActions({ paymentId, code }: { paymentId: string; code: strin
         <button
           type="button"
           disabled={busy}
-          onClick={() => window.confirm(`${code}: to‘lov kartaga tushganini tasdiqlaysizmi?`) && act("approve")}
+          onClick={async () => (await confirmDialog({ title: "To‘lovni tasdiqlaysizmi?", text: `${code}: to‘lov kartaga tushganini tekshirdingizmi?`, ok: "Tasdiqlash" })) && act("approve")}
           className="btn btn-sm flex-1 bg-success text-white hover:opacity-90"
         >
           <TickCircle size={16} /> Tasdiqlash

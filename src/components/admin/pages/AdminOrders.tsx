@@ -8,7 +8,7 @@ import type { Invitation, Order, OrderStatus } from "@/lib/types";
 import { AdminError, AdminLoading, AdminRefreshProvider, AdminTitle, Empty, fmtDateTime } from "../shared";
 import { StatusSelect } from "../StatusSelect";
 import { useReloadCounts } from "../AdminShell";
-import { StatusBadge, Toggle, api, useToast } from "@/components/ui";
+import { StatusBadge, Toggle, api, confirmDialog, useToast } from "@/components/ui";
 import { ExportSquare, SearchNormal1, Trash } from "@/components/icons";
 import { formatPrice } from "@/lib/format";
 import { formatPhoneDisplay, orderStatusView, splitDate } from "@/lib/display";
@@ -245,9 +245,8 @@ function DeleteOrder({ id, code, paid, onDone }: { id: string; code: string; pai
   const toast = useToast();
   const [busy, setBusy] = useState(false);
   const run = async () => {
-    const warn = paid ? "\n\nDIQQAT: bu to‘langan taklifnoma — mehmonlardagi havola ishlamay qoladi, to‘lov yozuvi ham o‘chadi." : "";
-    if (!window.confirm(`${code} buyurtmasi butunlay o‘chirilsinmi?${warn}`)) return;
-    if (paid && window.prompt(`Tasdiqlash uchun buyurtma kodini yozing: ${code}`)?.trim().toUpperCase() !== code.toUpperCase()) return;
+    const warn = paid ? "DIQQAT: bu to‘langan taklifnoma — mehmonlardagi havola ishlamay qoladi, to‘lov yozuvi ham o‘chadi." : "";
+    if (!(await confirmDialog({ title: `${code} buyurtmasi butunlay o‘chirilsinmi?`, text: warn || "Taklifnoma, mehmon javoblari va to‘lov yozuvlari ham o‘chadi.", ok: "O‘chirish", danger: true, typeToConfirm: paid ? code : undefined }))) return;
     setBusy(true);
     try {
       await api(`/api/admin/orders/${id}`, { method: "DELETE" });

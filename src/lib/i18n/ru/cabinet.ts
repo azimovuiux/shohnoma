@@ -234,4 +234,9 @@ export const ru: Record<string, string> = {
   "O‘chirilmoqda…": "Удаление…",
   "To‘langan taklifnomani o‘chirib bo‘lmaydi": "Оплаченное приглашение удалить нельзя",
   "To‘lov tekshirilayotgan buyurtmani o‘chirib bo‘lmaydi": "Нельзя удалить заказ, оплата которого проверяется",
+  "Buyurtmani o‘chirasizmi?": "Удалить заказ?",
+  "«{name}» buyurtmasi butunlay o‘chiriladi. Kiritilgan ma’lumotlar qaytarilmaydi.": "Заказ «{name}» будет удалён полностью. Введённые данные восстановить нельзя.",
+  "O‘chirish": "Удалить",
+  "Tasdiqlash": "Подтвердить",
+  "Tasdiqlash uchun yozing:": "Для подтверждения введите:",
 };

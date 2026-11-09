@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useApi } from "@/lib/client";
 import { ceremonyLabel, styleLabel, type Template } from "@/lib/templates";
 import { formatPrice } from "@/lib/format";
-import { Toggle, api, useToast } from "@/components/ui";
+import { Toggle, api, confirmDialog, useToast } from "@/components/ui";
 import { Edit, Eye, Trash } from "@/components/icons";
 import { PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
@@ -34,7 +34,7 @@ export function AdminTemplates() {
     }
   };
   const remove = async (t: AdminTemplate) => {
-    if (!confirm(`“${t.name}” shablonini butunlay o‘chirasizmi?`)) return;
+    if (!(await confirmDialog({ title: `“${t.name}” shablonini butunlay o‘chirasizmi?`, ok: "O‘chirish", danger: true }))) return;
     setBusy(t.slug);
     try {
       await api(`/api/admin/templates/${t.slug}`, { method: "DELETE" });
