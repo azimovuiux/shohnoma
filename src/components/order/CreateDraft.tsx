@@ -3,13 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "@/components/LocalLink";
 import { lpath, useLocale, useT } from "@/lib/i18n";
+import { useMe } from "@/lib/client";
 
-/** /buyurtma/<shablon>/marosim → qoralama yaratib, /buyurtma/<id>/marosim ga o‘tadi */
+/** /buyurtma/<shablon>/marosim → (kirmagan bo‘lsa — avval kirish) qoralama yaratib, /buyurtma/<id>/marosim ga o‘tadi */
 export function CreateDraft({ templateSlug, name }: { templateSlug: string; name: string }) {
   const started = useRef(false);
   const [error, setError] = useState<string | null>(null);
   const locale = useLocale();
   const t = useT();
+  const { me, loading } = useMe();
 
   const run = async () => {
     setError(null);
@@ -29,11 +31,16 @@ export function CreateDraft({ templateSlug, name }: { templateSlug: string; name
   };
 
   useEffect(() => {
-    if (started.current) return;
+    if (started.current || loading || !me) return;
     started.current = true;
+    // Buyurtma faqat kabinet orqali: kirmagan bo‘lsa — kirish sahifasiga, keyin shu yerga qaytadi
+    if (!me?.user) {
+      window.location.replace(lpath(locale, `/kirish/?next=${encodeURIComponent(`/buyurtma/${templateSlug}/marosim/`)}`));
+      return;
+    }
     void run();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loading, me]);
 
   return (
     <div className="mx-auto flex min-h-[50vh] max-w-[480px] flex-col items-center justify-center gap-5 px-5 py-20 text-center">
