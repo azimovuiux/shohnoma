@@ -122,6 +122,56 @@ function Sec({ children, className, style, ready, threshold, id, z, onP }: { chi
   );
 }
 
+/**
+ * Appear: har bir [data-a] element (va so‘z) o‘zi ekranga kirganda `data-in` oladi — butun bo‘lim birdan emas.
+ * Yuqorida qolganlar (sahifa o‘rtasidan qayta yuklanganda) darrov ko‘rsatiladi. Keyin qo‘shilgan elementlar ham kuzatiladi.
+ */
+function useReveal(root: React.RefObject<HTMLDivElement | null>, ready: boolean, all: boolean) {
+  useEffect(() => {
+    const el = root.current;
+    if (!el || !ready) return;
+    const SEL = "[data-a]:not([data-in]),[data-w]:not([data-in])";
+    if (all) {
+      el.querySelectorAll<HTMLElement>(SEL).forEach((x) => x.setAttribute("data-in", ""));
+      return;
+    }
+    // Scroll bo‘yicha joylashuv tekshiruvi (IntersectionObserver ota elementning kesilishi tufayli chetdagi bezaklarni o‘tkazib yuborardi)
+    let list: HTMLElement[] = [];
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const line = window.innerHeight * 0.9;
+      const atEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+      list = list.filter((x) => {
+        const r = x.getBoundingClientRect();
+        if (atEnd || r.top < line || r.bottom < 0) {
+          x.setAttribute("data-in", "");
+          return false;
+        }
+        return true;
+      });
+    };
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    const scan = () => {
+      list = Array.from(el.querySelectorAll<HTMLElement>(SEL));
+      on();
+    };
+    scan();
+    const mo = new MutationObserver(scan);
+    mo.observe(el, { childList: true, subtree: true });
+    window.addEventListener("scroll", on, { passive: true });
+    window.addEventListener("resize", on);
+    return () => {
+      mo.disconnect();
+      window.removeEventListener("scroll", on);
+      window.removeEventListener("resize", on);
+      cancelAnimationFrame(raf);
+    };
+  }, [root, ready, all]);
+}
+
 function Img({ src, className, style, eager, a, contain }: { src: string; className?: string; style?: CSSProperties; eager?: boolean; a?: string; contain?: boolean }) {
   // eslint-disable-next-line @next/next/no-img-element
   return <img src={src} alt="" draggable={false} data-a={a} loading={eager ? "eager" : "lazy"} decoding="async" className={cx(st.img, contain && st.contain, className)} style={style} />;
@@ -193,7 +243,7 @@ function Words({ text, d0 = 0, step = 0.03 }: { text: string; d0?: number; step?
         /^\s+$/.test(w) ? (
           w
         ) : (
-          <span key={i} className={st.word} style={vars({ "--d": `${(d0 + step * k++).toFixed(2)}s` })}>
+          <span key={i} data-w className={st.word} style={vars({ "--d": `${(d0 + step * k++).toFixed(2)}s` })}>
             {w}
           </span>
         ),
@@ -311,7 +361,7 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
     <div
       ref={wrap}
       className={cx(st.gateWrap, still && st.still)}
-      style={vars(still ? { "--u": `calc(100cqw / ${W})`, height: U(wide ? 900 : 815), marginBottom: 0 } : { "--u": wide ? "min(calc(100cqw / 1440), calc(100svh / 900))" : "min(calc(100cqw / 390), calc(100svh / 860))" })}
+      style={vars(still ? { "--u": `calc(100cqw / ${W})`, height: U(wide ? 900 : 815), marginBottom: 0 } : { "--u": wide ? "min(calc(100cqw / 1440), calc(100svh / 1020))" : "min(calc(100cqw / 390), calc(100svh / 890))" })}
     >
       <div className={st.gate} aria-label={t("Taklifnoma")} style={still ? { position: "relative", height: "100%", transform: "none" } : undefined}>
         <div className={st.gSky}>
@@ -721,14 +771,14 @@ function Stop({ it, i, wide, last, petal }: { it: ProgramItem; i: number; wide: 
           <Img src={icon} contain />
         </div>
         <span data-a="drop" className={st.dotGold} style={vars({ width: U(9), height: U(9), marginTop: U(-4.5), "--d": `${0.5 + i * 0.12}s` })} />
-        <p data-a="up" className={cx(st.serifI, st.clamp2)} style={vars({ fontSize: U(36), lineHeight: 1, color: "var(--ink)", marginTop: U(25.5), width: U(270), paddingBottom: "0.08em", "--y": 20, "--d": `${0.3 + i * 0.12}s` })}>
+        <p data-a="up" className={cx(st.serifI, st.clamp2)} style={vars({ fontSize: U(36), lineHeight: 1, color: "var(--ink)", marginTop: U(25.5), width: U(236), paddingBottom: "0.08em", "--y": 20, "--d": `${0.3 + i * 0.12}s` })}>
           {it.title}
         </p>
         <p data-a="flip" className={st.serifB} style={vars({ fontSize: U(30), color: "var(--gold)", marginTop: U(10), lineHeight: 1.2, "--d": `${0.45 + i * 0.12}s` })}>
           {it.time}
         </p>
         {it.note && (
-          <p data-a="up" className={cx(st.sans, st.clamp2)} style={vars({ fontSize: U(17), lineHeight: 1.45, color: "var(--muted)", marginTop: U(8), width: U(240), "--y": 16, "--d": `${0.5 + i * 0.12}s` })}>
+          <p data-a="up" className={cx(st.sans, st.clamp2)} style={vars({ fontSize: U(17), lineHeight: 1.45, color: "var(--muted)", marginTop: U(8), width: U(236), "--y": 16, "--d": `${0.5 + i * 0.12}s` })}>
             {it.note}
           </p>
         )}
@@ -1193,7 +1243,7 @@ function Final({ d, wide, ready, z, onSeen }: { d: D; wide: boolean; ready: bool
       <h2 className={cx(st.serifI, "absolute inset-x-0 text-center")} style={{ top: v(110, 120), lineHeight: 1, zIndex: 3, color: "var(--ink)" }}>
         <Fit base={wide ? 88 : 58} max={wide ? 1200 : 360} deps={title}>
           {[...title].map((ch, i) => (
-            <span key={i} className={st.word} style={vars({ "--d": `${(0.2 + 0.04 * k++).toFixed(2)}s` })}>
+            <span key={i} data-w className={st.word} style={vars({ "--d": `${(0.2 + 0.04 * k++).toFixed(2)}s` })}>
               {ch}
             </span>
           ))}
@@ -1270,6 +1320,7 @@ export function ShatoSite({ template, data, mode, embedded = false }: Invitation
     withGate,
     wide ? "l" : "m",
   );
+  useReveal(root, ready, embedded);
   const [loaderGone, setLoaderGone] = useState(!withGate);
   useEffect(() => {
     if (!loaded || loaderGone) return;

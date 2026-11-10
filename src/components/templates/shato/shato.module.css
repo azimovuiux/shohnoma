@@ -148,19 +148,19 @@
   transition-timing-function: var(--e, var(--ease));
   transition-delay: var(--d, 0s);
 }
-.sec:not(.in) [data-a="up"] {
+.root [data-a="up"]:not([data-in]) {
   opacity: 0;
   transform: translateY(calc(var(--u) * var(--y, 40)));
 }
-.sec:not(.in) [data-a="fade"] {
+.root [data-a="fade"]:not([data-in]) {
   opacity: 0;
 }
-.sec:not(.in) [data-a="blur"] {
+.root [data-a="blur"]:not([data-in]) {
   opacity: 0;
   filter: blur(10px);
   transform: translateY(calc(var(--u) * 16));
 }
-.sec:not(.in) [data-a="rise"] {
+.root [data-a="rise"]:not([data-in]) {
   opacity: 0;
   transform: translateY(calc(var(--u) * var(--y, 80)));
 }
@@ -168,13 +168,13 @@
   transition-duration: var(--t, 1.2s);
 }
 /* Ark surat pastdan ochiladi (inset 100% → 0), ichida rasm 1.12 → 1 */
-.sec:not(.in) [data-a="arch"] {
+.root [data-a="arch"]:not([data-in]) {
   clip-path: inset(100% 0 0 0);
 }
 .root [data-a="arch"] {
   transition-duration: 1.4s;
 }
-.sec:not(.in) [data-a="zoom"] {
+.root [data-a="zoom"]:not([data-in]) {
   transform: scale(1.12);
 }
 .root [data-a="zoom"] {
@@ -186,7 +186,7 @@
   border: 1px solid rgba(176, 141, 87, 0.6);
   pointer-events: none;
 }
-.sec:not(.in) [data-a="line"] {
+.root [data-a="line"]:not([data-in]) {
   clip-path: inset(0 0 100% 0);
   opacity: 0;
 }
@@ -195,11 +195,11 @@
   transition-delay: 0.3s;
 }
 /* Monogramma oxirida oltin porlaydi */
-.sec:not(.in) [data-a="glow"] {
+.root [data-a="glow"]:not([data-in]) {
   opacity: 0;
   filter: blur(6px);
 }
-.in [data-a="glow"] {
+.root [data-a="glow"][data-in] {
   animation: glow 2.2s calc(var(--d, 0s) + 0.8s) ease-in-out 1 both;
 }
 @keyframes glow {
@@ -211,11 +211,11 @@
     text-shadow: 0 0 calc(var(--u) * 18) rgba(226, 195, 143, 0.85);
   }
 }
-.sec:not(.in) [data-a="drop"] {
+.root [data-a="drop"]:not([data-in]) {
   opacity: 0;
   transform: translateY(calc(var(--u) * var(--dy, -30)));
 }
-.sec:not(.in) [data-a="sway"] {
+.root [data-a="sway"]:not([data-in]) {
   opacity: 0;
   transform: translateY(calc(var(--u) * -30));
 }
@@ -223,21 +223,21 @@
   transition-duration: 1.4s;
 }
 /* Atirgul chirmovug‘i pastdan «o‘sib chiqadi» */
-.sec:not(.in) [data-a="grow"] {
+.root [data-a="grow"]:not([data-in]) {
   clip-path: inset(100% 0 0 0);
 }
 .root [data-a="grow"] {
   transition-duration: 1.6s;
   transition-delay: 0.2s;
 }
-.sec:not(.in) [data-a="lineX"] {
+.root [data-a="lineX"]:not([data-in]) {
   transform: scaleX(0);
 }
 .root [data-a="lineX"] {
   transform-origin: 0 50%;
   transition-duration: 1.2s;
 }
-.sec:not(.in) [data-a="lineY"] {
+.root [data-a="lineY"]:not([data-in]) {
   transform: scaleY(0);
 }
 .root [data-a="lineY"] {
@@ -245,7 +245,7 @@
   transition-duration: 0.8s;
 }
 /* Akvarel ikonka «bo‘yaladi»: mask-reveal + saturation 0→1, scale 0.94→1 */
-.sec:not(.in) [data-a="paint"] {
+.root [data-a="paint"]:not([data-in]) {
   opacity: 0;
   clip-path: inset(0 100% 0 0);
   filter: saturate(0);
@@ -255,7 +255,7 @@
   transition-duration: 1.4s;
 }
 /* Vaqt — oltin flip */
-.sec:not(.in) [data-a="flip"] {
+.root [data-a="flip"]:not([data-in]) {
   opacity: 0;
   transform: perspective(400px) rotateX(-80deg);
 }
@@ -264,21 +264,21 @@
   transition-duration: 0.8s;
 }
 /* Kalendar kunlari — to‘lqin */
-.sec:not(.in) [data-a="pop"] {
+.root [data-a="pop"]:not([data-in]) {
   opacity: 0;
   transform: translateY(calc(var(--u) * 10)) scale(0.85);
 }
 .root [data-a="pop"] {
   transition-duration: 0.7s;
 }
-.sec:not(.in) [data-a="ring"] {
+.root [data-a="ring"]:not([data-in]) {
   transform: scale(0);
 }
 .root [data-a="ring"] {
   transition-duration: 0.8s;
   transition-timing-function: var(--spring);
 }
-.sec:not(.in) [data-a="land"] {
+.root [data-a="land"]:not([data-in]) {
   opacity: 0;
   transform: translate(calc(var(--u) * 18), calc(var(--u) * -40)) rotate(-60deg);
 }
@@ -286,7 +286,7 @@
   transition-duration: 1.2s;
 }
 /* Dress-kod karta arkasi yuqoridan ochiladi */
-.sec:not(.in) [data-a="archOpen"] {
+.root [data-a="archOpen"]:not([data-in]) {
   opacity: 0;
   clip-path: inset(0 0 100% 0);
 }
@@ -301,7 +301,7 @@
   transition: opacity 0.9s var(--ease), filter 0.9s var(--ease), transform 0.9s var(--ease);
   transition-delay: var(--d, 0s);
 }
-.sec:not(.in) .word {
+.root .word:not([data-in]) {
   opacity: 0;
   filter: blur(8px);
   transform: translateY(calc(var(--u) * 16));
@@ -360,8 +360,9 @@
   opacity: calc(1 - var(--q) * 1.15);
 }
 .gNames {
-  /* ismlar sekinroq ketadi — kamera darvozadan o‘tayotganda ham ko‘rinib turadi */
-  transform: translate3d(0, calc(var(--k) * 0.3), 0) scale(calc(1 + var(--q) * 0.08));
+  /* ismlar sekinroq ketadi — kamera darvozadan o‘tayotganda ko‘rinib turadi, so‘ng yumshoq so‘nadi */
+  transform: translate3d(0, calc(var(--k) * 0.3), 0) scale(calc(1 + var(--q) * 0.12));
+  opacity: calc(1.6 - var(--q) * 2);
 }
 .gRoseL {
   transform: translate3d(calc(var(--q) * var(--u) * -120), calc(var(--k) * -0.3), 0) scale(calc(1 + var(--q) * 0.3));
