@@ -49,13 +49,61 @@ function useMusic(url: string | null, enabled: boolean) {
  * Shablon dizayniga qarab: maxsus (kodda yozilgan) dizayn yoki umumiy sahifa.
  * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
  */
+/** Kodda yozilgan dizaynlar — yangi shablon qo‘shilganda shu ro‘yxatga ham qo‘shiladi */
+const CUSTOM = ["anor", "zumrad", "parvoz", "shato"] as const;
+
 export function InvitationSite(props: InvitationSiteProps) {
   const lang = inviteLang(props.data.extra, useLocale());
   const ds = designSlug(props.template);
+  // Umumiy (rangli) sahifa faqat eski, admin yaratgan shablonlar uchun — ularda `base` boshqa dizaynga ishora qiladi.
+  // Kod tanimagan yangi shablon (deploy paytida eski sahifa ochiq qolgan) — noto‘g‘ri dizayn ko‘rsatilmaydi, sahifa yangilanadi.
+  const stale = !CUSTOM.includes(ds as (typeof CUSTOM)[number]) && props.template.kind !== "html" && (!props.template.base || props.template.base === props.template.slug);
   return (
     <LocaleProvider locale={lang}>
-      {ds === "anor" ? <AnorSite {...props} /> : ds === "zumrad" ? <ZumradSite {...props} /> : ds === "parvoz" ? <ParvozSite {...props} /> : ds === "shato" ? <ShatoSite {...props} /> : <GenericSite {...props} />}
+      {ds === "anor" ? (
+        <AnorSite {...props} />
+      ) : ds === "zumrad" ? (
+        <ZumradSite {...props} />
+      ) : ds === "parvoz" ? (
+        <ParvozSite {...props} />
+      ) : ds === "shato" ? (
+        <ShatoSite {...props} />
+      ) : stale ? (
+        <StaleReload slug={props.template.slug} />
+      ) : (
+        <GenericSite {...props} />
+      )}
     </LocaleProvider>
+  );
+}
+
+/** Sahifa kodi eskirgan: bir marta keshsiz qayta yuklaymiz; takrorlansa — tugma bilan xabar (noto‘g‘ri dizayn emas) */
+function StaleReload({ slug }: { slug: string }) {
+  const t = useT();
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    const k = `sh_stale_${slug}`;
+    const last = Number(sessionStorage.getItem(k) || 0);
+    if (Date.now() - last > 120_000) {
+      sessionStorage.setItem(k, String(Date.now()));
+      const u = new URL(location.href);
+      u.searchParams.set("_r", String(Date.now()));
+      location.replace(u.toString());
+    } else setFailed(true);
+  }, [slug]);
+  return (
+    <div className="flex min-h-dvh flex-col items-center justify-center gap-4 bg-bg-base px-6 text-center">
+      {failed ? (
+        <>
+          <p className="t-body-m text-ink-2">{t("Iltimos, sahifani yangilang.")}</p>
+          <button type="button" className="btn btn-primary" onClick={() => location.reload()}>
+            {t("Sahifani yangilash")}
+          </button>
+        </>
+      ) : (
+        <span className="size-10 animate-spin rounded-full border-2 border-gold-soft border-t-maroon" aria-label={t("Taklifnoma yuklanmoqda")} />
+      )}
+    </div>
   );
 }
 

@@ -246,4 +246,6 @@ export const en: Record<string, string> = {
   "Sevgi — bu bir-biriga emas, balki birga bir tomonga qarash.": "Love is not looking at each other, but looking together in the same direction.",
   "Taklif matni ustida, ark ichida": "Above the invitation text, in an arch",
   "Iqtibos yonida, ark ichida": "Next to the quote, in an arch",
+  "Iltimos, sahifani yangilang.": "Please reload the page.",
+  "Sahifani yangilash": "Reload page",
 };

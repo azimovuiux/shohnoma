@@ -221,4 +221,6 @@ export const ru: Record<string, string> = {
   "Sevgi — bu bir-biriga emas, balki birga bir tomonga qarash.": "Любить — это не смотреть друг на друга, а смотреть вместе в одном направлении.",
   "Taklif matni ustida, ark ichida": "Над текстом приглашения, в арке",
   "Iqtibos yonida, ark ichida": "Рядом с цитатой, в арке",
+  "Iltimos, sahifani yangilang.": "Пожалуйста, обновите страницу.",
+  "Sahifani yangilash": "Обновить страницу",
 };
