@@ -248,4 +248,5 @@ export const en: Record<string, string> = {
   "Iqtibos yonida, ark ichida": "Next to the quote, in an arch",
   "Iltimos, sahifani yangilang.": "Please reload the page.",
   "Sahifani yangilash": "Reload page",
+  "Shu kunning go‘zalligini birga yaratamiz": "Let’s make this day beautiful together",
 };

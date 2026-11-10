@@ -318,9 +318,15 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
   }, [still]);
 
   const W = wide ? 1440 : 390;
-  // sahna koordinatasi: gorizontal markazdan
+  // Figma hero balandligi: laptop 920, mobil 860 — sahna pastki chetiga bog‘langan (ekran baland bo‘lsa, tepada osmon ko‘payadi)
+  const HH = wide ? 920 : 860;
+  // sahna koordinatasi: gorizontal markazdan, vertikal — pastki chetdan
   const X = (x: number) => `calc(50% + ${U(x - W / 2)})`;
-  const box = (r: Box, extra?: CSSProperties): CSSProperties => ({ position: "absolute", left: X(r[0]), top: U(r[1]), width: U(r[2]), height: U(r[3]), ...extra });
+  const Y = (y: number) => `calc(100% - ${U(HH - y)})`;
+  const box = (r: Box, extra?: CSSProperties): CSSProperties => ({ position: "absolute", left: X(r[0]), top: Y(r[1]), width: U(r[2]), height: U(r[3]), ...extra });
+  // keyingi bo‘lim (Xush kelibsiz) butalari — Figma’da hero pastini yopadi; sahifa birligida, shunda ulanishda aynan ustma-ust tushadi
+  const PU = (n: number) => `calc(100cqw / ${W} * ${n})`;
+  const bush = wide ? { x: -180, over: 330, w: 1800, h: 771.43 } : { x: -125, over: 150, w: 640, h: 274.29 };
   const frame: Box = wide ? [460, 40, 520, 924.44] : [-7, 110, 404, 718.22];
   const doors: Box[] = wide
     ? [
@@ -361,7 +367,7 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
     <div
       ref={wrap}
       className={cx(st.gateWrap, still && st.still)}
-      style={vars(still ? { "--u": `calc(100cqw / ${W})`, height: U(wide ? 900 : 815), marginBottom: 0 } : { "--u": wide ? "min(calc(100cqw / 1440), calc(100svh / 1020))" : "min(calc(100cqw / 390), calc(100svh / 890))" })}
+      style={vars(still ? { "--u": `calc(100cqw / ${W})`, height: U(HH), marginBottom: 0 } : { "--u": `min(calc(100cqw / ${W}), calc(100svh / ${HH}))` })}
     >
       <div className={st.gate} aria-label={t("Taklifnoma")} style={still ? { position: "relative", height: "100%", transform: "none" } : undefined}>
         <div className={st.gSky}>
@@ -388,7 +394,7 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
           </>
         )}
         {/* Darvoza ramkasi — kamera ichiga kiradi (scale 1→1.8, opacity →0) */}
-        <div className={cx(st.gl, st.gZoom)} style={{ transformOrigin: `50% ${U(wide ? 470 : 420)}` }}>
+        <div className={cx(st.gl, st.gZoom)} style={{ transformOrigin: `50% ${Y(wide ? 470 : 420)}` }}>
           <div style={box(frame)}>
             <div className={cx("size-full", st.fadeIn)} style={{ animationDuration: "1s" }}>
               <Img src={`${P}/darvoza.webp`} eager />
@@ -398,17 +404,17 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
         {/* Ismlar — chuqurlikdan chiqadi */}
         <div className={cx(st.gl, st.gNames)}>
           <h1 className={cx(st.serifI, "absolute text-center")} style={{ left: X(0), width: U(W), top: 0, height: "100%", color: "var(--ink)", lineHeight: 1 }}>
-            <span className={cx("absolute inset-x-0 flex items-center justify-center", st.nameIn)} style={{ top: U(n1Top), height: U(nameBase), animationDelay: "1.2s" }}>
+            <span className={cx("absolute inset-x-0 flex items-center justify-center", st.nameIn)} style={{ top: Y(n1Top), height: U(nameBase), animationDelay: "1.2s" }}>
               <Fit base={nameBase} max={nameMax} deps={d.a}>
                 {d.a}
               </Fit>
             </span>
             {d.b && (
               <>
-                <span className={cx("absolute inset-x-0 block", st.ampIn)} style={{ top: U(ampTop), fontSize: U(wide ? 52 : 40), color: "var(--gold)", animationDelay: "1.45s" }}>
+                <span className={cx("absolute inset-x-0 block", st.ampIn)} style={{ top: Y(ampTop), fontSize: U(wide ? 52 : 40), color: "var(--gold)", animationDelay: "1.45s" }}>
                   &amp;
                 </span>
-                <span className={cx("absolute inset-x-0 flex items-center justify-center", st.nameIn)} style={{ top: U(n2Top), height: U(nameBase), animationDelay: "1.35s" }}>
+                <span className={cx("absolute inset-x-0 flex items-center justify-center", st.nameIn)} style={{ top: Y(n2Top), height: U(nameBase), animationDelay: "1.35s" }}>
                   <Fit base={nameBase} max={nameMax} deps={d.b}>
                     {d.b}
                   </Fit>
@@ -417,13 +423,13 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
             )}
           </h1>
           {d.dots && (
-            <p className={cx(st.sansM, st.fadeIn, "absolute text-center")} style={{ left: X(0), width: U(W), top: U(single ? dateTop - 20 : dateTop), fontSize: U(wide ? 17 : 15), letterSpacing: U(wide ? 4.08 : 3.3), color: "var(--ink)", animationDelay: "1.7s", whiteSpace: "nowrap" }}>
+            <p className={cx(st.sansM, st.fadeIn, "absolute text-center")} style={{ left: X(0), width: U(W), top: Y(single ? dateTop - 20 : dateTop), fontSize: U(wide ? 17 : 15), letterSpacing: U(wide ? 4.08 : 3.3), color: "var(--ink)", animationDelay: "1.7s", whiteSpace: "nowrap" }}>
               {d.dots}
             </p>
           )}
         </div>
         {/* Tabaqalar (3D ochiladi) + girlyanda — ramka bilan birga kattalashadi */}
-        <div className={cx(st.gl, st.gZoom)} style={{ transformOrigin: `50% ${U(wide ? 470 : 420)}` }}>
+        <div className={cx(st.gl, st.gZoom)} style={{ transformOrigin: `50% ${Y(wide ? 470 : 420)}` }}>
           {doors.map((b, i) => {
             const o = doorContent(b, i === 1);
             const c = doorClosed(frame, i === 1);
@@ -470,6 +476,13 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
             </div>
           ))}
         </div>
+        <div className={st.gl} style={{ transform: "none" }}>
+          <div style={{ position: "absolute", left: `calc(50% + ${PU(bush.x - W / 2)})`, bottom: PU(bush.over - bush.h), width: PU(bush.w), height: PU(bush.h) }}>
+            <div className={cx("size-full", st.riseIn)} style={{ animationDelay: "0.35s" }}>
+              <Img src={`${P}/butalar.webp`} eager />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -498,12 +511,12 @@ function Welcome({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: bool
         <p
           key={i}
           data-a="up"
-          style={vars({ fontSize: U(wide ? 20 : 17), lineHeight: wide ? 1.6 : 1.55, color: "var(--ink)", marginTop: U(i === 0 ? (wide ? 33 : 58) : wide ? 34 : 20), whiteSpace: "pre-line", overflowWrap: "anywhere", "--y": 20, "--d": `${0.25 + i * 0.08}s`, maxWidth: center ? undefined : U(470) })}
+          style={vars({ fontSize: U(wide ? 20 : 17), lineHeight: wide ? 1.6 : 1.55, color: "var(--ink)", marginTop: U(i === 0 ? (wide ? 33 : 54) : wide ? 34 : 20), whiteSpace: "pre-line", overflowWrap: "anywhere", "--y": 20, "--d": `${0.25 + i * 0.08}s`, maxWidth: center ? undefined : U(470) })}
         >
           {p}
         </p>
       ))}
-      <p data-a="glow" className={st.serifI} style={vars({ fontSize: U(wide ? 44 : 36), color: "var(--gold)", marginTop: U(d.paragraphs.length ? (wide ? 24 : 36) : 28), whiteSpace: "nowrap", "--d": "0.6s" })}>
+      <p data-a="glow" className={st.serifI} style={vars({ fontSize: U(wide ? 44 : 36), lineHeight: 1.2, color: "var(--gold)", marginTop: U(d.paragraphs.length ? (wide ? 24 : 36) : 28), whiteSpace: "nowrap", "--d": "0.6s" })}>
         {d.mono}
       </p>
     </>
@@ -766,19 +779,19 @@ function Stop({ it, i, wide, last, petal }: { it: ProgramItem; i: number; wide: 
   const icon = programIcon(it, i);
   if (wide)
     return (
-      <div className="relative flex flex-col items-center text-center" style={{ width: U(260) }}>
+      <div className="relative flex flex-col items-center text-center" style={{ width: U(270) }}>
         <div data-a="paint" style={vars({ width: U(180), height: U(180), "--d": `${0.15 + i * 0.12}s` })}>
           <Img src={icon} contain />
         </div>
         <span data-a="drop" className={st.dotGold} style={vars({ width: U(9), height: U(9), marginTop: U(-4.5), "--d": `${0.5 + i * 0.12}s` })} />
-        <p data-a="up" className={cx(st.serifI, st.clamp2)} style={vars({ fontSize: U(36), lineHeight: 1, color: "var(--ink)", marginTop: U(25.5), width: U(236), paddingBottom: "0.08em", "--y": 20, "--d": `${0.3 + i * 0.12}s` })}>
+        <p data-a="up" className={cx(st.serifI, st.clamp2)} style={vars({ fontSize: U(36), lineHeight: 1, color: "var(--ink)", marginTop: U(25.5), width: U(266), paddingBottom: "0.08em", "--y": 20, "--d": `${0.3 + i * 0.12}s` })}>
           {it.title}
         </p>
         <p data-a="flip" className={st.serifB} style={vars({ fontSize: U(30), color: "var(--gold)", marginTop: U(10), lineHeight: 1.2, "--d": `${0.45 + i * 0.12}s` })}>
           {it.time}
         </p>
         {it.note && (
-          <p data-a="up" className={cx(st.sans, st.clamp2)} style={vars({ fontSize: U(17), lineHeight: 1.45, color: "var(--muted)", marginTop: U(8), width: U(236), "--y": 16, "--d": `${0.5 + i * 0.12}s` })}>
+          <p data-a="up" className={cx(st.sans, st.clamp2)} style={vars({ fontSize: U(17), lineHeight: 1.45, color: "var(--muted)", marginTop: U(8), width: U(256), "--y": 16, "--d": `${0.5 + i * 0.12}s` })}>
             {it.note}
           </p>
         )}
@@ -847,7 +860,7 @@ function Program({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: bool
         <div className="relative flex flex-col items-center" style={{ marginTop: U(48), gap: U(56), zIndex: 2 }}>
           {rows.map((row, ri) => (
             <div key={ri} className="relative flex justify-center">
-              <span data-a="lineX" className="absolute" style={vars({ left: U(130 - 60), right: U(130 - 60), top: U(180), height: 1, background: "rgba(176,141,87,.5)", "--d": `${0.1 + ri * 0.2}s` })} />
+              <span data-a="lineX" className="absolute" style={vars({ left: U(135 - 60), right: U(135 - 60), top: U(180), height: 1, background: "rgba(176,141,87,.5)", "--d": `${0.1 + ri * 0.2}s` })} />
               {row.map((it, i) => (
                 <Stop key={i} it={it} i={ri * rows[0].length + i} wide last={false} />
               ))}
@@ -893,7 +906,7 @@ function Details({ d, wide, ready, tail, z, linkable }: { d: D; wide: boolean; r
         </>
       )}
       <div className="relative" style={{ marginLeft: v(28, 420), paddingTop: v(140, 150), width: v(334, 600), zIndex: 3 }}>
-        <div data-a="rise" className={cx(st.olive, "relative flex flex-col items-center justify-center text-center")} style={vars({ minHeight: v(640, 700), borderRadius: v(167, 300), padding: wide ? `${U(150)} ${U(60)} ${U(150)}` : `${U(110)} ${U(40)} ${U(120)}`, gap: v(14, 16), "--y": 80, "--t": "1.2s" })}>
+        <div data-a="rise" className={cx(st.olive, "relative flex flex-col items-center justify-center text-center")} style={vars({ minHeight: v(945, 911), borderRadius: v(167, 300), padding: wide ? `${U(150)} ${U(60)} ${U(150)}` : `${U(110)} ${U(40)} ${U(120)}`, gap: v(14, 16), "--y": 80, "--t": "1.2s" })}>
           <p className={st.serifI} style={{ fontSize: v(42, 52), lineHeight: 1, color: "var(--cream)", width: v(230, 480) }}>
             {t("Tafsilotlar va tilaklar")}
           </p>
@@ -959,7 +972,10 @@ function Dress({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: boolea
       <p data-a="blur" className={cx(st.serifI, "text-center")} style={{ paddingTop: U(wide ? 110 : 96), fontSize: U(wide ? 72 : 54), lineHeight: 1, color: "var(--ink)" }}>
         {t("Dress-kod")}
       </p>
-      <div className="relative flex justify-center" style={{ marginTop: U(wide ? 48 : 34) }}>
+      <p data-a="up" className={cx(st.sans, "text-center")} style={vars({ marginTop: U(14), marginInline: "auto", maxWidth: U(wide ? 900 : 330), fontSize: U(wide ? 18 : 15), lineHeight: wide ? 1.35 : 1.3, color: "var(--muted)", "--y": 14, "--d": "0.15s" })}>
+        {t("Shu kunning go‘zalligini birga yaratamiz")}
+      </p>
+      <div className="relative flex justify-center" style={{ marginTop: U(wide ? 40 : 30) }}>
         <div data-a="archOpen" className={cx(st.dressCard, "relative flex flex-col items-center text-center")} style={vars({ width: s(342), padding: `${s(74)} ${s(24)} ${s(28)}`, gap: s(12), borderRadius: `${s(171)} ${s(171)} ${s(28)} ${s(28)}`, "--d": "0.15s" })}>
           <p className={st.serifI} style={{ fontSize: s(40), lineHeight: 1.1, color: "var(--ink)" }}>
             {x.title}
@@ -1115,7 +1131,7 @@ function Rsvp({ d, wide, ready, slug, mode, tail, z }: { d: D; wide: boolean; re
   );
   const pad = wide ? U(19) : U(16);
   return (
-    <Sec ready={ready} z={z} id="shato-javob" style={{ background: "var(--blush)", paddingBottom: U((wide ? 240 : 230) + tail) }}>
+    <Sec ready={ready} z={z} id="shato-javob" style={{ background: "var(--blush)", paddingBottom: U((wide ? 311 : 335) + tail), minHeight: U((wide ? 1380 : 1242) + tail) }}>
       <Pic src={`${P}/butalar.webp`} r={wide ? [-180, -330, 1800, 771.43] : [-125, -150, 640, 274.29]} z={1} />
       {wide && (
         <>
@@ -1294,14 +1310,14 @@ const OVER: Record<Key, [number, number]> = {
 };
 /** Har bo‘lim ostidagi bo‘sh joy (Figma bo‘yicha) — keyingi bo‘lim bezagi shundan katta bo‘lsa, bo‘lim cho‘ziladi */
 const ROOM: Record<Key, [number, number]> = {
-  welcome: [127, 120],
+  welcome: [127, 165],
   date: [99, 110],
   venue: [300, 380],
   program: [118, 160],
   details: [150, 190],
   dress: [110, 130],
   moments: [72, 120],
-  rsvp: [230, 240],
+  rsvp: [335, 311],
   final: [0, 0],
 };
 

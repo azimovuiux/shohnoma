@@ -223,4 +223,5 @@ export const ru: Record<string, string> = {
   "Iqtibos yonida, ark ichida": "Рядом с цитатой, в арке",
   "Iltimos, sahifani yangilang.": "Пожалуйста, обновите страницу.",
   "Sahifani yangilash": "Обновить страницу",
+  "Shu kunning go‘zalligini birga yaratamiz": "Создадим красоту этого дня вместе",
 };
