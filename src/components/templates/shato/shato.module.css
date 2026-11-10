@@ -383,12 +383,14 @@
 }
 /* Tabaqalar: yopiq holatdan 3D ochiladi (0.3–1.8s) */
 .door {
-  transform-origin: 0 0;
+  /* ochiq holat — tabaqa lo‘la atrofida tashqariga (tomoshabin tomon) 112° buriladi va ark yonida turadi; yuklanganda yopiq holatdan ochiladi */
+  transform: perspective(1400px) rotateY(var(--a));
+  backface-visibility: visible;
   animation: doorOpen 1.5s 0.3s var(--door) both;
 }
 @keyframes doorOpen {
   from {
-    transform: var(--c);
+    transform: perspective(1400px) rotateY(0deg);
   }
 }
 .nameIn {

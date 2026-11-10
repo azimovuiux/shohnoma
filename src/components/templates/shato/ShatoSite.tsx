@@ -254,7 +254,6 @@ function Words({ text, d0 = 0, step = 0.03 }: { text: string; d0?: number; step?
 
 /* ═════════════ 00 · Bog‘ darvozasi (scroll bilan) ═════════════ */
 /** Darvoza tabaqasi rasmi (tabaqa.webp — kesilgan) Figma’dagi to‘liq rasm qutisidan */
-const doorContent = (b: Box, flip: boolean): Box => [b[0] + b[2] * (flip ? 0.2662 : 0.2546), b[1] + b[3] * 0.01693, b[2] * 0.4792, b[3] * 0.9577];
 /** Yopiq tabaqalar — ramka ichida (Figma «09 Final» nisbatlari) */
 const doorClosed = (f: Box, right: boolean): Box => [f[0] + f[2] * (right ? 0.5 : 0.20625), f[1] + f[3] * 0.19336, f[2] * 0.29375, f[3] * 0.7945];
 
@@ -328,15 +327,6 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
   const PU = (n: number) => `calc(100cqw / ${W} * ${n})`;
   const bush = wide ? { x: -180, over: 330, w: 1800, h: 771.43 } : { x: -125, over: 150, w: 640, h: 274.29 };
   const frame: Box = wide ? [460, 40, 520, 924.44] : [-7, 110, 404, 718.22];
-  const doors: Box[] = wide
-    ? [
-        [380, 170, 120, 780],
-        [940, 170, 120, 780],
-      ]
-    : [
-        [-10, 212, 92, 600],
-        [308, 212, 92, 600],
-      ];
   const garland: Box = wide ? [400, -20, 640, 360] : [-15, 44, 420, 236.25];
   const roseL: Box = wide ? [170, 380, 360, 640] : [-78, 470, 236, 419.56];
   const roseR: Box = wide ? [910, 360, 360, 640] : [232, 450, 236, 419.56];
@@ -430,19 +420,13 @@ function Gate({ d, wide, onReveal, onStart, still = false }: { d: D; wide: boole
         </div>
         {/* Tabaqalar (3D ochiladi) + girlyanda — ramka bilan birga kattalashadi */}
         <div className={cx(st.gl, st.gZoom)} style={{ transformOrigin: `50% ${Y(wide ? 470 : 420)}` }}>
-          {doors.map((b, i) => {
-            const o = doorContent(b, i === 1);
-            const c = doorClosed(frame, i === 1);
+          {[false, true].map((right) => {
+            // yopiq holatda ramka ichida; tashqi cheti (lo‘la) atrofida 3D ochiladi.
+            // Tabaqa rasmi: baland tomoni o‘rtada uchrashadi (ark shakli) — chap tabaqa aks ettiriladi
+            const c = doorClosed(frame, right);
             return (
-              <div
-                key={i}
-                className={st.door}
-                style={vars({
-                  ...box(o),
-                  "--c": `translate(${U(c[0] - o[0])}, ${U(c[1] - o[1])}) scale(${(c[2] / o[2]).toFixed(4)}, ${(c[3] / o[3]).toFixed(4)})`,
-                })}
-              >
-                <Img src={`${P}/tabaqa.webp`} eager className={i === 1 ? st.flipX : undefined} style={{ objectFit: "fill" }} />
+              <div key={String(right)} className={st.door} style={vars({ ...box(c), transformOrigin: right ? "100% 50%" : "0 50%", "--a": right ? "112deg" : "-112deg" })}>
+                <Img src={`${P}/tabaqa.webp`} eager className={right ? undefined : st.flipX} style={{ objectFit: "fill" }} />
               </div>
             );
           })}
@@ -1272,10 +1256,10 @@ function Final({ d, wide, ready, z, onSeen }: { d: D; wide: boolean; ready: bool
       </p>
       <Pic src={`${P}/darvoza.webp`} r={frame} z={2} />
       <div ref={dl} className={cx("absolute", st.finalDoor)} style={{ left: U(c0[0]), top: U(c0[1]), width: U(c0[2]), height: U(c0[3]), zIndex: 2, transformOrigin: "0 50%", transform: "perspective(1400px) rotateY(82deg)", willChange: "transform" }}>
-        <Img src={`${P}/tabaqa.webp`} style={{ objectFit: "fill" }} />
+        <Img src={`${P}/tabaqa.webp`} className={st.flipX} style={{ objectFit: "fill" }} />
       </div>
       <div ref={dr} className={cx("absolute", st.finalDoor)} style={{ left: U(c1[0]), top: U(c1[1]), width: U(c1[2]), height: U(c1[3]), zIndex: 2, transformOrigin: "100% 50%", transform: "perspective(1400px) rotateY(-82deg)", willChange: "transform" }}>
-        <Img src={`${P}/tabaqa.webp`} className={st.flipX} style={{ objectFit: "fill" }} />
+        <Img src={`${P}/tabaqa.webp`} style={{ objectFit: "fill" }} />
       </div>
       <Pic src={`${P}/atirgul.webp`} r={wide ? [330, 520, 320, 568.89] : [-80, 560, 220, 391.11]} z={4} a="grow" />
       <Pic src={`${P}/atirgul.webp`} r={wide ? [790, 500, 320, 568.89] : [250, 540, 220, 391.11]} flip z={4} a="grow" />
