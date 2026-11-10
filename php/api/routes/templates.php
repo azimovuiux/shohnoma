@@ -9,7 +9,9 @@ route('GET', '/templates.js', function () {
         error_log('[shohnoma] templates.js: ' . $e->getMessage());
         $list = [];
     }
-    $js = 'window.__SHOHNOMA_TEMPLATES__=' . json_encode($list, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) . ';';
+    try { $cats = categories(); } catch (Throwable $e) { $cats = CATEGORY_DEFAULTS; }
+    $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP;
+    $js = 'window.__SHOHNOMA_TEMPLATES__=' . json_encode($list, $flags) . ';window.__SHOHNOMA_CATEGORIES__=' . json_encode($cats, $flags) . ';';
     // Har safar tekshiriladi (o‘zgarmagan bo‘lsa — 304), admin o‘zgarishi darhol ko‘rinadi
     $etag = '"' . substr(sha1($js), 0, 20) . '"';
     header('Content-Type: application/javascript; charset=utf-8');
@@ -22,7 +24,41 @@ route('GET', '/templates.js', function () {
 });
 
 route('GET', '/templates', function () {
-    json_out(['ok' => true, 'templates' => array_map('tpl_public', array_values(array_filter(templates(), fn($t) => $t['active'])))]);
+    json_out(['ok' => true, 'templates' => array_map('tpl_public', array_values(array_filter(templates(), fn($t) => $t['active']))), 'categories' => categories()]);
+});
+
+/* ── Admin: kategoriyalar (nomi uz/ru/en, ikonka, taklifnoma turi) ── */
+route('GET', '/admin/categories', function () {
+    require_admin();
+    json_out(['ok' => true, 'categories' => categories()]);
+});
+route('PUT', '/admin/categories', function () {
+    require_admin();
+    $b = body();
+    $in = is_array($b['categories'] ?? null) ? $b['categories'] : [];
+    if (count($in) > 40) fail('Kategoriyalar juda ko‘p', 422);
+    $out = [];
+    $seen = [];
+    foreach ($in as $c) {
+        if (!is_array($c)) continue;
+        $slug = (string)($c['slug'] ?? '');
+        if (!preg_match('/^[a-z0-9][a-z0-9-]{1,29}$/', $slug)) fail('Kategoriya havolasi (slug) noto‘g‘ri: lotin harflari, raqam va «-»', 422);
+        if (isset($seen[$slug])) fail('Bir xil slug ikki marta: ' . $slug, 422);
+        $seen[$slug] = true;
+        $name = str_in($c['name'] ?? '', 40);
+        if ($name === '') fail('Kategoriya nomini kiriting', 422);
+        $kind = (string)($c['kind'] ?? '');
+        // standart kategoriyaning turi o‘zgarmaydi
+        if (in_array($slug, CATEGORY_KINDS, true)) $kind = $slug;
+        if (!in_array($kind, CATEGORY_KINDS, true)) fail('Taklifnoma turini tanlang', 422);
+        $icon = (string)($c['icon'] ?? '');
+        if (!preg_match('/^[A-Za-z0-9]{2,30}$/', $icon)) $icon = 'Tag';
+        $out[] = ['slug' => $slug, 'name' => $name, 'nameRu' => str_in($c['nameRu'] ?? '', 40), 'nameEn' => str_in($c['nameEn'] ?? '', 40), 'icon' => $icon, 'kind' => $kind];
+    }
+    // standart kategoriyalar o‘chirilmaydi
+    foreach (CATEGORY_DEFAULTS as $d) if (!isset($seen[$d['slug']])) fail('Standart kategoriyani o‘chirib bo‘lmaydi: ' . $d['name'], 422);
+    setting_set('categories', json_encode($out, JSON_UNESCAPED_UNICODE));
+    json_out(['ok' => true, 'categories' => categories()]);
 });
 
 /* ── Admin: shablonlarni boshqarish ── */
@@ -54,9 +90,11 @@ function tpl_clean(array $b, string $slug): array
     if ($name === '') fail('Nomini kiriting', 422);
     // Bir nechta marosim tanlash mumkin; birinchisi — asosiy (`ceremony`)
     $cers = is_array($b['ceremonies'] ?? null) ? $b['ceremonies'] : [$b['ceremony'] ?? ''];
-    $cers = array_values(array_unique(array_filter(array_map('strval', $cers), fn($c) => in_array($c, TPL_CEREMONIES, true))));
-    if (!$cers) fail('Marosim turini tanlang', 422);
-    $ceremony = $cers[0];
+    $known = category_slugs();
+    $cers = array_values(array_unique(array_filter(array_map('strval', $cers), fn($c) => in_array($c, $known, true))));
+    if (!$cers) fail('Kategoriyani tanlang', 422);
+    // taklifnoma turi — birinchi kategoriyaning turi
+    $ceremony = category_kind($cers[0]) ?? 'nikoh';
     $style = (string)($b['style'] ?? '');
     if (!in_array($style, TPL_STYLES, true)) fail('Uslubni tanlang', 422);
     $price = (int)($b['price'] ?? 0);

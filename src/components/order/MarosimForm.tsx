@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useLocalRouter } from "@/lib/useLocalRouter";
 import { useLocale, useT } from "@/lib/i18n";
 import { Add, ArrowRight, CloseCircle, Location, Trash } from "@/components/icons";
-import { ceremonyLabel, tplCeremonies, type Ceremony, type Template } from "@/lib/templates";
+import { ceremonyLabel, tplKinds, type Ceremony, type Template } from "@/lib/templates";
 import { FlowField, IconInput, bareInput, flowInput, SectionTitle } from "./fields";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
 import { FlowColumns } from "./FlowTop";
@@ -145,7 +145,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
             label={t("Marosim turi")}
             value={o.ceremony}
             onChange={(v) => set("ceremony", v)}
-            options={ceremonies.filter((c) => c === o.ceremony || tplCeremonies(template).includes(c)).map((c) => ({ value: c, label: t(ceremonyLabel[c]) }))}
+            options={ceremonies.filter((c) => c === o.ceremony || tplKinds(template).includes(c)).map((c) => ({ value: c, label: t(ceremonyLabel[c]) }))}
           />
         </FlowField>
 

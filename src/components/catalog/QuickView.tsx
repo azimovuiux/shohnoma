@@ -5,7 +5,9 @@ import { useLocale, useT } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, CloseCircle, Eye, Messages, Mobile, Monitor, TickCircle } from "@/components/icons";
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, styleLabel, templateFeatures, tplCeremonies } from "@/lib/templates";
+import { ceremonyLabel, styleLabel, templateFeatures, tplCeremonies, type Ceremony } from "@/lib/templates";
+import { categoryName, getCategory } from "@/lib/categories";
+import { CategoryIcon } from "@/lib/categoryIcons";
 import { discountPercent, formatPrice } from "@/lib/format";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
@@ -140,8 +142,11 @@ export function QuickView({
             <h2 className="font-serif text-[38px] font-light leading-none text-ink">{t.name}</h2>
             <div className="mt-1 flex flex-wrap gap-1.5">
               {tplCeremonies(t).map((c) => (
-                <span key={c} className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">
-                  {tt(ceremonyLabel[c])}
+                <span key={c} className="inline-flex items-center gap-1.5 rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">
+                  <span className="text-gold">
+                    <CategoryIcon name={getCategory(c)?.icon} size={14} />
+                  </span>
+                  {categoryName(getCategory(c), locale) || tt(ceremonyLabel[c as Ceremony] ?? c)}
                 </span>
               ))}
               <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(styleLabel[t.style])}</span>

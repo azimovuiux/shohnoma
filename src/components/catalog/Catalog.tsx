@@ -11,7 +11,6 @@ import {
   hasCeremony,
   tplCeremonies,
   styleLabel,
-  type Ceremony,
   type Style,
   type Template,
 } from "@/lib/templates";
@@ -19,12 +18,14 @@ import { useTemplates } from "@/lib/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
 import { QuickView } from "./QuickView";
 import { CountBadge } from "@/components/CountBadge";
+import { categoryName, getCategory } from "@/lib/categories";
+import { useCategories } from "@/lib/useCategories";
+import { CategoryIcon } from "@/lib/categoryIcons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 
 type Sort = "new" | "cheap" | "expensive";
 const sortLabel: Record<Sort, string> = { new: "Yangilari", cheap: "Arzonroq", expensive: "Qimmatroq" };
 
-const ceremonies = Object.keys(ceremonyLabel) as Ceremony[];
 const styles = Object.keys(styleLabel) as Style[];
 
 function Select<T extends string>({
@@ -97,11 +98,13 @@ export function Catalog() {
   const router = useLocalRouter();
   const tt = useT();
   const params = useSearchParams();
-  const ceremony = (params.get("marosim") as Ceremony | null) ?? "";
+  const ceremony = params.get("marosim") ?? "";
   const style = (params.get("uslub") as Style | null) ?? "";
   const sort = ((params.get("sort") as Sort | null) ?? "new") as Sort;
   const [q, setQ] = useState(params.get("q") ?? "");
   const templates = useTemplates();
+  const categories = useCategories();
+  const locale = useLocale();
   const [quick, setQuick] = useState<Template | null>(null);
   const [sheet, setSheet] = useState(false);
 
@@ -113,7 +116,7 @@ export function Catalog() {
   };
 
   // Indikator: tanlangan uslub bilan birga shu marosimda nechta shablon bor
-  const byCeremony = (c: Ceremony | "") => templates.filter((t) => hasCeremony(t, c) && (!style || t.style === style)).length;
+  const byCeremony = (c: string) => templates.filter((t) => hasCeremony(t, c) && (!style || t.style === style)).length;
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLocaleLowerCase("uz");
@@ -124,7 +127,7 @@ export function Catalog() {
         (!needle ||
           t.name.toLocaleLowerCase("uz").includes(needle) ||
           styleLabel[t.style].toLocaleLowerCase("uz").includes(needle) ||
-          tplCeremonies(t).some((c) => ceremonyLabel[c].toLocaleLowerCase("uz").includes(needle) || tt(ceremonyLabel[c]).toLocaleLowerCase("ru").includes(needle)) ||
+          tplCeremonies(t).some((c) => (["uz", "ru", "en"] as const).some((l) => categoryName(getCategory(c), l).toLocaleLowerCase().includes(needle))) ||
           tt(styleLabel[t.style]).toLocaleLowerCase("ru").includes(needle)),
     );
     if (sort === "cheap") list.sort((a, b) => a.price - b.price);
@@ -172,14 +175,17 @@ export function Catalog() {
       </div>
 
       {/* Filtrlar */}
-      <div className="mt-8 flex flex-col gap-4 border-b border-line pb-6 xl:flex-row xl:items-center xl:justify-between">
-        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:px-0 xl:flex-nowrap">
+      <div className="mt-8 flex flex-col gap-4 border-b border-line pb-6 xl:flex-row xl:items-start xl:justify-between">
+        <div className="no-scrollbar -mx-5 flex min-w-0 gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
           <Chip active={!ceremony} onClick={() => setParam("marosim", "")}>
             {tt("Barchasi")} <CountBadge n={byCeremony("")} active={!ceremony} />
           </Chip>
-          {ceremonies.map((c) => (
-            <Chip key={c} active={ceremony === c} onClick={() => setParam("marosim", c)}>
-              {tt(ceremonyLabel[c])} <CountBadge n={byCeremony(c)} active={ceremony === c} />
+          {categories.map((c) => (
+            <Chip key={c.slug} active={ceremony === c.slug} onClick={() => setParam("marosim", c.slug)}>
+              <span className={ceremony === c.slug ? "" : "text-gold"}>
+                <CategoryIcon name={c.icon} />
+              </span>
+              {categoryName(c, locale)} <CountBadge n={byCeremony(c.slug)} active={ceremony === c.slug} />
             </Chip>
           ))}
         </div>
@@ -257,16 +263,18 @@ function FilterSheet({
   onClose,
   onApply,
 }: {
-  ceremony: Ceremony | "";
+  ceremony: string;
   style: Style | "";
   onClose: () => void;
   onApply: (v: { marosim: string; uslub: string }) => void;
 }) {
   const templates = useTemplates();
   const tt = useT();
+  const locale = useLocale();
+  const categories = useCategories();
   const [v, setV] = useState({ marosim: ceremony as string, uslub: style as string });
   const count = templates.filter(
-    (t) => hasCeremony(t, v.marosim as Ceremony | "") && (!v.uslub || t.style === v.uslub),
+    (t) => hasCeremony(t, v.marosim) && (!v.uslub || t.style === v.uslub),
   ).length;
 
   const group = (title: string, key: keyof typeof v, items: { value: string; label: string; n?: number }[]) => (
@@ -299,7 +307,7 @@ function FilterSheet({
             <CloseCircle size={22} />
           </button>
         </div>
-        {group(tt("Marosim"), "marosim", ceremonies.map((c) => ({ value: c, label: tt(ceremonyLabel[c]), n: templates.filter((t) => hasCeremony(t, c) && (!v.uslub || t.style === v.uslub)).length })))}
+        {group(tt("Marosim"), "marosim", categories.map((c) => ({ value: c.slug, label: categoryName(c, locale), n: templates.filter((t) => hasCeremony(t, c.slug) && (!v.uslub || t.style === v.uslub)).length })))}
         {group(tt("Uslub"), "uslub", styles.map((s) => ({ value: s, label: tt(styleLabel[s]) })))}
         <div className="flex gap-2.5 pt-2">
           <button type="button" className="btn btn-secondary flex-1" onClick={() => setV({ marosim: "", uslub: "" })}>

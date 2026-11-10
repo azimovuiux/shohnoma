@@ -1,4 +1,6 @@
 import { tplImgVersions } from "./tplImgVersions.ts";
+import { categoryName, getCategory } from "./categories.ts";
+import type { Locale } from "./i18n";
 /** Shablonlar ro‘yxati — spec §10.1 (narxlar namuna, [Ochiq]) */
 
 export type Ceremony = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun";
@@ -55,8 +57,8 @@ export interface Template {
   name: string;
   /** Asosiy marosim (birinchisi) — eski ma'lumotlar bilan moslik uchun */
   ceremony: Ceremony;
-  /** Shablon mos keladigan barcha marosimlar (bir nechta bo‘lishi mumkin). Bo‘lmasa — faqat `ceremony` */
-  ceremonies?: Ceremony[];
+  /** Shablon kategoriyalari (katalog filtrlari, admin boshqaradi; bir nechta). Bo‘lmasa — faqat `ceremony` */
+  ceremonies?: string[];
   style: Style;
   priceOld: number;
   price: number;
@@ -404,18 +406,23 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
   PHOTO_SLOTS[designSlug(t)] ?? Array.from({ length: 6 }, (_, i) => ({ title: `Surat · ${i + 1}`, where: "Fotogalereya" }));
 
-/** Shablonning barcha marosimlari (kamida bittasi) */
-export function tplCeremonies(t: Pick<Template, "ceremony" | "ceremonies">): Ceremony[] {
-  const list = (t.ceremonies ?? []).filter((c) => c in ceremonyLabel);
+/** Shablon kategoriyalari (slug, kamida bittasi; o‘chirilgan kategoriyalar tashlab ketiladi) */
+export function tplCeremonies(t: Pick<Template, "ceremony" | "ceremonies">): string[] {
+  const list = (t.ceremonies ?? []).filter((c) => !!getCategory(c));
   return list.length ? Array.from(new Set(list)) : [t.ceremony];
 }
-/** Shablon shu marosimga mosmi */
-export function hasCeremony(t: Pick<Template, "ceremony" | "ceremonies">, c: Ceremony | ""): boolean {
+/** Shablon shu kategoriyadami */
+export function hasCeremony(t: Pick<Template, "ceremony" | "ceremonies">, c: string): boolean {
   return !c || tplCeremonies(t).includes(c);
 }
-/** Marosimlar nomi: «Nikoh to‘yi, Fotiha to‘yi» */
-export function ceremonyNames(t: Pick<Template, "ceremony" | "ceremonies">, tr: (s: string) => string = (s) => s): string {
+/** Shablon qo‘llaydigan taklifnoma turlari (buyurtma formasidagi «Marosim turi») */
+export function tplKinds(t: Pick<Template, "ceremony" | "ceremonies">): Ceremony[] {
+  const kinds = tplCeremonies(t).map((c) => getCategory(c)?.kind ?? (c in ceremonyLabel ? (c as Ceremony) : null)).filter((k): k is Ceremony => !!k);
+  return kinds.length ? Array.from(new Set(kinds)) : [t.ceremony];
+}
+/** Kategoriyalar nomi: «Nikoh to‘yi, Fotiha to‘yi» */
+export function ceremonyNames(t: Pick<Template, "ceremony" | "ceremonies">, locale: Locale = "uz"): string {
   return tplCeremonies(t)
-    .map((c) => tr(ceremonyLabel[c]))
+    .map((c) => categoryName(getCategory(c), locale) || ceremonyLabel[c as Ceremony] || c)
     .join(", ");
 }

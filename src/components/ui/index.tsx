@@ -16,6 +16,7 @@ export function Field({
   error,
   children,
   className = "",
+  group = false,
 }: {
   label?: ReactNode;
   required?: boolean;
@@ -23,9 +24,12 @@ export function Field({
   error?: string | null;
   children: ReactNode;
   className?: string;
+  /** Ichida tugmalar guruhi bo‘lsa — <label> emas (label bosilganda birinchi tugma bosilib ketmasin) */
+  group?: boolean;
 }) {
+  const Tag = group ? "div" : "label";
   return (
-    <label className={`flex flex-col gap-[7px] ${className}`}>
+    <Tag role={group ? "group" : undefined} className={`flex flex-col gap-[7px] ${className}`}>
       {label && (
         <span className="t-body-s text-ink-2">
           {label}
@@ -34,7 +38,7 @@ export function Field({
       )}
       {children}
       {error ? <span className="t-body-s text-danger">{error}</span> : hint ? <span className="t-body-s text-ink-2">{hint}</span> : null}
-    </label>
+    </Tag>
   );
 }
 

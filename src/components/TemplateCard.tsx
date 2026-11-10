@@ -7,7 +7,9 @@ import { ArrowRight, Eye, Heart, MonitorMobbile, PlayCircle, Tag } from "@/compo
 import { GirihPattern } from "./Ornament";
 import { useToast } from "./ui";
 import type { Template } from "@/lib/templates";
-import { ceremonyNames, styleLabel, tplImages } from "@/lib/templates";
+import { ceremonyNames, styleLabel, tplCeremonies, tplImages } from "@/lib/templates";
+import { categoryName, getCategory } from "@/lib/categories";
+import { CategoryIcon } from "@/lib/categoryIcons";
 import { discountPercent, formatPrice } from "@/lib/format";
 import { LaptopFrame, PhoneFrame } from "./mockups/Devices";
 import { InvitationScreen } from "./mockups/InvitationScreen";
@@ -158,7 +160,11 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
           <h3 className="font-serif text-[26px] font-medium leading-[1.2] text-ink lg:text-[32px]">{t.name}</h3>
           <div className="flex flex-wrap items-center gap-2.5 text-[13px] leading-[1.5] text-ink-2">
             <span className="inline-flex items-center gap-1.5">
-              <Heart size={14} /> {ceremonyNames(t, tt)}
+              <CategoryIcon name={getCategory(tplCeremonies(t)[0])?.icon} size={14} />
+              <span title={ceremonyNames(t, locale)}>
+                {categoryName(getCategory(tplCeremonies(t)[0]), locale) || ceremonyNames(t, locale)}
+                {tplCeremonies(t).length > 1 && <span className="ml-1 text-ink-2/80">+{tplCeremonies(t).length - 1}</span>}
+              </span>
             </span>
             <span className="size-[3px] rounded-full bg-ink-2" />
             <span className="inline-flex items-center gap-1.5">

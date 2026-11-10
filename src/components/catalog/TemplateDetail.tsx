@@ -5,7 +5,9 @@ import { useLocale, useT } from "@/lib/i18n";
 import { useState } from "react";
 import { ArrowRight, Eye, Heart, Messages, TickCircle } from "@/components/icons";
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, styleLabel, templateFeatures, tplCeremonies } from "@/lib/templates";
+import { ceremonyLabel, styleLabel, templateFeatures, tplCeremonies, type Ceremony } from "@/lib/templates";
+import { categoryName, getCategory } from "@/lib/categories";
+import { CategoryIcon } from "@/lib/categoryIcons";
 import { discountPercent, formatPrice } from "@/lib/format";
 import { DeviceToggle, TemplatePreviewStage } from "./QuickView";
 import { useFavorite } from "@/components/TemplateCard";
@@ -37,8 +39,11 @@ export function TemplateDetail({ t }: { t: Template }) {
           <h1 className="font-serif text-[44px] font-light leading-none text-ink lg:text-[60px]">{t.name}</h1>
           <div className="flex flex-wrap gap-1.5">
             {tplCeremonies(t).map((c) => (
-              <span key={c} className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">
-                {tt(ceremonyLabel[c])}
+              <span key={c} className="inline-flex items-center gap-1.5 rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">
+                <span className="text-gold">
+                  <CategoryIcon name={getCategory(c)?.icon} size={14} />
+                </span>
+                {categoryName(getCategory(c), locale) || tt(ceremonyLabel[c as Ceremony] ?? c)}
               </span>
             ))}
             <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(styleLabel[t.style])}</span>

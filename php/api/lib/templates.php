@@ -67,6 +67,39 @@ function templates(bool $fresh = false): array
 function template_get(string $slug): ?array { return templates()[$slug] ?? null; }
 function template_active(string $slug): ?array { $t = template_get($slug); return $t && $t['active'] ? $t : null; }
 
+/* ── Kategoriyalar (katalog filtrlari) — admin qo‘shadi; `kind` — taklifnoma turi (buyurtma formasi) ── */
+const CATEGORY_DEFAULTS = [
+    ['slug' => 'nikoh', 'name' => 'Nikoh to‘yi', 'nameRu' => 'Никах', 'nameEn' => 'Wedding', 'icon' => 'Heart', 'kind' => 'nikoh', 'builtin' => true],
+    ['slug' => 'sunnat', 'name' => 'Sunnat to‘yi', 'nameRu' => 'Суннат-той', 'nameEn' => 'Sunnat celebration', 'icon' => 'Crown1', 'kind' => 'sunnat', 'builtin' => true],
+    ['slug' => 'fotiha', 'name' => 'Fotiha to‘yi', 'nameRu' => 'Фотиха-той', 'nameEn' => 'Engagement (Fotiha)', 'icon' => 'Lovely', 'kind' => 'fotiha', 'builtin' => true],
+    ['slug' => 'tugilgan-kun', 'name' => 'Tug‘ilgan kun', 'nameRu' => 'День рождения', 'nameEn' => 'Birthday', 'icon' => 'Cake', 'kind' => 'tugilgan-kun', 'builtin' => true],
+];
+const CATEGORY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun'];
+
+/** Kategoriyalar ro‘yxati (admin tartibida); standartlari doim bor */
+function categories(): array
+{
+    $raw = db_settings()['categories'] ?? '';
+    $list = $raw !== '' ? (json_decode($raw, true) ?: []) : [];
+    if (!$list) return CATEGORY_DEFAULTS;
+    $out = [];
+    $seen = [];
+    foreach ($list as $c) {
+        if (!is_array($c) || !isset($c['slug']) || isset($seen[$c['slug']])) continue;
+        $seen[$c['slug']] = true;
+        $c['builtin'] = in_array($c['slug'], CATEGORY_KINDS, true);
+        $out[] = $c;
+    }
+    foreach (CATEGORY_DEFAULTS as $d) if (!isset($seen[$d['slug']])) $out[] = $d;
+    return $out;
+}
+function category_slugs(): array { return array_column(categories(), 'slug'); }
+function category_kind(string $slug): ?string
+{
+    foreach (categories() as $c) if ($c['slug'] === $slug) return $c['kind'];
+    return null;
+}
+
 const CEREMONY_LABEL = ['nikoh' => 'Nikoh to‘yi', 'fotiha' => 'Fotiha to‘yi', 'sunnat' => 'Sunnat to‘yi', 'tugilgan-kun' => 'Tug‘ilgan kun', 'boshqa' => 'Boshqa'];
 function ceremony_label(?string $c): string { return CEREMONY_LABEL[$c ?? ''] ?? '—'; }
 

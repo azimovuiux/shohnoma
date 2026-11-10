@@ -10,6 +10,7 @@ import { Edit, Eye, Trash } from "@/components/icons";
 import { PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { AdminError, AdminLoading, AdminTitle, Empty } from "../shared";
+import { AdminCategories } from "../AdminCategories";
 
 export type AdminTemplate = Template & { orders: number };
 
@@ -104,6 +105,7 @@ export function AdminTemplates() {
           ))}
         </ul>
       )}
+      <AdminCategories templates={list} />
     </>
   );
 }

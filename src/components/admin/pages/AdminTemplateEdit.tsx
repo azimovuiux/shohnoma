@@ -6,7 +6,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
-import { builtinTemplates, ceremonyLabel, styleLabel, tplCeremonies, type Ceremony, type Style, type Template } from "@/lib/templates";
+import { builtinTemplates, styleLabel, tplCeremonies, type Style, type Template } from "@/lib/templates";
+import { categories, getCategory } from "@/lib/categories";
+import { CategoryIcon } from "@/lib/categoryIcons";
 import { Field, Input, Textarea, Toggle, api, useToast } from "@/components/ui";
 import { ArrowLeft, DocumentUpload, Pause, Play, TickCircle, Trash } from "@/components/icons";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
@@ -203,9 +205,9 @@ export function AdminTemplateEdit() {
                   maxLength={62}
                 />
               </Field>
-              <Field label="Marosim" hint="Bir nechtasini tanlash mumkin">
+              <Field group label="Kategoriya" hint="Bir nechtasini tanlash mumkin. Yangisini «Shablonlar» sahifasida qo‘shasiz">
                 <div className="flex flex-wrap gap-2">
-                  {(Object.keys(ceremonyLabel) as Ceremony[]).map((c) => {
+                  {categories.map(({ slug: c, name, icon }) => {
                     const cur = tplCeremonies(t);
                     const on = cur.includes(c);
                     return (
@@ -217,14 +219,14 @@ export function AdminTemplateEdit() {
                           // kamida bittasi qoladi; birinchisi — asosiy marosim
                           const next = on ? cur.filter((x) => x !== c) : [...cur, c];
                           if (!next.length) return;
-                          set({ ceremonies: next, ceremony: next[0] });
+                          set({ ceremonies: next, ceremony: getCategory(next[0])?.kind ?? "nikoh" });
                         }}
                         className={`inline-flex h-10 items-center gap-1.5 rounded-full border px-4 t-nav transition-colors ${
                           on ? "border-maroon bg-maroon text-ink-inverse" : "border-line bg-bg-base text-ink hover:bg-bg-soft"
                         }`}
                       >
-                        {on && <TickCircle size={15} />}
-                        {ceremonyLabel[c]}
+                        {on ? <TickCircle size={15} /> : <CategoryIcon name={icon} size={15} />}
+                        {name}
                       </button>
                     );
                   })}
