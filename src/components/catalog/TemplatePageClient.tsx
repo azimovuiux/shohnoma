@@ -7,6 +7,7 @@ import { TemplateDetail } from "./TemplateDetail";
 import { TemplateCard } from "@/components/TemplateCard";
 import { useTemplate, useTemplates } from "@/lib/useTemplates";
 import { PageLoading, useRouteParam } from "@/lib/client";
+import { tplCeremonies, type Template } from "@/lib/templates";
 
 /** Shablon sahifasi. slug "_" — admin qo‘shgan shablon: haqiqiy slug URL'dan o‘qiladi */
 export function TemplatePageClient({ slug }: { slug: string }) {
@@ -28,9 +29,11 @@ export function TemplatePageClient({ slug }: { slug: string }) {
     );
   }
 
+  const mine = tplCeremonies(t);
+  const shared = (x: Template) => tplCeremonies(x).filter((c) => mine.includes(c)).length;
   const similar = all
     .filter((x) => x.slug !== t.slug)
-    .sort((a, b) => Number(b.ceremony === t.ceremony) - Number(a.ceremony === t.ceremony) || Number(b.style === t.style) - Number(a.style === t.style))
+    .sort((a, b) => shared(b) - shared(a) || Number(b.style === t.style) - Number(a.style === t.style))
     .slice(0, 3);
 
   return (

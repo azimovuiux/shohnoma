@@ -4,7 +4,8 @@ import Link from "@/components/LocalLink";
 import { useT } from "@/lib/i18n";
 import { useState } from "react";
 import { ArrowRight, Cake, Crown1, Gallery, Heart, Lovely } from "@/components/icons";
-import { type Ceremony } from "@/lib/templates";
+import { hasCeremony, type Ceremony } from "@/lib/templates";
+import { CountBadge } from "@/components/CountBadge";
 import { useTemplates } from "@/lib/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
 import { SectionTitle } from "./SectionTitle";
@@ -23,7 +24,8 @@ export function Showcase() {
   const t = useT();
   const featured = templates.filter((x) => x.featured).slice(0, 10);
   // Bosh sahifada 10 ta; marosim tanlansa — shu marosimning barcha shablonlari
-  const list = ceremony ? templates.filter((x) => x.ceremony === ceremony) : featured;
+  const list = ceremony ? templates.filter((x) => hasCeremony(x, ceremony)) : featured;
+  const count = (c: Ceremony | "") => templates.filter((x) => hasCeremony(x, c)).length;
 
   return (
     <section id="shablonlar" className="scroll-mt-20 bg-bg-base py-20 lg:py-[120px]">
@@ -47,6 +49,7 @@ export function Showcase() {
                 >
                   {c.icon && <span className={active ? "" : "text-gold"}>{c.icon}</span>}
                   {t(c.label)}
+                  <CountBadge n={count(c.value)} active={active} />
                 </button>
               );
             })}

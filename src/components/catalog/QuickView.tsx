@@ -5,7 +5,7 @@ import { useLocale, useT } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, CloseCircle, Eye, Messages, Mobile, Monitor, TickCircle } from "@/components/icons";
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, styleLabel, templateFeatures } from "@/lib/templates";
+import { ceremonyLabel, styleLabel, templateFeatures, tplCeremonies } from "@/lib/templates";
 import { discountPercent, formatPrice } from "@/lib/format";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
@@ -139,7 +139,11 @@ export function QuickView({
           <div className="flex flex-col gap-2 pr-8">
             <h2 className="font-serif text-[38px] font-light leading-none text-ink">{t.name}</h2>
             <div className="mt-1 flex flex-wrap gap-1.5">
-              <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(ceremonyLabel[t.ceremony])}</span>
+              {tplCeremonies(t).map((c) => (
+                <span key={c} className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">
+                  {tt(ceremonyLabel[c])}
+                </span>
+              ))}
               <span className="rounded-full bg-bg-soft px-2.5 py-1 t-body-s text-ink">{tt(styleLabel[t.style])}</span>
               {off > 0 && <span className="rounded-full bg-maroon px-2.5 py-1 t-body-s text-ink-inverse">{tt("Aksiya")} −{off}%</span>}
             </div>

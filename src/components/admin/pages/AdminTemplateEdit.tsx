@@ -6,9 +6,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
-import { builtinTemplates, ceremonyLabel, styleLabel, type Ceremony, type Style, type Template } from "@/lib/templates";
+import { builtinTemplates, ceremonyLabel, styleLabel, tplCeremonies, type Ceremony, type Style, type Template } from "@/lib/templates";
 import { Field, Input, Textarea, Toggle, api, useToast } from "@/components/ui";
-import { ArrowLeft, DocumentUpload, Pause, Play, Trash } from "@/components/icons";
+import { ArrowLeft, DocumentUpload, Pause, Play, TickCircle, Trash } from "@/components/icons";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { InvitationDesktop } from "@/components/mockups/InvitationDesktop";
@@ -203,14 +203,32 @@ export function AdminTemplateEdit() {
                   maxLength={62}
                 />
               </Field>
-              <Field label="Marosim">
-                <select className={selectClass} value={t.ceremony} onChange={(e) => set({ ceremony: e.target.value as Ceremony })}>
-                  {Object.entries(ceremonyLabel).map(([v, l]) => (
-                    <option key={v} value={v}>
-                      {l}
-                    </option>
-                  ))}
-                </select>
+              <Field label="Marosim" hint="Bir nechtasini tanlash mumkin">
+                <div className="flex flex-wrap gap-2">
+                  {(Object.keys(ceremonyLabel) as Ceremony[]).map((c) => {
+                    const cur = tplCeremonies(t);
+                    const on = cur.includes(c);
+                    return (
+                      <button
+                        key={c}
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => {
+                          // kamida bittasi qoladi; birinchisi — asosiy marosim
+                          const next = on ? cur.filter((x) => x !== c) : [...cur, c];
+                          if (!next.length) return;
+                          set({ ceremonies: next, ceremony: next[0] });
+                        }}
+                        className={`inline-flex h-10 items-center gap-1.5 rounded-full border px-4 t-nav transition-colors ${
+                          on ? "border-maroon bg-maroon text-ink-inverse" : "border-line bg-bg-base text-ink hover:bg-bg-soft"
+                        }`}
+                      >
+                        {on && <TickCircle size={15} />}
+                        {ceremonyLabel[c]}
+                      </button>
+                    );
+                  })}
+                </div>
               </Field>
               <Field label="Uslub">
                 <select className={selectClass} value={t.style} onChange={(e) => set({ style: e.target.value as Style })}>

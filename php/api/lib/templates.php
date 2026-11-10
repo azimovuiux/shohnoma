@@ -41,6 +41,8 @@ function templates(bool $fresh = false): array
         $d = json_decode($r['data'], true) ?: [];
         if (($d['kind'] ?? '') !== 'html' && isset($code[$r['slug']])) {
             if (isset($code[$r['slug']]['fields'])) $d['fields'] = $code[$r['slug']]['fields'];
+            // Marosimlar ro‘yxati: admin hali saqlamagan bo‘lsa — koddagisi
+            if (empty($d['ceremonies']) && !empty($code[$r['slug']]['ceremonies'])) $d['ceremonies'] = $code[$r['slug']]['ceremonies'];
             if (empty($d['descriptionRu']) && !empty($code[$r['slug']]['descriptionRu'])) $d['descriptionRu'] = $code[$r['slug']]['descriptionRu'];
             if (empty($d['descriptionEn']) && !empty($code[$r['slug']]['descriptionEn'])) $d['descriptionEn'] = $code[$r['slug']]['descriptionEn'];
             // Koddagi rasmlar (kartadagi mokap/scroll preview): bazada yo‘q bo‘lsa — qo‘shiladi;

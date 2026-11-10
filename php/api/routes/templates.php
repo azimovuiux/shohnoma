@@ -52,8 +52,11 @@ function tpl_clean(array $b, string $slug): array
 {
     $name = str_in($b['name'] ?? '', 80);
     if ($name === '') fail('Nomini kiriting', 422);
-    $ceremony = (string)($b['ceremony'] ?? '');
-    if (!in_array($ceremony, TPL_CEREMONIES, true)) fail('Marosim turini tanlang', 422);
+    // Bir nechta marosim tanlash mumkin; birinchisi — asosiy (`ceremony`)
+    $cers = is_array($b['ceremonies'] ?? null) ? $b['ceremonies'] : [$b['ceremony'] ?? ''];
+    $cers = array_values(array_unique(array_filter(array_map('strval', $cers), fn($c) => in_array($c, TPL_CEREMONIES, true))));
+    if (!$cers) fail('Marosim turini tanlang', 422);
+    $ceremony = $cers[0];
     $style = (string)($b['style'] ?? '');
     if (!in_array($style, TPL_STYLES, true)) fail('Uslubni tanlang', 422);
     $price = (int)($b['price'] ?? 0);
@@ -92,6 +95,7 @@ function tpl_clean(array $b, string $slug): array
         'slug' => $slug,
         'name' => $name,
         'ceremony' => $ceremony,
+        'ceremonies' => $cers,
         'style' => $style,
         'price' => $price,
         'priceOld' => $priceOld ?: $price,

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useApi } from "@/lib/client";
-import { ceremonyLabel, styleLabel, type Template } from "@/lib/templates";
+import { ceremonyNames, styleLabel, type Template } from "@/lib/templates";
 import { formatPrice } from "@/lib/format";
 import { Toggle, api, confirmDialog, useToast } from "@/components/ui";
 import { Edit, Eye, Trash } from "@/components/icons";
@@ -70,7 +70,7 @@ export function AdminTemplates() {
                   </p>
                 </div>
                 <p className="t-body-s text-ink-2">
-                  {ceremonyLabel[t.ceremony]} · {styleLabel[t.style]}
+                  {ceremonyNames(t)} · {styleLabel[t.style]}
                   {t.kind === "html" && <span className="ml-1.5 rounded-full bg-gold-soft px-2 py-0.5 text-[11px] text-maroon">HTML v{t.version}</span>}
                 </p>
                 <p className="t-title text-maroon">

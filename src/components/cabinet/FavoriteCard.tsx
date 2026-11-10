@@ -5,7 +5,7 @@ import { ArrowRight, Eye, Heart } from "@/components/icons";
 import { useFavorite, isDarkTheme } from "@/components/TemplateCard";
 import { PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
-import { getTemplate, ceremonyLabel, styleLabel } from "@/lib/templates";
+import { getTemplate, ceremonyNames, styleLabel } from "@/lib/templates";
 import { discountPercent, formatPrice } from "@/lib/format";
 import { useLocale, useT } from "@/lib/i18n";
 
@@ -39,7 +39,7 @@ export function FavoriteCard({ slug, onChange }: { slug: string; onChange?: () =
         <div className="flex flex-col gap-1">
           <h2 className="font-serif text-[24px] font-medium leading-[1.2] text-ink">{t.name}</h2>
           <p className="t-body-s text-ink-2">
-            {tr(ceremonyLabel[t.ceremony])} · {tr(styleLabel[t.style])}
+            {ceremonyNames(t, tr)} · {tr(styleLabel[t.style])}
           </p>
         </div>
         <div className="flex items-baseline gap-2">

@@ -8,6 +8,8 @@ import { useMemo, useState } from "react";
 import { ArrowDown2, ArrowRight, Brush, CloseCircle, Filter, Mobile, SearchNormal1, Card } from "@/components/icons";
 import {
   ceremonyLabel,
+  hasCeremony,
+  tplCeremonies,
   styleLabel,
   type Ceremony,
   type Style,
@@ -16,6 +18,7 @@ import {
 import { useTemplates } from "@/lib/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
 import { QuickView } from "./QuickView";
+import { CountBadge } from "@/components/CountBadge";
 import { TelegramIcon } from "@/components/TelegramIcon";
 
 type Sort = "new" | "cheap" | "expensive";
@@ -109,20 +112,20 @@ export function Catalog() {
     router.replace(`/shablonlar/${next.toString() ? `?${next}` : ""}`, { scroll: false });
   };
 
-  const byCeremony = (c: Ceremony | "") => templates.filter((t) => !c || t.ceremony === c).length;
+  // Indikator: tanlangan uslub bilan birga shu marosimda nechta shablon bor
+  const byCeremony = (c: Ceremony | "") => templates.filter((t) => hasCeremony(t, c) && (!style || t.style === style)).length;
 
   const filtered = useMemo(() => {
     const needle = q.trim().toLocaleLowerCase("uz");
     const list = templates.filter(
       (t) =>
-        (!ceremony || t.ceremony === ceremony) &&
+        hasCeremony(t, ceremony) &&
         (!style || t.style === style) &&
         (!needle ||
           t.name.toLocaleLowerCase("uz").includes(needle) ||
           styleLabel[t.style].toLocaleLowerCase("uz").includes(needle) ||
-          ceremonyLabel[t.ceremony].toLocaleLowerCase("uz").includes(needle) ||
-          tt(styleLabel[t.style]).toLocaleLowerCase("ru").includes(needle) ||
-          tt(ceremonyLabel[t.ceremony]).toLocaleLowerCase("ru").includes(needle)),
+          tplCeremonies(t).some((c) => ceremonyLabel[c].toLocaleLowerCase("uz").includes(needle) || tt(ceremonyLabel[c]).toLocaleLowerCase("ru").includes(needle)) ||
+          tt(styleLabel[t.style]).toLocaleLowerCase("ru").includes(needle)),
     );
     if (sort === "cheap") list.sort((a, b) => a.price - b.price);
     else if (sort === "expensive") list.sort((a, b) => b.price - a.price);
@@ -172,11 +175,11 @@ export function Catalog() {
       <div className="mt-8 flex flex-col gap-4 border-b border-line pb-6 xl:flex-row xl:items-center xl:justify-between">
         <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-wrap lg:px-0 xl:flex-nowrap">
           <Chip active={!ceremony} onClick={() => setParam("marosim", "")}>
-            {tt("Barchasi")} <span className="opacity-70">{byCeremony("")}</span>
+            {tt("Barchasi")} <CountBadge n={byCeremony("")} active={!ceremony} />
           </Chip>
           {ceremonies.map((c) => (
             <Chip key={c} active={ceremony === c} onClick={() => setParam("marosim", c)}>
-              {tt(ceremonyLabel[c])} <span className="opacity-70">{byCeremony(c)}</span>
+              {tt(ceremonyLabel[c])} <CountBadge n={byCeremony(c)} active={ceremony === c} />
             </Chip>
           ))}
         </div>
@@ -263,16 +266,17 @@ function FilterSheet({
   const tt = useT();
   const [v, setV] = useState({ marosim: ceremony as string, uslub: style as string });
   const count = templates.filter(
-    (t) => (!v.marosim || t.ceremony === v.marosim) && (!v.uslub || t.style === v.uslub),
+    (t) => hasCeremony(t, v.marosim as Ceremony | "") && (!v.uslub || t.style === v.uslub),
   ).length;
 
-  const group = (title: string, key: keyof typeof v, items: { value: string; label: string }[]) => (
+  const group = (title: string, key: keyof typeof v, items: { value: string; label: string; n?: number }[]) => (
     <div className="flex flex-col gap-3">
       <p className="t-title text-ink">{title}</p>
       <div className="flex flex-wrap gap-2">
         {items.map((i) => (
           <Chip key={i.value} active={v[key] === i.value} onClick={() => setV({ ...v, [key]: v[key] === i.value ? "" : i.value })}>
             {i.label}
+            {i.n !== undefined && <CountBadge n={i.n} active={v[key] === i.value} />}
           </Chip>
         ))}
       </div>
@@ -295,7 +299,7 @@ function FilterSheet({
             <CloseCircle size={22} />
           </button>
         </div>
-        {group(tt("Marosim"), "marosim", ceremonies.map((c) => ({ value: c, label: tt(ceremonyLabel[c]) })))}
+        {group(tt("Marosim"), "marosim", ceremonies.map((c) => ({ value: c, label: tt(ceremonyLabel[c]), n: templates.filter((t) => hasCeremony(t, c) && (!v.uslub || t.style === v.uslub)).length })))}
         {group(tt("Uslub"), "uslub", styles.map((s) => ({ value: s, label: tt(styleLabel[s]) })))}
         <div className="flex gap-2.5 pt-2">
           <button type="button" className="btn btn-secondary flex-1" onClick={() => setV({ marosim: "", uslub: "" })}>

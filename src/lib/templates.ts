@@ -53,7 +53,10 @@ export interface Template {
   number: number;
   slug: string;
   name: string;
+  /** Asosiy marosim (birinchisi) — eski ma'lumotlar bilan moslik uchun */
   ceremony: Ceremony;
+  /** Shablon mos keladigan barcha marosimlar (bir nechta bo‘lishi mumkin). Bo‘lmasa — faqat `ceremony` */
+  ceremonies?: Ceremony[];
   style: Style;
   priceOld: number;
   price: number;
@@ -107,6 +110,7 @@ const builtin: Template[] = [
     slug: "anor",
     name: "Anor",
     ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
     style: "milliy",
     priceOld: 249000,
     price: 199000,
@@ -152,6 +156,7 @@ const builtin: Template[] = [
     slug: "zumrad",
     name: "Zumrad",
     ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
     style: "milliy",
     priceOld: 249000,
     price: 199000,
@@ -187,6 +192,7 @@ const builtin: Template[] = [
     slug: "parvoz",
     name: "Parvoz",
     ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
     style: "zamonaviy",
     priceOld: 249000,
     price: 199000,
@@ -223,6 +229,7 @@ const builtin: Template[] = [
     slug: "shato",
     name: "Shato",
     ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
     style: "romantik",
     priceOld: 249000,
     price: 199000,
@@ -396,3 +403,19 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
   PHOTO_SLOTS[designSlug(t)] ?? Array.from({ length: 6 }, (_, i) => ({ title: `Surat · ${i + 1}`, where: "Fotogalereya" }));
+
+/** Shablonning barcha marosimlari (kamida bittasi) */
+export function tplCeremonies(t: Pick<Template, "ceremony" | "ceremonies">): Ceremony[] {
+  const list = (t.ceremonies ?? []).filter((c) => c in ceremonyLabel);
+  return list.length ? Array.from(new Set(list)) : [t.ceremony];
+}
+/** Shablon shu marosimga mosmi */
+export function hasCeremony(t: Pick<Template, "ceremony" | "ceremonies">, c: Ceremony | ""): boolean {
+  return !c || tplCeremonies(t).includes(c);
+}
+/** Marosimlar nomi: «Nikoh to‘yi, Fotiha to‘yi» */
+export function ceremonyNames(t: Pick<Template, "ceremony" | "ceremonies">, tr: (s: string) => string = (s) => s): string {
+  return tplCeremonies(t)
+    .map((c) => tr(ceremonyLabel[c]))
+    .join(", ");
+}
