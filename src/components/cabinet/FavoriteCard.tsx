@@ -39,7 +39,7 @@ export function FavoriteCard({ slug, onChange }: { slug: string; onChange?: () =
         <div className="flex flex-col gap-1">
           <h2 className="font-serif text-[24px] font-medium leading-[1.2] text-ink">{t.name}</h2>
           <p className="t-body-s text-ink-2">
-            {ceremonyNames(t, tr)} · {tr(styleLabel[t.style])}
+            {ceremonyNames(t, locale)} · {tr(styleLabel[t.style])}
           </p>
         </div>
         <div className="flex items-baseline gap-2">
