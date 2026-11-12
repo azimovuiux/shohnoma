@@ -265,6 +265,42 @@ const builtin: Template[] = [
       { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Sevgi — bu bir-biriga emas, balki birga bir tomonga qarash.", max: 160, hint: "Ixtiyoriy" },
     ],
   },
+  {
+    number: 5,
+    slug: "savsan",
+    name: "Savsan",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
+    style: "romantik",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Yashil qog‘oz fonda konvert va oq liliyalar. Muhr ochilgach — kolaj ko‘rinishidagi taklif, kalendar va kumush ramkalardagi suratlar, to‘yga qadar sanoq, kun tartibi, manzil va mehmonlar javobi.",
+    descriptionRu: "Конверт и белые лилии на зелёной бумаге. Когда печать вскрыта — приглашение в виде коллажа, календарь и фото в серебряных рамках, отсчёт до торжества, программа дня, адрес и ответы гостей.",
+    descriptionEn: "An envelope and white lilies on green paper. Once the seal is broken — a collage-style invitation, a calendar and photos in silver frames, a countdown, the day’s schedule, the venue and guest replies.",
+    palette: ["#5E7352", "#9BAF8A", "#A8884A", "#F6F2E8"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "Gulzor Garden", time: "16:00" },
+    theme: { bg: ["#5e7352", "#4e6044"], ink: "#f6f2e8", accent: "#a8884a", soft: "#9baf8a", script: "cormorant", color: "yashil" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 60 },
+          note: { type: "text", label: "Izoh", placeholder: "Iliq so‘zlar va birinchi suratlar", max: 80 },
+        },
+      },
+      { key: "hall", type: "text", label: "Zal nomi", placeholder: "Bog‘ zali", max: 30, hint: "Ixtiyoriy" },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi", max: 160 },
+      { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Ikki qalb uchrashganda vaqt she’rga aylanadi, hayot esa abadiy va’daga.", max: 160, hint: "Ixtiyoriy" },
+      { key: "caption", type: "text", label: "Yorliq yozuvi", placeholder: "Sevgi — bir umrlik chiroyli sayohat", max: 48, hint: "Ixtiyoriy · «Lahzalar» bo‘limidagi yorliqda" },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -401,6 +437,13 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   shato: [
     { title: "Asosiy surat", where: "Taklif matni ustida, ark ichida" },
     { title: "Surat · 2", where: "Iqtibos yonida, ark ichida" },
+  ],
+  savsan: [
+    { title: "Asosiy surat", where: "Kolajdagi katta kumush ramka" },
+    { title: "Surat · 2", where: "Kolajdagi kichik kumush ramka" },
+    { title: "Surat · 3", where: "«Lahzalar» ravog‘i (bo‘lmasa — asosiy surat)" },
+    { title: "Surat · 4", where: "«Lahzalar» — katta kumush ramka" },
+    { title: "Surat · 5", where: "«Lahzalar» — kichik kumush ramka" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

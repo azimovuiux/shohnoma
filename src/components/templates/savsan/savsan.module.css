@@ -1,0 +1,921 @@
+/*
+ * Savsan — taklifnoma shabloni (Figma 315:5016 mobil, 329:5198 laptop).
+ * Birlik `--u`: kontent ustuni (mobil 390 kanvas; laptopda ustun = mobil × 1.45). Yon bezaklar laptop birligida (`--u / 1.45`).
+ * Fon — yagona yashil qog‘oz; bo‘limlar orasida chegara/fade yo‘q, liliyalar chegaradan o‘tadi. Hamma rasmlar Normal blend.
+ * Harakat: "Motion — Savsan 00…07".
+ */
+@font-face {
+  font-family: "Prata";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/prata-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: "Prata";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/prata-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/lora-cyrillic-400-italic.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/lora-latin-ext-400-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/lora-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/lora-cyrillic-500-italic.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/lora-latin-ext-500-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Lora";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/lora-latin-500-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-cyrillic-500-normal.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-ext-500-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-cyrillic-600-normal.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-ext-600-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --door: cubic-bezier(0.65, 0, 0.35, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --ink: #2f3a2a;
+  --gold: #a8884a;
+  --muted: #6e7765;
+  --sage: #5e7352;
+  --paper: #f6f2e8;
+  --bgc: #9baf8a;
+  --mx: 0;
+  --my: 0;
+  --sh-ink: #f6f2e8;
+  --sh-accent: rgba(246, 242, 232, 0.6);
+  --sh-loader-a: #9baf8a;
+  --sh-loader-b: #5e7352;
+  --sh-ring: rgba(233, 217, 168, 0.65);
+  position: relative;
+  container-type: inline-size;
+  background: var(--bgc);
+  color: var(--ink);
+  font-family: "Montserrat", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+/* Yashil qog‘oz fon — kontent boshidan (gate pastki cheti bilan bir xil fazada) */
+.flow {
+  position: relative;
+  background-color: var(--bgc);
+  background-image: url("/templates/savsan/bg.webp");
+  background-repeat: repeat;
+  background-position: 0 0;
+}
+/* Musiqa tugmasi — Figma «Savsan / Musiqa tugmasi»: yashil, krem chegarali */
+.page > button[aria-pressed],
+.page > div > button[aria-pressed] {
+  background: rgba(94, 115, 82, 0.9);
+  border-color: rgba(246, 242, 232, 0.5);
+  color: var(--paper);
+  box-shadow: 0 6px 8px rgba(26, 36, 20, 0.25);
+  backdrop-filter: blur(6px);
+}
+.prata {
+  font-family: "Prata", Georgia, serif;
+  font-weight: 400;
+}
+.lora {
+  font-family: "Lora", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.loraM {
+  font-family: "Lora", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+}
+.sans {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 400;
+}
+.sansM {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 500;
+}
+.sansB {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 600;
+}
+.clamp2,
+.clamp3,
+.clamp4 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  /* kursiv harflarning yon chiqishi kesilmasin (balandlik o‘zgarmaydi) */
+  padding-inline: 0.12em;
+  margin-inline: -0.12em;
+}
+.clamp2 {
+  -webkit-line-clamp: 2;
+}
+.clamp3 {
+  -webkit-line-clamp: 3;
+}
+.clamp4 {
+  -webkit-line-clamp: 4;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.contain {
+  object-fit: contain;
+}
+.fill {
+  object-fit: fill;
+}
+.flipX {
+  transform: scaleX(-1);
+}
+.abs {
+  position: absolute;
+  pointer-events: none;
+}
+/* Qog‘oz karta (Figma: #f6f2e8 + qog‘oz teksturasi 90%) */
+.paper {
+  background-color: var(--paper);
+  background-image: linear-gradient(rgba(246, 242, 232, 0.1), rgba(246, 242, 232, 0.1)), url("/templates/savsan/paper.webp");
+  background-size: auto, calc(var(--u) * 358.4) calc(var(--u) * 358.4);
+  background-repeat: repeat;
+}
+.shadow {
+  box-shadow: 0 calc(var(--u) * 14) calc(var(--u) * 30) calc(var(--u) * -6) rgba(31, 41, 26, 0.16);
+}
+.dshadow {
+  filter: drop-shadow(0 calc(var(--u) * 14) calc(var(--u) * 15) rgba(31, 41, 26, 0.16));
+}
+
+/* ── Bo‘lim va reveal ── */
+.sec {
+  --p: 0.5;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+}
+.root [data-a] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * var(--y, 30)));
+}
+.root [data-a="fade"]:not([data-in]) {
+  opacity: 0;
+}
+.root [data-a="blur"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(calc(var(--u) * 14));
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * var(--y, 70)));
+}
+.root [data-a="rise"] {
+  transition-duration: var(--t, 1.2s);
+}
+/* Kolaj: element stolga «qo‘yiladi» — pastdan, ozgina burilib */
+.root [data-a="place"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * var(--y, 60))) rotate(var(--rr, -4deg)) scale(0.97);
+}
+.root [data-a="place"] {
+  transition-duration: var(--t, 1.2s);
+}
+/* Yorliq aylanib tushadi */
+.root [data-a="spin"]:not([data-in]) {
+  opacity: 0;
+  transform: rotate(var(--rr, -40deg)) scale(0.7);
+}
+.root [data-a="spin"] {
+  transition-duration: 1.3s;
+}
+/* Kumush ramka — spring bilan */
+.root [data-a="spring"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 40)) scale(0.86);
+}
+.root [data-a="spring"] {
+  transition-duration: 1.1s;
+  transition-timing-function: var(--spring);
+}
+/* Ramka/ark ichidagi surat 1.15 → 1 */
+.root [data-a="zoom"]:not([data-in]) {
+  transform: scale(1.15);
+}
+.root [data-a="zoom"] {
+  transition-duration: 1.8s;
+}
+.root [data-a="arch"]:not([data-in]) {
+  clip-path: inset(100% 0 0 0);
+}
+.root [data-a="arch"] {
+  transition-duration: 1.4s;
+}
+/* Liliya shoxi pastdan o‘sib chiqadi */
+.root [data-a="grow"]:not([data-in]) {
+  clip-path: inset(100% 0 0 0);
+  opacity: 0;
+}
+.root [data-a="grow"] {
+  clip-path: inset(-10% -10% -10% -10%);
+  transition-duration: 1.6s;
+}
+/* Burchak liliyalar yon tomondan suriladi (x −80 → 0) */
+.root [data-a="slideL"]:not([data-in]) {
+  opacity: 0;
+  transform: translateX(calc(var(--u) * -80));
+}
+.root [data-a="slideR"]:not([data-in]) {
+  opacity: 0;
+  transform: translateX(calc(var(--u) * 80));
+}
+.root [data-a="slideL"],
+.root [data-a="slideR"] {
+  transition-duration: 1.4s;
+}
+/* Liliyalar konvertdan «portlab» chiqadi */
+.root [data-a="burst"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 50)) scale(0.6);
+}
+.root [data-a="burst"] {
+  transform-origin: 50% 85%;
+  transition-duration: 1.3s;
+  transition-timing-function: var(--spring);
+}
+/* Pochta markasi «yopishtiriladi» */
+.root [data-a="stick"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(1.45) rotate(-14deg);
+}
+.root [data-a="stick"] {
+  transition-duration: 0.8s;
+  transition-timing-function: var(--spring);
+}
+/* Muhr kartaga bosiladi (1.6 → 1) */
+.root [data-a="press"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(1.6);
+}
+.root [data-a="press"] {
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.5, 0, 0.75, 0);
+}
+.root [data-a="press"][data-in]::after {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  border: 2px solid rgba(233, 217, 168, 0.9);
+  animation: wave 1.1s calc(var(--d, 0s) + 0.65s) var(--ease) 1 both;
+  pointer-events: none;
+}
+@keyframes wave {
+  from {
+    opacity: 0.9;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+/* Gulbarg tushadi */
+.root [data-a="petal"]:not([data-in]) {
+  opacity: 0;
+  transform: translate(calc(var(--u) * -14), calc(var(--u) * -50)) rotate(-50deg);
+}
+.root [data-a="petal"] {
+  transition-duration: 1.8s;
+}
+.root [data-a="lineY"]:not([data-in]) {
+  transform: scaleY(0);
+}
+.root [data-a="lineY"] {
+  transform-origin: 50% 0;
+  transition-duration: 0.9s;
+}
+/* Vaqt — pastdan */
+.root [data-a="num"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 22));
+}
+.root [data-a="num"] {
+  transition-duration: 0.9s;
+}
+/* Ikonka chiziladi */
+.root [data-a="draw"]:not([data-in]) {
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+}
+.root [data-a="draw"] {
+  transition-duration: 1s;
+}
+/* Kalendar kunlari — to‘lqin */
+.root [data-a="pop"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 4)) scale(0.8);
+}
+.root [data-a="pop"] {
+  transition-duration: 0.6s;
+}
+/* 12-kun doirasi chizilib to‘ladi */
+.dayRing circle {
+  fill: rgba(94, 115, 82, 0);
+  stroke: var(--sage);
+  stroke-width: 1.5;
+  stroke-dasharray: 64;
+  stroke-dashoffset: 64;
+  transition: stroke-dashoffset 0.9s var(--ease) var(--d, 0s), fill 0.5s var(--ease) calc(var(--d, 0s) + 0.8s);
+}
+.dayRing[data-in] circle {
+  stroke-dashoffset: 0;
+  fill: var(--sage);
+}
+.dayNum {
+  transition: color 0.4s var(--ease) var(--d, 0s);
+}
+.word {
+  display: inline-block;
+  white-space: pre;
+  transition: opacity 0.9s var(--ease), filter 0.9s var(--ease), transform 0.9s var(--ease);
+  transition-delay: var(--d, 0s);
+}
+.root .word:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 12));
+}
+
+/* Scroll parallaksi (vaqt bo‘yicha tebranish yo‘q): --sp — bo‘lim jarayoniga bog‘langan siljish */
+.px {
+  will-change: transform;
+  transform: translate3d(0, calc((var(--p) - 0.5) * var(--sp, 0) * var(--u)), 0);
+}
+/* Laptop yon bezaklari: sekinroq parallaks + kursor parallaksi (±12px) */
+.side {
+  position: absolute;
+  pointer-events: none;
+  will-change: transform;
+  transform: translate3d(calc(var(--mx) * 12px), calc((var(--p) - 0.5) * 60 * var(--u) + var(--my) * 12px), 0);
+  transition: none;
+}
+.hov {
+  pointer-events: auto;
+  transition: transform 0.45s var(--spring);
+}
+.hov:hover {
+  transform: translateY(calc(var(--u) * -5));
+}
+.hov:active {
+  transform: translateY(calc(var(--u) * -2)) scale(0.98);
+}
+
+/* ═════ 00 · Konvert (scroll bilan ochiladi) ═════
+ * JS faqat --o (0…1, lerp) va --gy (px) ni yozadi; qolgani shu yerda hisoblanadi.
+ * --sl muhr · --fa qopqoq (0 yopiq … 1 ochiq) · --cr karta (1 ichkarida … 0 chiqqan) · --sg liliya shoxi */
+.gateWrap {
+  --o: 0;
+  --gy: 0px;
+  --sl: clamp(0, var(--o) / 0.22, 1);
+  --sp1: clamp(0, var(--sl) / 0.35, 1);
+  --sk: clamp(0, (var(--sl) - 0.35) / 0.65, 1);
+  --f0: clamp(0, (var(--o) - 0.1) / 0.36, 1);
+  --fa: calc(var(--f0) * var(--f0) * (3 - 2 * var(--f0)));
+  --fb: clamp(0, (var(--fa) - 0.5) * 1000, 1);
+  --c0: clamp(0, (var(--o) - 0.47) / 0.45, 1);
+  --cr: calc((1 - var(--c0)) * (1 - var(--c0)) * (1 - var(--c0)));
+  --sg: clamp(0, (var(--o) - 0.66) / 0.34, 1);
+  /* yopiq konvert ekran markazida; ochilish davomida Figma’dagi joyiga tushadi */
+  --e0: clamp(0, (var(--o) - 0.3) / 0.6, 1);
+  --ec: calc(1 - var(--e0) * var(--e0) * (3 - 2 * var(--e0)));
+  --bw: clamp(0, (var(--o) - 0.8) / 0.2, 1);
+  --stp: clamp(0, (var(--o) - 0.86) / 0.14, 1);
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  /* 1 ekran sahna + 0.5 ochilish + 1 ekran keyingi bo‘lim ostidan chiqishi */
+  height: calc(100svh * 2.5);
+  margin-bottom: calc(100svh * -1);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  transform: translate3d(0, calc(var(--gy) * -1), 0);
+}
+.gBg {
+  position: absolute;
+  inset: 0;
+  background-color: var(--bgc);
+  background-image: url("/templates/savsan/bg.webp");
+  background-repeat: repeat;
+  /* pastki chetda tayl chegarasi — keyingi bo‘lim foni bilan chocksiz ulanadi */
+  background-position: 0 100%;
+}
+.gl {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* chiqib ketishda qatlamlar: karta 1x, konvert 1.15x, liliya 1.35x */
+.gEnv {
+  transform: translate3d(0, calc((var(--u) * 246 - 50%) * var(--ec) + var(--gy) * -0.15), 0);
+}
+.gCard {
+  transform: translate3d(0, calc((var(--u) * 246 - 50%) * var(--ec)), 0);
+}
+.gLily {
+  transform: translate3d(0, calc(var(--gy) * -0.35), 0);
+}
+.gSide {
+  transform: translate3d(calc(var(--mx) * 12px), calc(var(--gy) * 0.2 + var(--my) * 12px), 0);
+}
+/* Qopqoq: lo‘la (yuqori qirra) atrofida 3D ochiladi; 90° dan keyin karta orqasiga o‘tadi */
+.flap {
+  position: absolute;
+  transform-origin: 50% 18.6%;
+  transform: perspective(1400px) rotateX(calc(var(--fa) * 180deg));
+  backface-visibility: visible;
+}
+.flapFront {
+  opacity: calc(1 - var(--fb));
+}
+.flapBack {
+  opacity: var(--fb);
+}
+/* Karta konvert ichidan ko‘tariladi */
+.pocket {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.card {
+  position: absolute;
+  transform: translate3d(0, calc(var(--cr) * var(--u) * 430), 0);
+}
+/* Ismlar harfma-harf (scroll bilan) */
+.ch {
+  display: inline-block;
+  white-space: pre;
+  --li: clamp(0, (var(--o) - var(--s0)) / 0.08, 1);
+  opacity: var(--li);
+  transform: translateY(calc((1 - var(--li)) * var(--u) * 10));
+  filter: blur(calc((1 - var(--li)) * 5px));
+}
+/* Muhr: ochilishda bosiladi (biroz kichrayib qaytadi) va Figma’dagidek konvert ustida qoladi */
+.sealHalf {
+  position: absolute;
+  inset: 0;
+}
+.sealL {
+  clip-path: polygon(0 0, 52% 0, 47% 22%, 55% 41%, 46% 60%, 54% 79%, 49% 100%, 0 100%);
+  transform: scale(calc(1 - var(--sp1) * 0.1 + var(--sk) * 0.1));
+}
+.sealR {
+  clip-path: polygon(52% 0, 100% 0, 100% 100%, 49% 100%, 54% 79%, 46% 60%, 55% 41%, 47% 22%);
+  transform: scale(calc(1 - var(--sp1) * 0.1 + var(--sk) * 0.1));
+}
+.seal {
+  position: absolute;
+}
+/* yopiq muhr atrofida oltin halqa pulsi (ochila boshlaganda so‘nadi) */
+.sealRing {
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(233, 217, 168, 0.85);
+  opacity: calc(1 - var(--sl) * 6);
+}
+.sealRing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(233, 217, 168, 0.9);
+  animation: ring 2.4s var(--ease) infinite;
+}
+@keyframes ring {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+.gStem {
+  transform-origin: 8% 96%;
+  transform: rotate(calc(var(--sg) * 8deg)) scale(calc(0.7 + var(--sg) * 0.3));
+  opacity: var(--sg);
+}
+.gBow {
+  opacity: var(--bw);
+  transform: translateY(calc((1 - var(--bw)) * var(--u) * -26));
+}
+.gStamp {
+  opacity: var(--stp);
+  transform: scale(calc(1.45 - var(--stp) * 0.45)) rotate(calc((1 - var(--stp)) * -14deg));
+}
+/* yuklanganda (vaqt bo‘yicha) kirish */
+.fadeIn {
+  animation: fadeIn 1s var(--ease) both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+.riseIn {
+  animation: riseIn 1.3s var(--ease) both;
+}
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 70));
+  }
+}
+.slideInL {
+  animation: slideInL 1.4s var(--ease) both;
+}
+@keyframes slideInL {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--u) * -80));
+  }
+}
+.slideInR {
+  animation: slideInR 1.4s var(--ease) both;
+}
+@keyframes slideInR {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--u) * 80));
+  }
+}
+.dropIn {
+  animation: dropIn 1.6s var(--ease) both;
+}
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translate(calc(var(--u) * -12), calc(var(--u) * -40)) rotate(-40deg);
+  }
+}
+/* mokap ichida — harakatsiz kadr */
+.still * {
+  animation: none !important;
+}
+.still .sealRing {
+  display: none;
+}
+
+/* ═════ 08 · Final — konvert yopiladi (--fc: 1 ochiq … 0 yopiq; --sm muhr) ═════ */
+.finalWrap {
+  --fc: 1;
+  --sm: 0;
+}
+.finalFlap {
+  position: absolute;
+  transform-origin: 50% 18.6%;
+  transform: perspective(1400px) rotateX(calc(var(--fc) * 180deg));
+  backface-visibility: visible;
+}
+.finalFlapFront {
+  opacity: calc(1 - clamp(0, (var(--fc) - 0.5) * 1000, 1));
+}
+.finalFlapBack {
+  opacity: clamp(0, (var(--fc) - 0.5) * 1000, 1);
+}
+.finalFlapSeal {
+  position: absolute;
+  opacity: var(--sm);
+  transform: scale(calc(1.6 - var(--sm) * 0.6));
+}
+
+/* ═════ Kartalar va tugmalar ═════ */
+.ribbon {
+  background: var(--sage);
+  border: 1px solid rgba(246, 242, 232, 0.5);
+}
+.dressCard {
+  border: 1px solid rgba(176, 141, 87, 0.35);
+  filter: drop-shadow(0 calc(var(--u) * 16) calc(var(--u) * 18) rgba(74, 63, 54, 0.08));
+}
+.digits {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  /* raqamlar kesilmasin; joylashuv o‘zgarmaydi */
+  padding: 0.12em 0 0.3em;
+  margin: -0.12em 0 -0.3em;
+}
+.digit {
+  display: inline-block;
+  animation: digitIn 0.55s var(--ease);
+}
+@keyframes digitIn {
+  from {
+    transform: translateY(38%);
+    opacity: 0;
+  }
+}
+
+/* ═════ 07 · Anketa ═════ */
+.lbl {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  line-height: 1.22;
+}
+.field {
+  width: 100%;
+  background: #fffffc;
+  border: 1px solid #d9d3c3;
+  color: var(--ink);
+  outline: none;
+  font-family: "Montserrat", system-ui, sans-serif;
+  line-height: 1.22;
+  transition: border-color 0.3s var(--ease);
+  resize: none;
+}
+.field::placeholder {
+  color: #9da394;
+}
+.field:focus {
+  border-color: var(--sage);
+}
+.choice {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #d9d3c3;
+  border-radius: 40px;
+  color: var(--ink);
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease), border-color 0.35s var(--ease), transform 0.35s var(--spring);
+}
+.choice[aria-checked="true"] {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: var(--paper);
+  animation: hop 0.4s var(--spring);
+}
+@keyframes hop {
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.step {
+  border-radius: 50%;
+  background: rgba(94, 115, 82, 0.12);
+  color: var(--sage);
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.45;
+}
+.btnSage {
+  width: 100%;
+  background: var(--sage);
+  color: var(--paper);
+  border-radius: 40px;
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s var(--ease);
+}
+.btnSage:hover {
+  background: #52664a;
+}
+.thanks {
+  animation: thanks 0.9s 0.2s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+/* javob yuborilganda muhr qayta bosiladi */
+.restamp {
+  animation: restamp 0.9s var(--ease) both;
+}
+@keyframes restamp {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.35);
+  }
+  60% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+/* yuborishda gulbarglar yomg‘iri (bir marta) */
+.rain {
+  position: absolute;
+  top: -8%;
+  opacity: 0;
+  animation: rain 2.4s var(--d, 0s) cubic-bezier(0.3, 0.2, 0.6, 1) 1 both;
+}
+@keyframes rain {
+  0% {
+    opacity: 0;
+    transform: translateY(0) rotate(var(--r));
+  }
+  12% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 700)) rotate(calc(var(--r) + 220deg));
+  }
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--sage);
+  color: var(--paper);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+  .px,
+  .side {
+    transform: none;
+  }
+}
