@@ -25,6 +25,7 @@ Yarim tayyor ishni «tayyor» deb topshirma; tekshirilmagan narsani ochiq ayt.
 - `withGate = !embedded` — yangi tabdagi preview ham ochilishni ko‘rsatadi. Embedded (buyurtma/kabinet mokapi): **harakatsiz birinchi kadr**, scroll tinglovchisiz, `--u: calc(100cqw / W)`, balandlik `U(HH)`, `marginBottom: 0`.
 - `usePreload` + `Loader`; musiqa faqat `!embedded`.
 - **Eshik/qopqoq/tabaqa rasmlari:** rasmning yo‘nalishini ko‘zing bilan tekshir (lo‘la qaysi tomonda, ark shaklining baland tomoni o‘rtadami). Ochilish — haqiqiy 3D `rotateY` (lo‘la atrofida, perspective 1400, ease `cubic-bezier(.65,0,.35,1)`), oxirgi holat Figma’dagi ochiq holatga o‘xshasin. Yopiladigan final ham shu qoidaga bo‘ysunadi.
+- **«Sharpa» yo‘q:** ochilishda ichki kontent (karta) fon orqasidan yarim shaffof ko‘rinib turmasin — fonning so‘nishi qisqa bo‘lsin (≤ 0.06 `--o`) va kontent ochilgan teshikdan ko‘rinadigan paytga to‘g‘ri kelsin (Muhr’da 0.38→0.55 uzoq so‘nish xunuk «sharpa» berdi).
 
 ## 3. Animatsiya
 - Paydo bo‘lish **har element uchun alohida** (`useReveal`: scroll’da rect tekshiruvi + sahifa oxirida qolganlarning hammasi ochiladi). Butun bo‘lim birdan chiqmaydi. Ekrandan yon tomonga chiqib turgan bezaklar ham ochilishi shart.
