@@ -8,6 +8,7 @@ Yarim tayyor ishni «tayyor» deb topshirma; tekshirilmagan narsani ochiq ayt.
 - **Figma — asosiy manba.** Fayl `D0wt4iM9V6ym59nF6npes7`, sahifa Templates `223:4528`. Har shablon uchun: Mobil (390), Laptop (1440), Assets, Dress-kod kartasi, Musiqa tugmasi, «Motion — …» kartalari, «Nazorat · NN» ro‘yxati.
 - Avval **hamma** «Motion» kartalarini va «Nazorat» ro‘yxatini o‘qi, keyin kod yoz.
 - Har bo‘limning **x, y, width, height** qiymatlarini `get_design_context`/metadata’dan ol. Taxmin qilma (Shato’da hero 920 o‘rniga 1020 qilingan edi — xato).
+- Figma’dagi elementni (muhr, bezak, matn) o‘zboshimchalik bilan olib tashlama yoki almashtirma — Motion kartasi boshqacha desa ham, oxirgi (statik) holat Figma kadri bilan bir xil bo‘lsin. Faqat matn ustma-ust tushsa yoki qoidaga zid bo‘lsa o‘zgartir va hisobotda ayt.
 - Namuna kod: eng yangi shablon (`src/components/templates/shato/`, `parvoz/`). Umumiy: `templates/shared/{hooks.ts,runtime.tsx,shared.module.css}`.
 
 ## 1. O‘lcham va moslashuv
