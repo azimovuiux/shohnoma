@@ -1,7 +1,8 @@
+import { langAlternates } from "@/lib/i18n/meta";
 import { LegalPage } from "@/components/legal/LegalPage";
 import { TermsContent } from "@/components/legal/TermsContent";
 
-export const metadata = { title: "Foydalanish shartlari", description: "Shohnoma taklifnoma saytlari xizmatidan foydalanish shartlari." };
+export const metadata = { alternates: langAlternates("/shartlar/"), title: "Foydalanish shartlari", description: "Shohnoma taklifnoma saytlari xizmatidan foydalanish shartlari." };
 
 export default function TermsPage() {
   return (

@@ -1,4 +1,5 @@
 import { builtinTemplates } from "@/lib/templates";
+import { langAlternates } from "@/lib/i18n/meta";
 import { TemplatePageClient } from "@/components/catalog/TemplatePageClient";
 
 export const dynamicParams = false;
@@ -11,7 +12,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const slug = (await params).slug;
   const t = builtinTemplates.find((x) => x.slug === slug);
-  return t ? { title: `${t.name} — taklifnoma shabloni`, description: t.description } : { title: "Taklifnoma shabloni" };
+  const alternates = langAlternates(`/shablonlar/${slug}/`);
+  return t ? { title: `${t.name} — taklifnoma shabloni`, description: t.description, alternates } : { title: "Taklifnoma shabloni" };
 }
 
 export default async function TemplatePage({ params }: { params: Promise<{ slug: string }> }) {

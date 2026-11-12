@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 
+/** Til versiyalari (hreflang) va canonical: `path` — o‘zbekcha yo‘l («/shablonlar/»), `lang` — joriy sahifa tili */
+export function langAlternates(path: string, lang: "uz" | "ru" | "en" = "uz"): NonNullable<Metadata["alternates"]> {
+  const href = { uz: path, ru: `/ru${path}`, en: `/en${path}` };
+  return { canonical: href[lang], languages: { uz: href.uz, ru: href.ru, en: href.en, "x-default": href.uz } };
+}
+
 /** /ru/ sahifalarining sarlavha va tavsiflari (server — metadata uchun) */
 export const RU_TITLES: Record<string, string> = {
   "Buyurtmalarim": "Мои заказы",
@@ -48,7 +54,7 @@ export function ruMeta(m: Metadata | undefined, path: string): Metadata {
   // Bosh sahifa: sarlavha to‘liq (shablon «· Shohnoma» qo‘shilmasin)
   if (path === "/" && !out.title) out.title = { absolute: "Shohnoma — королевский сайт-приглашение на ваше торжество" };
   if (typeof out.description === "string") out.description = RU_DESCRIPTIONS[out.description] ?? out.description;
-  out.alternates = { canonical: `/ru${path}`, languages: { uz: path, ru: `/ru${path}`, en: `/en${path}` } };
+  out.alternates = langAlternates(path, "ru");
   return out;
 }
 
@@ -99,6 +105,6 @@ export function enMeta(m: Metadata | undefined, path: string): Metadata {
   if (typeof out.title === "string") out.title = EN_TITLES[out.title] ?? out.title;
   if (path === "/" && !out.title) out.title = { absolute: "Shohnoma — elegant invitation websites for your celebration" };
   if (typeof out.description === "string") out.description = EN_DESCRIPTIONS[out.description] ?? out.description;
-  out.alternates = { canonical: `/en${path}`, languages: { uz: path, ru: `/ru${path}`, en: `/en${path}` } };
+  out.alternates = langAlternates(path, "en");
   return out;
 }

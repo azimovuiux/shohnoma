@@ -1,5 +1,6 @@
 // Ruscha nusxa — o‘zbekcha sahifaning o‘zi, til konteksti /ru/layout.tsx da
 import { builtinTemplates } from "@/lib/templates";
+import { langAlternates } from "@/lib/i18n/meta";
 import Page from "@/app/(site)/shablonlar/[slug]/page";
 export { generateStaticParams } from "@/app/(site)/shablonlar/[slug]/page";
 
@@ -11,7 +12,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: t ? `${t.name} — шаблон приглашения` : "Шаблон приглашения",
     description: t?.descriptionRu ?? t?.description,
-    alternates: { canonical: `/ru/shablonlar/${slug}/`, languages: { uz: `/shablonlar/${slug}/`, ru: `/ru/shablonlar/${slug}/` } },
+    alternates: langAlternates(`/shablonlar/${slug}/`, "ru"),
   };
 }
 export default Page;
