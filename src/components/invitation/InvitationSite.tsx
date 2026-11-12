@@ -22,6 +22,7 @@ import { ParvozSite } from "@/components/templates/parvoz/ParvozSite";
 import { ShatoSite } from "@/components/templates/shato/ShatoSite";
 import { SavsanSite } from "@/components/templates/savsan/SavsanSite";
 import { MuhrSite } from "@/components/templates/muhr/MuhrSite";
+import { KalitSite } from "@/components/templates/kalit/KalitSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -52,7 +53,7 @@ function useMusic(url: string | null, enabled: boolean) {
  * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
  */
 /** Kodda yozilgan dizaynlar — yangi shablon qo‘shilganda shu ro‘yxatga ham qo‘shiladi */
-const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr"] as const;
+const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit"] as const;
 
 export function InvitationSite(props: InvitationSiteProps) {
   const lang = inviteLang(props.data.extra, useLocale());
@@ -74,6 +75,8 @@ export function InvitationSite(props: InvitationSiteProps) {
         <SavsanSite {...props} />
       ) : ds === "muhr" ? (
         <MuhrSite {...props} />
+      ) : ds === "kalit" ? (
+        <KalitSite {...props} />
       ) : stale ? (
         <StaleReload slug={props.template.slug} />
       ) : (

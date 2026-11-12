@@ -336,6 +336,39 @@ const builtin: Template[] = [
       { key: "caption", type: "text", label: "Yakuniy so‘z", placeholder: "Muhabbat — bir umrga bosilgan muhr.", max: 80, hint: "Ixtiyoriy · «Lahzalar» bo‘limida" },
     ],
   },
+  {
+    number: 7,
+    slug: "kalit",
+    name: "Kalit",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
+    style: "klassik",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Qorong‘i xonada kalit teshigidan tushgan nur. Sahifani pastga surganingizda teshik kattalashadi va siz ichkariga — juftlik suratiga kirasiz. Keyin taklif matni, sana va sanoq, kuyov-kelin suratlari, kun tartibi, manzil, dress-kod va mehmonlar javobi; oxirida teshik yana yopiladi.",
+    descriptionRu: "Свет из замочной скважины в тёмной комнате. Когда вы листаете страницу вниз, скважина расширяется, и вы попадаете внутрь — к фото пары. Дальше текст приглашения, дата и отсчёт, фото жениха и невесты, программа дня, адрес, дресс-код и ответы гостей; в конце скважина снова закрывается.",
+    descriptionEn: "Light falling through a keyhole in a dark room. As you scroll down, the keyhole widens and you step inside — into the couple’s photo. Then the invitation text, the date and a countdown, photos of the bride and groom, the day’s schedule, the venue, the dress code and guest replies; at the end the keyhole closes again.",
+    palette: ["#120C08", "#1C140F", "#C8A46A", "#EFE4D2"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "Grand Library", time: "17:00" },
+    theme: { bg: ["#1c140f", "#120c08"], ink: "#efe4d2", accent: "#c8a46a", soft: "#9c8b78", script: "cormorant", color: "oltin" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.", max: 160 },
+      { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Seni birinchi ko‘rganimda vaqt to‘xtadi. Endi esa butun umrim — shu lahza.", max: 120, hint: "Ixtiyoriy · «Lahza» bo‘limida, qo‘llar surati ostida" },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -485,6 +518,13 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Surat · 2", where: "«Bazm manzili» ramkasi" },
     { title: "Surat · 3", where: "«Lahzalar» — birinchi ramka" },
     { title: "Surat · 4", where: "«Lahzalar» — ikkinchi ramka" },
+  ],
+  kalit: [
+    { title: "Asosiy surat", where: "Kalit teshigi ortida (boshida va oxirida)" },
+    { title: "Surat · 2", where: "Kelin portreti — eshik tirqishi va «Ikki hikoya»" },
+    { title: "Surat · 3", where: "Kuyov portreti — «Ikki hikoya»" },
+    { title: "Surat · 4", where: "Bazm zali — ark deraza ichida" },
+    { title: "Surat · 5", where: "«Lahza» — nur ostidagi surat" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

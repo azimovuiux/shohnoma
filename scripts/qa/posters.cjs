@@ -5,6 +5,8 @@
  * [laptopW] — laptop gate birligining kanvas eni (Savsan: ustun = mobil × 1.45 → 1440 / 1.45 = 993.103, HH_laptop = 860).
  * Savsan konverti: `--o:1` — ochilgan holat (Figma kadri); Muhr’da qo‘llanmaydi (uning birinchi kadri — yopiq konvert).
  * Muhr: birinchi kadr — yopiq konvert (Figma hero); -long da 01-bo‘lim (`openWrap`) ochiq holatda, sticky oralig‘i (`openSpacer`) olib tashlanadi.
+ * Kalit: birinchi kadr — kalit teshigi (Figma hero, `--o:0`); -long da scroll bilan bog‘langan holatlar Figma kadriga keltiriladi
+ * (tirqish/kapsulalar `--v:1`, titrlar `--f:1`, final teshik `--fc:1`).
  */
 const { chromium } = require("playwright");
 const path = require("path");
@@ -13,7 +15,7 @@ const [slug, hhM = "860", hhL = "920", base = "http://localhost:8091", lw = "144
 if (!slug) throw new Error("slug kerak");
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
-const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{display:none!important}form button[aria-label]{display:flex!important}' + (slug === "muhr" ? "" : '[class*="gateWrap"]{--o:1!important}');
+const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{display:none!important}form button[aria-label]{display:flex!important}' + (slug === "muhr" || slug === "kalit" ? "" : '[class*="gateWrap"]{--o:1!important}');
 (async () => {
   const b = await chromium.launch();
   for (const [lang, pre] of [["uz", ""], ["ru", "/ru"], ["en", "/en"]]) {
@@ -31,7 +33,7 @@ const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{d
       await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight)); await p.waitForTimeout(1500);
       await p.evaluate(() => scrollTo(0, 0)); await p.waitForTimeout(1500);
       const u = `min(calc(100cqw / ${UW}), calc(${H}px / ${HH}))`;
-      await p.addStyleTag({ content: `[class*="gateWrap"]{height:${H}px!important;margin-bottom:0!important;--k:0px!important;--q:0!important;--gy:0px!important;--u:${u}!important}[class*="_gate__"]{position:relative!important;height:${H}px!important;transform:none!important}[class*="finalDoor"],[class*="finalFlap"]{transform:none!important;opacity:1!important}[class*="openWrap"]{--o:1!important}[class*="openSpacer"]{display:none!important}` });
+      await p.addStyleTag({ content: `[class*="gateWrap"]{height:${H}px!important;margin-bottom:0!important;--k:0px!important;--q:0!important;--gy:0px!important;--u:${u}!important}[class*="_gate__"]{position:relative!important;height:${H}px!important;transform:none!important}[class*="finalDoor"],[class*="finalFlap"]{transform:none!important;opacity:1!important}[class*="openWrap"]{--o:1!important}[class*="openSpacer"]{display:none!important}` + (slug === "kalit" ? '[class*="gateWrap"]{--o:0!important;--sh:1!important;--sp:1!important}[class*="finalWrap"]{--fc:1!important}[data-v]{--v:1!important}[data-f]{--f:1!important}' : "") });
       await p.waitForTimeout(800);
       await p.screenshot({ path: `${OUT}/${tag}-${kind}-long.png`, fullPage: true });
       console.log(tag, kind, "ok");

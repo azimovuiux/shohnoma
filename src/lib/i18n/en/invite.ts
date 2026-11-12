@@ -295,4 +295,22 @@ export const en: Record<string, string> = {
   "«Bazm manzili» ramkasi": "“Venue” frame",
   "«Lahzalar» — birinchi ramka": "“Moments” — first frame",
   "«Lahzalar» — ikkinchi ramka": "“Moments” — second frame",
+  // ── Kalit (keyhole, library light) ──
+  "Bir eshik ochildi — va butun dunyo shu nurga sig‘di.": "A door opened — and the whole world fit into this light.",
+  "Aziz mehmonimiz,": "Dear guest,",
+  "Ikki hikoya — bitta yo‘l": "Two stories — one path",
+  ISMINGIZ: "YOUR NAME",
+  "Ismingiz…": "Your name…",
+  "Kechaning ohangi — klassika": "The tone of the evening — classic",
+  "Kechaning ohangi — kechki rasmiy uslub": "The tone of the evening — black tie",
+  "Kechaning ohangi — milliy libos": "The tone of the evening — national dress",
+  "Kechaning ohangi — erkin uslub": "The tone of the evening — casual",
+  // order form (templates.ts → kalit fields, PHOTO_SLOTS)
+  "Seni birinchi ko‘rganimda vaqt to‘xtadi. Endi esa butun umrim — shu lahza.": "When I first saw you, time stood still. Now my whole life is that moment.",
+  "Ixtiyoriy · «Lahza» bo‘limida, qo‘llar surati ostida": "Optional · in the “Moment” section, under the hands photo",
+  "Kalit teshigi ortida (boshida va oxirida)": "Behind the keyhole (at the start and the end)",
+  "Kelin portreti — eshik tirqishi va «Ikki hikoya»": "Bride’s portrait — the door gap and “Two stories”",
+  "Kuyov portreti — «Ikki hikoya»": "Groom’s portrait — “Two stories”",
+  "Bazm zali — ark deraza ichida": "Venue hall — inside the arched window",
+  "«Lahza» — nur ostidagi surat": "“Moment” — the photo in the light",
 };

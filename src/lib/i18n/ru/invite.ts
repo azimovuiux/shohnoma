@@ -272,4 +272,22 @@ export const ru: Record<string, string> = {
   "«Bazm manzili» ramkasi": "Рамка «Место торжества»",
   "«Lahzalar» — birinchi ramka": "«Моменты» — первая рамка",
   "«Lahzalar» — ikkinchi ramka": "«Моменты» — вторая рамка",
+  // ── Kalit (kalit teshigi, kutubxona nuri) ──
+  "Bir eshik ochildi — va butun dunyo shu nurga sig‘di.": "Одна дверь открылась — и весь мир уместился в этом свете.",
+  "Aziz mehmonimiz,": "Дорогой гость,",
+  "Ikki hikoya — bitta yo‘l": "Две истории — один путь",
+  ISMINGIZ: "ВАШЕ ИМЯ",
+  "Ismingiz…": "Ваше имя…",
+  "Kechaning ohangi — klassika": "Тон вечера — классика",
+  "Kechaning ohangi — kechki rasmiy uslub": "Тон вечера — вечерний стиль",
+  "Kechaning ohangi — milliy libos": "Тон вечера — национальный наряд",
+  "Kechaning ohangi — erkin uslub": "Тон вечера — свободный стиль",
+  // buyurtma formasi (templates.ts → kalit fields, PHOTO_SLOTS)
+  "Seni birinchi ko‘rganimda vaqt to‘xtadi. Endi esa butun umrim — shu lahza.": "Когда я впервые увидел тебя, время остановилось. Теперь вся моя жизнь — этот миг.",
+  "Ixtiyoriy · «Lahza» bo‘limida, qo‘llar surati ostida": "Необязательно · в разделе «Мгновение», под фото рук",
+  "Kalit teshigi ortida (boshida va oxirida)": "За замочной скважиной (в начале и в конце)",
+  "Kelin portreti — eshik tirqishi va «Ikki hikoya»": "Портрет невесты — щель двери и «Две истории»",
+  "Kuyov portreti — «Ikki hikoya»": "Портрет жениха — «Две истории»",
+  "Bazm zali — ark deraza ichida": "Зал торжества — в арочном окне",
+  "«Lahza» — nur ostidagi surat": "«Мгновение» — фото в луче света",
 };

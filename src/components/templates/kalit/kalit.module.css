@@ -1,0 +1,734 @@
+/*
+ * Kalit — taklifnoma shabloni (Figma 357:5593 mobil, 360:5619 laptop).
+ * Birlik `--u`: kontent ustuni (mobil 390 kanvas; laptopda ustun = mobil × 1.45). Hero va final — laptopda 1440 kanvas.
+ * Fon — yagona to‘q jigarrang (#120c08); bo‘limlar orasida chegara/fade yo‘q. Hamma rasmlar Normal blend.
+ * Harakat: "Motion — Kalit 00…09".
+ */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/templates/kalit/fonts/montserrat-cyrillic-300-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/templates/kalit/fonts/montserrat-latin-ext-300-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/templates/kalit/fonts/montserrat-latin-300-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-cyrillic-500-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-ext-500-normal.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --door: cubic-bezier(0.65, 0, 0.35, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --bg: #120c08;
+  --card: #1c140f;
+  --ink: #efe4d2;
+  --gold: #c8a46a;
+  --muted: #9c8b78;
+  --mx: 0;
+  --my: 0;
+  --sh-ink: #c8a46a;
+  --sh-accent: rgba(200, 164, 106, 0.8);
+  --sh-loader-a: #1c140f;
+  --sh-loader-b: #120c08;
+  --sh-ring: rgba(200, 164, 106, 0.65);
+  position: relative;
+  container-type: inline-size;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Montserrat", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: var(--bg);
+}
+/* Musiqa tugmasi — Figma «Kalit / Musiqa tugmasi»: to‘q, oltin chegarali */
+.page > button[aria-pressed],
+.page > div > button[aria-pressed] {
+  background: rgba(18, 12, 8, 0.7);
+  border-color: rgba(200, 164, 106, 0.8);
+  color: var(--gold);
+  box-shadow: none;
+  backdrop-filter: blur(7px);
+}
+.cg {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-style: normal;
+}
+.cgi {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+}
+.cg4 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+}
+.ml {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 300;
+}
+.mr {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 400;
+}
+.mm {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 500;
+}
+.clamp2,
+.clamp3,
+.clamp5 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  /* kursiv harflarning yon chiqishi va eski uslubdagi raqamlar kesilmasin (balandlik o‘zgarmaydi) */
+  padding: 0 0.12em;
+  margin-left: -0.12em;
+  margin-right: -0.12em;
+}
+.clamp2 {
+  -webkit-line-clamp: 2;
+}
+.clamp3 {
+  -webkit-line-clamp: 3;
+}
+.clamp5 {
+  -webkit-line-clamp: 5;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni ── */
+.sec {
+  --p: 0.5;
+  --v: 1;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  background: var(--bg);
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+  overflow: clip;
+  background: var(--bg);
+}
+/* Laptop: ustun yonidagi ingichka oltin chiziqlar (bo‘lim balandligining o‘rta yarmi) */
+.sideLine {
+  position: absolute;
+  top: 25%;
+  height: 50%;
+  width: 1px;
+  background: rgba(200, 164, 106, 0.25);
+  pointer-events: none;
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * var(--y, 30)));
+}
+.root [data-a="fade"]:not([data-in]) {
+  opacity: 0;
+}
+/* qorong‘ulikdan chiqadi: blur 12 → 0 */
+.root [data-a="blur"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(calc(var(--u) * 14));
+}
+.root [data-a="blur"] {
+  transition-duration: 1.4s;
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * var(--y, 70)));
+}
+.root [data-a="rise"] {
+  transition-duration: var(--t, 1.3s);
+}
+.root [data-a="zoom"]:not([data-in]) {
+  transform: scale(1.15);
+}
+.root [data-a="zoom"] {
+  transition-duration: 1.8s;
+}
+.root [data-a="zoomIn"]:not([data-in]) {
+  transform: scale(1.2);
+}
+.root [data-a="zoomIn"] {
+  transition-duration: 2.4s;
+  transition-delay: 0.1s;
+}
+.root [data-a="zoomOut"]:not([data-in]) {
+  transform: scale(1.08);
+}
+.root [data-a="zoomOut"] {
+  transition-duration: 2.6s;
+}
+/* Nur ustuni yorqinlashadi: qo‘shimcha soya 0.6 → 0 */
+.root [data-a="light"]:not([data-in]) {
+  opacity: 1;
+}
+.root [data-a="light"] {
+  opacity: 0;
+  transition-duration: 2.6s;
+  transition-delay: 0.2s;
+}
+/* Ark deraza qorong‘ulikdan ochiladi (pastdan yuqoriga) */
+.root [data-a="window"]:not([data-in]) {
+  clip-path: inset(100% 0 0 0);
+}
+.root [data-a="window"] {
+  clip-path: inset(0 0 0 0);
+  transition-duration: 1.8s;
+  transition-timing-function: var(--door);
+}
+/* «12» chiziq bilan maskalanib chiqadi */
+.root [data-a="mask"]:not([data-in]) {
+  clip-path: inset(100% -20% -20% -20%);
+  transform: translateY(calc(var(--u) * 30));
+}
+.root [data-a="mask"] {
+  clip-path: inset(-20% -20% -20% -20%);
+  transition-duration: 1.4s;
+}
+.root [data-a="lineY"]:not([data-in]) {
+  transform: scaleY(0);
+}
+.root [data-a="lineY"] {
+  transition-duration: 1.2s;
+}
+.root [data-a="num"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 22));
+}
+.root [data-a="num"] {
+  transition-duration: 0.9s;
+}
+/* oltin kontur chiziladi */
+.gold {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+.goldPath {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+}
+.root [data-a="draw"] .goldPath {
+  transition: stroke-dashoffset var(--t, 1.6s) var(--ease) var(--d, 0s);
+}
+.root [data-a="draw"]:not([data-in]) .goldPath {
+  stroke-dashoffset: 1;
+}
+/* karta chegarasi tepadan pastga chiziladi */
+.root [data-a="edge"]:not([data-in]) {
+  clip-path: inset(0 0 100% 0);
+}
+.root [data-a="edge"] {
+  clip-path: inset(-2px -2px -2px -2px);
+  transition-duration: 1.8s;
+}
+.ch,
+.word {
+  display: inline-block;
+  white-space: pre;
+  transition:
+    opacity 0.9s var(--ease),
+    filter 0.9s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: var(--d, 0s);
+}
+.root .ch:not([data-in]),
+.root .word:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 10));
+}
+.dark {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ═════ 00 · Kalit teshigi (scroll bilan kattalashadi) ═════
+ * JS faqat --o (0…1, lerp), --sh (teshik 1 → 14) va --sp (surat) ni yozadi.
+ * Wrapper: 1 ekran sahna + 1.3 ekran ochilish + 1 ekran (keyingi bo‘lim sahna ustidan chiqadi). */
+.gateWrap {
+  --o: 0;
+  --sh: 1;
+  --sp: 1;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: calc(100svh * 3.3);
+  margin-bottom: calc(100svh * -1);
+}
+.gateHold {
+  height: 100svh;
+  background: var(--bg);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--bg);
+}
+.gPhoto {
+  position: absolute;
+  transform: scale(var(--sp));
+  will-change: transform;
+}
+.gPhotoIn {
+  position: absolute;
+  inset: 0;
+  animation: photoIn 1.6s 0.1s var(--ease) both;
+}
+@keyframes photoIn {
+  from {
+    opacity: 0;
+    filter: brightness(0.3);
+  }
+}
+.gateWrap[data-tall] .gPhotoIn {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+.gPar {
+  transform: translate3d(calc(var(--mx) * -16px), calc(var(--my) * -16px), 0) scale(1.01);
+  transition: transform 0.6s var(--ease);
+}
+.gDark {
+  transform: scale(var(--sh));
+  will-change: transform;
+}
+.gGold {
+  position: absolute;
+  transform: scale(var(--sh));
+  opacity: calc(1 - clamp(0, (var(--o) - 0.02) / 0.16, 1));
+}
+.goldIntro .goldPath {
+  animation: drawIn 1.4s 0.3s var(--ease) both;
+}
+@keyframes drawIn {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+.gText {
+  position: absolute;
+  inset: 0;
+  opacity: calc(1 - clamp(0, var(--o) / 0.08, 1));
+}
+/* Ismlar qorong‘ulikdan chiqadi (blur 12 → 0, harflar orasi torayadi) */
+.gNames {
+  animation: namesIn 1.6s 0.5s var(--ease) both;
+}
+@keyframes namesIn {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: scaleX(1.12);
+  }
+}
+.gLine {
+  animation: fadeUp 1.1s 1.3s var(--ease) both;
+}
+.gDate {
+  animation: fadeUp 1.1s 1.5s var(--ease) both;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 14));
+  }
+}
+/* mokap ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 01 · Nur ═════
+ * Bo‘lim ochilish sahnasi (to‘liq ekran surat) ustidan ko‘tariladi: tepasi yumshoq (Figma’da tepa 95% qorong‘i — statik holatda farq yo‘q) */
+.nur {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--u) * 64));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--u) * 64));
+}
+.nurShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 12, 8, 0.95) 0%, rgba(18, 12, 8, 0.15) 30%, rgba(18, 12, 8, 0.25) 62%, rgba(18, 12, 8, 0.98) 100%);
+}
+.nurDim {
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 12, 8, 0.6);
+}
+.dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ═════ 02 · Eshik tirqishi: eni 2 → 150 (scroll) ═════ */
+.slit {
+  overflow: hidden;
+  clip-path: inset(0 calc((1 - var(--v)) * var(--u) * 74) round calc(var(--u) * 75));
+  will-change: clip-path;
+}
+.bigDay {
+  line-height: 1;
+}
+.digits {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  /* eski uslubdagi raqamlar (3, 4, 5, 7, 9) kesilmasin; joylashuv o‘zgarmaydi */
+  padding: 0.12em 0 0.3em;
+  margin: -0.12em 0 -0.3em;
+}
+.digit {
+  display: inline-block;
+  animation: digitIn 0.55s var(--ease);
+}
+@keyframes digitIn {
+  from {
+    transform: translateY(38%);
+    opacity: 0;
+  }
+}
+
+/* ═════ 03 · Ikki yuz — qarama-qarshi parallaks, oxirida Figma holati ═════ */
+.cap {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(0, calc((1 - var(--v)) * var(--dir) * 44 * var(--u)), 0);
+  will-change: transform;
+}
+
+/* ═════ 04 · Kun tartibi — titrlar: markazda yorqin, chetlarda xira ═════ */
+.credit {
+  opacity: calc(0.25 + 0.75 * var(--f, 1));
+}
+
+/* ═════ 07 · Nur doirasi («qo‘l chirog‘i») ═════ */
+.torch {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(calc(var(--tx, 0) * 24px), calc(var(--ty, 0) * 18px), 0);
+  transition: transform 0.8s var(--ease);
+}
+
+/* ═════ 09 · Final — teshik yopiladi (--fc: 0 … 1 = Figma holati) ═════ */
+.finalWrap {
+  --fc: 0;
+  --fe: calc(var(--fc) * var(--fc) * (3 - 2 * var(--fc)));
+}
+.fPhoto,
+.fDark,
+.fGold {
+  transform: scale(calc(1 + (1 - var(--fe)) * 0.25));
+  will-change: transform;
+}
+.fPhoto {
+  position: absolute;
+  overflow: hidden;
+}
+.fGold {
+  position: absolute;
+}
+.fKey {
+  --kk: clamp(0, (var(--fc) - 0.2) / 0.8, 1);
+  --ke: calc(var(--kk) * var(--kk) * (3 - 2 * var(--kk)));
+  opacity: clamp(0, (var(--fc) - 0.2) / 0.3, 1);
+  transform: translate3d(0, calc((1 - var(--ke)) * var(--u) * 70), 0) rotate(calc((1 - var(--ke)) * 90deg));
+  will-change: transform;
+}
+
+/* ═════ Tugmalar, kartalar ═════ */
+.pill {
+  border-radius: 999px;
+  line-height: 1.22;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gold);
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+.pill:hover {
+  transform: translateY(-2px);
+}
+.pillFill {
+  background: var(--gold);
+  color: var(--bg);
+}
+.pillLine {
+  color: var(--gold);
+}
+.pillLine:hover {
+  background: var(--gold);
+  color: var(--bg);
+}
+.dressCard,
+.formBg {
+  position: absolute;
+  inset: 0;
+  background: var(--card);
+}
+.dressEdge,
+.formEdge {
+  position: absolute;
+  inset: 0;
+  border-style: solid;
+  pointer-events: none;
+}
+.dressEdge {
+  border-color: rgba(200, 164, 106, 0.6);
+}
+.formEdge {
+  border-color: rgba(200, 164, 106, 0.5);
+}
+
+/* ═════ 08 · Anketa ═════ */
+.lbl {
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  line-height: 1.22;
+}
+/* maydon tagidagi chiziq: fokusda chapdan o‘ngga oltin bilan to‘ladi */
+.fieldWrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid rgba(200, 164, 106, 0.5);
+}
+.fieldWrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.6s var(--ease);
+}
+.fieldWrap:focus-within::after {
+  transform: scaleX(1);
+}
+.field {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.21;
+  padding: 0;
+  resize: none;
+}
+.field::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+.choice {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border: 1px solid var(--gold);
+  border-radius: 40px;
+  color: var(--gold);
+  background: transparent;
+  line-height: 1.22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--gold);
+  color: var(--bg);
+}
+.step {
+  border-radius: 50%;
+  border: 1px solid rgba(200, 164, 106, 0.6);
+  color: var(--gold);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.btnGold {
+  width: 100%;
+  background: var(--gold);
+  color: var(--bg);
+  border-radius: 40px;
+  line-height: 1.22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s var(--ease);
+}
+.btnGold:hover {
+  background: #d4b47f;
+}
+/* yuborilgach: karta qorong‘ulikka botadi, «Rahmat» nur ichida chiqadi */
+.thanks {
+  animation: thanks 1.1s 0.15s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+.glow {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 120%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(200, 164, 106, 0.22), rgba(200, 164, 106, 0) 70%);
+  pointer-events: none;
+  animation: glow 1.8s 0.2s var(--ease) both;
+}
+@keyframes glow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: #0b0705;
+  color: var(--ink);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+  .cap,
+  .gPar,
+  .torch {
+    transform: none;
+  }
+}
