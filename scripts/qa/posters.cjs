@@ -7,6 +7,8 @@
  * Muhr: birinchi kadr — yopiq konvert (Figma hero); -long da 01-bo‘lim (`openWrap`) ochiq holatda, sticky oralig‘i (`openSpacer`) olib tashlanadi.
  * Kalit: birinchi kadr — kalit teshigi (Figma hero, `--o:0`); -long da scroll bilan bog‘langan holatlar Figma kadriga keltiriladi
  * (tirqish/kapsulalar `--v:1`, titrlar `--f:1`, final teshik `--fc:1`).
+ * Sayohat (gorizontal scroll): birinchi kadr — 01 · Start; -long — har bekat (ekran) alohida suratga olinib, tepadan pastga
+ * ketma-ket tikiladi (katalog kartasi uzun rasmni vertikal aylantiradi — gorizontal tasma u yerda ko‘rinmaydi).
  */
 const { chromium } = require("playwright");
 const path = require("path");
@@ -28,6 +30,21 @@ const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{d
       await p.waitForTimeout(4200);
       await p.addStyleTag({ content: '[class*="digit"]{animation:none!important}' });
       await p.screenshot({ path: `${OUT}/${tag}-${kind}.png` });
+      if (slug === "sayohat") {
+        const n = await p.evaluate(() => +(document.querySelector("[data-stops]")?.getAttribute("data-stops") || 1));
+        const shots = [];
+        for (let k = 0; k < n; k++) {
+          await p.evaluate((k) => scrollTo(0, k * innerHeight), k);
+          await p.waitForTimeout(k ? 2000 : 600);
+          shots.push((await p.screenshot()).toString("base64"));
+        }
+        await p.setContent(`<html><body style="margin:0;background:#c7dbf0">${shots.map((x) => `<img src="data:image/png;base64,${x}" style="display:block;width:${W}px;height:${H}px">`).join("")}</body></html>`);
+        await p.waitForTimeout(300);
+        await p.screenshot({ path: `${OUT}/${tag}-${kind}-long.png`, fullPage: true });
+        console.log(tag, kind, "ok");
+        await ctx.close();
+        continue;
+      }
       const total = await p.evaluate(() => document.documentElement.scrollHeight);
       for (let y = 0; y < total; y += Math.round(H * 0.5)) { await p.evaluate((v) => scrollTo(0, v), y); await p.waitForTimeout(150); }
       await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight)); await p.waitForTimeout(1500);

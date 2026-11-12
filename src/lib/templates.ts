@@ -369,6 +369,38 @@ const builtin: Template[] = [
       { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Seni birinchi ko‘rganimda vaqt to‘xtadi. Endi esa butun umrim — shu lahza.", max: 120, hint: "Ixtiyoriy · «Lahza» bo‘limida, qo‘llar surati ostida" },
     ],
   },
+  {
+    number: 8,
+    slug: "sayohat",
+    name: "Sayohat",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Kelin-kuyov skuterda shahar bo‘ylab yo‘lga chiqadi. Sahifani pastga surganingizda shahar yon tomonga suriladi: haykal, teleminora, masjid va to‘yxona oldidan o‘tasiz. Har bekatda bitta karta — taklif matni, sana va sanoq, kun tartibi, dress-kod, manzil va mehmonlar javobi.",
+    descriptionRu: "Жених и невеста едут на скутере по городу. Когда вы листаете страницу вниз, город движется в сторону: вы проезжаете памятник, телебашню, мечеть и ресторан. На каждой остановке — одна карточка: текст приглашения, дата и отсчёт, программа дня, дресс-код, адрес и ответы гостей.",
+    descriptionEn: "The bride and groom ride a scooter through the city. As you scroll down, the city slides sideways: you pass a monument, the TV tower, a mosque and the wedding hall. Each stop has one card — the invitation text, the date and a countdown, the day’s schedule, the dress code, the venue and guest replies.",
+    palette: ["#C7DBF0", "#22324D", "#C46A4E", "#FFFBF4"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "«Bahor» to‘yxonasi", time: "17:00" },
+    theme: { bg: ["#c7dbf0", "#9fbfe2"], ink: "#22324d", accent: "#c46a4e", soft: "#5d6b80", script: "cormorant", color: "moviy" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -526,6 +558,8 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Surat · 4", where: "Bazm zali — ark deraza ichida" },
     { title: "Surat · 5", where: "«Lahza» — nur ostidagi surat" },
   ],
+  /** Sayohat — suratsiz dizayn (juftlik, shahar va bekatlar — shablonning o‘z rasmlari) */
+  sayohat: [],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
   PHOTO_SLOTS[designSlug(t)] ?? Array.from({ length: 6 }, (_, i) => ({ title: `Surat · ${i + 1}`, where: "Fotogalereya" }));

@@ -313,4 +313,10 @@ export const en: Record<string, string> = {
   "Kuyov portreti — «Ikki hikoya»": "Groom’s portrait — “Two stories”",
   "Bazm zali — ark deraza ichida": "Venue hall — inside the arched window",
   "«Lahza» — nur ostidagi surat": "“Moment” — the photo in the light",
+  // ── Sayohat (scooter ride through the city, horizontal scroll) ──
+  "Hayotimizning eng go‘zal sayohatini boshlayapmiz. Shu yo‘lda — nikoh to‘yimizda — yonimizda bo‘lishingizni chin dildan istaymiz.":
+    "We are setting off on the most beautiful journey of our lives. We sincerely hope you will be by our side along the way — at our wedding.",
+  "«Bahor» to‘yxonasi": "Bahor Wedding Hall",
+  "Toshkent sh., Amir Temur ko‘chasi, 108": "108 Amir Temur Street, Tashkent",
+  "Bazm va raqs": "Dinner and dancing",
 };

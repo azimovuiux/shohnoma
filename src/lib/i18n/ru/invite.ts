@@ -290,4 +290,10 @@ export const ru: Record<string, string> = {
   "Kuyov portreti — «Ikki hikoya»": "Портрет жениха — «Две истории»",
   "Bazm zali — ark deraza ichida": "Зал торжества — в арочном окне",
   "«Lahza» — nur ostidagi surat": "«Мгновение» — фото в луче света",
+  // ── Sayohat (skuterda shahar bo‘ylab, gorizontal scroll) ──
+  "Hayotimizning eng go‘zal sayohatini boshlayapmiz. Shu yo‘lda — nikoh to‘yimizda — yonimizda bo‘lishingizni chin dildan istaymiz.":
+    "Мы начинаем самое прекрасное путешествие в нашей жизни. От всего сердца хотим, чтобы на этом пути — на нашей свадьбе — вы были рядом.",
+  "«Bahor» to‘yxonasi": "Ресторан «Бахор»",
+  "Toshkent sh., Amir Temur ko‘chasi, 108": "г. Ташкент, ул. Амира Темура, 108",
+  "Bazm va raqs": "Банкет и танцы",
 };

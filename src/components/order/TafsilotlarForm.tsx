@@ -142,7 +142,8 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
         </FlowField>
 
         <div className="flex flex-col gap-3">
-          <SectionTitle>{t("Suratlar")}</SectionTitle>
+          {/* Suratsiz dizayn (Sayohat) — «Suratlar» sarlavhasi va bo‘sh ro‘yxat ko‘rsatilmaydi, faqat jonli ko‘rinish tugmasi */}
+          {slots.length > 0 && <SectionTitle>{t("Suratlar")}</SectionTitle>}
           <input
             ref={slotRef}
             type="file"
@@ -150,7 +151,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
             hidden
             onChange={(e) => uploadSlot(e.target.files?.[0], pendingSlot.current)}
           />
-          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <ul className={slots.length ? "grid grid-cols-2 gap-3 sm:grid-cols-4" : "hidden"}>
             {slots.map((sl, i) => {
               const src = o.photos[i];
               const next = i === o.photos.length; // keyingi bo‘sh joy
