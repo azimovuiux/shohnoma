@@ -9,3 +9,4 @@ storage/
 .env
 dist/
 php/api/lib/templates.json
+scripts/qa/out/
