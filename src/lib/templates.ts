@@ -433,6 +433,39 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.", max: 160 },
     ],
   },
+  {
+    number: 10,
+    slug: "kumush",
+    name: "Kumush",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Oq-qora plyonka uslubidagi taklifnoma: to‘liq ekranli surat, qora va kumushrang oq bo‘limlar, nafis bosh harflar. Sahifani pastga surganingizda surat sekin yaqinlashadi, ismlar harflari yig‘ilib paydo bo‘ladi, plyonka lentasi suriladi va kadrlar birin-ketin ochiladi. Keyin sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi.",
+    descriptionRu: "Приглашение в стиле чёрно-белой плёнки: фото на весь экран, чёрные и серебристо-белые разделы, изящные заглавные буквы. Когда вы листаете страницу вниз, фото плавно приближается, буквы имён собираются вместе, плёнка прокручивается, а кадры проявляются один за другим. Дальше дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей.",
+    descriptionEn: "An invitation in a black-and-white film style: a full-screen photo, black and silver-white sections and elegant capital letters. As you scroll down, the photo slowly settles in, the letters of the names gather together, a film strip slides along and the frames develop one by one. Then the date and a countdown, the day’s schedule, the venue, the dress code and guest replies.",
+    palette: ["#161616", "#F2F1EE", "#9A9A9A", "#FFFFFF"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "«Opera» banket zali", time: "17:00" },
+    theme: { bg: ["#2a2a2a", "#161616"], ink: "#ffffff", accent: "#9a9a9a", soft: "#d4d3cf", script: "cormorant", color: "krem" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — smoking yoki to‘q rangli kostyum va kapalak galstuk, ayollar — uzun kechki libos.", max: 160 },
+      { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Har bir kadr — biz birga yozgan hikoyaning bir satri.", max: 120, hint: "Ixtiyoriy · «Bizning kadrlar» bo‘limida, plyonka ostida" },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -592,6 +625,12 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   ],
   /** Sayohat — suratsiz dizayn (juftlik, shahar va bekatlar — shablonning o‘z rasmlari) */
   sayohat: [],
+  /** Kumush — oq-qora: mijoz suratlari ham oq-qora ko‘rinadi */
+  kumush: [
+    { title: "Asosiy surat", where: "Birinchi ekranda (to‘liq ekran, oq-qora) va plyonkadagi 1-kadrda" },
+    { title: "Surat · 2", where: "Yakuniy ekranda va plyonkadagi 2-kadrda" },
+    { title: "Surat · 3", where: "Plyonkadagi 3-kadrda (qo‘llar, uzuklar…)" },
+  ],
   lino: [
     { title: "Asosiy surat", where: "Jurnal muqovasida (bo‘lmasa — guldasta surati)" },
     { title: "Surat · 2", where: "Taklif matni yonida — detal surat (guldasta, uzuklar…)" },

@@ -325,4 +325,14 @@ export const en: Record<string, string> = {
   "Jurnal muqovasida (bo‘lmasa — guldasta surati)": "On the magazine cover (if none — the bouquet photo)",
   "Taklif matni yonida — detal surat (guldasta, uzuklar…)": "Next to the invitation text — a detail photo (bouquet, rings…)",
   "«Bazm manzili» bo‘limida (bo‘lmasa — suratsiz)": "In the “Venue” section (if none — no photo)",
+  // ── Kumush (black-and-white film) ──
+  "Bizning kadrlar": "Our frames",
+  "Javobingizni {date} kutamiz": "Please reply {date}",
+  "{y} · soat {time}": "{y} · at {time}",
+  "Har bir kadr — biz birga yozgan hikoyaning bir satri.": "Every frame is a line of the story we are writing together.",
+  "Ixtiyoriy · «Bizning kadrlar» bo‘limida, plyonka ostida": "Optional · in the “Our frames” section, under the film strip",
+  // order form (templates.ts → PHOTO_SLOTS.kumush)
+  "Birinchi ekranda (to‘liq ekran, oq-qora) va plyonkadagi 1-kadrda": "On the first screen (full screen, black and white) and in frame 1 of the film strip",
+  "Yakuniy ekranda va plyonkadagi 2-kadrda": "On the final screen and in frame 2 of the film strip",
+  "Plyonkadagi 3-kadrda (qo‘llar, uzuklar…)": "In frame 3 of the film strip (hands, rings…)",
 };

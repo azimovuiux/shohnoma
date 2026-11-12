@@ -1,0 +1,704 @@
+/*
+ * Kumush — taklifnoma shabloni (Figma 379:7034 mobil, 380:7167 laptop).
+ * Oq-qora plyonka uslubi: qora (#161616) va kumushrang oq (#f2f1ee) bo‘limlar, Forum bosh harflar, Montserrat matn.
+ * Birlik `--u`: kontent ustuni (mobil 390 kanvas; laptopda ustun = mobil × 1.45). Hero va final — laptopda 1440 kanvas.
+ * Harakat ("Motion — 10 · Kumush"): hero surati scrollda 1.1 → 1, ismlar harflari 0.4em → 0.18em oralig‘iga yig‘iladi;
+ * taklif so‘zma-so‘z; plyonka lentasi scroll bilan gorizontal suriladi, kadrlar ketma-ket «ochiladi»; final — scroll bilan.
+ * Hamma rasmlar Normal blend; mijoz suratlari ham oq-qora (grayscale) ko‘rinadi.
+ */
+@font-face {
+  font-family: "Forum";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/kumush/fonts/forum-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Forum";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/kumush/fonts/forum-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Forum";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/kumush/fonts/forum-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Montserrat: 300 (Light) — Kalit’dan, 400/500 — Savsan’dan */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/templates/kalit/fonts/montserrat-cyrillic-300-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/templates/kalit/fonts/montserrat-latin-ext-300-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/templates/kalit/fonts/montserrat-latin-300-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-cyrillic-500-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-ext-500-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/savsan/fonts/montserrat-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --bg: #f2f1ee;
+  --black: #161616;
+  --ink: #161616;
+  --muted: #6f6f6f;
+  --grey: #9a9a9a;
+  --rule: #d4d3cf;
+  --sh-loader-a: #262626;
+  --sh-loader-b: #161616;
+  --sh-ring: rgba(255, 255, 255, 0.35);
+  position: relative;
+  container-type: inline-size;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Montserrat", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: var(--bg);
+}
+.fo {
+  font-family: "Forum", Georgia, serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.ml {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 300;
+}
+.mr {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 400;
+}
+.mm {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 500;
+}
+.up {
+  text-transform: uppercase;
+}
+.clamp2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  background: var(--bg);
+}
+.dark {
+  background: var(--black);
+  color: #fff;
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+  overflow: clip;
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * var(--y, 22)));
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * var(--y, 50)));
+}
+.root [data-a="rise"] {
+  transition-duration: var(--t, 1.3s);
+}
+.root [data-a="line"] {
+  transform-origin: 50% 50%;
+  transition-duration: 1.4s;
+}
+.root [data-a="line"]:not([data-in]) {
+  transform: scaleX(0);
+}
+.root [data-a="lineY"] {
+  transform-origin: 50% 0;
+  transition-duration: 1s;
+}
+.root [data-a="lineY"]:not([data-in]) {
+  transform: scaleY(0);
+}
+/* katta sana — mask ortidan pastdan ko‘tariladi (old-style raqamlar kesilmasin — joylashuv o‘zgarmaydi) */
+.mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.12em 0.08em 0.3em;
+  margin: -0.12em -0.08em -0.3em;
+}
+.maskIn {
+  display: inline-block;
+}
+.root [data-a="mask"] {
+  transition-duration: 1.3s;
+}
+.root [data-a="mask"]:not([data-in]) {
+  transform: translateY(112%);
+}
+
+/* harflar: o‘z joyidan ±0.22em uzoqda (0.4em oraliq) va shaffof → 0.18em oraliqqa yig‘iladi */
+.ch {
+  display: inline-block;
+}
+.root [data-a="track"] .ch {
+  transition:
+    transform 1.6s var(--ease) var(--d, 0s),
+    opacity 1.2s var(--ease) var(--d, 0s),
+    filter 1.2s var(--ease) var(--d, 0s);
+}
+.root [data-a="track"]:not([data-in]) .ch {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateX(calc(var(--x) * 0.22em));
+}
+/* so‘zma-so‘z */
+.w {
+  display: inline-block;
+}
+.root [data-a="words"] .w {
+  transition:
+    transform 1s var(--ease) var(--d, 0s),
+    opacity 1s var(--ease) var(--d, 0s),
+    filter 1s var(--ease) var(--d, 0s);
+}
+.root [data-a="words"]:not([data-in]) .w {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(0.35em);
+}
+
+/* ═════ 00 · Hero ═════
+ * JS faqat --o (0…1, lerp: surat 1.1 → 1) va --gy (px: sahna keyingi bo‘limga yopishib ketishi) ni yozadi.
+ * Wrapper: 1 ekran sahna + 0.3 ekran sticky + 1 ekran (sahna keyingi bo‘lim bilan birga yuqoriga ketadi). */
+.gateWrap {
+  --o: 0;
+  --gy: 0px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: calc(100svh * 2.3);
+  margin-bottom: calc(100svh * -1);
+}
+.gateHold {
+  height: 100svh;
+  background: var(--black);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--black);
+  color: #fff;
+  transform: translate3d(0, calc(var(--gy) * -1), 0);
+}
+.gPhoto {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--black);
+}
+.gPhotoIn {
+  position: absolute;
+  inset: 0;
+  animation: photoIn 1.6s 0.05s var(--ease) both;
+}
+@keyframes photoIn {
+  from {
+    opacity: 0;
+  }
+}
+/* surat: scrollda 1.1 → 1 (Motion «sekin zoom»), keyin sahifadan sekinroq (0.85x) ketadi */
+.gImg {
+  filter: grayscale(1);
+  transform-origin: 50% 60%;
+  transform: translate3d(0, calc(var(--gy) * 0.15), 0) scale(calc(1.1 - 0.1 * var(--o)));
+  will-change: transform;
+}
+.shTop {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+  pointer-events: none;
+}
+.shBot {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+}
+.gNames {
+  margin: 0;
+  color: #fff;
+}
+.gNames .ch {
+  animation: track 2s var(--d, 0.35s) var(--ease) both;
+}
+@keyframes track {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translateX(calc(var(--x) * 0.22em));
+  }
+}
+.gLine {
+  background: rgba(255, 255, 255, 0.7);
+  transform-origin: 50% 0;
+  animation: lineDown 1.2s 1.1s var(--ease) both;
+}
+@keyframes lineDown {
+  from {
+    transform: scaleY(0);
+  }
+}
+.gDate {
+  animation: fadeUp 1.1s 1.3s var(--ease) both;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+/* mokap ichida — harakatsiz kadr (Figma hero) */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 02 · Kadrlar — plyonka lentasi ═════
+ * JS faqat --k (0…1) ni yozadi: lenta o‘z o‘qi bo‘ylab (1−k)² × 170 birlik o‘ngdan suriladi, kadrlar ketma-ket ochiladi. */
+.filmWrap {
+  --k: 0;
+  pointer-events: none;
+}
+.film {
+  position: absolute;
+  background: var(--black);
+  overflow: hidden;
+  transform: rotate(4deg) translate3d(calc((1 - var(--k)) * (1 - var(--k)) * var(--slide)), 0, 0);
+  will-change: transform;
+}
+.hole {
+  display: contents;
+}
+.hole > span {
+  position: absolute;
+  background: var(--bg);
+}
+.frame {
+  position: absolute;
+  overflow: hidden;
+  background: #222;
+}
+/* «exposure»: surat 0 → 1, ichida 1.12 → 1; o‘rtada qisqa oq chaqnash (suratga tushirilgandek) */
+.frameImg {
+  filter: grayscale(1);
+  opacity: var(--e);
+  transform: scale(calc(1.12 - 0.12 * var(--e)));
+}
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: calc(var(--e) * (1 - var(--e)) * 2.6);
+}
+.frameNo {
+  position: absolute;
+  color: var(--grey);
+  white-space: nowrap;
+}
+
+/* ═════ 03 · Sana ═════ */
+.digits {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+}
+.slot {
+  display: inline-block;
+}
+/* o‘zgargan raqam — yuqoridan sekin tushadi; shaffoflik yo‘q, kesilmaydi (padded «0» hech qachon yo‘qolmaydi) */
+.tick {
+  display: inline-block;
+  animation: tick 0.5s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: translateY(-0.14em);
+  }
+}
+
+/* ═════ Tugmalar, kartalar ═════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  line-height: 1.22;
+  border-style: solid;
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btnLine {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: transparent;
+}
+.btnLine:hover {
+  background: var(--ink);
+  color: #fff;
+}
+.btnWhite {
+  border-color: #fff;
+  background: #fff;
+  color: var(--ink);
+}
+.btnGhost {
+  border-color: #fff;
+  background: transparent;
+  color: #fff;
+}
+.btnGhost:hover {
+  background: #fff;
+  color: var(--ink);
+}
+.dressCard {
+  background: #fff;
+  border-style: solid;
+  border-color: rgba(22, 22, 22, 0.2);
+  color: var(--ink);
+}
+.card {
+  background: #fff;
+  color: var(--ink);
+}
+
+/* ═════ 07 · Anketa ═════ */
+.lbl {
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  line-height: 1.22;
+}
+.fieldWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(22, 22, 22, 0.35);
+}
+.fieldWrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.6s var(--ease);
+}
+.fieldWrap:focus-within::after {
+  transform: scaleX(1);
+}
+.field {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.22;
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.field::placeholder {
+  color: var(--grey);
+  opacity: 1;
+}
+.choice {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: var(--ink);
+  color: var(--ink);
+  background: transparent;
+  line-height: 1.22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+.step {
+  border-style: solid;
+  border-color: rgba(22, 22, 22, 0.4);
+  color: var(--ink);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.btnInk {
+  width: 100%;
+  background: var(--ink);
+  color: #fff;
+  line-height: 1.22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s var(--ease);
+}
+.btnInk:hover {
+  background: #2e2e2e;
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+
+/* ═════ 08 · Final — scroll bilan (--fc: 0 … 1 = Figma kadri) ═════ */
+.finalWrap {
+  --fc: 0;
+  --f1: clamp(0, var(--fc) / 0.7, 1);
+  --f2: clamp(0, (var(--fc) - 0.2) / 0.6, 1);
+  --f3: clamp(0, (var(--fc) - 0.55) / 0.45, 1);
+  overflow: hidden;
+}
+.fPhoto {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+/* surat 1.1 → 1 (hero bilan bir xil «sekin zoom») */
+.fImg {
+  filter: grayscale(1);
+  transform-origin: 50% 60%;
+  transform: scale(calc(1.1 - 0.1 * var(--f1)));
+}
+.fTitle {
+  margin: 0;
+}
+.fTitle .ch {
+  opacity: var(--f2);
+  transform: translateX(calc(var(--x) * 0.22em * (1 - var(--f2)) * (1 - var(--f2))));
+}
+.fLine {
+  opacity: var(--f3);
+  transform: translateY(calc((1 - var(--f3)) * var(--u) * 12));
+}
+
+/* ═════ Musiqa tugmasi (Figma: qora doira 52, 0.6 oq chegara, ekvalayzer) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(22, 22, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: fadeUp 0.8s 1.2s var(--ease) both;
+}
+.music svg {
+  display: block;
+  width: 52px;
+  height: 52px;
+  margin: -1px;
+}
+.musicEmbedded {
+  position: absolute;
+}
+.bar {
+  fill: #fff;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.4s var(--ease);
+}
+/* o‘chirilgan: chiziqlar nuqtaga aylanadi, ustidan qiya chiziq */
+.music:not(.playing) .bar {
+  transform: scaleY(0.2);
+}
+.music.playing .bar {
+  animation: eq 1.1s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.23s);
+}
+@keyframes eq {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.45);
+  }
+}
+.strike {
+  stroke: #fff;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  transition: stroke-dashoffset 0.3s var(--ease);
+}
+.music:not(.playing) .strike {
+  stroke-dashoffset: 0;
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--black);
+  color: #fff;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+  .gImg,
+  .fImg {
+    transform: none;
+  }
+  .film {
+    transform: rotate(4deg);
+  }
+}

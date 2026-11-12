@@ -301,4 +301,14 @@ export const ru: Record<string, string> = {
   "Jurnal muqovasida (bo‘lmasa — guldasta surati)": "На обложке журнала (если нет — фото букета)",
   "Taklif matni yonida — detal surat (guldasta, uzuklar…)": "Рядом с текстом приглашения — фото-деталь (букет, кольца…)",
   "«Bazm manzili» bo‘limida (bo‘lmasa — suratsiz)": "В разделе «Место торжества» (если нет — без фото)",
+  // ── Kumush (oq-qora plyonka) ──
+  "Bizning kadrlar": "Наши кадры",
+  "Javobingizni {date} kutamiz": "Ждём вашего ответа {date}",
+  "{y} · soat {time}": "{y} · в {time}",
+  "Har bir kadr — biz birga yozgan hikoyaning bir satri.": "Каждый кадр — строчка истории, которую мы пишем вместе.",
+  "Ixtiyoriy · «Bizning kadrlar» bo‘limida, plyonka ostida": "Необязательно · в разделе «Наши кадры», под плёнкой",
+  // buyurtma formasi (templates.ts → PHOTO_SLOTS.kumush)
+  "Birinchi ekranda (to‘liq ekran, oq-qora) va plyonkadagi 1-kadrda": "На первом экране (во весь экран, чёрно-белое) и в 1-м кадре плёнки",
+  "Yakuniy ekranda va plyonkadagi 2-kadrda": "На последнем экране и во 2-м кадре плёнки",
+  "Plyonkadagi 3-kadrda (qo‘llar, uzuklar…)": "В 3-м кадре плёнки (руки, кольца…)",
 };
