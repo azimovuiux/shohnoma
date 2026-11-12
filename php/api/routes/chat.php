@@ -119,8 +119,22 @@ route('POST', '/admin/chats/:id', function ($p) {
 function tg_webhook_secret(): string { return substr(hash('sha256', 'tg-webhook:' . env('SESSION_SECRET', 'dev') . ':' . env('TELEGRAM_BOT_TOKEN', '')), 0, 48); }
 
 route('POST', '/telegram/webhook', function () {
-    if (!hash_equals(tg_webhook_secret(), (string)($_SERVER['HTTP_X_TELEGRAM_BOT_API_SECRET_TOKEN'] ?? ''))) fail('Forbidden', 403);
-    $u = json_decode((string)file_get_contents('php://input'), true) ?: [];
+    if (!hash_equals(tg_webhook_secret(), (string)($_SERVER['HTTP_X_TELEGRAM_BOT_API_SECRET_TOKEN'] ?? ''))) {
+        // Kalit eskirgan bo‘lishi mumkin — webhookni yangi kalit bilan qayta ulaymiz (keyingi xabarlar o‘tadi)
+        tg_webhook_sync(true);
+        fail('Forbidden', 403);
+    }
+    // Har qanday xatoda ham Telegram'ga 200 qaytariladi: aks holda bitta "buzuq" xabar navbatni to‘sib qo‘yadi
+    try {
+        tg_webhook_handle(json_decode((string)file_get_contents('php://input'), true) ?: []);
+    } catch (Throwable $e) {
+        error_log('[shohnoma] telegram webhook: ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
+    }
+    json_out(['ok' => true]);
+});
+
+function tg_webhook_handle(array $u): void
+{
     $msg = $u['message'] ?? null;
     if ($msg && (tg_admin_link_handle($msg) || tg_login_handle($msg))) json_out(['ok' => true]);
     $admin = (string)env('TELEGRAM_ADMIN_CHAT_ID');
@@ -135,7 +149,7 @@ route('POST', '/telegram/webhook', function () {
     if (!$orig) { tg_send($admin, 'Bu xabar saytdagi chatga tegishli emas.'); json_out(['ok' => true]); }
     chat_add($orig['session_id'], 'admin', mb_substr($text, 0, 2000));
     json_out(['ok' => true]);
-});
+}
 
 /** Admin: Telegram webhookni ulash (bot token sozlangan bo‘lsa) */
 route('POST', '/admin/telegram/setup', function () {

@@ -16,19 +16,17 @@ function settings_out(): array
     }
     $bot = env('TELEGRAM_BOT_TOKEN') ? tg_bot_username() : null;
     $hook = site_url() . '/api/telegram/webhook';
-    $info = $bot ? tg_api('getWebhookInfo', []) : null;
-    // Webhook ulanmagan yoki boshqa manzilga qarab tursa — qayta ulaymiz
-    if ($bot && $info !== null && ($info['url'] ?? '') !== $hook) {
-        tg_api('setWebhook', ['url' => $hook, 'secret_token' => tg_webhook_secret(), 'allowed_updates' => ['message']]);
-        $info = tg_api('getWebhookInfo', []);
-    }
+    // Admin sozlamalari ochilganda — webhook holati darhol tekshiriladi va kerak bo‘lsa qayta ulanadi
+    $info = $bot ? tg_webhook_sync(true) : null;
+    $recentError = $info && (int)($info['last_error_date'] ?? 0) > time() - 900;
     return ['settings' => $out, 'telegram' => [
         'bot' => $bot,
         'adminLinked' => (bool)env('TELEGRAM_ADMIN_CHAT_ID'),
         'adminChatIsGroup' => str_starts_with((string)env('TELEGRAM_ADMIN_CHAT_ID'), '-'),
         'webhook' => $hook,
         'webhookOk' => $info !== null && ($info['url'] ?? '') === $hook,
-        'webhookError' => $info['last_error_message'] ?? null,
+        'webhookError' => $recentError ? ($info['last_error_message'] ?? null) : null,
+        'pending' => (int)($info['pending_update_count'] ?? 0),
     ]];
 }
 

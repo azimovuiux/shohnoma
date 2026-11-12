@@ -18,14 +18,30 @@ function tg_phone(?string $raw): ?string
     return strlen($d) >= 10 && strlen($d) <= 15 ? "+$d" : null;
 }
 
-/** Webhook bir marta avtomatik ulanadi (token yoki sayt manzili o‘zgarsa — qayta) */
-function tg_ensure_webhook(): void
+/**
+ * Webhook holatini tekshiradi va kerak bo‘lsa qayta ulaydi (har 5 daqiqada ko‘pi bilan bir marta, $force — darhol).
+ * Qayta ulanadi: manzil boshqa bo‘lsa yoki Telegram so‘nggi 15 daqiqada xato qayd etgan bo‘lsa
+ * (masalan, maxfiy kalit o‘zgarib 403 qaytgan) — shunda bot o‘z-o‘zidan tiklanadi.
+ */
+function tg_webhook_sync(bool $force = false): ?array
 {
+    if (!env('TELEGRAM_BOT_TOKEN')) return null;
     $url = site_url() . '/api/telegram/webhook';
     $flag = storage_dir() . '/.tg_webhook_' . substr(sha1(env('TELEGRAM_BOT_TOKEN', '') . $url), 0, 12);
-    if (is_file($flag)) return;
-    if (tg_api('setWebhook', ['url' => $url, 'secret_token' => tg_webhook_secret(), 'allowed_updates' => ['message']]) !== null) @touch($flag);
+    if (!$force && is_file($flag) && time() - (int)@filemtime($flag) < 300) return null;
+    $info = tg_api('getWebhookInfo', []);
+    $broken = $info === null
+        || ($info['url'] ?? '') !== $url
+        || ((int)($info['last_error_date'] ?? 0) > time() - 900);
+    if ($broken) {
+        $set = tg_api('setWebhook', ['url' => $url, 'secret_token' => tg_webhook_secret(), 'allowed_updates' => ['message']]);
+        if ($set !== null) $info = tg_api('getWebhookInfo', []) ?? $info;
+        else error_log('[shohnoma] Telegram setWebhook bajarilmadi');
+    }
+    @touch($flag);
+    return $info;
 }
+function tg_ensure_webhook(): void { tg_webhook_sync(); }
 
 route('POST', '/auth/tg/start', function () {
     $bot = tg_bot_username() ?? fail('Telegram orqali kirish hozircha sozlanmagan', 503);
@@ -40,6 +56,7 @@ route('POST', '/auth/tg/start', function () {
 });
 
 route('GET', '/auth/tg/status', function () {
+    tg_webhook_sync();
     $b = $_COOKIE[TG_LOGIN_COOKIE] ?? '';
     if (!$b) json_out(['ok' => true, 'status' => 'none']);
     $r = one('SELECT *, TIMESTAMPDIFF(SECOND, created_at, UTC_TIMESTAMP()) AS age FROM tg_logins WHERE browser_hash = ? ORDER BY created_at DESC LIMIT 1', [hash('sha256', $b)]);
