@@ -319,4 +319,10 @@ export const en: Record<string, string> = {
   "«Bahor» to‘yxonasi": "Bahor Wedding Hall",
   "Toshkent sh., Amir Temur ko‘chasi, 108": "108 Amir Temur Street, Tashkent",
   "Bazm va raqs": "Dinner and dancing",
+  // ── Lino (magazine cover) ──
+  Toshkent: "Tashkent",
+  // order form (templates.ts → PHOTO_SLOTS.lino)
+  "Jurnal muqovasida (bo‘lmasa — guldasta surati)": "On the magazine cover (if none — the bouquet photo)",
+  "Taklif matni yonida — detal surat (guldasta, uzuklar…)": "Next to the invitation text — a detail photo (bouquet, rings…)",
+  "«Bazm manzili» bo‘limida (bo‘lmasa — suratsiz)": "In the “Venue” section (if none — no photo)",
 };

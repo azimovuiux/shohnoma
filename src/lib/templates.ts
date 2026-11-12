@@ -401,6 +401,38 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.", max: 160 },
     ],
   },
+  {
+    number: 9,
+    slug: "lino",
+    name: "Lino",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
+    style: "minimal",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Jurnal muqovasi uslubidagi sokin taklifnoma: iliq zig‘ir rang, katta surat va nafis yozuvlar. Sahifani pastga surganingizda surat sekin joyiga tushadi, ismlar pastdan ko‘tariladi, ingichka chiziqlar chiziladi. Keyin taklif matni, sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi.",
+    descriptionRu: "Спокойное приглашение в стиле обложки журнала: тёплый льняной цвет, большое фото и изящные надписи. Когда вы листаете страницу вниз, фото плавно встаёт на место, имена поднимаются снизу, проводятся тонкие линии. Дальше текст приглашения, дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей.",
+    descriptionEn: "A calm invitation styled like a magazine cover: warm linen tones, a large photo and elegant lettering. As you scroll down, the photo gently settles into place, the names rise from below and thin lines are drawn. Then the invitation text, the date and a countdown, the day’s schedule, the venue, the dress code and guest replies.",
+    palette: ["#EFE8DC", "#2B2620", "#6B6A45", "#CFC5B4"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "«Zaytun bog‘i» restorani", time: "17:00" },
+    theme: { bg: ["#f7f2e9", "#efe8dc"], ink: "#2b2620", accent: "#6b6a45", soft: "#857c6d", script: "cormorant", color: "krem" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -560,6 +592,11 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   ],
   /** Sayohat — suratsiz dizayn (juftlik, shahar va bekatlar — shablonning o‘z rasmlari) */
   sayohat: [],
+  lino: [
+    { title: "Asosiy surat", where: "Jurnal muqovasida (bo‘lmasa — guldasta surati)" },
+    { title: "Surat · 2", where: "Taklif matni yonida — detal surat (guldasta, uzuklar…)" },
+    { title: "Surat · 3", where: "«Bazm manzili» bo‘limida (bo‘lmasa — suratsiz)" },
+  ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
   PHOTO_SLOTS[designSlug(t)] ?? Array.from({ length: 6 }, (_, i) => ({ title: `Surat · ${i + 1}`, where: "Fotogalereya" }));

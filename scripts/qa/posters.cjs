@@ -7,6 +7,7 @@
  * Muhr: birinchi kadr — yopiq konvert (Figma hero); -long da 01-bo‘lim (`openWrap`) ochiq holatda, sticky oralig‘i (`openSpacer`) olib tashlanadi.
  * Kalit: birinchi kadr — kalit teshigi (Figma hero, `--o:0`); -long da scroll bilan bog‘langan holatlar Figma kadriga keltiriladi
  * (tirqish/kapsulalar `--v:1`, titrlar `--f:1`, final teshik `--fc:1`).
+ * Lino: birinchi kadr — jurnal muqovasi (`--o:1` — surat Figma masshtabida); -long da final (`--fc:1`) Figma holatida.
  * Sayohat (gorizontal scroll): birinchi kadr — 01 · Start; -long — har bekat (ekran) alohida suratga olinib, tepadan pastga
  * ketma-ket tikiladi (katalog kartasi uzun rasmni vertikal aylantiradi — gorizontal tasma u yerda ko‘rinmaydi).
  */
@@ -50,7 +51,7 @@ const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{d
       await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight)); await p.waitForTimeout(1500);
       await p.evaluate(() => scrollTo(0, 0)); await p.waitForTimeout(1500);
       const u = `min(calc(100cqw / ${UW}), calc(${H}px / ${HH}))`;
-      await p.addStyleTag({ content: `[class*="gateWrap"]{height:${H}px!important;margin-bottom:0!important;--k:0px!important;--q:0!important;--gy:0px!important;--u:${u}!important}[class*="_gate__"]{position:relative!important;height:${H}px!important;transform:none!important}[class*="finalDoor"],[class*="finalFlap"]{transform:none!important;opacity:1!important}[class*="openWrap"]{--o:1!important}[class*="openSpacer"]{display:none!important}` + (slug === "kalit" ? '[class*="gateWrap"]{--o:0!important;--sh:1!important;--sp:1!important}[class*="finalWrap"]{--fc:1!important}[data-v]{--v:1!important}[data-f]{--f:1!important}' : "") });
+      await p.addStyleTag({ content: `[class*="gateWrap"]{height:${H}px!important;margin-bottom:0!important;--k:0px!important;--q:0!important;--gy:0px!important;--u:${u}!important}[class*="_gate__"]{position:relative!important;height:${H}px!important;transform:none!important}[class*="finalDoor"],[class*="finalFlap"]{transform:none!important;opacity:1!important}[class*="openWrap"]{--o:1!important}[class*="openSpacer"]{display:none!important}` + (slug === "kalit" ? '[class*="gateWrap"]{--o:0!important;--sh:1!important;--sp:1!important}[class*="finalWrap"]{--fc:1!important}[data-v]{--v:1!important}[data-f]{--f:1!important}' : slug === "lino" ? '[class*="finalWrap"]{--fc:1!important}' : "") });
       await p.waitForTimeout(800);
       await p.screenshot({ path: `${OUT}/${tag}-${kind}-long.png`, fullPage: true });
       console.log(tag, kind, "ok");

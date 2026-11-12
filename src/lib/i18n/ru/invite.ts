@@ -296,4 +296,9 @@ export const ru: Record<string, string> = {
   "«Bahor» to‘yxonasi": "Ресторан «Бахор»",
   "Toshkent sh., Amir Temur ko‘chasi, 108": "г. Ташкент, ул. Амира Темура, 108",
   "Bazm va raqs": "Банкет и танцы",
+  // ── Lino (jurnal muqovasi) ──
+  // buyurtma formasi (templates.ts → PHOTO_SLOTS.lino)
+  "Jurnal muqovasida (bo‘lmasa — guldasta surati)": "На обложке журнала (если нет — фото букета)",
+  "Taklif matni yonida — detal surat (guldasta, uzuklar…)": "Рядом с текстом приглашения — фото-деталь (букет, кольца…)",
+  "«Bazm manzili» bo‘limida (bo‘lmasa — suratsiz)": "В разделе «Место торжества» (если нет — без фото)",
 };
