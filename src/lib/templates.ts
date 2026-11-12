@@ -301,6 +301,41 @@ const builtin: Template[] = [
       { key: "caption", type: "text", label: "Yorliq yozuvi", placeholder: "Sevgi — bir umrlik chiroyli sayohat", max: 48, hint: "Ixtiyoriy · «Lahzalar» bo‘limidagi yorliqda" },
     ],
   },
+  {
+    number: 6,
+    slug: "muhr",
+    name: "Muhr",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
+    style: "klassik",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Bordo charm konvert va sur‘gich muhr. Sahifani pastga surganingizda muhr yoriladi va konvertning to‘rt qanoti birin-ketin ochiladi — ichidan taklif kartasi chiqadi. Keyin sanoq, kun tartibi, suratlar, manzil, dress-kod va mehmonlar javobi; oxirida konvert yana yopiladi.",
+    descriptionRu: "Бордовый кожаный конверт и сургучная печать. Когда вы листаете страницу вниз, печать трескается, и четыре клапана конверта раскрываются один за другим — внутри приглашение. Дальше отсчёт, программа дня, фото, адрес, дресс-код и ответы гостей; в конце конверт снова закрывается.",
+    descriptionEn: "A burgundy leather envelope with a wax seal. As you scroll down, the seal cracks and the envelope’s four flaps open one by one to reveal the invitation card. Then a countdown, the day’s schedule, photos, the venue, the dress code and guest replies; at the end the envelope closes again.",
+    palette: ["#5E1A27", "#6E1F2E", "#C9A06B", "#F7F1E8"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 09 · 2026", venue: "Grand Palace Hall", time: "17:00" },
+    theme: { bg: ["#5e1a27", "#3a0d16"], ink: "#f7f1e8", accent: "#c9a06b", soft: "#e8d9c4", script: "cormorant", color: "bordo" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 60 },
+          note: { type: "text", label: "Izoh", placeholder: "Welcome-drink va jonli musiqa", max: 80 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — smoking, ayollar — uzun kechki libos", max: 160 },
+      { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Seni topganim — taqdirning eng chiroyli muhri.", max: 120, hint: "Ixtiyoriy · surat ostida" },
+      { key: "caption", type: "text", label: "Yakuniy so‘z", placeholder: "Muhabbat — bir umrga bosilgan muhr.", max: 80, hint: "Ixtiyoriy · «Lahzalar» bo‘limida" },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -444,6 +479,12 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Surat · 3", where: "«Lahzalar» ravog‘i (bo‘lmasa — asosiy surat)" },
     { title: "Surat · 4", where: "«Lahzalar» — katta kumush ramka" },
     { title: "Surat · 5", where: "«Lahzalar» — kichik kumush ramka" },
+  ],
+  muhr: [
+    { title: "Asosiy surat", where: "Passe-partout ark ichida" },
+    { title: "Surat · 2", where: "«Bazm manzili» ramkasi" },
+    { title: "Surat · 3", where: "«Lahzalar» — birinchi ramka" },
+    { title: "Surat · 4", where: "«Lahzalar» — ikkinchi ramka" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
