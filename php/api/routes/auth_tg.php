@@ -100,45 +100,65 @@ function tg_login_handle(array $msg): bool
 
     // 2) Kontakt (faqat o‘z raqami)
     if (isset($msg['contact'])) {
-        $c = $msg['contact'];
-        $r = one("SELECT * FROM tg_logins WHERE tg_user_id = ? AND status = 'pending' AND created_at > ? ORDER BY created_at DESC LIMIT 1", [$tgId, gmdate('Y-m-d H:i:s', time() - TG_LOGIN_TTL)]);
-        if (!$r) return false;
-        $remove = ['remove_keyboard' => true];
-        if ((string)($c['user_id'] ?? '') !== $tgId) {
-            tg_api('sendMessage', ['chat_id' => $chat, 'text' => 'Iltimos, o‘zingizning raqamingizni «📱 Raqamni yuborish» tugmasi orqali yuboring.']);
+        try {
+            return tg_login_contact($msg, $from, $tgId, $chat);
+        } catch (Throwable $e) {
+            error_log('[shohnoma] tg login contact: ' . $e->getMessage());
+            tg_api('sendMessage', ['chat_id' => $chat, 'text' => 'Kechirasiz, kirishda xatolik bo‘ldi. Saytda «Telegram orqali kirish» tugmasini qayta bosing.', 'reply_markup' => ['remove_keyboard' => true]]);
             return true;
         }
-        $phone = tg_phone($c['phone_number'] ?? '');
-        $tgUser = !empty($from['username']) ? '@' . $from['username'] : null;
-        $name = trim(($from['first_name'] ?? '') . ' ' . ($from['last_name'] ?? '')) ?: null;
-
-        if ($r['link_user_id']) {
-            // Kabinetdan "Telegramni ulash"
-            q('UPDATE users SET telegram_id = NULL, telegram_user = NULL WHERE telegram_id = ? AND id <> ?', [$tgId, $r['link_user_id']]);
-            q('UPDATE users SET telegram_id = ?, telegram_user = ? WHERE id = ?', [$tgId, $tgUser, $r['link_user_id']]);
-            $uid = $r['link_user_id'];
-            $done = "✅ Telegram hisobingiz Shohnoma kabinetiga ulandi. Saytga qaytishingiz mumkin.";
-        } else {
-            $u = one('SELECT * FROM users WHERE telegram_id = ?', [$tgId]);
-            if (!$u && $phone) $u = one('SELECT * FROM users WHERE phone = ?', [$phone]);
-            if ($u) {
-                q('UPDATE users SET telegram_id = ?, telegram_user = ?, phone = COALESCE(phone, ?), name = COALESCE(name, ?) WHERE id = ?', [$tgId, $tgUser, $phone, $name, $u['id']]);
-                $uid = $u['id'];
-            } else {
-                $uid = new_id();
-                q('INSERT INTO users (id, phone, name, telegram_id, telegram_user, is_admin) VALUES (?, ?, ?, ?, ?, ?)', [$uid, $phone, $name, $tgId, $tgUser, $phone && in_array($phone, admin_phones(), true) ? 1 : 0]);
-            }
-            $done = "✅ Tayyor! Saytga qayting — kabinetingiz ochildi.\n\nBuyurtma holati va mehmonlar javoblari haqida shu yerga xabar yuboramiz.";
-        }
-        q("UPDATE tg_logins SET status = 'approved', user_id = ? WHERE id = ?", [$uid, $r['id']]);
-        tg_api('sendMessage', ['chat_id' => $chat, 'text' => $done, 'reply_markup' => $remove]);
-        return true;
     }
-
     // 3) Oddiy /start (havolasiz)
     if ($text === '/start') {
         tg_api('sendMessage', ['chat_id' => $chat, 'text' => "Assalomu alaykum! Bu Shohnoma.uz boti.\n\nSaytga kirish uchun shohnoma.uz/kirish/ sahifasida «Telegram orqali kirish» tugmasini bosing."]);
         return true;
     }
     return false;
+}
+
+/** Foydalanuvchi o‘z kontaktini yubordi — hisob topiladi/yaratiladi, kirish tasdiqlanadi */
+function tg_login_contact(array $msg, array $from, string $tgId, string $chat): bool
+{
+    $c = $msg['contact'];
+    $r = one("SELECT * FROM tg_logins WHERE tg_user_id = ? AND status = 'pending' AND created_at > ? ORDER BY created_at DESC LIMIT 1", [$tgId, gmdate('Y-m-d H:i:s', time() - TG_LOGIN_TTL)]);
+    if (!$r) {
+        tg_api('sendMessage', ['chat_id' => $chat, 'text' => "Kirish havolasi eskirgan. Saytda «Telegram orqali kirish» tugmasini qayta bosing.", 'reply_markup' => ['remove_keyboard' => true]]);
+        return true;
+    }
+    $remove = ['remove_keyboard' => true];
+    if ((string)($c['user_id'] ?? '') !== $tgId) {
+        tg_api('sendMessage', ['chat_id' => $chat, 'text' => 'Iltimos, o‘zingizning raqamingizni «📱 Raqamni yuborish» tugmasi orqali yuboring.']);
+        return true;
+    }
+    $phone = tg_phone($c['phone_number'] ?? '');
+    $tgUser = !empty($from['username']) ? '@' . $from['username'] : null;
+    $name = trim(($from['first_name'] ?? '') . ' ' . ($from['last_name'] ?? '')) ?: null;
+
+    if ($r['link_user_id']) {
+        // Kabinetdan "Telegramni ulash"
+        q('UPDATE users SET telegram_id = NULL, telegram_user = NULL WHERE telegram_id = ? AND id <> ?', [$tgId, $r['link_user_id']]);
+        q('UPDATE users SET telegram_id = ?, telegram_user = ? WHERE id = ?', [$tgId, $tgUser, $r['link_user_id']]);
+        $uid = $r['link_user_id'];
+        $done = "✅ Telegram hisobingiz Shohnoma kabinetiga ulandi. Saytga qaytishingiz mumkin.";
+    } else {
+        // Telegram bir hisobga, raqam boshqa hisobga bog‘langan bo‘lishi mumkin — raqamli hisob asosiy
+        // (unda buyurtmalar, admin huquqi). Telegram o‘sha hisobga ko‘chiriladi; noyob kalit to‘qnashuvi bo‘lmaydi.
+        $byTg = one('SELECT * FROM users WHERE telegram_id = ?', [$tgId]);
+        $byPhone = $phone ? one('SELECT * FROM users WHERE phone = ?', [$phone]) : null;
+        $u = $byPhone ?: $byTg;
+        if ($u) {
+            if ($byTg && $byTg['id'] !== $u['id']) q('UPDATE users SET telegram_id = NULL, telegram_user = NULL WHERE id = ?', [$byTg['id']]);
+            $setPhone = !$u['phone'] && $phone && !one('SELECT id FROM users WHERE phone = ? AND id <> ?', [$phone, $u['id']]);
+            q('UPDATE users SET telegram_id = ?, telegram_user = ?, phone = ' . ($setPhone ? '?' : 'phone') . ', name = COALESCE(name, ?) WHERE id = ?',
+                $setPhone ? [$tgId, $tgUser, $phone, $name, $u['id']] : [$tgId, $tgUser, $name, $u['id']]);
+            $uid = $u['id'];
+        } else {
+            $uid = new_id();
+            q('INSERT INTO users (id, phone, name, telegram_id, telegram_user, is_admin) VALUES (?, ?, ?, ?, ?, ?)', [$uid, $phone, $name, $tgId, $tgUser, $phone && in_array($phone, admin_phones(), true) ? 1 : 0]);
+        }
+        $done = "✅ Tayyor! Saytga qayting — kabinetingiz ochildi.\n\nBuyurtma holati va mehmonlar javoblari haqida shu yerga xabar yuboramiz.";
+    }
+    q("UPDATE tg_logins SET status = 'approved', user_id = ? WHERE id = ?", [$uid, $r['id']]);
+    tg_api('sendMessage', ['chat_id' => $chat, 'text' => $done, 'reply_markup' => $remove]);
+    return true;
 }
