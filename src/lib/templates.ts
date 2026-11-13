@@ -466,6 +466,40 @@ const builtin: Template[] = [
       { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Har bir kadr — biz birga yozgan hikoyaning bir satri.", max: 120, hint: "Ixtiyoriy · «Bizning kadrlar» bo‘limida, plyonka ostida" },
     ],
   },
+  {
+    number: 11,
+    slug: "riviera",
+    name: "Riviera",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh", "fotiha"],
+    style: "klassik",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Ko‘l bo‘yidagi villa ruhidagi nafis taklifnoma: shampan rang, qora va oltin, ko‘p bo‘sh joy. Sahifani pastga surganingizda oltin muhr ikkiga bo‘linadi, karta eshikdek ochiladi va ortidan ko‘l bo‘yidagi terrasa surati chiqadi, ismlar harflari yig‘iladi. Keyin taklif matni, suratlar, sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi.",
+    descriptionRu: "Изысканное приглашение в духе виллы у озера: цвет шампанского, чёрный и золото, много воздуха. Когда вы листаете страницу вниз, золотая печать раскалывается надвое, карточка открывается как двери, а за ней появляется фото террасы у озера и собираются буквы имён. Дальше текст приглашения, фото, дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей.",
+    descriptionEn: "An elegant invitation in the spirit of a lakeside villa: champagne tones, black and gold, plenty of air. As you scroll down, a gold seal splits in two, the card opens like a pair of doors to reveal a lakeside terrace photo, and the letters of the names gather together. Then the invitation text, photos, the date and a countdown, the day’s schedule, the venue, the dress code and guest replies.",
+    palette: ["#FAF7F1", "#121212", "#A8895A", "#EEE6D8"],
+    sample: { a: "Rustam", b: "Elina", date: "26 · 09 · 2026", venue: "Villa «Riviera»", time: "18:00" },
+    theme: { bg: ["#faf7f1", "#eee6d8"], ink: "#121212", accent: "#a8895a", soft: "#7a736a", script: "cormorant", color: "krem" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "To‘y dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Nikoh marosimi", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Terrasada, quyosh botishida", max: 80 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Klassik", "Kechki rasmiy", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar — smoking yoki to‘q kostyum, ayollar — uzun kechki libos.", max: 160 },
+      { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Sevgi — eng go‘zal safar.", max: 80, hint: "Ixtiyoriy · monogramma ostida; bo‘sh qolsa — «Sevgi — eng go‘zal safar.»" },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -630,6 +664,12 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Asosiy surat", where: "Birinchi ekranda (to‘liq ekran, oq-qora) va plyonkadagi 1-kadrda" },
     { title: "Surat · 2", where: "Yakuniy ekranda va plyonkadagi 2-kadrda" },
     { title: "Surat · 3", where: "Plyonkadagi 3-kadrda (qo‘llar, uzuklar…)" },
+  ],
+  /** Riviera — hero: shablonning Komo ko‘li terrasasi surati; mijoz suratlari «Kadrlar» va «Manzil» bo‘limlarida */
+  riviera: [
+    { title: "Asosiy surat", where: "«Kadrlar» — katta portret (oq-qora). Bo‘lmasa — bo‘lim chiqmaydi" },
+    { title: "Surat · 2", where: "«Kadrlar» — kichik kvadrat ramka (bo‘lmasa — shampan surati)" },
+    { title: "Surat · 3", where: "«Manzil» bo‘limida (bo‘lmasa — kechki terrasa surati)" },
   ],
   lino: [
     { title: "Asosiy surat", where: "Jurnal muqovasida (bo‘lmasa — guldasta surati)" },

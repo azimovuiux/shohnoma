@@ -9,6 +9,8 @@
  * (tirqish/kapsulalar `--v:1`, titrlar `--f:1`, final teshik `--fc:1`).
  * Lino: birinchi kadr — jurnal muqovasi (`--o:1` — surat Figma masshtabida); -long da final (`--fc:1`) Figma holatida.
  * Kumush: birinchi kadr — oq-qora hero (`--o:1`); -long da plyonka lentasi (`--k:1`) va final (`--fc:1`) Figma holatida.
+ * Riviera: birinchi kadr — yopiq darvoza-karta (Figma 00, `--o:0`); -long da hero (`openWrap`) ochiq holatda, final (`--fc:1`) va
+ * «Kadrlar» portreti (`--pc:1`, parallaks 0) Figma holatida.
  * Sayohat (gorizontal scroll): birinchi kadr — 01 · Start; -long — har bekat (ekran) alohida suratga olinib, tepadan pastga
  * ketma-ket tikiladi (katalog kartasi uzun rasmni vertikal aylantiradi — gorizontal tasma u yerda ko‘rinmaydi).
  */
@@ -19,7 +21,7 @@ const [slug, hhM = "860", hhL = "920", base = "http://localhost:8091", lw = "144
 if (!slug) throw new Error("slug kerak");
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
-const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{display:none!important}form button[aria-label]{display:flex!important}' + (slug === "muhr" || slug === "kalit" ? "" : '[class*="gateWrap"]{--o:1!important}');
+const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{display:none!important}form button[aria-label]{display:flex!important}' + (slug === "muhr" || slug === "kalit" || slug === "riviera" ? "" : '[class*="gateWrap"]{--o:1!important}');
 (async () => {
   const b = await chromium.launch();
   for (const [lang, pre] of [["uz", ""], ["ru", "/ru"], ["en", "/en"]]) {
@@ -52,7 +54,7 @@ const HIDE = 'a[href*="/buyurtma/"],a[href*="/shablonlar/"],button[aria-label]{d
       await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight)); await p.waitForTimeout(1500);
       await p.evaluate(() => scrollTo(0, 0)); await p.waitForTimeout(1500);
       const u = `min(calc(100cqw / ${UW}), calc(${H}px / ${HH}))`;
-      await p.addStyleTag({ content: `[class*="gateWrap"]{height:${H}px!important;margin-bottom:0!important;--k:0px!important;--q:0!important;--gy:0px!important;--u:${u}!important}[class*="_gate__"]{position:relative!important;height:${H}px!important;transform:none!important}[class*="finalDoor"],[class*="finalFlap"]{transform:none!important;opacity:1!important}[class*="openWrap"]{--o:1!important}[class*="openSpacer"]{display:none!important}` + (slug === "kalit" ? '[class*="gateWrap"]{--o:0!important;--sh:1!important;--sp:1!important}[class*="finalWrap"]{--fc:1!important}[data-v]{--v:1!important}[data-f]{--f:1!important}' : slug === "lino" ? '[class*="finalWrap"]{--fc:1!important}' : slug === "kumush" ? '[class*="finalWrap"]{--fc:1!important}[class*="filmWrap"]{--k:1!important}' : "") });
+      await p.addStyleTag({ content: `[class*="gateWrap"]{height:${H}px!important;margin-bottom:0!important;--k:0px!important;--q:0!important;--gy:0px!important;--u:${u}!important}[class*="_gate__"]{position:relative!important;height:${H}px!important;transform:none!important}[class*="finalDoor"],[class*="finalFlap"]{transform:none!important;opacity:1!important}[class*="openWrap"]{--o:1!important}[class*="openSpacer"]{display:none!important}` + (slug === "kalit" ? '[class*="gateWrap"]{--o:0!important;--sh:1!important;--sp:1!important}[class*="finalWrap"]{--fc:1!important}[data-v]{--v:1!important}[data-f]{--f:1!important}' : slug === "lino" ? '[class*="finalWrap"]{--fc:1!important}' : slug === "kumush" ? '[class*="finalWrap"]{--fc:1!important}[class*="filmWrap"]{--k:1!important}' : slug === "riviera" ? '[class*="finalWrap"]{--fc:1!important}[data-pc]{--pc:1!important;--py:0px!important}[class*="openWrap"]>*{position:relative!important}' : "") });
       await p.waitForTimeout(800);
       await p.screenshot({ path: `${OUT}/${tag}-${kind}-long.png`, fullPage: true });
       console.log(tag, kind, "ok");
