@@ -10,11 +10,21 @@ import type { InvitationData } from "./types";
 import { mapHref } from "./Sections";
 import { monogram, namesOf, s, type Palette } from "./theme";
 import st from "./invitation.module.css";
+import { inviteGuestToken } from "@/components/templates/shared/guest";
 
 export type RsvpStatus = "coming" | "maybe" | "not_coming";
 export type RsvpAnswer = { name: string; status: RsvpStatus; count: number; wish: string };
 
-const storageKey = (slug: string) => `shohnoma:rsvp:${slug}`;
+/** Maxsus mehmon havolasi (?g=) bilan berilgan javob alohida saqlanadi — bir qurilmada boshqa javob bilan aralashmaydi */
+const storageKey = (slug: string) => {
+  const g = inviteGuestToken();
+  return g ? `shohnoma:rsvp:${slug}:${g}` : `shohnoma:rsvp:${slug}`;
+};
+/** Javob yuborish manzili (POST yangi / PATCH tahrir); maxsus mehmon havolasida javob o‘sha mehmonga bog‘lanadi */
+export function rsvpUrl(slug: string, editToken?: string | null) {
+  const g = inviteGuestToken();
+  return `/api/i/${slug}/rsvp${editToken ? `/${editToken}` : ""}${g ? `?g=${g}` : ""}`;
+}
 export function loadSavedRsvp(slug: string): { token: string; name: string } | null {
   try {
     const v = JSON.parse(localStorage.getItem(storageKey(slug)) || "null");
@@ -86,7 +96,7 @@ export function RsvpForm({
     setBusy(true);
     try {
       const body = JSON.stringify({ name: a.name.trim(), status: a.status, count: a.count, wish: a.wish.trim() || null });
-      const res = await fetch(editToken ? `/api/i/${d.slug}/rsvp/${editToken}` : `/api/i/${d.slug}/rsvp`, {
+      const res = await fetch(rsvpUrl(d.slug, editToken), {
         method: editToken ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body,

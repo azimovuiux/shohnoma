@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * Ulashish kartasi rasmi (brauzerda canvas bilan chiziladi, src/lib/shareCard) — serverda og:image uchun saqlanadi.
- * Fayl: uploads/share/<invitation_id><kalit>.jpg; kalit: "m" — umumiy havola, "g" + sha1(ism)[0..12] — shaxsiy (?m=Ism).
+ * Fayl: uploads/share/<invitation_id><kalit>.jpg; kalit: "m" — umumiy havola, "g" + sha1(ism)[0..12] — shaxsiy (?g=token → mehmon ismi, yoki ?m=Ism).
  * Ro‘yxat invitations.share_image ustunida: {"m": {"h": "<xesh>", "t": <unix>}, ...}
  */
 const SHARE_MAX = 2 * 1024 * 1024;

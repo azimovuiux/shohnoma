@@ -76,7 +76,7 @@ export const ru: Record<string, string> = {
   "Juda ko‘p urinish. Keyinroq qayta urinib ko‘ring.": "Слишком много попыток. Попробуйте позже.",
   "Juda tez yozyapsiz. Biroz kuting.": "Вы пишете слишком быстро. Подождите немного.",
   Kirilmagan: "Вы не вошли",
-  "Kishi soni 1 dan 10 gacha bo‘lsin": "Количество человек — от 1 до 10",
+  "Kishi soni 1 dan 20 gacha bo‘lsin": "Количество человек — от 1 до 20",
   "Kishi soni noto‘g‘ri": "Некорректное количество человек",
   "Ko‘pi bilan 10 ta surat": "Не более 10 фото",
   "Marosim turini tanlang": "Выберите тип торжества",

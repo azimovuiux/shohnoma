@@ -240,6 +240,7 @@ Ishlaydigan qismlar. Ichki tuzilishi tizimniki — siz faqat **o‘rnini** belgi
 | `<sh-open>` | Kirish ekrani tugmasi: bosilganda sahifa ochiladi (`.sh-opened` klassi qo‘shiladi) | yo‘q |
 | `<sh-calendar>` | «Kalendarga qo‘shish» tugmasi | yo‘q |
 | `<sh-share>` | «Havolani ulashish» tugmasi | yo‘q |
+| `<sh-guest>Hurmatli {name}!</sh-guest>` | Shaxsiy murojaat: mehmon havolasi (maxsus mehmon `?g=` yoki `?m=Ism`) bilan ochilganda `{name}` o‘rniga ismi; ism bo‘lmasa ko‘rinmaydi | yo‘q |
 
 ### Teglarni bezash
 

@@ -76,7 +76,7 @@ export const en: Record<string, string> = {
   "Juda ko‘p urinish. Keyinroq qayta urinib ko‘ring.": "Too many attempts. Please try again later.",
   "Juda tez yozyapsiz. Biroz kuting.": "You’re typing too fast. Please wait a moment.",
   Kirilmagan: "Not logged in",
-  "Kishi soni 1 dan 10 gacha bo‘lsin": "Number of people must be 1 to 10",
+  "Kishi soni 1 dan 20 gacha bo‘lsin": "Number of people must be 1 to 20",
   "Kishi soni noto‘g‘ri": "Invalid number of people",
   "Ko‘pi bilan 10 ta surat": "Up to 10 photos",
   "Marosim turini tanlang": "Choose the event type",

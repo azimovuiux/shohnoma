@@ -3,7 +3,7 @@
 import Link from "@/components/LocalLink";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { ArrowDown, ArrowLeft2, ArrowRight2, CloseCircle, Clock, Eye, TickCircle } from "@/components/icons";
+import { ArrowDown, ArrowLeft2, ArrowRight2, CloseCircle, Clock, Eye, Star1, TickCircle } from "@/components/icons";
 import { StatusBadge } from "@/components/ui";
 import { PageLoading, useApi } from "@/lib/client";
 import type { Guest, RsvpStatus, Stats } from "@/lib/types";
@@ -11,6 +11,8 @@ import { initials, rsvpView } from "@/lib/display";
 import { useLocale, useT } from "@/lib/i18n";
 import { GuestSearch } from "../GuestSearch";
 import { relTime, useInvitationData } from "../data";
+import { SpecialGuests } from "./SpecialGuests";
+import { csvDict, downloadCsvTranslated } from "../csv";
 
 type Resp = { ok: boolean; total: number; list: Guest[]; stats: Stats; views: number; wishes: Guest[] };
 
@@ -20,66 +22,6 @@ const chipLabel = { coming: "Boraman", maybe: "Aniq emas", not_coming: "Kela olm
 
 type SP = { status?: string; q?: string; page?: string; ko?: string };
 
-/** CSV (server o‘zbekcha beradi) — ruscha sarlavha va javob nomlari bilan qayta yozish */
-const CSV_RU: Record<string, string> = { Mehmon: "Гость", Kishi: "Кол-во", Javob: "Ответ", Tilak: "Пожелание", Vaqt: "Время" };
-const CSV_STATUS_RU: Record<string, string> = { Boraman: "Приду", "Hali aniq emas": "Пока не знаю", "Kela olmayman": "Не смогу прийти" };
-function csvToRu(text: string) {
-  // Excel UTF-8 ni to‘g‘ri o‘qishi uchun BOM (res.text() uni olib tashlaydi)
-  const src = text.replace(/^\uFEFF/, "");
-  let out = "\uFEFF";
-  let field = "";
-  let quoted = false;
-  let col = 0;
-  let row = 0;
-  const flush = () => {
-    const plain = !field.startsWith('"');
-    if (plain && row === 0 && CSV_RU[field]) field = CSV_RU[field];
-    else if (plain && row > 0 && col === 2 && CSV_STATUS_RU[field]) field = CSV_STATUS_RU[field];
-    out += field;
-    field = "";
-  };
-  for (let i = 0; i < src.length; i++) {
-    const c = src[i];
-    if (quoted) {
-      field += c;
-      if (c === '"') {
-        if (src[i + 1] === '"') field += src[++i];
-        else quoted = false;
-      }
-    } else if (c === '"') {
-      field += c;
-      quoted = true;
-    } else if (c === ";") {
-      flush();
-      out += c;
-      col++;
-    } else if (c === "\r" || c === "\n") {
-      flush();
-      out += c;
-      if (c === "\n" || src[i + 1] !== "\n") {
-        row++;
-        col = 0;
-      }
-    } else field += c;
-  }
-  flush();
-  return out;
-}
-
-async function downloadCsvRu(url: string, filename: string) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error();
-  const name = /filename="([^"]+)"/.exec(res.headers.get("Content-Disposition") ?? "")?.[1] ?? filename;
-  const blob = new Blob([csvToRu(await res.text())], { type: "text/csv;charset=utf-8" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = name.replace(/^mehmonlar-/, "gosti-");
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-}
-
 export function GuestsPage() {
   return (
     <Suspense fallback={<PageLoading />}>
@@ -88,7 +30,44 @@ export function GuestsPage() {
   );
 }
 
+/** Tablar: barcha javoblar | maxsus mehmonlar (?tab=maxsus) */
 function GuestsInner() {
+  const t = useT();
+  const params = useSearchParams();
+  const { data: bundle } = useInvitationData();
+  const special = params.get("tab") === "maxsus";
+  const tabs = [
+    { key: "all", href: "?", label: t("Barcha javoblar"), n: bundle.stats.responses, active: !special },
+    { key: "maxsus", href: "?tab=maxsus", label: t("Maxsus mehmonlar"), n: bundle.special?.total ?? 0, active: special },
+  ];
+  return (
+    <>
+      <div className="flex flex-col gap-4">
+        <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("Mehmonlar javobi")}</h1>
+        <nav className="flex w-full gap-1 rounded-full bg-bg-soft p-1 sm:w-fit" aria-label={t("Mehmonlar javobi")}>
+          {tabs.map((tab) => (
+            <Link
+              key={tab.key}
+              href={tab.href}
+              scroll={false}
+              aria-current={tab.active ? "page" : undefined}
+              className={`flex h-10 min-w-0 flex-auto items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 t-nav transition-colors sm:flex-none sm:px-5 ${
+                tab.active ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2 hover:text-ink"
+              }`}
+            >
+              {tab.key === "maxsus" && <Star1 size={15} className="hidden shrink-0 sm:block" />}
+              <span className="truncate">{tab.label}</span>
+              <span className="text-[12px] opacity-70">{tab.n}</span>
+            </Link>
+          ))}
+        </nav>
+      </div>
+      {special ? <SpecialGuests /> : <AllResponses />}
+    </>
+  );
+}
+
+function AllResponses() {
   const t = useT();
   const locale = useLocale();
   const params = useSearchParams();
@@ -139,10 +118,6 @@ function GuestsInner() {
 
   return (
     <>
-      <div className="flex flex-col gap-2">
-        <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{t("Mehmonlar javobi")}</h1>
-      </div>
-
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
         {cards.map((s) => (
           <div key={s.label} className="flex flex-col gap-2.5 rounded-card bg-bg-soft p-4 lg:p-5">
@@ -179,11 +154,12 @@ function GuestsInner() {
             <a
               href={`/api/invitations/${inv.id}/guests`}
               onClick={
-                locale === "ru"
+                locale !== "uz"
                   ? (e) => {
                       e.preventDefault();
                       const url = e.currentTarget.href;
-                      downloadCsvRu(url, `gosti-${inv.slug}.csv`).catch(() => (window.location.href = url));
+                      const prefix: [string, string] = ["mehmonlar-", locale === "ru" ? "gosti-" : "guests-"];
+                      downloadCsvTranslated(url, `${prefix[1]}${inv.slug}.csv`, csvDict(locale, 2, prefix)).catch(() => (window.location.href = url));
                     }
                   : undefined
               }

@@ -16,6 +16,7 @@ import { Divider, HeroArt, heroShowsTitle } from "./Heroes";
 import { Closing, Countdown, Gallery, Program, RsvpBlock, Venue } from "./Sections";
 import { Layer, RsvpForm, ThankYou, fetchSavedAnswer, loadSavedRsvp, useSavedAnswer, type RsvpAnswer, type RsvpStatus } from "./Rsvp";
 import st from "./invitation.module.css";
+import { guestNameNow } from "@/components/templates/shared/guest";
 import { AnorSite } from "@/components/templates/anor/AnorSite";
 import { ZumradSite } from "@/components/templates/zumrad/ZumradSite";
 import { ParvozSite } from "@/components/templates/parvoz/ParvozSite";
@@ -173,7 +174,11 @@ function GenericSite({ template, data: raw, mode, embedded = false }: Invitation
     }
   };
 
-  const answer = (status: RsvpStatus) => setForm({ open: true, initial: { status }, token: null });
+  const answer = (status: RsvpStatus) => {
+    // shaxsiy havola (?g= / ?m=) — ism oldindan yoziladi
+    const name = guestNameNow();
+    setForm({ open: true, initial: name ? { status, name } : { status }, token: null });
+  };
 
   const editAnswer = async () => {
     if (!live || !saved) {

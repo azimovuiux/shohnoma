@@ -3,85 +3,39 @@
 import Link from "@/components/LocalLink";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { ArrowRight, Calendar, CloseCircle, Clock, Edit, Gallery, Link2, Location, Music, Timer1, TickCircle } from "@/components/icons";
-import { StatusBadge, useCopy } from "@/components/ui";
+import { ArrowRight, Calendar, CloseCircle, Clock, Edit, Gallery, Link2, Location, Music, Star1, Timer1, TickCircle } from "@/components/icons";
+import { StatusBadge } from "@/components/ui";
 import { InvitationHeader } from "../InvitationHeader";
 import { InvitationThumb } from "../InvitationThumb";
 import { CopyLink } from "../LinkActions";
-import { ShareInvite, useShareCardSync, type ShareInvitation } from "@/components/share/ShareInvite";
+import { ShareInvite, useShareCardSync } from "@/components/share/ShareInvite";
 import { isPaidStatus } from "@/lib/types";
 import { relTime, useInvitationData, useSiteUrl } from "../data";
 import { daysUntil, initials, rsvpView } from "@/lib/display";
 import { useLocale, useT } from "@/lib/i18n";
 
-/** Mehmon uchun shaxsiy havola: taklifnoma «Hurmatli …» deb shu ism bilan ochiladi (?m=) */
-/** Shaxsiy havolalar: mehmon ismi bilan ochiladigan taklifnoma (?m=Ism). Yaratilganlari shu brauzerda eslab qolinadi */
-function GuestLinks({ url, slug, invitationId, templateSlug, inv }: { url: string; slug: string; invitationId: string; templateSlug: string; inv: ShareInvitation }) {
+/**
+ * Shaxsiy havolalar endi «Maxsus mehmonlar» tabida (server: kim ochgani va javobi kuzatiladi).
+ * Avval shu brauzerda yaratilgan ?m=Ism havolalari ishlayveradi — tabda ularni ro‘yxatga ko‘chirish taklif qilinadi.
+ */
+function SpecialGuestsLink({ invitationId, total, opened }: { invitationId: string; total: number; opened: number }) {
   const t = useT();
-  const copy = useCopy();
-  const key = `sh_guests_${slug}`;
-  const [name, setName] = useState("");
-  const [list, setList] = useState<string[]>([]);
-  useEffect(() => {
-    try {
-      setList(JSON.parse(localStorage.getItem(key) || "[]"));
-    } catch {}
-  }, [key]);
-  const save = (l: string[]) => {
-    setList(l);
-    try {
-      localStorage.setItem(key, JSON.stringify(l));
-    } catch {}
-  };
-  const link = (n: string) => `${url}?m=${encodeURIComponent(n)}`;
-  const add = () => {
-    const n = name.trim();
-    if (!n) return;
-    save([n, ...list.filter((x) => x !== n)].slice(0, 50));
-    copy(link(n), t("Shaxsiy havola nusxalandi"));
-    setName("");
-  };
   return (
-    <div className="flex flex-col gap-3">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          add();
-        }}
-        className="flex gap-2"
-      >
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={80}
-          placeholder={t("Masalan: Dilshod aka")}
-          aria-label={t("Mehmon ismi")}
-          className="h-11 min-w-0 flex-1 rounded-full border border-line bg-bg-base px-4 t-body-m text-ink outline-none focus:border-maroon/55"
-        />
-        <button type="submit" disabled={!name.trim()} className="btn btn-primary btn-sm shrink-0 disabled:opacity-50">
-          {t("Havola yaratish")}
-        </button>
-      </form>
-      {list.length > 0 && (
-        <ul className="flex flex-col divide-y divide-line rounded-xl border border-line">
-          {list.map((n) => (
-            <li key={n} className="flex items-center gap-2 px-3 py-2">
-              <span className="min-w-0 flex-1 truncate t-body-m text-ink">{n}</span>
-              <a href={link(n)} target="_blank" rel="noopener noreferrer" className="t-body-s text-ink-2 hover:text-maroon">
-                {t("Ochish")}
-              </a>
-              <button type="button" onClick={() => copy(link(n), t("Shaxsiy havola nusxalandi"))} className="t-body-s font-medium text-maroon hover:underline">
-                {t("Nusxalash")}
-              </button>
-              <ShareInvite variant="icon" target={{ invitationId, templateSlug, invitation: inv, url: link(n), guest: n }} className="icon-btn !size-8" />
-              <button type="button" onClick={() => save(list.filter((x) => x !== n))} aria-label={t("O‘chirish")} className="text-ink-2 hover:text-danger">
-                <CloseCircle size={16} />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Link
+      href={`/kabinet/t/${invitationId}/mehmonlar/?tab=maxsus`}
+      className="group flex items-center gap-3 rounded-xl border border-line px-3.5 py-3 transition-colors hover:border-maroon/40 hover:bg-bg-soft"
+    >
+      <span className="flex size-[38px] shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">
+        <Star1 size={17} />
+      </span>
+      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span className="t-body-m font-semibold text-ink">{t("Maxsus mehmonlar")}</span>
+        <span className="text-[12px] text-ink-2">
+          {total ? t("{n} ta mehmon · {m} tasi ochgan", { n: total, m: opened }) : t("Ism bilan shaxsiy havola — kim ochganini va javobini ko‘rasiz")}
+        </span>
+      </span>
+      <ArrowRight size={16} className="shrink-0 text-ink-2 transition-transform group-hover:translate-x-0.5 group-hover:text-maroon" />
+    </Link>
   );
 }
 
@@ -189,7 +143,7 @@ export function OverviewPage() {
                   <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
                     <p className="t-body-s font-semibold text-ink">{t("Shaxsiy havola — mehmon ismi bilan")}</p>
                     <p className="-mt-1 text-[12px] text-ink-2">{t("Mehmon ismi bilan ochiladi")}</p>
-                    <GuestLinks url={url} slug={inv.slug} invitationId={inv.id} templateSlug={order.templateSlug} inv={inv} />
+                    <SpecialGuestsLink invitationId={inv.id} total={data.special?.total ?? 0} opened={data.special?.opened ?? 0} />
                   </div>
                 </>
               ) : (

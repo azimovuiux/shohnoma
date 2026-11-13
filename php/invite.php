@@ -14,7 +14,7 @@ $notFound = __DIR__ . '/404.html';
 $inv = null;
 try {
     if (preg_match('/^[a-z0-9][a-z0-9-]{1,79}$/', $slug)) {
-        $inv = one("SELECT i.*, o.status, o.template_slug FROM invitations i JOIN orders o ON o.id = i.order_id WHERE i.slug = ? AND o.status IN ('paid','active','archived')", [$slug]);
+        $inv = one("SELECT i.*, o.status, o.template_slug, o.user_id FROM invitations i JOIN orders o ON o.id = i.order_id WHERE i.slug = ? AND o.status IN ('paid','active','archived')", [$slug]);
     }
 } catch (Throwable $e) {
     error_log('[invite] ' . $e->getMessage());
@@ -26,15 +26,34 @@ if (!$inv || !is_file($shell)) {
     exit;
 }
 
+// Shaxsiy havola: ?g=<token> (maxsus mehmon) yoki ?m=Ism. og:image — o‘sha mehmon kartasi («Hurmatli …» rasmda);
+// og:title/description esa umumiy qoladi: havola boshqa joyga uzatilsa ham mehmon ismi matnda (qidiruv/oldindan ko‘rish) chiqmaydi
+$sg = null;
+try {
+    if (isset($_GET['g'])) $sg = sg_find($inv['id'], $_GET['g']);
+} catch (Throwable $e) {
+    error_log('[invite guest] ' . $e->getMessage());
+}
+$guestName = $sg['name'] ?? (is_string($_GET['m'] ?? null) ? mb_substr(trim($_GET['m']), 0, 80) : null);
+
 // HTML shablon (admin ZIP orqali yuklagan) — sahifa to‘liq serverda yig‘iladi
 try {
     $tpl = template_get((string)$inv['template_slug']);
     if ($tpl && ($tpl['kind'] ?? '') === 'html') {
         if ($inv['status'] !== 'archived') q('UPDATE invitations SET views = views + 1 WHERE id = ?', [$inv['id']]);
-        $page = tpl_page($tpl, tpl_invitation_data($inv), $inv['status'] === 'archived' ? 'archived' : 'live', $slug);
+        $d = tpl_invitation_data($inv);
+        if ($sg) {
+            // Sahifa serverda yig‘iladi — ochilish shu yerda hisoblanadi (havola oldindan ko‘rinishini oluvchi botlar hisoblanmaydi)
+            if (sg_should_count(['status' => $inv['status'], 'user_id' => $inv['user_id']])) sg_mark_open($sg);
+            $prev = scalar('SELECT edit_token FROM guest_responses WHERE special_guest_id = ? ORDER BY created_at DESC LIMIT 1', [$sg['id']]);
+            $d['guest'] = ['name' => $sg['name'], 'token' => $sg['token'], 'editToken' => $prev ?: null];
+        } elseif ($guestName) {
+            $d['guest'] = ['name' => $guestName];
+        }
+        $page = tpl_page($tpl, $d, $inv['status'] === 'archived' ? 'archived' : 'live', $slug);
         $og = sprintf('<meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:url" content="%s">',
             htmlspecialchars(trim($inv['person_a'] . ($inv['person_b'] ? ' & ' . $inv['person_b'] : '')) . ' — taklifnoma', ENT_QUOTES), htmlspecialchars(site_url() . "/$slug/", ENT_QUOTES));
-        $card = share_og($inv, is_string($_GET['m'] ?? null) ? $_GET['m'] : null);
+        $card = share_og($inv, $guestName);
         if ($card) $og .= sprintf('<meta property="og:image" content="%s"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="%d"><meta property="og:image:height" content="%d"><meta name="twitter:card" content="summary_large_image">', htmlspecialchars($card[0], ENT_QUOTES), $card[1], $card[2]);
         elseif (!empty($tpl['images']['phone'])) $og .= '<meta property="og:image" content="' . htmlspecialchars(site_url() . $tpl['images']['phone'], ENT_QUOTES) . '">';
         tpl_headers();
@@ -52,8 +71,8 @@ if (preg_match('/^(\d{4})-(\d{2})-(\d{2})/', (string)$inv['date'], $m)) $date = 
 $title = "$names — taklifnoma";
 $desc = trim($date . ($inv['venue_name'] ? ', ' . $inv['venue_name'] : ''), ', ');
 $url = site_url() . '/' . $slug . '/';
-// Ulashish kartasi (3:4, mijoz ma’lumoti bilan; shaxsiy havola ?m= uchun — o‘sha mehmon kartasi), bo‘lmasa umumiy shablon rasmi
-$card = share_og($inv, is_string($_GET['m'] ?? null) ? $_GET['m'] : null);
+// Ulashish kartasi (3:4, mijoz ma’lumoti bilan; shaxsiy havola ?g=/?m= uchun — o‘sha mehmon kartasi), bo‘lmasa umumiy shablon rasmi
+$card = share_og($inv, $guestName);
 [$image, $imgW, $imgH] = $card ?? [site_url() . '/og/' . $inv['template_slug'] . '.png', 1200, 630];
 
 $h = fn(string $s) => htmlspecialchars($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');

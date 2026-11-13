@@ -7,7 +7,7 @@
  *   shareCaption(input, url)                       // rasm ostidagi qisqa matn + havola
  *   shareCardHash(input)                           // ma’lumot o‘zgarganini bilish (server rasmi bilan solishtirish)
  *
- * Qayta ishlatish: shaxsiy havolalar (?m=Ism) va «maxsus mehmonlar» — `guest` maydoni bilan.
+ * Qayta ishlatish: shaxsiy havolalar — maxsus mehmonlar (?g=token) va eski ?m=Ism — `guest` maydoni bilan.
  */
 import { tr, type Locale } from "@/lib/i18n";
 import { monthsEn, monthsRu, monthsUz, splitDate } from "@/lib/display";

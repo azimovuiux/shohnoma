@@ -8,7 +8,7 @@
  * Mobil (navigator.canShare({files})): tizim oynasi orqali JPEG rasm (photo) + ostida matn va havola.
  * Desktop / fayl ulashib bo‘lmasa: Telegram, WhatsApp havolalari — havola oldindan ko‘rinishida xuddi shu rasm
  * chiqadi (rasm serverga yuklanadi → php/invite.php og:image). Qo‘shimcha: rasmni yuklab olish, havolani nusxalash.
- * Shaxsiy havola (?m=Ism) va keyingi «maxsus mehmonlar» uchun — `guest` (kartada va matnda «Hurmatli …»).
+ * Shaxsiy havola (maxsus mehmon ?g=token, eski ?m=Ism) — `guest` (kartada va matnda «Hurmatli …»).
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Copy, Export, Import, Refresh, Send2, Whatsapp } from "@/components/icons";
@@ -28,7 +28,7 @@ export type ShareTarget = {
   invitationId: string;
   templateSlug: string;
   invitation: ShareInvitation;
-  /** Ulashiladigan havola (shaxsiy bo‘lsa — ?m=… bilan) */
+  /** Ulashiladigan havola (shaxsiy bo‘lsa — ?g=… yoki ?m=… bilan) */
   url: string;
   /** Mehmon ismi (shaxsiy havola) */
   guest?: string | null;

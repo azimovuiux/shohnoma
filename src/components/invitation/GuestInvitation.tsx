@@ -9,8 +9,17 @@ import { getTemplate } from "@/lib/templates";
 import { star8Path } from "@/lib/ornament";
 import { InvitationSite } from "./InvitationSite";
 import { inviteLang, toInvitationData } from "./data";
+import { loadSavedRsvp, saveRsvp } from "./Rsvp";
+import { inviteGuestToken, setInviteGuest } from "@/components/templates/shared/guest";
 
-type PublicResponse = { ok: boolean; invitation: Invitation; templateSlug: string; archived: boolean };
+type PublicResponse = {
+  ok: boolean;
+  invitation: Invitation;
+  templateSlug: string;
+  archived: boolean;
+  /** Maxsus mehmon havolasi (?g=token): ism va (bo‘lsa) avvalgi javobini tahrirlash tokeni */
+  guest?: { name: string; editToken: string | null };
+};
 
 function Shell({ title, text, names }: { title: string; text: string; names?: string }) {
   const lang = useLocale();
@@ -36,7 +45,13 @@ export function GuestInvitation() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const valid = !!slug && /^[a-z0-9][a-z0-9-]{1,79}$/.test(slug);
-  const { data, error } = useApi<PublicResponse>(valid ? `/api/i/${slug}` : null);
+  const gToken = mounted ? inviteGuestToken() : null;
+  const { data, error } = useApi<PublicResponse>(valid && mounted ? `/api/i/${slug}${gToken ? `?g=${gToken}` : ""}` : null);
+  // Shablon chizilishidan oldin: mehmon ismi (useGuestName) va boshqa qurilmada berilgan javob (Javobni o‘zgartirish)
+  if (data && slug && gToken) {
+    setInviteGuest(data.guest ? { token: gToken, name: data.guest.name } : null);
+    if (data.guest?.editToken && !loadSavedRsvp(slug)) saveRsvp(slug, data.guest.editToken, data.guest.name);
+  }
   const template = data ? getTemplate(data.templateSlug) : undefined;
   const lang = inviteLang(data?.invitation.extra, useLocale());
 

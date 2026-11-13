@@ -20,7 +20,7 @@ route('GET', '/invitations/:id', function ($p) {
     foreach (all('SELECT o.status, o.template_slug, i.id, i.person_a, i.person_b, i.date FROM orders o JOIN invitations i ON i.order_id = o.id WHERE o.user_id = ? ORDER BY o.created_at DESC', [$ownerId]) as $r) {
         $switcher[] = ['id' => $r['id'], 'names' => trim($r['person_a'] . ($r['person_b'] ? ' & ' . $r['person_b'] : '')), 'date' => $r['date'], 'status' => $r['status'], 'templateSlug' => $r['template_slug']];
     }
-    json_out(['ok' => true, 'order' => order_out($o), 'invitation' => invitation_out($i), 'stats' => invitation_stats($i['id']), 'recent' => $recent, 'payments' => $payments, 'switcher' => $switcher]);
+    json_out(['ok' => true, 'order' => order_out($o), 'invitation' => invitation_out($i), 'stats' => invitation_stats($i['id']), 'recent' => $recent, 'payments' => $payments, 'switcher' => $switcher, 'special' => sg_summary($i['id'])]);
 });
 
 route('GET', '/invitations/:id/responses', function ($p) {

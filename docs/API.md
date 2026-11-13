@@ -67,17 +67,21 @@ Lead        { id, name, phone, ceremony, message, replyVia, status, createdAt }
 
 ## Kabinet — taklifnoma
 
-| GET | `/api/invitations/:id` | `{ok, order, invitation, stats, recent: Guest[] (5 ta), payments: Payment[], switcher: {id, names, date, status, templateSlug}[]}` — egasi yoki admin |
+| GET | `/api/invitations/:id` | `{ok, order, invitation, stats, recent: Guest[] (5 ta), payments: Payment[], switcher: {id, names, date, status, templateSlug}[], special: {total, opened}}` — egasi yoki admin |
 | GET | `/api/invitations/:id/responses?status=&q=&page=1&per=8` | `{ok, total, list: Guest[], stats, views, wishes: Guest[] (oxirgi 3 ta tilakli)}` |
 | GET | `/api/invitations/:id/guests` | CSV yuklab olish (BOM, `;`) |
+| GET | `/api/invitations/:id/special-guests` | Maxsus mehmonlar: `{ok, list: {id, name, note, token, openCount, firstOpenedAt, lastOpenedAt, createdAt, response: {name, status, count, wish, at} \| null}[], max: 1000, editable}` |
+| POST | `/api/invitations/:id/special-guests` | `{names: string[]}` (bitta yoki ro‘yxat, takrorlar o‘tkaziladi) → `{ok, added, skipped}` — faqat faol taklifnoma |
+| PATCH/DELETE | `/api/invitations/:id/special-guests/:gid` | `{name?, note?}` → `{ok, guest}` / `{ok}` (javobi umumiy ro‘yxatda qoladi) |
+| GET | `/api/invitations/:id/special-guests-csv` | CSV (BOM, `;`) |
 
 QR kod brauzerda yaratiladi (`qrcode` paketi) — server endpointi yo‘q.
 
 ## Mehmon (ommaviy)
 
-| GET | `/api/i/:slug` | `{ok, invitation, templateSlug, archived}` — faqat paid/active/archived; ko‘rishlar soni +1 |
-| POST | `/api/i/:slug/rsvp` | `{name, status, count, wish?, website?}` → `{ok, editToken, count}` |
-| GET/PATCH | `/api/i/:slug/rsvp/:token` | `{ok, response:{name,status,count,wish}}` / `{ok}` |
+| GET | `/api/i/:slug[?g=token]` | `{ok, invitation, templateSlug, archived, guest?: {name, editToken}}` — faqat paid/active/archived; ko‘rishlar soni +1; `?g=` — maxsus mehmon (ochilish hisoblanadi: bot, egasi/admin sessiyasi va arxiv bundan mustasno; 10 daqiqa ichidagi qayta ochish bitta) |
+| POST | `/api/i/:slug/rsvp[?g=token]` | `{name, status, count, wish?, website?}` → `{ok, editToken, count}`; `?g=` — javob shu mehmonga bog‘lanadi (avval javob bergan bo‘lsa — o‘sha javob yangilanadi) |
+| GET/PATCH | `/api/i/:slug/rsvp/:token[?g=token]` | `{ok, response:{name,status,count,wish}}` / `{ok}` |
 | GET | `/api/i/:slug/calendar` | `.ics` |
 
 ## Formalar

@@ -8,7 +8,8 @@ import { splitDate, tashkentDate } from "@/lib/display";
 import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
-import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
+import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
+import { useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
@@ -34,11 +35,7 @@ function useData({ template, data, mode }: Pick<InvitationSiteProps, "template" 
   const ex = (data.extra ?? {}) as Record<string, unknown>;
   const str = (k: string) => (typeof ex[k] === "string" ? (ex[k] as string).trim() : "");
   const sd = splitDate(data.date);
-  const [guest, setGuest] = useState("");
-  useEffect(() => {
-    const m = new URLSearchParams(location.search).get("m");
-    setGuest(m ? m.slice(0, 80) : "");
-  }, []);
+  const guest = useGuestName();
   return useMemo(() => {
     const cw = calendarWords(lang);
     const exProgram = Array.isArray(ex.program) ? (ex.program as ProgramItem[]).filter((p) => p?.time && p?.title) : [];
@@ -1090,7 +1087,7 @@ function Rsvp({ d, wide, ready, slug, mode, tail, z }: { d: D; wide: boolean; re
     }
     setBusy(true);
     try {
-      const res = await fetch(token ? `/api/i/${slug}/rsvp/${token}` : `/api/i/${slug}/rsvp`, {
+      const res = await fetch(rsvpUrl(slug, token), {
         method: token ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name.trim(), status, count: status === "coming" ? count : 0, wish: wish.trim() || null }),

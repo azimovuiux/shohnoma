@@ -10,7 +10,7 @@ declare(strict_types=1);
 const TPL_ZIP_MAX = 15 * 1024 * 1024;
 const TPL_ASSET_EXT = ['webp' => 1536000, 'png' => 1536000, 'jpg' => 1536000, 'jpeg' => 1536000, 'gif' => 1536000, 'svg' => 512000, 'woff2' => 307200, 'woff' => 307200, 'mp3' => 4194304];
 const TPL_FIELD_TYPES = ['text', 'textarea', 'time', 'date', 'number', 'select', 'list'];
-const TPL_SH_TAGS = ['sh-open', 'sh-countdown', 'sh-map', 'sh-gallery', 'sh-rsvp', 'sh-music', 'sh-calendar', 'sh-share'];
+const TPL_SH_TAGS = ['sh-open', 'sh-countdown', 'sh-map', 'sh-gallery', 'sh-rsvp', 'sh-music', 'sh-calendar', 'sh-share', 'sh-guest'];
 const TPL_ALLOWED_TAGS = ['a', 'abbr', 'address', 'article', 'aside', 'b', 'blockquote', 'br', 'button', 'caption', 'cite', 'code', 'dd', 'del', 'details', 'dfn', 'div', 'dl', 'dt',
     'em', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'mark', 'nav', 'ol', 'p', 'picture',
     'pre', 'q', 's', 'section', 'small', 'source', 'span', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'time', 'tr', 'u', 'ul', 'video', 'audio',
@@ -355,6 +355,8 @@ function tpl_page(array $t, array $d, string $mode, ?string $slug = null): strin
         'photos' => array_values(array_filter((array)($d['photos'] ?? []), 'is_string')),
         'rsvpEnabled' => $d['rsvpEnabled'] ?? true,
         'musicEnabled' => ($d['musicEnabled'] ?? true) && $music !== '',
+        /** Shaxsiy havola: {name, token?, editToken?} — <sh-guest> va javob formasi uchun */
+        'guest' => $d['guest'] ?? null,
     ];
     $h = fn($s) => htmlspecialchars((string)$s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     $title = $ctx['names'] . ' — taklifnoma';

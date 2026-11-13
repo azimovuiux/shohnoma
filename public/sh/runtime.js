@@ -9,6 +9,9 @@
     D = JSON.parse(document.getElementById("sh-data").textContent || "{}");
   } catch (e) {}
   var live = D.mode === "live";
+  /** Shaxsiy havola (?g= maxsus mehmon yoki ?m=Ism): {name, token?, editToken?} */
+  var G = D.guest && D.guest.name ? D.guest : null;
+  var gq = G && G.token ? "?g=" + encodeURIComponent(G.token) : "";
 
   function el(tag, attrs, kids) {
     var n = document.createElement(tag);
@@ -131,7 +134,8 @@
   /* ── Mehmon javobi ── */
   define("sh-rsvp", function (host) {
     if (D.rsvpEnabled === false) { hideBlock(host); return; }
-    var key = "sh_rsvp_" + (D.slug || "demo");
+    // maxsus mehmon javobi alohida saqlanadi (bir qurilmada boshqa havola bilan javob berilgan bo‘lsa aralashmaydi)
+    var key = "sh_rsvp_" + (D.slug || "demo") + (G && G.token ? "_" + G.token : "");
     var saved = null;
     try { saved = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
     var form = el("form", { class: "sh-rsvp", novalidate: "" });
@@ -148,7 +152,7 @@
       form.innerHTML = "";
       if (saved && !edit) return done(saved.status === "not_coming" ? "Javobingiz uchun rahmat!" : "Rahmat! Sizni kutib qolamiz.");
       form.appendChild(el("h3", { class: "sh-rsvp__title", text: title }));
-      var name = el("input", { class: "sh-rsvp__input", name: "name", autocomplete: "name", maxlength: "120", placeholder: "Ism va familiyangiz", value: saved && saved.name || "" });
+      var name = el("input", { class: "sh-rsvp__input", name: "name", autocomplete: "name", maxlength: "120", placeholder: "Ism va familiyangiz", value: saved && saved.name || G && G.name || "" });
       form.appendChild(el("label", null, [el("span", { class: "sh-rsvp__label", text: "Ismingiz" }), name]));
       var choices = el("div", { class: "sh-rsvp__choices", role: "radiogroup" });
       [["coming", "Boraman"], ["maybe", "Hali aniq emas"], ["not_coming", "Kela olmayman"]].forEach(function (c) {
@@ -186,8 +190,8 @@
         btn.disabled = true;
         var body = { name: name.value.trim(), status: state.status, count: state.count, wish: wish.value.trim(), website: hp.value };
         var req = saved && saved.token
-          ? api("PATCH", "/api/i/" + D.slug + "/rsvp/" + saved.token, body).then(function () { return { editToken: saved.token }; })
-          : api("POST", "/api/i/" + D.slug + "/rsvp", body);
+          ? api("PATCH", "/api/i/" + D.slug + "/rsvp/" + saved.token + gq, body).then(function () { return { editToken: saved.token }; })
+          : api("POST", "/api/i/" + D.slug + "/rsvp" + gq, body);
         req.then(function (r) {
           saved = { token: r.editToken, name: body.name, status: body.status, count: body.count, wish: body.wish };
           try { localStorage.setItem(key, JSON.stringify(saved)); } catch (x) {}
@@ -199,7 +203,24 @@
       };
     }
     host.appendChild(form);
-    render(false);
+    // Maxsus mehmon boshqa qurilmada javob bergan — o‘sha javob ko‘rsatiladi (tahrirlash mumkin)
+    if (!saved && live && G && G.editToken) {
+      fetch("/api/i/" + D.slug + "/rsvp/" + G.editToken).then(function (r) { return r.json(); }).then(function (d) {
+        if (d && d.ok && d.response) {
+          saved = { token: G.editToken, name: d.response.name, status: d.response.status, count: d.response.count, wish: d.response.wish || "" };
+          state = { status: saved.status, count: saved.count || 1 };
+          try { localStorage.setItem(key, JSON.stringify(saved)); } catch (x) {}
+        }
+        render(false);
+      }).catch(function () { render(false); });
+    } else render(false);
+  });
+
+  /* ── Shaxsiy murojaat: <sh-guest>Hurmatli {name}!</sh-guest> — mehmon ismi bo‘lmasa ko‘rinmaydi ── */
+  define("sh-guest", function (host) {
+    var fmt = host.textContent.trim() || "Hurmatli {name}!";
+    if (!G) { hideBlock(host); return; }
+    host.textContent = fmt.split("{name}").join(G.name);
   });
 
   /* ── Musiqa ── */
@@ -237,7 +258,8 @@
     host.textContent = "";
     host.appendChild(el("button", {
       type: "button", class: "sh-btn sh-btn--ghost", text: label, onclick: function () {
-        var url = location.href.split("#")[0];
+        // shaxsiy havola (?g=, ?m=) boshqalarga uzatilmaydi — umumiy havola ulashiladi
+        var url = location.origin + location.pathname;
         if (navigator.share) navigator.share({ title: D.names + " — taklifnoma", url: url }).catch(function () {});
         else if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { toast("Havola nusxalandi"); });
       },

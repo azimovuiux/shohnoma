@@ -11,7 +11,8 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { timerUnits } from "@/components/invitation/data";
-import { fetchSavedAnswer, loadSavedRsvp, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
+import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
+import { useGuestName } from "../shared/guest";
 import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
 import { A, ANOR_DEMO, ANOR_DEMO_RU, ANOR_DEMO_EN, DRESS, calendarWords, coordsFrom, downloadIcs, programIcon, untilPhrase, weekOf, type ProgramItem, type StoryItem } from "./data";
 import st from "./anor.module.css";
@@ -32,11 +33,7 @@ function useAnorData({ template, data, mode }: Pick<InvitationSiteProps, "templa
   const ex = (data.extra ?? {}) as Record<string, unknown>;
   const str = (k: string) => (typeof ex[k] === "string" ? (ex[k] as string).trim() : "");
   const sd = splitDate(data.date);
-  const [guest, setGuest] = useState("");
-  useEffect(() => {
-    const m = new URLSearchParams(location.search).get("m");
-    setGuest(m ? m.slice(0, 80) : demo ? DEMO.guest : "");
-  }, [demo, DEMO.guest]);
+  const guest = useGuestName(demo ? DEMO.guest : "");
 
   return useMemo(() => {
     const cw = calendarWords(lang);
@@ -892,7 +889,7 @@ function Rsvp({ d, wide, ready, slug, mode }: { d: D; wide: boolean; ready: bool
     if (!live) return setSent(status);
     setBusy(true);
     try {
-      const res = await fetch(token ? `/api/i/${slug}/rsvp/${token}` : `/api/i/${slug}/rsvp`, {
+      const res = await fetch(rsvpUrl(slug, token), {
         method: token ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name.trim(), status, count: status === "coming" ? count : 0, wish: wish.trim() || null }),

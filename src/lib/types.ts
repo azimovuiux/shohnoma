@@ -93,6 +93,19 @@ export interface Guest {
   updatedAt: string;
 }
 
+/** Maxsus mehmon: ism bilan shaxsiy havola (/<slug>/?g=<token>), ochilishi va javobi */
+export interface SpecialGuest {
+  id: string;
+  name: string;
+  note: string | null;
+  token: string;
+  openCount: number;
+  firstOpenedAt: string | null;
+  lastOpenedAt: string | null;
+  createdAt: string;
+  response: { name: string; status: RsvpStatus; count: number; wish: string | null; at: string } | null;
+}
+
 export interface Stats {
   coming: number;
   maybe: number;

@@ -30,6 +30,8 @@ export type InvitationBundle = {
   recent: Guest[];
   payments: Payment[];
   switcher: SwitcherItem[];
+  /** Maxsus mehmonlar: jami va havolani ochganlar */
+  special?: { total: number; opened: number };
 };
 
 const InvCtx = createContext<{ data: InvitationBundle; reload: (silent?: boolean) => Promise<void> } | null>(null);
