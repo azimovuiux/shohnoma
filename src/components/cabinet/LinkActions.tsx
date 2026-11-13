@@ -1,11 +1,10 @@
 "use client";
 
-import { Copy, Export, Instagram, Send2, Whatsapp } from "@/components/icons";
-import { TelegramIcon } from "@/components/TelegramIcon";
-import { useCopy, useToast } from "@/components/ui";
+import { Copy } from "@/components/icons";
+import { useCopy } from "@/components/ui";
 import { useT } from "@/lib/i18n";
 
-/** "shohnoma.uz/jasur-madina" + nusxalash */
+/** "shohnoma.uz/jasur-madina" + nusxalash. Ulashish — src/components/share/ShareInvite */
 export function CopyLink({ url, className = "" }: { url: string; className?: string }) {
   const t = useT();
   const copy = useCopy();
@@ -15,74 +14,5 @@ export function CopyLink({ url, className = "" }: { url: string; className?: str
       <span className="truncate text-[13px] font-medium leading-none text-maroon">{shown}</span>
       <Copy size={15} className="shrink-0 text-ink-2 group-hover:text-maroon" />
     </button>
-  );
-}
-
-/** Umumiy ulashish (navigator.share), bo‘lmasa nusxalash */
-export function ShareButton({ url, title, className = "icon-btn !size-11" }: { url: string; title: string; className?: string }) {
-  const t = useT();
-  const copy = useCopy();
-  return (
-    <button
-      type="button"
-      aria-label={t("Ulashish")}
-      className={className}
-      onClick={async () => {
-        if (navigator.share) {
-          try {
-            await navigator.share({ title, url });
-            return;
-          } catch {
-            return;
-          }
-        }
-        copy(url, t("Havola nusxalandi"));
-      }}
-    >
-      <Send2 size={16} />
-    </button>
-  );
-}
-
-export function ShareRow({ url, title }: { url: string; title: string }) {
-  const t = useT();
-  const copy = useCopy();
-  const toast = useToast();
-  const text = encodeURIComponent(`${title}\n${url}`);
-  const cls = "icon-btn !size-[38px]";
-  return (
-    <div className="flex gap-2">
-      <a className={cls} aria-label="Telegram" target="_blank" rel="noopener noreferrer" href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`}>
-        <TelegramIcon size={16} />
-      </a>
-      <button
-        type="button"
-        className={cls}
-        aria-label="Instagram"
-        onClick={async () => {
-          await copy(url, t("Havola nusxalandi — Instagram'da joylashtiring"));
-          void toast;
-        }}
-      >
-        <Instagram size={16} />
-      </button>
-      <a className={cls} aria-label="WhatsApp" target="_blank" rel="noopener noreferrer" href={`https://wa.me/?text=${text}`}>
-        <Whatsapp size={16} />
-      </a>
-      <button
-        type="button"
-        className={cls}
-        aria-label={t("Ulashish")}
-        onClick={async () => {
-          if (navigator.share) {
-            try {
-              await navigator.share({ title, url });
-            } catch {}
-          } else copy(url, t("Havola nusxalandi"));
-        }}
-      >
-        <Export size={16} />
-      </button>
-    </div>
   );
 }

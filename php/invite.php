@@ -34,7 +34,9 @@ try {
         $page = tpl_page($tpl, tpl_invitation_data($inv), $inv['status'] === 'archived' ? 'archived' : 'live', $slug);
         $og = sprintf('<meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:url" content="%s">',
             htmlspecialchars(trim($inv['person_a'] . ($inv['person_b'] ? ' & ' . $inv['person_b'] : '')) . ' — taklifnoma', ENT_QUOTES), htmlspecialchars(site_url() . "/$slug/", ENT_QUOTES));
-        if (!empty($tpl['images']['phone'])) $og .= '<meta property="og:image" content="' . htmlspecialchars(site_url() . $tpl['images']['phone'], ENT_QUOTES) . '">';
+        $card = share_og($inv, is_string($_GET['m'] ?? null) ? $_GET['m'] : null);
+        if ($card) $og .= sprintf('<meta property="og:image" content="%s"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="%d"><meta property="og:image:height" content="%d"><meta name="twitter:card" content="summary_large_image">', htmlspecialchars($card[0], ENT_QUOTES), $card[1], $card[2]);
+        elseif (!empty($tpl['images']['phone'])) $og .= '<meta property="og:image" content="' . htmlspecialchars(site_url() . $tpl['images']['phone'], ENT_QUOTES) . '">';
         tpl_headers();
         echo str_replace('</head>', $og . '</head>', $page);
         exit;
@@ -50,12 +52,14 @@ if (preg_match('/^(\d{4})-(\d{2})-(\d{2})/', (string)$inv['date'], $m)) $date = 
 $title = "$names — taklifnoma";
 $desc = trim($date . ($inv['venue_name'] ? ', ' . $inv['venue_name'] : ''), ', ');
 $url = site_url() . '/' . $slug . '/';
-$image = site_url() . '/og/' . $inv['template_slug'] . '.png';
+// Ulashish kartasi (3:4, mijoz ma’lumoti bilan; shaxsiy havola ?m= uchun — o‘sha mehmon kartasi), bo‘lmasa umumiy shablon rasmi
+$card = share_og($inv, is_string($_GET['m'] ?? null) ? $_GET['m'] : null);
+[$image, $imgW, $imgH] = $card ?? [site_url() . '/og/' . $inv['template_slug'] . '.png', 1200, 630];
 
 $h = fn(string $s) => htmlspecialchars($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 $meta = sprintf(
-    '<meta property="og:type" content="website"><meta property="og:title" content="%1$s"><meta property="og:description" content="%2$s"><meta property="og:url" content="%3$s"><meta property="og:image" content="%4$s"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="robots" content="noindex">',
-    $h($title), $h($desc), $h($url), $h($image)
+    '<meta property="og:type" content="website"><meta property="og:title" content="%1$s"><meta property="og:description" content="%2$s"><meta property="og:url" content="%3$s"><meta property="og:image" content="%4$s"><meta property="og:image:type" content="%7$s"><meta property="og:image:width" content="%5$d"><meta property="og:image:height" content="%6$d"><meta name="twitter:card" content="summary_large_image"><meta name="robots" content="noindex">',
+    $h($title), $h($desc), $h($url), $h($image), $imgW, $imgH, $card ? 'image/jpeg' : 'image/png'
 );
 
 $html = (string)file_get_contents($shell);

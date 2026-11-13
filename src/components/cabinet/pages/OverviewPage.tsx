@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { ArrowRight, Calendar, CloseCircle, Clock, Edit, Gallery, Link2, Location, Music, Timer1, TickCircle } from "@/components/icons";
 import { StatusBadge, useCopy } from "@/components/ui";
-import { InvitationHeader, invTitle } from "../InvitationHeader";
+import { InvitationHeader } from "../InvitationHeader";
 import { InvitationThumb } from "../InvitationThumb";
-import { CopyLink, ShareButton, ShareRow } from "../LinkActions";
+import { CopyLink } from "../LinkActions";
+import { ShareInvite, useShareCardSync, type ShareInvitation } from "@/components/share/ShareInvite";
 import { isPaidStatus } from "@/lib/types";
 import { relTime, useInvitationData, useSiteUrl } from "../data";
 import { daysUntil, initials, rsvpView } from "@/lib/display";
@@ -15,7 +16,7 @@ import { useLocale, useT } from "@/lib/i18n";
 
 /** Mehmon uchun shaxsiy havola: taklifnoma «Hurmatli …» deb shu ism bilan ochiladi (?m=) */
 /** Shaxsiy havolalar: mehmon ismi bilan ochiladigan taklifnoma (?m=Ism). Yaratilganlari shu brauzerda eslab qolinadi */
-function GuestLinks({ url, slug, title }: { url: string; slug: string; title: string }) {
+function GuestLinks({ url, slug, invitationId, templateSlug, inv }: { url: string; slug: string; invitationId: string; templateSlug: string; inv: ShareInvitation }) {
   const t = useT();
   const copy = useCopy();
   const key = `sh_guests_${slug}`;
@@ -72,7 +73,7 @@ function GuestLinks({ url, slug, title }: { url: string; slug: string; title: st
               <button type="button" onClick={() => copy(link(n), t("Shaxsiy havola nusxalandi"))} className="t-body-s font-medium text-maroon hover:underline">
                 {t("Nusxalash")}
               </button>
-              <ShareButton url={link(n)} title={`${n}, ${title}`} className="icon-btn !size-8" />
+              <ShareInvite variant="icon" target={{ invitationId, templateSlug, invitation: inv, url: link(n), guest: n }} className="icon-btn !size-8" />
               <button type="button" onClick={() => save(list.filter((x) => x !== n))} aria-label={t("O‘chirish")} className="text-ink-2 hover:text-danger">
                 <CloseCircle size={16} />
               </button>
@@ -131,6 +132,8 @@ export function OverviewPage() {
   const recent = { list: (data.recent ?? []).slice(0, 4) };
   const url = `${siteUrl}/${inv.slug}/`;
   const days = daysUntil(inv.date);
+  // og:image (ulashish kartasi) eskirgan bo‘lsa — orqa fonda yangilanadi
+  useShareCardSync(paid ? { invitationId: inv.id, templateSlug: order.templateSlug, invitation: inv } : null);
   const flow = (step: "marosim" | "tafsilotlar") => `/buyurtma/${order.id}/${step}/?qaytish=kabinet`;
 
   const statCards = [
@@ -177,12 +180,16 @@ export function OverviewPage() {
                       <Link2 size={15} className="shrink-0 text-ink-2" />
                       <CopyLink url={url} className="min-w-0 flex-1 justify-between" />
                     </div>
-                    <ShareRow url={url} title={`${invTitle(inv, t)} — ${t("taklifnoma")}`} />
+                    <ShareInvite
+                      target={{ invitationId: inv.id, templateSlug: order.templateSlug, invitation: inv, url }}
+                      label={t("Taklifnomani ulashish")}
+                      className="btn btn-primary btn-sm w-full sm:w-fit"
+                    />
                   </div>
                   <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
                     <p className="t-body-s font-semibold text-ink">{t("Shaxsiy havola — mehmon ismi bilan")}</p>
                     <p className="-mt-1 text-[12px] text-ink-2">{t("Mehmon ismi bilan ochiladi")}</p>
-                    <GuestLinks url={url} slug={inv.slug} title={`${invTitle(inv, t)} — ${t("taklifnoma")}`} />
+                    <GuestLinks url={url} slug={inv.slug} invitationId={inv.id} templateSlug={order.templateSlug} inv={inv} />
                   </div>
                 </>
               ) : (

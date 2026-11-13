@@ -11,7 +11,8 @@ import type { OrderStatus } from "@/lib/types";
 import { InvitationThumb } from "../InvitationThumb";
 import { LiveDevices } from "@/components/order/LiveDevices";
 import { toFlowOrder } from "@/components/order/FlowGate";
-import { CopyLink, ShareButton } from "../LinkActions";
+import { CopyLink } from "../LinkActions";
+import { ShareInvite } from "@/components/share/ShareInvite";
 import { getTemplate, ceremonyLabel, type Ceremony } from "@/lib/templates";
 import { orderStatusView, splitDate } from "@/lib/display";
 import { useT } from "@/lib/i18n";
@@ -168,7 +169,7 @@ export function OrdersPage() {
                       <Link href={`/kabinet/t/${inv.id}/mehmonlar/`} className="btn btn-secondary flex-1 !px-3.5 !py-[13px]">
                         <Profile2User size={16} /> {tr("Mehmonlar javobi")} · {stats.responses}
                       </Link>
-                      <ShareButton url={url} title={title} />
+                      <ShareInvite variant="icon" target={{ invitationId: inv.id, templateSlug: order.templateSlug, invitation: inv, url }} />
                     </div>
                   </>
                 ) : order.status === "p2p_review" ? (

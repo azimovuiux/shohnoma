@@ -239,4 +239,23 @@ export const ru: Record<string, string> = {
   "O‘chirish": "Удалить",
   "Tasdiqlash": "Подтвердить",
   "Tasdiqlash uchun yozing:": "Для подтверждения введите:",
+  // ulashish oynasi (src/components/share/ShareInvite)
+  "Taklifnomani ulashish": "Поделиться приглашением",
+  "Shaxsiy taklifnoma": "Персональное приглашение",
+  "Rasm ostida shu matn va havola boradi": "Под картинкой будут этот текст и ссылка",
+  "Rasm bilan ulashish": "Поделиться с картинкой",
+  "Rasmni yuklab olish": "Скачать картинку",
+  "Rasmni tayyorlab bo‘lmadi": "Не удалось подготовить картинку",
+  "Rasm tayyorlanmoqda…": "Картинка готовится…",
+  "Havola rasmi tayyorlanmoqda…": "Готовим превью ссылки…",
+  "Ulashish kartasi": "Карточка приглашения",
+  "Ulashib bo‘lmadi. Telegram yoki WhatsApp tugmasidan foydalaning.": "Не удалось поделиться. Воспользуйтесь кнопкой Telegram или WhatsApp.",
+  "Telegram, WhatsApp va boshqa ilovalarga — shablon uslubidagi rasm, qisqa matn va havola": "В Telegram, WhatsApp и другие приложения — картинка в стиле шаблона, короткий текст и ссылка",
+  // API: ulashish kartasi (php/api/routes/share.php)
+  "Taklifnoma faol emas": "Приглашение не активно",
+  "Noto‘g‘ri xesh": "Неверный хеш",
+  "Rasm JPEG 1080×1440 bo‘lishi kerak": "Картинка должна быть JPEG 1080×1440",
+  "Rasm yuklanmadi": "Картинка не загрузилась",
+  "Rasm hajmi 2 MB dan oshmasin": "Размер картинки — не более 2 МБ",
+  "Rasmni saqlab bo‘lmadi": "Не удалось сохранить картинку",
 };

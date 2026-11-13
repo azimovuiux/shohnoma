@@ -65,6 +65,8 @@ export interface Invitation {
   contactTg: string | null;
   extra?: Record<string, unknown>;
   views: number;
+  /** Serverdagi ulashish kartasi (og:image) xeshi — src/lib/shareCard */
+  shareHash?: string | null;
   createdAt: string;
 }
 

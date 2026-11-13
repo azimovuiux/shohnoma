@@ -3,8 +3,7 @@
 import Link from "@/components/LocalLink";
 import { useLpath, useT } from "@/lib/i18n";
 import { useMemo, useState } from "react";
-import { ArrowLeft, Copy, Edit, ExportSquare, Eye, Instagram, Link2, Mobile, Monitor, Profile2User, ReceiptText, Scan, Send2, TickCircle, Whatsapp } from "@/components/icons";
-import { TelegramIcon } from "@/components/TelegramIcon";
+import { ArrowLeft, Copy, Edit, ExportSquare, Eye, Link2, Mobile, Monitor, Profile2User, ReceiptText, Scan, TickCircle } from "@/components/icons";
 import { useCopy } from "@/components/ui";
 import { LaptopFrame, PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationDesktop } from "@/components/mockups/InvitationDesktop";
@@ -12,18 +11,21 @@ import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { isDarkTheme } from "@/components/TemplateCard";
 import type { Template } from "@/lib/templates";
 import { liveTemplate } from "./live";
-import { namesOf } from "./labels";
 import { downloadQr } from "@/lib/qr";
 import type { FlowOrder } from "./types";
+import type { Invitation } from "@/lib/types";
+import { ShareInvite, useShareCardSync } from "@/components/share/ShareInvite";
 
 export function ReadyView({
   order,
+  invitation,
   template,
   url,
   providerName,
   loggedIn,
 }: {
   order: FlowOrder;
+  invitation: Invitation;
   template: Template;
   url: string;
   providerName: string;
@@ -35,16 +37,9 @@ export function ReadyView({
   const [device, setDevice] = useState<"laptop" | "phone">("laptop");
   const live = useMemo(() => liveTemplate(template, order), [template, order]);
   const host = url.replace(/^https?:\/\//, "");
-  const names = namesOf(order);
-  const shareText = t("{names} — taklifnoma. Sizni to‘yimizda kutamiz!", { names });
-
-  const share = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: t("{names} — taklifnoma", { names }), text: shareText, url });
-      } catch {}
-    } else copy(url);
-  };
+  const shareTarget = { invitationId: invitation.id, templateSlug: order.templateSlug, invitation, url };
+  // og:image (ulashish kartasi) — taklifnoma tayyor bo‘lishi bilan serverga
+  useShareCardSync(shareTarget);
 
   const shareBtn = "flex h-11 items-center justify-center gap-2 rounded-full border border-line-dark/30 t-nav text-ink transition-colors hover:bg-bg-soft";
 
@@ -142,34 +137,12 @@ export function ReadyView({
           <div className="flex flex-col gap-2.5">
             <p className="t-title text-ink">{t("Ulashish")}</p>
             <div className="grid grid-cols-2 gap-2.5">
-              <a
-                href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(shareText)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={shareBtn}
-              >
-                <TelegramIcon size={16} /> Telegram
-              </a>
-              <button
-                type="button"
-                onClick={async () => {
-                  await copy(url, t("Havola nusxalandi — Instagram’da ulashing"));
-                  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) window.location.href = "instagram://story-camera";
-                }}
-                className={shareBtn}
-              >
-                <Instagram size={16} /> Instagram
-              </button>
-              <a href={`https://wa.me/?text=${encodeURIComponent(`${shareText} ${url}`)}`} target="_blank" rel="noopener noreferrer" className={shareBtn}>
-                <Whatsapp size={16} /> WhatsApp
-              </a>
-              <a href={url} target="_blank" rel="noopener noreferrer" className={shareBtn}>
+              <ShareInvite target={shareTarget} label={t("Ulashish")} className="btn btn-primary col-span-2 !h-12 sm:col-span-1" />
+              <a href={url} target="_blank" rel="noopener noreferrer" className={`${shareBtn} col-span-2 sm:col-span-1`}>
                 <Eye size={16} /> {t("Saytni ochish")}
               </a>
             </div>
-            <button type="button" onClick={share} className="inline-flex w-fit items-center gap-2 t-body-s text-ink-2 hover:text-maroon sm:hidden">
-              <Send2 size={15} /> {t("Boshqa ilova orqali ulashish")}
-            </button>
+            <p className="t-body-s text-ink-2">{t("Telegram, WhatsApp va boshqa ilovalarga — shablon uslubidagi rasm, qisqa matn va havola")}</p>
           </div>
 
           <div className="h-px bg-line" />

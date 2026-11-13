@@ -338,4 +338,10 @@ export const ru: Record<string, string> = {
   "«Kadrlar» — katta portret (oq-qora). Bo‘lmasa — bo‘lim chiqmaydi": "«Кадры» — большой портрет (чёрно-белый). Если нет — раздел не показывается",
   "«Kadrlar» — kichik kvadrat ramka (bo‘lmasa — shampan surati)": "«Кадры» — малая квадратная рамка (если нет — фото с шампанским)",
   "«Manzil» bo‘limida (bo‘lmasa — kechki terrasa surati)": "В разделе «Адрес» (если нет — фото вечерней террасы)",
+  // ulashish kartasi va rasm ostidagi matn (src/lib/shareCard)
+  "Tug‘ilgan kunga taklif": "Приглашение на день рождения",
+  "nikoh to‘yiga taklif qilamiz": "приглашаем на никах",
+  "fotiha to‘yiga taklif qilamiz": "приглашаем на фотиха-той",
+  "sunnat to‘yiga taklif qilamiz": "приглашаем на суннат-той",
+  "tug‘ilgan kunga taklif qilamiz": "приглашаем на день рождения",
 };

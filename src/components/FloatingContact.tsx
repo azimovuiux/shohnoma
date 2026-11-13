@@ -127,7 +127,8 @@ export function FloatingContact() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? t("Chatni yopish") : t("Savolingiz bormi? Yozing")}
         aria-expanded={open}
-        className={`group fixed bottom-5 right-5 z-[71] items-center gap-2.5 lg:bottom-8 lg:right-8 ${open ? "hidden sm:flex" : "flex"}`}
+        // oyna (Modal, tezkor ko‘rish, menyu) ochiq bo‘lsa — tugma uning tugmalarini yopib qo‘ymasin
+        className={`group fixed bottom-5 right-5 z-[71] items-center gap-2.5 lg:bottom-8 lg:right-8 [body:has([aria-modal=true])_&]:hidden ${open ? "hidden sm:flex" : "flex"}`}
       >
         {!open && (
           <span className="hidden rounded-full border border-line bg-bg-base px-4 py-2.5 text-[13px] font-medium leading-none text-ink shadow-[0_4px_6px_rgba(26,13,10,0.08)] lg:block">

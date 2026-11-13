@@ -25,6 +25,7 @@ import { Sandbox } from "./Sandbox";
 import { PrintButton } from "./PrintButton";
 import { tashkentStamp } from "./time";
 import { namesOf } from "./labels";
+import { ShareInvite } from "@/components/share/ShareInvite";
 
 const siteUrlFallback = typeof window !== "undefined" ? window.location.origin : "https://shohnoma.uz";
 
@@ -158,10 +159,12 @@ export function ProcessingPageClient() {
 export function PaidPageClient() {
   const t = useT();
   const locale = useLocale();
+  const cfg = useConfig();
   return (
     <FlowGate step="other" guard={({ raw, base }) => (isPaidStatus(raw.order.status) ? null : `${base}/tolov/jarayonda/`)}>
       {({ order, raw, base }) => {
         const p = raw.payment;
+        const url = `${(cfg.data?.siteUrl ?? siteUrlFallback).replace(/\/$/, "")}/${order.slug}/`;
         return (
           <StatusScreen kind="success" title={t("To‘lov qabul qilindi")} text={t("Taklifnomangiz ishga tushdi.")}>
             <InfoCard
@@ -176,6 +179,7 @@ export function PaidPageClient() {
               <Link href={`${base}/tayyor/`} className="btn btn-primary">
                 {t("Taklifnomamni ko‘rish")} <ArrowRight size={16} />
               </Link>
+              <ShareInvite target={{ invitationId: raw.invitation.id, templateSlug: order.templateSlug, invitation: raw.invitation, url }} className="btn btn-secondary" />
               <Link href={`${base}/tolov/chek/`} className="btn btn-secondary">
                 <ArrowDown size={16} /> {t("Chekni yuklab olish")}
               </Link>
@@ -316,6 +320,10 @@ export function ApprovedPageClient() {
               <Link href={`${base}/tayyor/`} className="btn btn-primary">
                 {t("Taklifnomamni ko‘rish")} <ArrowRight size={16} />
               </Link>
+              <ShareInvite
+                target={{ invitationId: raw.invitation.id, templateSlug: order.templateSlug, invitation: raw.invitation, url: `${(cfg.data?.siteUrl ?? siteUrlFallback).replace(/\/$/, "")}/${order.slug}/` }}
+                className="btn btn-secondary"
+              />
               <Link href={me?.user ? "/kabinet/" : `/kirish/?next=${encodeURIComponent(lp("/kabinet/"))}`} className="btn btn-secondary">
                 {t("Buyurtmalarimga o‘tish")}
               </Link>
@@ -346,6 +354,7 @@ export function ReadyPageClient() {
       {({ order, template, raw }) => (
         <ReadyView
           order={order}
+          invitation={raw.invitation}
           template={template}
           url={`${(cfg.data?.siteUrl ?? siteUrlFallback).replace(/\/$/, "")}/${order.slug}/`}
           providerName={raw.payment ? t(providerLabel[raw.payment.provider]) : t("To‘langan")}

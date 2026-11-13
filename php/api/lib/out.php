@@ -50,6 +50,8 @@ function invitation_out(array $i): array
         'contactPhone' => $i['contact_phone'],
         'contactTg' => $i['contact_tg'],
         'views' => (int)$i['views'],
+        /** Serverdagi ulashish kartasi xeshi (og:image) — o‘zgargan bo‘lsa mijoz qayta yuklaydi */
+        'shareHash' => share_main_hash($i),
         'createdAt' => iso($i['created_at']),
     ];
 }

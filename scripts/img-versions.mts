@@ -10,6 +10,12 @@ for (const f of readdirSync(dir).sort()) {
   const p = new URL(f, dir);
   if (existsSync(p)) out[f] = createHash("md5").update(readFileSync(p)).digest("hex").slice(0, 8);
 }
+// Ulashish kartasi fonlari (public/templates/<slug>/share-bg.webp) — src/lib/shareCard
+for (const d of readdirSync(dir, { withFileTypes: true })) {
+  if (!d.isDirectory()) continue;
+  const p = new URL(`${d.name}/share-bg.webp`, dir);
+  if (existsSync(p)) out[`${d.name}/share-bg.webp`] = createHash("md5").update(readFileSync(p)).digest("hex").slice(0, 8);
+}
 writeFileSync(
   new URL("../src/lib/tplImgVersions.ts", import.meta.url),
   `// Avtomatik yaratiladi: scripts/img-versions.mts (npm run build) — qo‘lda tahrirlamang\nexport const tplImgVersions: Record<string, string> = ${JSON.stringify(out, null, 2)};\n`,

@@ -360,4 +360,10 @@ export const en: Record<string, string> = {
   "«Kadrlar» — katta portret (oq-qora). Bo‘lmasa — bo‘lim chiqmaydi": "“Frames” — large portrait (black and white). If none — the section is hidden",
   "«Kadrlar» — kichik kvadrat ramka (bo‘lmasa — shampan surati)": "“Frames” — small square frame (if none — the champagne photo)",
   "«Manzil» bo‘limida (bo‘lmasa — kechki terrasa surati)": "In the “Venue” section (if none — the evening terrace photo)",
+  // ulashish kartasi va rasm ostidagi matn (src/lib/shareCard)
+  "Tug‘ilgan kunga taklif": "Birthday invitation",
+  "nikoh to‘yiga taklif qilamiz": "we invite you to our wedding",
+  "fotiha to‘yiga taklif qilamiz": "we invite you to our engagement",
+  "sunnat to‘yiga taklif qilamiz": "we invite you to the celebration",
+  "tug‘ilgan kunga taklif qilamiz": "we invite you to a birthday party",
 };

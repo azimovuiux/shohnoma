@@ -131,5 +131,16 @@ export const tplImgVersions: Record<string, string> = {
   "zumrad-ru-laptop-long.webp": "742e916c",
   "zumrad-ru-laptop.webp": "05787e88",
   "zumrad-ru-phone-long.webp": "95a04206",
-  "zumrad-ru-phone.webp": "607fd873"
+  "zumrad-ru-phone.webp": "607fd873",
+  "anor/share-bg.webp": "fd9094c3",
+  "kalit/share-bg.webp": "df588c17",
+  "kumush/share-bg.webp": "7e22493d",
+  "lino/share-bg.webp": "2ab49bbc",
+  "muhr/share-bg.webp": "a2ed5079",
+  "parvoz/share-bg.webp": "49766058",
+  "riviera/share-bg.webp": "f2f5b5f8",
+  "savsan/share-bg.webp": "e5d4d67b",
+  "sayohat/share-bg.webp": "47cf3cc1",
+  "shato/share-bg.webp": "dccc0c0a",
+  "zumrad/share-bg.webp": "be487855"
 };

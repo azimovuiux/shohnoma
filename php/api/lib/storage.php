@@ -10,7 +10,7 @@ const UPLOAD_TYPES = [
     'image/heif' => 'heif',
     'application/pdf' => 'pdf',
 ];
-const UPLOAD_DIRS = ['photos', 'receipts', 'briefs', 'templates'];
+const UPLOAD_DIRS = ['photos', 'receipts', 'briefs', 'templates', 'share'];
 
 function upload_root(): string { return storage_dir() . '/uploads'; }
 
