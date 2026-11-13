@@ -1,0 +1,1325 @@
+[
+  {
+    "number": 1,
+    "slug": "anor",
+    "name": "Anor",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "milliy",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Bordo baxmal, muhrlangan maktub va anor bezaklari. Muhr ochilgach — ravoqli muqova, otkritka-manzil, polaroid hikoya va chipta-javob.",
+    "descriptionRu": "Бордовый бархат, запечатанное письмо и гранатовые узоры. После вскрытия печати — арочная обложка, открытка с адресом, история в полароидах и билет-ответ.",
+    "descriptionEn": "Burgundy velvet, a sealed letter and pomegranate ornaments. Once the seal is broken — an arched cover, a card with the address, a story in polaroids and a reply ticket.",
+    "palette": [
+      "#7A1E2C",
+      "#4A0F1A",
+      "#C9A25E",
+      "#F3ECE0"
+    ],
+    "sample": {
+      "a": "Azizbek",
+      "b": "Sevara",
+      "date": "12 · 09 · 2026",
+      "venue": "«Navro‘z» saroyi",
+      "time": "17:00"
+    },
+    "theme": {
+      "bg": [
+        "#7a1e2c",
+        "#4a0f1a"
+      ],
+      "ink": "#f3ece0",
+      "accent": "#c9a25e",
+      "soft": "#e8d3a8",
+      "script": "cormorant",
+      "color": "bordo"
+    },
+    "fields": [
+      {
+        "key": "hosts",
+        "type": "text",
+        "label": "Mezbonlar",
+        "placeholder": "Karimovlar va Rahimovlar oilasi",
+        "max": 120,
+        "hint": "Taklif matni ostida «Hurmat bilan» deb chiqadi"
+      },
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Kutib olish",
+            "max": 60
+          },
+          "note": {
+            "type": "text",
+            "label": "Izoh",
+            "placeholder": "Sharbat va jonli musiqa",
+            "max": 80
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi",
+        "max": 160
+      },
+      {
+        "key": "storyText",
+        "type": "textarea",
+        "label": "Bizning hikoyamiz",
+        "placeholder": "Universitet kutubxonasida boshlangan hikoya — endi bir umrlik.",
+        "max": 400,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "story",
+        "type": "list",
+        "label": "Hikoya lahzalari",
+        "min": 0,
+        "max": 3,
+        "item": {
+          "year": {
+            "type": "text",
+            "label": "Yil",
+            "placeholder": "2021",
+            "max": 12
+          },
+          "caption": {
+            "type": "text",
+            "label": "Lahza",
+            "required": true,
+            "placeholder": "Tanishuv",
+            "max": 40
+          }
+        }
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/anor-phone.webp?v=ca0dfc6a",
+      "laptop": "/templates/anor-laptop.webp?v=4235a267",
+      "phoneScroll": "/templates/anor-phone-long.webp?v=ba045927",
+      "laptopScroll": "/templates/anor-laptop-long.webp?v=24775ce8",
+      "phoneRu": "/templates/anor-ru-phone.webp?v=632ab5cc",
+      "laptopRu": "/templates/anor-ru-laptop.webp?v=2ab67dda",
+      "phoneScrollRu": "/templates/anor-ru-phone-long.webp?v=cc196325",
+      "laptopScrollRu": "/templates/anor-ru-laptop-long.webp?v=9fc0f611",
+      "phoneEn": "/templates/anor-en-phone.webp?v=99dbb806",
+      "laptopEn": "/templates/anor-en-laptop.webp?v=a1c00c24",
+      "phoneScrollEn": "/templates/anor-en-phone-long.webp?v=5f7f98a9",
+      "laptopScrollEn": "/templates/anor-en-laptop-long.webp?v=10c6bddc"
+    }
+  },
+  {
+    "number": 2,
+    "slug": "zumrad",
+    "name": "Zumrad",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "milliy",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Zumrad yashil damask, oltin muhrli konvert va bog‘ manzarasi. Konvert ochilgach — madrasa ravog‘i, parda ortidagi bog‘, ravoqli suratlar va konvert-javob.",
+    "descriptionRu": "Изумрудный дамаск, конверт с золотой печатью и садовый пейзаж. После открытия конверта — арка медресе, сад за занавесом, фото в арках и конверт-ответ.",
+    "descriptionEn": "Emerald damask, an envelope with a golden seal and a garden scene. Once the envelope opens — a madrasa arch, a garden behind the curtain, photos in arches and a reply envelope.",
+    "palette": [
+      "#123C2E",
+      "#0C2A20",
+      "#C6A15B",
+      "#F7F3EA"
+    ],
+    "sample": {
+      "a": "Azizbek",
+      "b": "Sevara",
+      "date": "12 · 09 · 2026",
+      "venue": "«Navro‘z» saroyi",
+      "time": "17:00"
+    },
+    "theme": {
+      "bg": [
+        "#123c2e",
+        "#0c2a20"
+      ],
+      "ink": "#f7f3ea",
+      "accent": "#c6a15b",
+      "soft": "#e2c88e",
+      "script": "cormorant",
+      "color": "yashil"
+    },
+    "fields": [
+      {
+        "key": "hosts",
+        "type": "text",
+        "label": "Mezbonlar",
+        "placeholder": "Karimovlar va Rahimovlar oilasi",
+        "max": 120,
+        "hint": "Taklif matni ostida «Hurmat bilan» deb chiqadi"
+      },
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Kutib olish",
+            "max": 60
+          },
+          "note": {
+            "type": "text",
+            "label": "Izoh",
+            "placeholder": "Sharbat va jonli musiqa",
+            "max": 80
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi",
+        "max": 160
+      },
+      {
+        "key": "storyText",
+        "type": "textarea",
+        "label": "Bizning hikoyamiz",
+        "placeholder": "Universitet kutubxonasida boshlangan hikoya — endi bir umrlik.",
+        "max": 400,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "caption",
+        "type": "text",
+        "label": "Polaroid yozuvi",
+        "placeholder": "Bir umrga",
+        "max": 24
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/zumrad-phone.webp?v=b9e20728",
+      "laptop": "/templates/zumrad-laptop.webp?v=71dd0387",
+      "phoneScroll": "/templates/zumrad-phone-long.webp?v=a7a1ce8c",
+      "laptopScroll": "/templates/zumrad-laptop-long.webp?v=7a10a565",
+      "phoneRu": "/templates/zumrad-ru-phone.webp?v=607fd873",
+      "laptopRu": "/templates/zumrad-ru-laptop.webp?v=05787e88",
+      "phoneScrollRu": "/templates/zumrad-ru-phone-long.webp?v=95a04206",
+      "laptopScrollRu": "/templates/zumrad-ru-laptop-long.webp?v=742e916c",
+      "phoneEn": "/templates/zumrad-en-phone.webp?v=3734b94f",
+      "laptopEn": "/templates/zumrad-en-laptop.webp?v=74b26331",
+      "phoneScrollEn": "/templates/zumrad-en-phone-long.webp?v=47f69201",
+      "laptopScrollEn": "/templates/zumrad-en-laptop-long.webp?v=420ab45f"
+    }
+  },
+  {
+    "number": 3,
+    "slug": "parvoz",
+    "name": "Parvoz",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "zamonaviy",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Osmon va bulutlar orasidan ochiladigan taklifnoma. Samolyot bulutlar ortiga uchib ketgach — chipta ko‘rinishidagi taklif, illyuminator ortidagi taklif matni, to‘yga qadar sanoq, to‘y dasturi va mehmonlar javobi.",
+    "descriptionRu": "Приглашение, которое открывается среди неба и облаков. Когда самолёт скрывается за облаками — приглашение в виде билета, текст в иллюминаторе, отсчёт до торжества, программа и ответы гостей.",
+    "descriptionEn": "An invitation that opens among the sky and clouds. When the plane disappears into the clouds — an invitation in the form of a ticket, text in a porthole, a countdown, the programme and guest replies.",
+    "palette": [
+      "#1C2B45",
+      "#A8BCD6",
+      "#EFA97E",
+      "#F6F1E8"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "Sky Terrace",
+      "time": "17:30"
+    },
+    "theme": {
+      "bg": [
+        "#1c2b45",
+        "#17233a"
+      ],
+      "ink": "#f4e9d8",
+      "accent": "#efa97e",
+      "soft": "#a8bcd6",
+      "script": "cormorant",
+      "color": "moviy"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Kutib olish",
+            "max": 60
+          },
+          "note": {
+            "type": "text",
+            "label": "Izoh",
+            "placeholder": "Welcome-drink va jonli musiqa",
+            "max": 80
+          }
+        }
+      },
+      {
+        "key": "venueNote",
+        "type": "text",
+        "label": "Manzil izohi",
+        "placeholder": "Mehmonlar uchun bepul avtoturargoh mavjud",
+        "max": 80,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi",
+        "max": 160
+      },
+      {
+        "key": "story1",
+        "type": "text",
+        "label": "1-surat yozuvi",
+        "placeholder": "Uchrashuv · 2021",
+        "max": 28
+      },
+      {
+        "key": "story2",
+        "type": "text",
+        "label": "2-surat yozuvi",
+        "placeholder": "Unashtiruv · 2025",
+        "max": 28
+      },
+      {
+        "key": "quote",
+        "type": "textarea",
+        "label": "Iqtibos",
+        "placeholder": "Yo‘l qanchalik uzoq bo‘lmasin, eng go‘zal manzil — bir-birimiz.",
+        "max": 160,
+        "hint": "Ixtiyoriy"
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/parvoz-phone.webp?v=b1d44f7d",
+      "laptop": "/templates/parvoz-laptop.webp?v=6b5a19c6",
+      "phoneScroll": "/templates/parvoz-phone-long.webp?v=54c82452",
+      "laptopScroll": "/templates/parvoz-laptop-long.webp?v=74ef133a",
+      "phoneRu": "/templates/parvoz-ru-phone.webp?v=f57be9c4",
+      "laptopRu": "/templates/parvoz-ru-laptop.webp?v=5e1ed872",
+      "phoneScrollRu": "/templates/parvoz-ru-phone-long.webp?v=32b2cd71",
+      "laptopScrollRu": "/templates/parvoz-ru-laptop-long.webp?v=6474fbff",
+      "phoneEn": "/templates/parvoz-en-phone.webp?v=6bf42a94",
+      "laptopEn": "/templates/parvoz-en-laptop.webp?v=e9584f8d",
+      "phoneScrollEn": "/templates/parvoz-en-phone-long.webp?v=c0b5f04e",
+      "laptopScrollEn": "/templates/parvoz-en-laptop-long.webp?v=cd5e341b"
+    }
+  },
+  {
+    "number": 4,
+    "slug": "shato",
+    "name": "Shato",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "romantik",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Akvarel bog‘ va oltin darvoza. Darvoza ochilgach — ark ichidagi surat va taklif matni, kalendar va sanoq, qasr ko‘rinishidagi manzil, to‘y dasturi va mehmonlar javobi.",
+    "descriptionRu": "Акварельный сад и золотые ворота. Когда ворота открываются — фото в арке и текст приглашения, календарь и отсчёт, адрес на фоне замка, программа и ответы гостей.",
+    "descriptionEn": "A watercolour garden and golden gates. Once the gates open — a photo in an arch with the invitation text, a calendar and countdown, the venue with a château view, the programme and guest replies.",
+    "palette": [
+      "#7A7D5C",
+      "#DCE7F0",
+      "#B08D57",
+      "#FBF4EC"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "Chateau Blanc",
+      "time": "16:00"
+    },
+    "theme": {
+      "bg": [
+        "#7a7d5c",
+        "#5f6247"
+      ],
+      "ink": "#fbf4ec",
+      "accent": "#b08d57",
+      "soft": "#dce7f0",
+      "script": "cormorant",
+      "color": "krem"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Mehmonlar yig‘ilishi",
+            "max": 60
+          },
+          "note": {
+            "type": "text",
+            "label": "Izoh",
+            "placeholder": "Qadrdonlarimiz bilan uchrashamiz",
+            "max": 80
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi",
+        "max": 160
+      },
+      {
+        "key": "gifts",
+        "type": "textarea",
+        "label": "Sovg‘alar haqida",
+        "placeholder": "Yoningizda bo‘lishingiz — biz uchun eng katta sovg‘a.",
+        "max": 200,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "flowers",
+        "type": "textarea",
+        "label": "Gullar haqida",
+        "placeholder": "Guldasta o‘rniga iliq tilaklaringizni olib keling.",
+        "max": 200,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "contact",
+        "type": "textarea",
+        "label": "Aloqa",
+        "placeholder": "Savollar bo‘yicha tashkilotchimiz Malikaga murojaat qiling.",
+        "max": 200,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "phone",
+        "type": "text",
+        "label": "Telefon raqami",
+        "placeholder": "+998 90 123 45 67",
+        "max": 24,
+        "hint": "«Qo‘ng‘iroq» tugmasi uchun"
+      },
+      {
+        "key": "telegram",
+        "type": "text",
+        "label": "Telegram",
+        "placeholder": "@username",
+        "max": 40,
+        "hint": "«Telegram» tugmasi uchun"
+      },
+      {
+        "key": "quote",
+        "type": "textarea",
+        "label": "Iqtibos",
+        "placeholder": "Sevgi — bu bir-biriga emas, balki birga bir tomonga qarash.",
+        "max": 160,
+        "hint": "Ixtiyoriy"
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/shato-phone.webp?v=52f586e7",
+      "laptop": "/templates/shato-laptop.webp?v=e14f0057",
+      "phoneScroll": "/templates/shato-phone-long.webp?v=df1c1427",
+      "laptopScroll": "/templates/shato-laptop-long.webp?v=af0383de",
+      "phoneRu": "/templates/shato-ru-phone.webp?v=c356ac2a",
+      "laptopRu": "/templates/shato-ru-laptop.webp?v=318290ee",
+      "phoneScrollRu": "/templates/shato-ru-phone-long.webp?v=0d96cc7f",
+      "laptopScrollRu": "/templates/shato-ru-laptop-long.webp?v=a693a66c",
+      "phoneEn": "/templates/shato-en-phone.webp?v=52f586e7",
+      "laptopEn": "/templates/shato-en-laptop.webp?v=e14f0057",
+      "phoneScrollEn": "/templates/shato-en-phone-long.webp?v=84b15be2",
+      "laptopScrollEn": "/templates/shato-en-laptop-long.webp?v=9c3fcfec"
+    }
+  },
+  {
+    "number": 5,
+    "slug": "savsan",
+    "name": "Savsan",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "romantik",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Yashil qog‘oz fonda konvert va oq liliyalar. Muhr ochilgach — kolaj ko‘rinishidagi taklif, kalendar va kumush ramkalardagi suratlar, to‘yga qadar sanoq, kun tartibi, manzil va mehmonlar javobi.",
+    "descriptionRu": "Конверт и белые лилии на зелёной бумаге. Когда печать вскрыта — приглашение в виде коллажа, календарь и фото в серебряных рамках, отсчёт до торжества, программа дня, адрес и ответы гостей.",
+    "descriptionEn": "An envelope and white lilies on green paper. Once the seal is broken — a collage-style invitation, a calendar and photos in silver frames, a countdown, the day’s schedule, the venue and guest replies.",
+    "palette": [
+      "#5E7352",
+      "#9BAF8A",
+      "#A8884A",
+      "#F6F2E8"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "Gulzor Garden",
+      "time": "16:00"
+    },
+    "theme": {
+      "bg": [
+        "#5e7352",
+        "#4e6044"
+      ],
+      "ink": "#f6f2e8",
+      "accent": "#a8884a",
+      "soft": "#9baf8a",
+      "script": "cormorant",
+      "color": "yashil"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Mehmonlarni kutib olish",
+            "max": 60
+          },
+          "note": {
+            "type": "text",
+            "label": "Izoh",
+            "placeholder": "Iliq so‘zlar va birinchi suratlar",
+            "max": 80
+          }
+        }
+      },
+      {
+        "key": "hall",
+        "type": "text",
+        "label": "Zal nomi",
+        "placeholder": "Bog‘ zali",
+        "max": 30,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim, ayollar — marosim ko‘ylagi",
+        "max": 160
+      },
+      {
+        "key": "quote",
+        "type": "textarea",
+        "label": "Iqtibos",
+        "placeholder": "Ikki qalb uchrashganda vaqt she’rga aylanadi, hayot esa abadiy va’daga.",
+        "max": 160,
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "caption",
+        "type": "text",
+        "label": "Yorliq yozuvi",
+        "placeholder": "Sevgi — bir umrlik chiroyli sayohat",
+        "max": 48,
+        "hint": "Ixtiyoriy · «Lahzalar» bo‘limidagi yorliqda"
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/savsan-phone.webp?v=cbe14399",
+      "laptop": "/templates/savsan-laptop.webp?v=1523a4fa",
+      "phoneScroll": "/templates/savsan-phone-long.webp?v=474ccf74",
+      "laptopScroll": "/templates/savsan-laptop-long.webp?v=8eabfd57",
+      "phoneRu": "/templates/savsan-ru-phone.webp?v=79b592d0",
+      "laptopRu": "/templates/savsan-ru-laptop.webp?v=81477b47",
+      "phoneScrollRu": "/templates/savsan-ru-phone-long.webp?v=3114293c",
+      "laptopScrollRu": "/templates/savsan-ru-laptop-long.webp?v=27d86291",
+      "phoneEn": "/templates/savsan-en-phone.webp?v=cbe14399",
+      "laptopEn": "/templates/savsan-en-laptop.webp?v=1523a4fa",
+      "phoneScrollEn": "/templates/savsan-en-phone-long.webp?v=4427f2b8",
+      "laptopScrollEn": "/templates/savsan-en-laptop-long.webp?v=76d8d338"
+    }
+  },
+  {
+    "number": 6,
+    "slug": "muhr",
+    "name": "Muhr",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "klassik",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Bordo charm konvert va sur‘gich muhr. Sahifani pastga surganingizda muhr yoriladi va konvertning to‘rt qanoti birin-ketin ochiladi — ichidan taklif kartasi chiqadi. Keyin sanoq, kun tartibi, suratlar, manzil, dress-kod va mehmonlar javobi; oxirida konvert yana yopiladi.",
+    "descriptionRu": "Бордовый кожаный конверт и сургучная печать. Когда вы листаете страницу вниз, печать трескается, и четыре клапана конверта раскрываются один за другим — внутри приглашение. Дальше отсчёт, программа дня, фото, адрес, дресс-код и ответы гостей; в конце конверт снова закрывается.",
+    "descriptionEn": "A burgundy leather envelope with a wax seal. As you scroll down, the seal cracks and the envelope’s four flaps open one by one to reveal the invitation card. Then a countdown, the day’s schedule, photos, the venue, the dress code and guest replies; at the end the envelope closes again.",
+    "palette": [
+      "#5E1A27",
+      "#6E1F2E",
+      "#C9A06B",
+      "#F7F1E8"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "Grand Palace Hall",
+      "time": "17:00"
+    },
+    "theme": {
+      "bg": [
+        "#5e1a27",
+        "#3a0d16"
+      ],
+      "ink": "#f7f1e8",
+      "accent": "#c9a06b",
+      "soft": "#e8d9c4",
+      "script": "cormorant",
+      "color": "bordo"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Mehmonlarni kutib olish",
+            "max": 60
+          },
+          "note": {
+            "type": "text",
+            "label": "Izoh",
+            "placeholder": "Welcome-drink va jonli musiqa",
+            "max": 80
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — smoking, ayollar — uzun kechki libos",
+        "max": 160
+      },
+      {
+        "key": "quote",
+        "type": "textarea",
+        "label": "Iqtibos",
+        "placeholder": "Seni topganim — taqdirning eng chiroyli muhri.",
+        "max": 120,
+        "hint": "Ixtiyoriy · surat ostida"
+      },
+      {
+        "key": "caption",
+        "type": "text",
+        "label": "Yakuniy so‘z",
+        "placeholder": "Muhabbat — bir umrga bosilgan muhr.",
+        "max": 80,
+        "hint": "Ixtiyoriy · «Lahzalar» bo‘limida"
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/muhr-phone.webp?v=606de36b",
+      "laptop": "/templates/muhr-laptop.webp?v=b2585ab4",
+      "phoneScroll": "/templates/muhr-phone-long.webp?v=6831d44a",
+      "laptopScroll": "/templates/muhr-laptop-long.webp?v=2542a431",
+      "phoneRu": "/templates/muhr-ru-phone.webp?v=00a43555",
+      "laptopRu": "/templates/muhr-ru-laptop.webp?v=3a1ec680",
+      "phoneScrollRu": "/templates/muhr-ru-phone-long.webp?v=35f3e81b",
+      "laptopScrollRu": "/templates/muhr-ru-laptop-long.webp?v=0823c2d0",
+      "phoneEn": "/templates/muhr-en-phone.webp?v=606de36b",
+      "laptopEn": "/templates/muhr-en-laptop.webp?v=b2585ab4",
+      "phoneScrollEn": "/templates/muhr-en-phone-long.webp?v=00d16152",
+      "laptopScrollEn": "/templates/muhr-en-laptop-long.webp?v=9d387ed1"
+    }
+  },
+  {
+    "number": 7,
+    "slug": "kalit",
+    "name": "Kalit",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "klassik",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Qorong‘i xonada kalit teshigidan tushgan nur. Sahifani pastga surganingizda teshik kattalashadi va siz ichkariga — juftlik suratiga kirasiz. Keyin taklif matni, sana va sanoq, kuyov-kelin suratlari, kun tartibi, manzil, dress-kod va mehmonlar javobi; oxirida teshik yana yopiladi.",
+    "descriptionRu": "Свет из замочной скважины в тёмной комнате. Когда вы листаете страницу вниз, скважина расширяется, и вы попадаете внутрь — к фото пары. Дальше текст приглашения, дата и отсчёт, фото жениха и невесты, программа дня, адрес, дресс-код и ответы гостей; в конце скважина снова закрывается.",
+    "descriptionEn": "Light falling through a keyhole in a dark room. As you scroll down, the keyhole widens and you step inside — into the couple’s photo. Then the invitation text, the date and a countdown, photos of the bride and groom, the day’s schedule, the venue, the dress code and guest replies; at the end the keyhole closes again.",
+    "palette": [
+      "#120C08",
+      "#1C140F",
+      "#C8A46A",
+      "#EFE4D2"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "Grand Library",
+      "time": "17:00"
+    },
+    "theme": {
+      "bg": [
+        "#1c140f",
+        "#120c08"
+      ],
+      "ink": "#efe4d2",
+      "accent": "#c8a46a",
+      "soft": "#9c8b78",
+      "script": "cormorant",
+      "color": "oltin"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Mehmonlarni kutib olish",
+            "max": 40
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.",
+        "max": 160
+      },
+      {
+        "key": "quote",
+        "type": "textarea",
+        "label": "Iqtibos",
+        "placeholder": "Seni birinchi ko‘rganimda vaqt to‘xtadi. Endi esa butun umrim — shu lahza.",
+        "max": 120,
+        "hint": "Ixtiyoriy · «Lahza» bo‘limida, qo‘llar surati ostida"
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/kalit-phone.webp?v=32aa381d",
+      "laptop": "/templates/kalit-laptop.webp?v=410213a6",
+      "phoneScroll": "/templates/kalit-phone-long.webp?v=aa2b5524",
+      "laptopScroll": "/templates/kalit-laptop-long.webp?v=e1b99e6a",
+      "phoneRu": "/templates/kalit-ru-phone.webp?v=06038880",
+      "laptopRu": "/templates/kalit-ru-laptop.webp?v=0d7da382",
+      "phoneScrollRu": "/templates/kalit-ru-phone-long.webp?v=f2e2bf86",
+      "laptopScrollRu": "/templates/kalit-ru-laptop-long.webp?v=fffe44a5",
+      "phoneEn": "/templates/kalit-en-phone.webp?v=cb4b8a54",
+      "laptopEn": "/templates/kalit-en-laptop.webp?v=949c1efb",
+      "phoneScrollEn": "/templates/kalit-en-phone-long.webp?v=cdc30bf4",
+      "laptopScrollEn": "/templates/kalit-en-laptop-long.webp?v=fc7ee4cf"
+    }
+  },
+  {
+    "number": 8,
+    "slug": "sayohat",
+    "name": "Sayohat",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "zamonaviy",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Kelin-kuyov skuterda shahar bo‘ylab yo‘lga chiqadi. Sahifani pastga surganingizda shahar yon tomonga suriladi: haykal, teleminora, masjid va to‘yxona oldidan o‘tasiz. Har bekatda bitta karta — taklif matni, sana va sanoq, kun tartibi, dress-kod, manzil va mehmonlar javobi.",
+    "descriptionRu": "Жених и невеста едут на скутере по городу. Когда вы листаете страницу вниз, город движется в сторону: вы проезжаете памятник, телебашню, мечеть и ресторан. На каждой остановке — одна карточка: текст приглашения, дата и отсчёт, программа дня, дресс-код, адрес и ответы гостей.",
+    "descriptionEn": "The bride and groom ride a scooter through the city. As you scroll down, the city slides sideways: you pass a monument, the TV tower, a mosque and the wedding hall. Each stop has one card — the invitation text, the date and a countdown, the day’s schedule, the dress code, the venue and guest replies.",
+    "palette": [
+      "#C7DBF0",
+      "#22324D",
+      "#C46A4E",
+      "#FFFBF4"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "«Bahor» to‘yxonasi",
+      "time": "17:00"
+    },
+    "theme": {
+      "bg": [
+        "#c7dbf0",
+        "#9fbfe2"
+      ],
+      "ink": "#22324d",
+      "accent": "#c46a4e",
+      "soft": "#5d6b80",
+      "script": "cormorant",
+      "color": "moviy"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Mehmonlarni kutib olish",
+            "max": 40
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.",
+        "max": 160
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/sayohat-phone.webp?v=7393ebe1",
+      "laptop": "/templates/sayohat-laptop.webp?v=496ec9c2",
+      "phoneScroll": "/templates/sayohat-phone-long.webp?v=804c0315",
+      "laptopScroll": "/templates/sayohat-laptop-long.webp?v=46c8b803",
+      "phoneRu": "/templates/sayohat-ru-phone.webp?v=dbad3acf",
+      "laptopRu": "/templates/sayohat-ru-laptop.webp?v=b1aeb845",
+      "phoneScrollRu": "/templates/sayohat-ru-phone-long.webp?v=b84119be",
+      "laptopScrollRu": "/templates/sayohat-ru-laptop-long.webp?v=486afa38",
+      "phoneEn": "/templates/sayohat-en-phone.webp?v=7393ebe1",
+      "laptopEn": "/templates/sayohat-en-laptop.webp?v=90e016a7",
+      "phoneScrollEn": "/templates/sayohat-en-phone-long.webp?v=07dd22fa",
+      "laptopScrollEn": "/templates/sayohat-en-laptop-long.webp?v=37c5c328"
+    }
+  },
+  {
+    "number": 9,
+    "slug": "lino",
+    "name": "Lino",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "minimal",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Jurnal muqovasi uslubidagi sokin taklifnoma: iliq zig‘ir rang, katta surat va nafis yozuvlar. Sahifani pastga surganingizda surat sekin joyiga tushadi, ismlar pastdan ko‘tariladi, ingichka chiziqlar chiziladi. Keyin taklif matni, sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi.",
+    "descriptionRu": "Спокойное приглашение в стиле обложки журнала: тёплый льняной цвет, большое фото и изящные надписи. Когда вы листаете страницу вниз, фото плавно встаёт на место, имена поднимаются снизу, проводятся тонкие линии. Дальше текст приглашения, дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей.",
+    "descriptionEn": "A calm invitation styled like a magazine cover: warm linen tones, a large photo and elegant lettering. As you scroll down, the photo gently settles into place, the names rise from below and thin lines are drawn. Then the invitation text, the date and a countdown, the day’s schedule, the venue, the dress code and guest replies.",
+    "palette": [
+      "#EFE8DC",
+      "#2B2620",
+      "#6B6A45",
+      "#CFC5B4"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "«Zaytun bog‘i» restorani",
+      "time": "17:00"
+    },
+    "theme": {
+      "bg": [
+        "#f7f2e9",
+        "#efe8dc"
+      ],
+      "ink": "#2b2620",
+      "accent": "#6b6a45",
+      "soft": "#857c6d",
+      "script": "cormorant",
+      "color": "krem"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Mehmonlarni kutib olish",
+            "max": 40
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — kostyum-shim (galstuk ixtiyoriy), ayollar — marosim ko‘ylagi yoki nafis libos.",
+        "max": 160
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/lino-phone.webp?v=69feae65",
+      "laptop": "/templates/lino-laptop.webp?v=7e356d87",
+      "phoneScroll": "/templates/lino-phone-long.webp?v=ab54931f",
+      "laptopScroll": "/templates/lino-laptop-long.webp?v=8c09771a",
+      "phoneRu": "/templates/lino-ru-phone.webp?v=e7ea0939",
+      "laptopRu": "/templates/lino-ru-laptop.webp?v=2740490f",
+      "phoneScrollRu": "/templates/lino-ru-phone-long.webp?v=cc5ef382",
+      "laptopScrollRu": "/templates/lino-ru-laptop-long.webp?v=f21fbce6",
+      "phoneEn": "/templates/lino-en-phone.webp?v=eb37ea32",
+      "laptopEn": "/templates/lino-en-laptop.webp?v=c98c6e14",
+      "phoneScrollEn": "/templates/lino-en-phone-long.webp?v=636903fb",
+      "laptopScrollEn": "/templates/lino-en-laptop-long.webp?v=ee76c961"
+    }
+  },
+  {
+    "number": 10,
+    "slug": "kumush",
+    "name": "Kumush",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "zamonaviy",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Oq-qora plyonka uslubidagi taklifnoma: to‘liq ekranli surat, qora va kumushrang oq bo‘limlar, nafis bosh harflar. Sahifani pastga surganingizda surat sekin yaqinlashadi, ismlar harflari yig‘ilib paydo bo‘ladi, plyonka lentasi suriladi va kadrlar birin-ketin ochiladi. Keyin sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi.",
+    "descriptionRu": "Приглашение в стиле чёрно-белой плёнки: фото на весь экран, чёрные и серебристо-белые разделы, изящные заглавные буквы. Когда вы листаете страницу вниз, фото плавно приближается, буквы имён собираются вместе, плёнка прокручивается, а кадры проявляются один за другим. Дальше дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей.",
+    "descriptionEn": "An invitation in a black-and-white film style: a full-screen photo, black and silver-white sections and elegant capital letters. As you scroll down, the photo slowly settles in, the letters of the names gather together, a film strip slides along and the frames develop one by one. Then the date and a countdown, the day’s schedule, the venue, the dress code and guest replies.",
+    "palette": [
+      "#161616",
+      "#F2F1EE",
+      "#9A9A9A",
+      "#FFFFFF"
+    ],
+    "sample": {
+      "a": "Jasur",
+      "b": "Madina",
+      "date": "12 · 09 · 2026",
+      "venue": "«Opera» banket zali",
+      "time": "17:00"
+    },
+    "theme": {
+      "bg": [
+        "#2a2a2a",
+        "#161616"
+      ],
+      "ink": "#ffffff",
+      "accent": "#9a9a9a",
+      "soft": "#d4d3cf",
+      "script": "cormorant",
+      "color": "krem"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Mehmonlarni kutib olish",
+            "max": 40
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — smoking yoki to‘q rangli kostyum va kapalak galstuk, ayollar — uzun kechki libos.",
+        "max": 160
+      },
+      {
+        "key": "quote",
+        "type": "textarea",
+        "label": "Iqtibos",
+        "placeholder": "Har bir kadr — biz birga yozgan hikoyaning bir satri.",
+        "max": 120,
+        "hint": "Ixtiyoriy · «Bizning kadrlar» bo‘limida, plyonka ostida"
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/kumush-phone.webp?v=70f6c830",
+      "laptop": "/templates/kumush-laptop.webp?v=eb80430d",
+      "phoneScroll": "/templates/kumush-phone-long.webp?v=15dd89b7",
+      "laptopScroll": "/templates/kumush-laptop-long.webp?v=4d1be6a9",
+      "phoneRu": "/templates/kumush-ru-phone.webp?v=6d6e3b63",
+      "laptopRu": "/templates/kumush-ru-laptop.webp?v=ba03fd07",
+      "phoneScrollRu": "/templates/kumush-ru-phone-long.webp?v=30e58652",
+      "laptopScrollRu": "/templates/kumush-ru-laptop-long.webp?v=0d3da574",
+      "phoneEn": "/templates/kumush-en-phone.webp?v=70f6c830",
+      "laptopEn": "/templates/kumush-en-laptop.webp?v=eb80430d",
+      "phoneScrollEn": "/templates/kumush-en-phone-long.webp?v=48bd3b03",
+      "laptopScrollEn": "/templates/kumush-en-laptop-long.webp?v=8d24a1e0"
+    }
+  },
+  {
+    "number": 11,
+    "slug": "riviera",
+    "name": "Riviera",
+    "ceremony": "nikoh",
+    "ceremonies": [
+      "nikoh",
+      "fotiha"
+    ],
+    "style": "klassik",
+    "priceOld": 249000,
+    "price": 199000,
+    "featured": true,
+    "description": "Ko‘l bo‘yidagi villa ruhidagi nafis taklifnoma: shampan rang, qora va oltin, ko‘p bo‘sh joy. Sahifani pastga surganingizda oltin muhr ikkiga bo‘linadi, karta eshikdek ochiladi va ortidan ko‘l bo‘yidagi terrasa surati chiqadi, ismlar harflari yig‘iladi. Keyin taklif matni, suratlar, sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi.",
+    "descriptionRu": "Изысканное приглашение в духе виллы у озера: цвет шампанского, чёрный и золото, много воздуха. Когда вы листаете страницу вниз, золотая печать раскалывается надвое, карточка открывается как двери, а за ней появляется фото террасы у озера и собираются буквы имён. Дальше текст приглашения, фото, дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей.",
+    "descriptionEn": "An elegant invitation in the spirit of a lakeside villa: champagne tones, black and gold, plenty of air. As you scroll down, a gold seal splits in two, the card opens like a pair of doors to reveal a lakeside terrace photo, and the letters of the names gather together. Then the invitation text, photos, the date and a countdown, the day’s schedule, the venue, the dress code and guest replies.",
+    "palette": [
+      "#FAF7F1",
+      "#121212",
+      "#A8895A",
+      "#EEE6D8"
+    ],
+    "sample": {
+      "a": "Rustam",
+      "b": "Elina",
+      "date": "26 · 09 · 2026",
+      "venue": "Villa «Riviera»",
+      "time": "18:00"
+    },
+    "theme": {
+      "bg": [
+        "#faf7f1",
+        "#eee6d8"
+      ],
+      "ink": "#121212",
+      "accent": "#a8895a",
+      "soft": "#7a736a",
+      "script": "cormorant",
+      "color": "krem"
+    },
+    "fields": [
+      {
+        "key": "program",
+        "type": "list",
+        "label": "To‘y dasturi",
+        "min": 0,
+        "max": 8,
+        "item": {
+          "time": {
+            "type": "time",
+            "label": "Vaqt",
+            "required": true
+          },
+          "title": {
+            "type": "text",
+            "label": "Nomi",
+            "required": true,
+            "placeholder": "Nikoh marosimi",
+            "max": 40
+          },
+          "note": {
+            "type": "text",
+            "label": "Izoh",
+            "placeholder": "Terrasada, quyosh botishida",
+            "max": 80
+          }
+        }
+      },
+      {
+        "key": "dressCode",
+        "type": "select",
+        "label": "Dress-kod",
+        "options": [
+          "Klassik",
+          "Kechki rasmiy",
+          "Milliy",
+          "Ixtiyoriy"
+        ],
+        "hint": "Ixtiyoriy"
+      },
+      {
+        "key": "dressNote",
+        "type": "text",
+        "label": "Dress-kod izohi",
+        "placeholder": "Erkaklar — smoking yoki to‘q kostyum, ayollar — uzun kechki libos.",
+        "max": 160
+      },
+      {
+        "key": "quote",
+        "type": "textarea",
+        "label": "Iqtibos",
+        "placeholder": "Sevgi — eng go‘zal safar.",
+        "max": 80,
+        "hint": "Ixtiyoriy · monogramma ostida; bo‘sh qolsa — «Sevgi — eng go‘zal safar.»"
+      }
+    ],
+    "active": true,
+    "images": {
+      "phone": "/templates/riviera-phone.webp?v=52d3d214",
+      "laptop": "/templates/riviera-laptop.webp?v=a461e404",
+      "phoneScroll": "/templates/riviera-phone-long.webp?v=41ad2b33",
+      "laptopScroll": "/templates/riviera-laptop-long.webp?v=3c69eb36",
+      "phoneRu": "/templates/riviera-ru-phone.webp?v=1d9ef150",
+      "laptopRu": "/templates/riviera-ru-laptop.webp?v=5fbf3fc8",
+      "phoneScrollRu": "/templates/riviera-ru-phone-long.webp?v=f290d40f",
+      "laptopScrollRu": "/templates/riviera-ru-laptop-long.webp?v=e7614d22",
+      "phoneEn": "/templates/riviera-en-phone.webp?v=5d4f8bf6",
+      "laptopEn": "/templates/riviera-en-laptop.webp?v=7c04022c",
+      "phoneScrollEn": "/templates/riviera-en-phone-long.webp?v=6dcca245",
+      "laptopScrollEn": "/templates/riviera-en-laptop-long.webp?v=c7ed9170"
+    }
+  }
+]
