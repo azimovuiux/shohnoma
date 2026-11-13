@@ -315,4 +315,5 @@ export const ru: Record<string, string> = {
   "Havola yaratilmadi": "Не удалось создать ссылку",
   "Bank kartasi": "Банковская карта",
   "Uzun murojaat ba’zi shablonlarda mayda chiqadi — qisqaroq yozgan ma’qul (masalan, «Karimovlar oilasi»)": "Длинное обращение в некоторых шаблонах выглядит мелко — лучше короче (например, «Семья Каримовых»)",
+  "Boshqa usul": "Другой способ",
 };

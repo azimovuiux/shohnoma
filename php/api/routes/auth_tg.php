@@ -108,9 +108,10 @@ function tg_login_handle(array $msg): bool
             return true;
         }
     }
-    // 3) Oddiy /start (havolasiz)
-    if ($text === '/start') {
-        tg_api('sendMessage', ['chat_id' => $chat, 'text' => "Assalomu alaykum! Bu Shohnoma.uz boti.\n\nSaytga kirish uchun shohnoma.uz/kirish/ sahifasida «Telegram orqali kirish» tugmasini bosing."]);
+    // 3) Oddiy /start yoki /start support — salomlashish (support shu chatda ishlaydi)
+    if ($text === '/start' || $text === '/start support') {
+        $name = trim((string)($from['first_name'] ?? ''));
+        tg_api('sendMessage', ['chat_id' => $chat, 'text' => "Assalomu alaykum" . ($name ? ", $name" : '') . "! 👋 Bu Shohnoma.uz boti.\n\n💬 Savolingiz bo‘lsa — shu yerga yozing (matn, rasm yoki ovozli xabar). Support jamoamiz shu chatda javob beradi.\n\n🔑 Saytga kirish uchun shohnoma.uz/kirish/ sahifasida «Telegram orqali kirish» tugmasini bosing.", 'reply_markup' => ['remove_keyboard' => true]]);
         return true;
     }
     return false;

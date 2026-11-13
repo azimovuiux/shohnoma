@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-const PROVIDER_LABEL = ['payme' => 'Payme', 'click' => 'Click', 'google_pay' => 'Google Pay', 'p2p' => 'Bank kartasi'];
+const PROVIDER_LABEL = ['payme' => 'Payme', 'click' => 'Click', 'google_pay' => 'Google Pay', 'p2p' => 'Boshqa usul'];
 
-/** «Bank kartasi orqali»: 'card' — karta raqami ko‘rsatiladi, 'support' — mijoz support bilan bog‘lanib to‘laydi */
+/** «Boshqa usul»: 'card' — karta raqami ko‘rsatiladi, 'support' — mijoz support bilan bog‘lanib to‘laydi */
 function p2p_mode(): string
 {
     return env('P2P_MODE') === 'support' ? 'support' : 'card';
@@ -47,7 +47,7 @@ function start_payment(array $order, string $provider): string
         if (p2p_mode() === 'support' && $order['status'] !== 'pending_payment') {
             try {
                 $inv = one('SELECT contact_phone FROM invitations WHERE order_id = ?', [$id]);
-                notify_admin("💳 Bank kartasi orqali to‘lov (support): buyurtma №{$order['code']}, " . number_format((int)$order['amount'], 0, '', ' ') . " so‘m" . (!empty($inv['contact_phone']) ? ", tel: {$inv['contact_phone']}" : '') . ".\nMijoz bog‘lanadi — to‘lovni olgach, admin → Buyurtmalar’da holatini «To‘langan» qiling.");
+                notify_admin("💳 Boshqa usul bilan to‘lov (support): buyurtma №{$order['code']}, " . number_format((int)$order['amount'], 0, '', ' ') . " so‘m" . (!empty($inv['contact_phone']) ? ", tel: {$inv['contact_phone']}" : '') . ".\nMijoz bog‘lanadi — to‘lovni olgach, admin → Buyurtmalar’da holatini «To‘langan» qiling.");
             } catch (Throwable $e) {
                 error_log('[p2p support notify] ' . $e->getMessage());
             }

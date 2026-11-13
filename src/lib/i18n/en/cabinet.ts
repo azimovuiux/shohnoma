@@ -315,4 +315,5 @@ export const en: Record<string, string> = {
   "Havola yaratilmadi": "Couldn’t create the link",
   "Bank kartasi": "Bank card",
   "Uzun murojaat ba’zi shablonlarda mayda chiqadi — qisqaroq yozgan ma’qul (masalan, «Karimovlar oilasi»)": "A long greeting looks small in some templates — shorter is better (e.g. “The Karimov family”)",
+  "Boshqa usul": "Other method",
 };

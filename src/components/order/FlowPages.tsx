@@ -111,7 +111,7 @@ export function PayPageClient() {
               title={t("To‘lov")}
             />
             {cfg.data.providers.length || cfg.data.providersSoon?.length ? (
-              <PayChoice order={order} template={template} providers={cfg.data.providers as Provider[]} soon={(cfg.data.providersSoon ?? []) as Provider[]} />
+              <PayChoice order={order} template={template} providers={cfg.data.providers as Provider[]} soon={(cfg.data.providersSoon ?? []) as Provider[]} p2pMode={cfg.data.p2p.mode ?? "card"} />
             ) : (
               <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-3 px-5 pb-16 lg:px-10">
                 <p className="t-body-m text-ink-2">{t("Onlayn to‘lov vaqtincha ishlamayapti. Iltimos, biz bilan bog‘laning — to‘lovni boshqa yo‘l bilan qabul qilamiz.")}</p>
@@ -254,7 +254,7 @@ export function P2PPageClient() {
             <FlowTop
               back={{ href: `/buyurtma/${order.id}/tolov/`, label: t("To‘lov usuliga qaytish") }}
               step={4}
-              title={t("Bank kartasi orqali")}
+              title={t("Boshqa usul")}
             />
             {cfg.data.p2p.mode === "support" ? (
               <P2PSupport order={order} template={template} tg={cfg.data.p2p.supportTg ?? null} phone={cfg.data.p2p.supportPhone ?? null} />

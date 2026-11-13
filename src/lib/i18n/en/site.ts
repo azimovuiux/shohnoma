@@ -320,4 +320,8 @@ export const en: Record<string, string> = {
   "Bu sahifa topilmadi": "Page not found",
   "Havola eskirgan yoki xato yozilgan bo‘lishi mumkin. Taklifnoma qidirayotgan bo‘lsangiz — havolani yuborgan odamdan qayta so‘rang.": "The link may have expired or been mistyped. Looking for an invitation? Ask the sender for the link again.",
   "Bank kartasi": "Bank card",
+  "yoki Telegram botda yozing": "or message our Telegram bot",
+  "Boshqa usul": "Other method",
+  "Payme, Click yoki boshqa qulay usulda.": "Via Payme, Click or another convenient method.",
+  "Payme, Click yoki boshqa qulay usulda. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click or another convenient method. Once payment is confirmed, your link is ready right away.",
 };

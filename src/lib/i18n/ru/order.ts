@@ -397,4 +397,10 @@ export const ru: Record<string, string> = {
   "Karta ma’lumotlarini va to‘lov tartibini sizga yuboramiz. To‘lov tasdiqlangach, taklifnomangiz darhol ishga tushadi va SMS/Telegram orqali xabar olasiz.": "Мы пришлём реквизиты карты и порядок оплаты. После подтверждения оплаты приглашение сразу заработает, а вы получите уведомление по SMS/Telegram.",
   "Qo‘ng‘iroq qilish": "Позвонить",
   "Xabaringizga ish vaqtida tez javob beramiz: {hours}.": "В рабочее время отвечаем быстро: {hours}.",
+  "Boshqa usul": "Другой способ",
+  "Kartadan kartaga o‘tkazma": "Перевод с карты на карту",
+  "Operator bilan bog‘lanib to‘lash": "Оплата через оператора",
+  "Assalomu alaykum! №{code} buyurtmani to‘lamoqchiman. Summa: {sum}.": "Здравствуйте! Хочу оплатить заказ №{code}. Сумма: {sum}.",
+  "Payme, Click yoki boshqa qulay usulda.": "Через Payme, Click или другим удобным способом.",
+  "Payme, Click yoki boshqa qulay usulda. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click или другим удобным способом. После подтверждения оплаты ссылка сразу готова.",
 };

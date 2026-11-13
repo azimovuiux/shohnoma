@@ -10,7 +10,7 @@ import { AdminTitle, Empty, fmtDateTime } from "../shared";
 import { useReloadCounts } from "../AdminShell";
 import { ding } from "@/lib/ding";
 
-type Item = { id: string; name: string; phone: string; page: string | null; status: string; unread: number; lastAt: string; lastText: string | null };
+type Item = { id: string; name: string; phone: string; telegram?: boolean; tgUsername?: string | null; page: string | null; status: string; unread: number; lastAt: string; lastText: string | null };
 type Msg = { id: number; sender: "user" | "admin" | "bot"; text: string; createdAt: string };
 
 export function AdminChats() {
@@ -70,9 +70,10 @@ export function AdminChats() {
                 >
                   <span className="flex items-center gap-2">
                     <span className="min-w-0 flex-1 truncate t-title text-ink">{i.name}</span>
+                    {i.telegram && <span className="rounded-full bg-[#229ED9]/12 px-2 py-0.5 text-[11px] font-medium leading-none text-[#1c7fb0]">Telegram</span>}
                     {i.unread > 0 && <span className="rounded-full bg-maroon px-1.5 py-0.5 text-[11px] font-semibold leading-none text-ink-inverse">{i.unread}</span>}
                   </span>
-                  <span className="t-body-s text-ink-2">{formatPhoneDisplay(i.phone)} · {fmtDateTime(i.lastAt)}</span>
+                  <span className="t-body-s text-ink-2">{[i.phone ? formatPhoneDisplay(i.phone) : i.tgUsername ? `@${i.tgUsername}` : null, fmtDateTime(i.lastAt)].filter(Boolean).join(" · ")}</span>
                   {i.lastText && <span className="truncate t-body-s text-ink-2">{i.lastText}</span>}
                 </button>
               </li>
@@ -146,10 +147,21 @@ function Thread({ item, onBack, onRead }: { item: Item; onBack: () => void; onRe
         <div className="min-w-0 flex-1">
           <p className="t-title text-ink">{item.name}</p>
           <p className="t-body-s text-ink-2">
-            <a href={`tel:${item.phone}`} className="hover:text-maroon">
-              {formatPhoneDisplay(item.phone)}
-            </a>
+            {item.phone && (
+              <a href={`tel:${item.phone}`} className="hover:text-maroon">
+                {formatPhoneDisplay(item.phone)}
+              </a>
+            )}
+            {item.tgUsername && (
+              <>
+                {item.phone && " · "}
+                <a href={`https://t.me/${item.tgUsername}`} target="_blank" rel="noopener noreferrer" className="hover:text-maroon">
+                  @{item.tgUsername}
+                </a>
+              </>
+            )}
             {item.page && <> · {item.page}</>}
+            {item.telegram && <span className="block">Javobingiz mijozga Telegram bot orqali yuboriladi.</span>}
           </p>
         </div>
       </div>

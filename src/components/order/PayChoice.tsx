@@ -20,12 +20,12 @@ const meta: Record<Provider, { label: string; text: string; icon: React.ReactNod
   payme: { label: "Payme", text: "Payme ilovasi yoki karta orqali", icon: <Wallet size={20} />, cta: "Payme orqali to‘lash", logo: "/pay/payme.svg" },
   click: { label: "Click", text: "Click ilovasi yoki karta orqali", icon: <Card size={20} />, cta: "Click orqali to‘lash", logo: "/pay/click.svg" },
   google_pay: { label: "Google Pay", text: "Telefon hamyoni orqali", icon: <Mobile size={20} />, cta: "Google Pay orqali to‘lash" },
-  p2p: { label: "Bank kartasi orqali", text: "Uzcard yoki Humo kartadan o‘tkazma", icon: <MoneySend size={20} />, cta: "Karta orqali to‘lash" },
+  p2p: { label: "Boshqa usul", text: "Kartadan kartaga o‘tkazma", icon: <MoneySend size={20} />, cta: "Davom etish" },
 };
 
 export const PAY_URL_KEY = (id: string) => `shohnoma:pay:${id}`;
 
-export function PayChoice({ order, template, providers, soon = [] }: { order: FlowOrder; template: Template; providers: Provider[]; soon?: Provider[] }) {
+export function PayChoice({ order, template, providers, soon = [], p2pMode = "card" }: { order: FlowOrder; template: Template; providers: Provider[]; soon?: Provider[]; p2pMode?: "card" | "support" }) {
   const router = useLocalRouter();
   const t = useT();
   const [p, setP] = useState<Provider | null>(providers[0] ?? null);
@@ -122,7 +122,7 @@ export function PayChoice({ order, template, providers, soon = [] }: { order: Fl
                   ) : (
                     <span className="t-title text-ink">{t(meta[k].label)}</span>
                   )}
-                  <span className="t-body-s text-ink-2">{t(meta[k].text)}</span>
+                  <span className="t-body-s text-ink-2">{t(k === "p2p" && p2pMode === "support" ? "Operator bilan bog‘lanib to‘lash" : meta[k].text)}</span>
                 </span>
                 {off ? (
                   <span className="shrink-0 rounded-full bg-bg-soft px-2.5 py-1 t-body-s font-medium text-ink-2">{t("Tez kunda")}</span>

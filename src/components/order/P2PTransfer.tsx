@@ -237,14 +237,14 @@ export function P2PTransfer({
   );
 }
 
-/** «Bank kartasi orqali» — support rejimi: mijoz support bilan bog‘lanadi, to‘lov admin tomonidan qo‘lda tasdiqlanadi */
+/** «Boshqa usul» — support rejimi: mijoz support bilan bog‘lanadi, to‘lov admin tomonidan qo‘lda tasdiqlanadi */
 export function P2PSupport({ order, template, tg, phone }: { order: FlowOrder; template: Template; tg: string | null; phone: string | null }) {
   const t = useT();
   const locale = useLocale();
   const copy = useCopy();
   const live = useMemo(() => liveTemplate(template, order), [template, order]);
   const sum = formatPrice(order.amount, true, locale);
-  const msg = t("Assalomu alaykum! №{code} buyurtmani bank kartasi orqali to‘lamoqchiman. Summa: {sum}.", { code: order.code, sum });
+  const msg = t("Assalomu alaykum! №{code} buyurtmani to‘lamoqchiman. Summa: {sum}.", { code: order.code, sum });
   const tgUrl = tg ? `https://t.me/${tg}?text=${encodeURIComponent(msg)}` : site.telegram;
   const phoneShown = phone ? phone.replace(/^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/, "+998 $1 $2 $3 $4") : site.phone;
   const phoneHref = phone ? `tel:${phone}` : site.phoneHref;

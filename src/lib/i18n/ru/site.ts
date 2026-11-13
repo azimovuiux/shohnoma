@@ -320,4 +320,8 @@ export const ru: Record<string, string> = {
   "Bu sahifa topilmadi": "Страница не найдена",
   "Havola eskirgan yoki xato yozilgan bo‘lishi mumkin. Taklifnoma qidirayotgan bo‘lsangiz — havolani yuborgan odamdan qayta so‘rang.": "Возможно, ссылка устарела или набрана с ошибкой. Если вы ищете приглашение — попросите ссылку ещё раз у того, кто её отправил.",
   "Bank kartasi": "Банковская карта",
+  "yoki Telegram botda yozing": "или напишите нашему боту в Telegram",
+  "Boshqa usul": "Другой способ",
+  "Payme, Click yoki boshqa qulay usulda.": "Через Payme, Click или другим удобным способом.",
+  "Payme, Click yoki boshqa qulay usulda. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click или другим удобным способом. После подтверждения оплаты ссылка сразу готова.",
 };

@@ -112,7 +112,7 @@ function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, s
   const rows: [prefix: string, label: string, ready: boolean, hint: string][] = [
     ["PAYME", "Payme", !!(data.settings.PAYME_MERCHANT_ID?.set && data.settings.PAYME_KEY?.set), "Merchant ID va kalit kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
     ["CLICK", "Click", !!(data.settings.CLICK_SERVICE_ID?.set && data.settings.CLICK_MERCHANT_ID?.set && data.settings.CLICK_SECRET_KEY?.set), "Service ID, Merchant ID va Secret key kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
-    ["P2P", "Bank kartasi orqali", p2pSupport || !!data.settings.P2P_CARD?.set, "Karta raqami kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
+    ["P2P", "Boshqa usul", p2pSupport || !!data.settings.P2P_CARD?.set, "Karta raqami kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
   ];
   const set = async (prefix: string, label: string, st: PayState) => {
     setBusy(prefix);
@@ -154,7 +154,7 @@ function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, s
   );
 }
 
-/** «Bank kartasi orqali»: karta raqamini ko‘rsatish yoki support bilan bog‘lanib to‘lash */
+/** «Boshqa usul»: karta raqamini ko‘rsatish yoki support bilan bog‘lanib to‘lash */
 function BankCardCard({ data, save }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void> }) {
   const toast = useToast();
   const mode = data.settings.P2P_MODE?.value === "support" ? "support" : "card";
@@ -169,7 +169,7 @@ function BankCardCard({ data, save }: { data: Resp; save: (p: Record<string, str
   return (
     <>
       <Card
-        title="Bank kartasi orqali"
+        title="Boshqa usul (karta / support)"
         sub={
           mode === "card"
             ? "Mijoz to‘lov sahifasida karta raqamini ko‘radi, o‘tkazma qilib chekni yuklaydi. Chekni «Cheklar» bo‘limida tasdiqlaysiz."

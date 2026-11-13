@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CloseCircle, Messages, Send2 } from "@/components/icons";
 import { Field, Input, PhoneInput, api, phoneDigits } from "@/components/ui";
-import { useMe } from "@/lib/client";
+import { useConfig, useMe } from "@/lib/client";
 import { site } from "@/lib/site";
 import { ding, primeAudio } from "@/lib/ding";
 import { TelegramIcon } from "./TelegramIcon";
@@ -163,6 +163,7 @@ export function FloatingContact({ launcher = "all" }: { launcher?: "all" | "desk
 
 function StartForm({ onStarted }: { onStarted: (s: Session) => void }) {
   const { me } = useMe();
+  const bot = useConfig().data?.telegramBot ?? null;
   const t = useT();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -218,8 +219,8 @@ function StartForm({ onStarted }: { onStarted: (s: Session) => void }) {
       <button type="submit" disabled={busy} className="btn btn-primary w-full">
         {busy ? t("Yuborilmoqda…") : t("Chatni boshlash")}
       </button>
-      <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 t-body-s text-ink-2 hover:text-maroon">
-        <TelegramIcon size={15} /> {t("yoki Telegramda yozing")}
+      <a href={bot ? `https://t.me/${bot}?start=support` : site.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 t-body-s text-ink-2 hover:text-maroon">
+        <TelegramIcon size={15} /> {t("yoki Telegram botda yozing")}
       </a>
     </form>
   );
