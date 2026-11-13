@@ -1,18 +1,41 @@
 <?php
 declare(strict_types=1);
 
-const PROVIDER_LABEL = ['payme' => 'Payme', 'click' => 'Click', 'google_pay' => 'Google Pay', 'p2p' => 'P2P o‘tkazma'];
+const PROVIDER_LABEL = ['payme' => 'Payme', 'click' => 'Click', 'google_pay' => 'Google Pay', 'p2p' => 'Bank kartasi'];
+
+/** «Bank kartasi orqali»: 'card' — karta raqami ko‘rsatiladi, 'support' — mijoz support bilan bog‘lanib to‘laydi */
+function p2p_mode(): string
+{
+    return env('P2P_MODE') === 'support' ? 'support' : 'card';
+}
+
+/** To‘lov usulining holati: 'on' — ishlaydi, 'soon' — «Tez kunda» (ko‘rinadi, tanlab bo‘lmaydi), 'off' — ko‘rinmaydi */
+function provider_state(string $p): string
+{
+    $sandbox = env('PAYMENTS_SANDBOX') === '1';
+    if ($p === 'google_pay') return env('GOOGLE_PAY_ENABLED') === '1' ? 'on' : 'off';
+    $key = strtoupper($p);
+    // *_DISABLED = '1' — admin yashirgan (kalitlar saqlanib qoladi); *_SOON = '1' — «Tez kunda»
+    if (env($key . '_DISABLED') === '1') return 'off';
+    if (env($key . '_SOON') === '1') return 'soon';
+    $ready = match ($p) {
+        'payme' => (env('PAYME_MERCHANT_ID') && env('PAYME_KEY')) || $sandbox,
+        'click' => (env('CLICK_SERVICE_ID') && env('CLICK_MERCHANT_ID') && env('CLICK_SECRET_KEY')) || $sandbox,
+        'p2p' => p2p_mode() === 'support' || (bool)env('P2P_CARD'),
+        default => false,
+    };
+    // sozlanmagan usul yashirilmagan bo‘lsa — «Tez kunda» bo‘lib ko‘rinadi
+    return $ready ? 'on' : 'soon';
+}
 
 function enabled_providers(): array
 {
-    $sandbox = env('PAYMENTS_SANDBOX') === '1';
-    $list = [];
-    // *_DISABLED = '1' — admin to‘lov usulini vaqtincha o‘chirib qo‘ygan (kalitlar saqlanib qoladi)
-    if (((env('PAYME_MERCHANT_ID') && env('PAYME_KEY')) || $sandbox) && env('PAYME_DISABLED') !== '1') $list[] = 'payme';
-    if (((env('CLICK_SERVICE_ID') && env('CLICK_MERCHANT_ID') && env('CLICK_SECRET_KEY')) || $sandbox) && env('CLICK_DISABLED') !== '1') $list[] = 'click';
-    if (env('GOOGLE_PAY_ENABLED') === '1') $list[] = 'google_pay';
-    if (env('P2P_DISABLED') !== '1') $list[] = 'p2p';
-    return $list;
+    return array_values(array_filter(['payme', 'click', 'google_pay', 'p2p'], fn($p) => provider_state($p) === 'on'));
+}
+
+function soon_providers(): array
+{
+    return array_values(array_filter(['payme', 'click', 'p2p'], fn($p) => provider_state($p) === 'soon'));
 }
 
 function start_payment(array $order, string $provider): string
@@ -20,6 +43,15 @@ function start_payment(array $order, string $provider): string
     $id = $order['id'];
     $returnUrl = site_url() . "/buyurtma/$id/tolov/jarayonda/?usul=$provider";
     if ($provider === 'p2p') {
+        // support rejimi: adminga bir marta xabar — mijoz bog‘lanadi, to‘lov qo‘lda tasdiqlanadi
+        if (p2p_mode() === 'support' && $order['status'] !== 'pending_payment') {
+            try {
+                $inv = one('SELECT contact_phone FROM invitations WHERE order_id = ?', [$id]);
+                notify_admin("💳 Bank kartasi orqali to‘lov (support): buyurtma №{$order['code']}, " . number_format((int)$order['amount'], 0, '', ' ') . " so‘m" . (!empty($inv['contact_phone']) ? ", tel: {$inv['contact_phone']}" : '') . ".\nMijoz bog‘lanadi — to‘lovni olgach, admin → Buyurtmalar’da holatini «To‘langan» qiling.");
+            } catch (Throwable $e) {
+                error_log('[p2p support notify] ' . $e->getMessage());
+            }
+        }
         q("UPDATE orders SET status = 'pending_payment' WHERE id = ?", [$id]);
         return "/buyurtma/$id/tolov/p2p/";
     }

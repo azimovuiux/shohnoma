@@ -17,7 +17,7 @@ import { ReviewView } from "./ReviewView";
 import { PayChoice, type Provider } from "./PayChoice";
 import { Processing } from "./Processing";
 import { ReadyView } from "./ReadyView";
-import { P2PTransfer } from "./P2PTransfer";
+import { P2PSupport, P2PTransfer } from "./P2PTransfer";
 import { P2PChecking } from "./P2PChecking";
 import { StatusScreen, InfoCard, OrderLine, Timeline } from "./StatusScreen";
 import { RetryPay } from "./RetryPay";
@@ -110,8 +110,8 @@ export function PayPageClient() {
               step={4}
               title={t("To‘lov")}
             />
-            {cfg.data.providers.length ? (
-              <PayChoice order={order} template={template} providers={cfg.data.providers as Provider[]} />
+            {cfg.data.providers.length || cfg.data.providersSoon?.length ? (
+              <PayChoice order={order} template={template} providers={cfg.data.providers as Provider[]} soon={(cfg.data.providersSoon ?? []) as Provider[]} />
             ) : (
               <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-3 px-5 pb-16 lg:px-10">
                 <p className="t-body-m text-ink-2">{t("Onlayn to‘lov vaqtincha ishlamayapti. Iltimos, biz bilan bog‘laning — to‘lovni boshqa yo‘l bilan qabul qilamiz.")}</p>
@@ -254,9 +254,13 @@ export function P2PPageClient() {
             <FlowTop
               back={{ href: `/buyurtma/${order.id}/tolov/`, label: t("To‘lov usuliga qaytish") }}
               step={4}
-              title={t("Kartaga o‘tkazma")}
+              title={t("Bank kartasi orqali")}
             />
-            <P2PTransfer order={order} template={template} card={cfg.data.p2p} rejectedNote={rejected} />
+            {cfg.data.p2p.mode === "support" ? (
+              <P2PSupport order={order} template={template} tg={cfg.data.p2p.supportTg ?? null} phone={cfg.data.p2p.supportPhone ?? null} />
+            ) : (
+              <P2PTransfer order={order} template={template} card={cfg.data.p2p} rejectedNote={rejected} />
+            )}
           </>
         );
       }}

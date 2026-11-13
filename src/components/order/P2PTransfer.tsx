@@ -3,7 +3,9 @@
 import { useMemo, useRef, useState } from "react";
 import { useLocalRouter } from "@/lib/useLocalRouter";
 import { useLocale, useT } from "@/lib/i18n";
-import { ArrowRight, CloseCircle, Copy, DocumentText, Gallery, Timer1 } from "@/components/icons";
+import { ArrowRight, Call, CloseCircle, Copy, DocumentText, Gallery, Timer1 } from "@/components/icons";
+import { TelegramIcon } from "@/components/TelegramIcon";
+import { site } from "@/lib/site";
 import { useCopy } from "@/components/ui";
 import { formatPrice } from "@/lib/format";
 import { star8Path } from "@/lib/ornament";
@@ -231,6 +233,100 @@ export function P2PTransfer({
         {button}
         {err}
       </MobileBar>
+    </FlowColumns>
+  );
+}
+
+/** «Bank kartasi orqali» — support rejimi: mijoz support bilan bog‘lanadi, to‘lov admin tomonidan qo‘lda tasdiqlanadi */
+export function P2PSupport({ order, template, tg, phone }: { order: FlowOrder; template: Template; tg: string | null; phone: string | null }) {
+  const t = useT();
+  const locale = useLocale();
+  const copy = useCopy();
+  const live = useMemo(() => liveTemplate(template, order), [template, order]);
+  const sum = formatPrice(order.amount, true, locale);
+  const msg = t("Assalomu alaykum! №{code} buyurtmani bank kartasi orqali to‘lamoqchiman. Summa: {sum}.", { code: order.code, sum });
+  const tgUrl = tg ? `https://t.me/${tg}?text=${encodeURIComponent(msg)}` : site.telegram;
+  const phoneShown = phone ? phone.replace(/^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/, "+998 $1 $2 $3 $4") : site.phone;
+  const phoneHref = phone ? `tel:${phone}` : site.phoneHref;
+
+  const button = (
+    <a href={tgUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary w-full">
+      <TelegramIcon size={16} /> {t("Telegram’da yozish")}
+    </a>
+  );
+  const rows: [string, React.ReactNode, string][] = [
+    ["Buyurtma", `№ ${order.code}`, order.code],
+    ["To‘lanadigan summa", <span key="s" className="font-serif text-[22px] font-medium text-maroon">{sum}</span>, String(order.amount)],
+  ];
+
+  return (
+    <FlowColumns
+      aside={
+        <OrderSummary
+          template={template}
+          live={live}
+          order={order}
+          amount={order.amount}
+          rows={[
+            ["Buyurtma", `№ ${order.code}`],
+            ["Ismlar", namesOf(order)],
+            ["Sana", dayTime(order.day, order.time)],
+          ]}
+          action={button}
+        />
+      }
+    >
+      <div className="flex flex-col gap-6">
+        <MobileTemplateCard template={template} live={live} order={order} />
+        <SectionTitle>{t("To‘lov uchun biz bilan bog‘laning")}</SectionTitle>
+        <p className="t-body-m text-ink-2">
+          {t("Karta ma’lumotlarini va to‘lov tartibini sizga yuboramiz. To‘lov tasdiqlangach, taklifnomangiz darhol ishga tushadi va SMS/Telegram orqali xabar olasiz.")}
+        </p>
+        <dl className="w-full divide-y divide-line rounded-xl border border-line px-4">
+          {rows.map(([l, v, c]) => (
+            <div key={l} className="flex items-center justify-between gap-3 py-3">
+              <div className="flex flex-col">
+                <dt className="t-body-s text-ink-2">{t(l)}</dt>
+                <dd className="text-[15px] font-semibold text-ink">{v}</dd>
+              </div>
+              <button
+                type="button"
+                onClick={() => copy(c, t("{l} nusxalandi", { l: t(l) }))}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-bg-soft px-3 py-1.5 t-body-s font-medium text-maroon hover:bg-gold-soft"
+              >
+                <Copy size={14} /> {t("Nusxa")}
+              </button>
+            </div>
+          ))}
+        </dl>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <a href={tgUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-xl border border-line bg-bg-base px-4 py-4 hover:bg-bg-soft/60">
+            <span className="flex size-10 items-center justify-center rounded-full bg-bg-soft text-maroon">
+              <TelegramIcon size={18} />
+            </span>
+            <span className="flex flex-col">
+              <span className="t-title text-ink">Telegram</span>
+              <span className="t-body-s text-ink-2">{tg ? `@${tg}` : site.telegramHandle}</span>
+            </span>
+          </a>
+          <a href={phoneHref} className="flex items-center gap-3 rounded-xl border border-line bg-bg-base px-4 py-4 hover:bg-bg-soft/60">
+            <span className="flex size-10 items-center justify-center rounded-full bg-bg-soft text-maroon">
+              <Call size={18} />
+            </span>
+            <span className="flex flex-col">
+              <span className="t-title text-ink">{t("Qo‘ng‘iroq qilish")}</span>
+              <span className="t-body-s text-ink-2">{phoneShown}</span>
+            </span>
+          </a>
+        </div>
+        <p className="flex items-center gap-2 t-body-s text-ink-2">
+          <span className="text-gold">
+            <Timer1 size={16} />
+          </span>
+          {t("Xabaringizga ish vaqtida tez javob beramiz: {hours}.", { hours: t(site.workHours) })}
+        </p>
+      </div>
+      <MobileBar>{button}</MobileBar>
     </FlowColumns>
   );
 }

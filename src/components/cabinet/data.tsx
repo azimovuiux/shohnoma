@@ -11,7 +11,7 @@ import { PageLoading, useApi, useConfig, useRequireUser, useRouteParam } from "@
 import type { Guest, Invitation, Order, Payment, Stats } from "@/lib/types";
 import { tr, useT, type Locale } from "@/lib/i18n";
 
-export const providerLabel: Record<string, string> = { payme: "Payme", click: "Click", google_pay: "Google Pay", p2p: "P2P o‘tkazma" };
+export const providerLabel: Record<string, string> = { payme: "Payme", click: "Click", google_pay: "Google Pay", p2p: "Bank kartasi" };
 
 /** Sayt manzili (havolalar uchun): API config → brauzer manzili */
 export function useSiteUrl() {

@@ -41,7 +41,7 @@ export function AdminPayments() {
   return (
     <AdminRefreshProvider value={() => (reload(true), reloadCounts())}>
       <AdminTitle
-        title="P2P cheklar"
+        title="Karta cheklari"
         sub={
           <>
             Karta: <b className="font-semibold text-ink">{p2p.card}</b> · {p2p.holder} · {p2p.bank}. Izohdagi buyurtma kodi va summani tekshiring.

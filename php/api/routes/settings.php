@@ -53,7 +53,18 @@ route('PUT', '/admin/settings', function () {
             $v = strtoupper($v);
             if (!preg_match('/^(G|GTM)-[A-Z0-9]{4,16}$/', $v)) fail('ID «G-XXXXXXXXXX» (Google Analytics) yoki «GTM-XXXXXXX» (Tag Manager) ko‘rinishida bo‘lsin.', 422);
         }
-        if (str_ends_with($k, '_DISABLED')) $v = $v === '1' ? '1' : '';
+        if (str_ends_with($k, '_DISABLED') || str_ends_with($k, '_SOON')) $v = $v === '1' ? '1' : '';
+        if ($k === 'P2P_MODE') $v = $v === 'support' ? 'support' : '';
+        if ($k === 'P2P_SUPPORT_TG' && $v !== '') {
+            $v = preg_replace('#^(https?://)?(t\.me/|telegram\.me/)?@?#i', '', $v);
+            if (!preg_match('/^[A-Za-z0-9_]{4,32}$/', $v)) fail('Telegram username noto‘g‘ri (masalan: shohnoma_support)', 422);
+        }
+        if ($k === 'P2P_SUPPORT_PHONE' && $v !== '') {
+            $d = preg_replace('/\D/', '', $v);
+            if (strlen($d) === 9) $d = '998' . $d;
+            if (!preg_match('/^998\d{9}$/', $d)) fail('Telefon raqami +998 XX XXX XX XX ko‘rinishida bo‘lsin', 422);
+            $v = '+' . $d;
+        }
         if ($k === 'P2P_CARD' && $v !== '' && !preg_match('/^\d{4} ?\d{4} ?\d{4} ?\d{4}$/', $v)) fail('Karta raqami 16 ta raqam bo‘lsin', 422);
         setting_set($k, $v === '' ? null : mb_substr($v, 0, 500));
     }

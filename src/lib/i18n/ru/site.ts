@@ -181,7 +181,7 @@ export const ru: Record<string, string> = {
   "Ma’lumotlarni kiriting": "Введите данные",
   "Ismlar, sana, vaqt, manzil va rasmlarni qo‘shing.": "Добавьте имена, дату, время, адрес и фотографии.",
   "To‘lovni amalga oshiring": "Оплатите",
-  "Payme, Click, Google Pay yoki P2P o‘tkazma orqali.": "Через Payme, Click, Google Pay или перевод P2P.",
+  "Payme, Click yoki bank kartasi orqali.": "Через Payme, Click или банковскую карту.",
   "Havolani ulashing": "Поделитесь ссылкой",
   "Tayyor sayt havolasini Telegram va Instagramda yuboring.": "Отправьте ссылку на готовый сайт в Telegram и Instagram.",
   "P2P o‘tkazma": "Перевод P2P",
@@ -230,7 +230,7 @@ export const ru: Record<string, string> = {
   "Mehmonlar javobini qayerda ko‘raman?": "Где смотреть ответы гостей?",
   "Kabinetdagi “Mehmonlar javobi” bo‘limida: kim boradi, necha kishi va qanday tilak qoldirgan. Yangi javob kelganda Telegramga xabar yuboramiz.": "В разделе «Ответы гостей» личного кабинета: кто придёт, сколько человек и какие пожелания оставили. О новых ответах сообщаем в Telegram.",
   "Qaysi to‘lov usullari mavjud?": "Какие способы оплаты доступны?",
-  "Payme, Click, Google Pay yoki kartadan kartaga (P2P) o‘tkazma. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click, Google Pay или перевод с карты на карту (P2P). Сразу после подтверждения оплаты ссылка готова.",
+  "Payme, Click yoki bank kartasi orqali. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click или банковская карта. После подтверждения оплаты ссылка сразу готова.",
   "O‘z dizaynimni buyurtma qilsam bo‘ladimi?": "Можно ли заказать собственный дизайн?",
   "Albatta. Qisqa brifni to‘ldiring — dizaynerimiz 24 soat ichida bog‘lanadi va faqat siz uchun taklifnoma chizib beradi.": "Конечно. Заполните короткий бриф — наш дизайнер свяжется с вами в течение 24 часов и нарисует приглашение специально для вас.",
   // Bosh sahifa — yakun
@@ -319,4 +319,5 @@ export const ru: Record<string, string> = {
   // 404
   "Bu sahifa topilmadi": "Страница не найдена",
   "Havola eskirgan yoki xato yozilgan bo‘lishi mumkin. Taklifnoma qidirayotgan bo‘lsangiz — havolani yuborgan odamdan qayta so‘rang.": "Возможно, ссылка устарела или набрана с ошибкой. Если вы ищете приглашение — попросите ссылку ещё раз у того, кто её отправил.",
+  "Bank kartasi": "Банковская карта",
 };

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
-import { Field, Input, Toggle, api, confirmDialog, useToast } from "@/components/ui";
+import { Field, Input, Segment, api, confirmDialog, useToast } from "@/components/ui";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { TickCircle } from "@/components/icons";
 import { AdminError, AdminLoading, AdminTitle } from "../shared";
@@ -65,17 +65,7 @@ export function AdminSettings() {
         <TelegramCard data={data} save={save} reload={load} />
         <div className="flex flex-col gap-6">
           <PayMethodsCard data={data} save={save} />
-          <FieldsCard
-            title="P2P o‘tkazma (karta)"
-            sub="Mijoz to‘lov sahifasida ko‘radigan karta."
-            fields={[
-              ["P2P_CARD", "Karta raqami", "8600 1234 5678 9012"],
-              ["P2P_HOLDER", "Karta egasi", "ISM FAMILIYA"],
-              ["P2P_BANK", "Bank / tizim", "UZCARD"],
-            ]}
-            data={data}
-            save={save}
-          />
+          <BankCardCard data={data} save={save} />
           <FieldsCard
             title="Google Analytics"
             sub="Google Tag Manager ID (GTM-XXXXXXX) yoki GA4 Measurement ID (G-XXXXXXXXXX). Kiritilsa — sayt sahifalarida ishlay boshlaydi (admin paneldan tashqari). Bo‘sh qoldirilsa — o‘chadi."
@@ -111,20 +101,23 @@ export function AdminSettings() {
   );
 }
 
-/** To‘lov usullarini yoqish/o‘chirish (kalitlar o‘chirilmaydi — keyin qayta yoqish mumkin) */
+type PayState = "on" | "soon" | "off";
+
+/** To‘lov usullari: Faol / Tez kunda (ko‘rinadi, tanlab bo‘lmaydi) / Yashirin. Kalitlar o‘chirilmaydi. */
 function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void> }) {
   const toast = useToast();
   const [busy, setBusy] = useState<string | null>(null);
-  const rows: [key: string, label: string, ready: boolean, hint: string][] = [
-    ["PAYME_DISABLED", "Payme", !!(data.settings.PAYME_MERCHANT_ID?.set && data.settings.PAYME_KEY?.set), "Merchant ID va kalit kiritilmagan"],
-    ["CLICK_DISABLED", "Click", !!(data.settings.CLICK_SERVICE_ID?.set && data.settings.CLICK_MERCHANT_ID?.set && data.settings.CLICK_SECRET_KEY?.set), "Service ID, Merchant ID va Secret key kiritilmagan"],
-    ["P2P_DISABLED", "P2P o‘tkazma (karta)", true, ""],
+  const v = (k: string) => data.settings[k]?.value === "1";
+  const p2pSupport = data.settings.P2P_MODE?.value === "support";
+  const rows: [prefix: string, label: string, ready: boolean, hint: string][] = [
+    ["PAYME", "Payme", !!(data.settings.PAYME_MERCHANT_ID?.set && data.settings.PAYME_KEY?.set), "Merchant ID va kalit kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
+    ["CLICK", "Click", !!(data.settings.CLICK_SERVICE_ID?.set && data.settings.CLICK_MERCHANT_ID?.set && data.settings.CLICK_SECRET_KEY?.set), "Service ID, Merchant ID va Secret key kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
+    ["P2P", "Bank kartasi orqali", p2pSupport || !!data.settings.P2P_CARD?.set, "Karta raqami kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
   ];
-  const set = async (key: string, label: string, on: boolean) => {
-    if (!on && !(await confirmDialog({ title: `${label} o‘chirilsinmi?`, text: "Mijozlar to‘lov sahifasida bu usulni ko‘rmaydi. Saqlangan ma’lumotlar o‘chmaydi — istalgan vaqtda qayta yoqishingiz mumkin.", ok: "O‘chirish" }))) return;
-    setBusy(key);
+  const set = async (prefix: string, label: string, st: PayState) => {
+    setBusy(prefix);
     try {
-      await save({ [key]: on ? "" : "1" }, on ? `${label} yoqildi` : `${label} o‘chirildi`);
+      await save({ [`${prefix}_DISABLED`]: st === "off" ? "1" : "", [`${prefix}_SOON`]: st === "soon" ? "1" : "" }, `${label}: ${st === "on" ? "faol" : st === "soon" ? "«Tez kunda»" : "yashirildi"}`);
     } catch (e) {
       toast((e as Error).message, "error");
     } finally {
@@ -132,24 +125,93 @@ function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, s
     }
   };
   return (
-    <Card title="To‘lov usullari" sub="Mijozga ko‘rinadigan usullar. O‘chirilgan usul to‘lov sahifasida chiqmaydi.">
+    <Card title="To‘lov usullari" sub="Mijoz to‘lov sahifasida ko‘radigan usullar. «Tez kunda» — usul ko‘rinadi, lekin tanlab bo‘lmaydi. «Yashirin» — umuman chiqmaydi.">
       <ul className="flex flex-col divide-y divide-line">
-        {rows.map(([key, label, ready, hint]) => {
-          const on = data.settings[key]?.value !== "1";
+        {rows.map(([prefix, label, ready, hint]) => {
+          const st: PayState = v(`${prefix}_DISABLED`) ? "off" : v(`${prefix}_SOON`) ? "soon" : "on";
           return (
-            <li key={key} className="flex items-center justify-between gap-4 py-3">
+            <li key={prefix} className="flex flex-col gap-2.5 py-3.5">
               <span className="flex flex-col gap-0.5">
                 <span className="t-title text-ink">{label}</span>
-                <span className="t-body-s text-ink-2">{!ready ? hint : on ? "Yoqilgan" : "O‘chirilgan"}</span>
+                {!ready && st === "on" && <span className="t-body-s text-pending">{hint}</span>}
               </span>
-              <span className={busy === key || !ready ? "pointer-events-none opacity-50" : ""}>
-                <Toggle checked={ready && on} onChange={(v) => set(key, label, v)} label={label} />
+              <span className={busy === prefix ? "pointer-events-none opacity-50" : ""}>
+                <Segment<PayState>
+                  value={st}
+                  onChange={(x) => x !== st && set(prefix, label, x)}
+                  options={[
+                    { value: "on", label: "Faol" },
+                    { value: "soon", label: "Tez kunda" },
+                    { value: "off", label: "Yashirin" },
+                  ]}
+                />
               </span>
             </li>
           );
         })}
       </ul>
     </Card>
+  );
+}
+
+/** «Bank kartasi orqali»: karta raqamini ko‘rsatish yoki support bilan bog‘lanib to‘lash */
+function BankCardCard({ data, save }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void> }) {
+  const toast = useToast();
+  const mode = data.settings.P2P_MODE?.value === "support" ? "support" : "card";
+  const setMode = async (m: "card" | "support") => {
+    if (m === mode) return;
+    try {
+      await save({ P2P_MODE: m === "support" ? "support" : "" }, m === "support" ? "Endi mijoz support bilan bog‘lanib to‘laydi" : "Endi mijozga karta raqami ko‘rsatiladi");
+    } catch (e) {
+      toast((e as Error).message, "error");
+    }
+  };
+  return (
+    <>
+      <Card
+        title="Bank kartasi orqali"
+        sub={
+          mode === "card"
+            ? "Mijoz to‘lov sahifasida karta raqamini ko‘radi, o‘tkazma qilib chekni yuklaydi. Chekni «Cheklar» bo‘limida tasdiqlaysiz."
+            : "Mijoz to‘lov sahifasida support kontaktlarini ko‘radi va siz bilan bog‘lanadi. Sizga Telegram’da xabar keladi; to‘lovni olgach, Buyurtmalar’da holatini «To‘langan» qiling."
+        }
+      >
+        <Segment<"card" | "support">
+          value={mode}
+          onChange={setMode}
+          options={[
+            { value: "card", label: "Karta raqami" },
+            { value: "support", label: "Support orqali" },
+          ]}
+        />
+      </Card>
+      {mode === "card" ? (
+        <FieldsCard
+          key="card"
+          title="Karta ma’lumotlari"
+          sub="Mijoz to‘lov sahifasida ko‘radigan karta."
+          fields={[
+            ["P2P_CARD", "Karta raqami", "8600 1234 5678 9012"],
+            ["P2P_HOLDER", "Karta egasi", "ISM FAMILIYA"],
+            ["P2P_BANK", "Bank / tizim", "UZCARD"],
+          ]}
+          data={data}
+          save={save}
+        />
+      ) : (
+        <FieldsCard
+          key="support"
+          title="Support kontaktlari"
+          sub="To‘lov sahifasida ko‘rinadi. Bo‘sh qoldirilsa — saytdagi umumiy kontaktlar chiqadi."
+          fields={[
+            ["P2P_SUPPORT_TG", "Telegram username", "shohnoma_support"],
+            ["P2P_SUPPORT_PHONE", "Telefon", "+998 90 123 45 67"],
+          ]}
+          data={data}
+          save={save}
+        />
+      )}
+    </>
   );
 }
 

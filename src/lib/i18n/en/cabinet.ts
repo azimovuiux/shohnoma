@@ -258,4 +258,5 @@ export const en: Record<string, string> = {
   "Rasm yuklanmadi": "The picture was not uploaded",
   "Rasm hajmi 2 MB dan oshmasin": "The picture must not exceed 2 MB",
   "Rasmni saqlab bo‘lmadi": "Couldn’t save the picture",
+  "Bank kartasi": "Bank card",
 };

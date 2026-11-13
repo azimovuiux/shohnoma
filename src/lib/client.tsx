@@ -126,7 +126,9 @@ export function useRequireUser(admin = false) {
 
 export type SiteConfig = {
   providers: ("payme" | "click" | "google_pay" | "p2p")[];
-  p2p: { card: string; holder: string; bank: string };
+  /** «Tez kunda» — ko‘rinadi, lekin tanlab bo‘lmaydi */
+  providersSoon?: ("payme" | "click" | "p2p")[];
+  p2p: { mode?: "card" | "support"; card: string; holder: string; bank: string; supportTg?: string | null; supportPhone?: string | null };
   telegramBot: string | null;
   gaId?: string | null;
   sandbox: boolean;

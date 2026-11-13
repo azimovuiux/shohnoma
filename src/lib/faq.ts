@@ -14,7 +14,7 @@ export const faqs = [
   },
   {
     q: "Qaysi to‘lov usullari mavjud?",
-    a: "Payme, Click, Google Pay yoki kartadan kartaga (P2P) o‘tkazma. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.",
+    a: "Payme, Click yoki bank kartasi orqali. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.",
   },
   {
     q: "O‘z dizaynimni buyurtma qilsam bo‘ladimi?",

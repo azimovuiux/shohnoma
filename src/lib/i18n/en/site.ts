@@ -181,7 +181,7 @@ export const en: Record<string, string> = {
   "Ma’lumotlarni kiriting": "Enter the details",
   "Ismlar, sana, vaqt, manzil va rasmlarni qo‘shing.": "Add names, date, time, venue and photos.",
   "To‘lovni amalga oshiring": "Pay",
-  "Payme, Click, Google Pay yoki P2P o‘tkazma orqali.": "Via Payme, Click, Google Pay or P2P transfer.",
+  "Payme, Click yoki bank kartasi orqali.": "Via Payme, Click or bank card.",
   "Havolani ulashing": "Share the link",
   "Tayyor sayt havolasini Telegram va Instagramda yuboring.": "Send your site link on Telegram and Instagram.",
   "P2P o‘tkazma": "P2P transfer",
@@ -230,7 +230,7 @@ export const en: Record<string, string> = {
   "Mehmonlar javobini qayerda ko‘raman?": "Where do I see guest RSVPs?",
   "Kabinetdagi “Mehmonlar javobi” bo‘limida: kim boradi, necha kishi va qanday tilak qoldirgan. Yangi javob kelganda Telegramga xabar yuboramiz.": "In the “Guest RSVPs” section of your account: who’s coming, how many, and their wishes. We notify you on Telegram about new replies.",
   "Qaysi to‘lov usullari mavjud?": "Which payment methods are available?",
-  "Payme, Click, Google Pay yoki kartadan kartaga (P2P) o‘tkazma. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click, Google Pay or a card-to-card (P2P) transfer. Your link is ready as soon as payment is confirmed.",
+  "Payme, Click yoki bank kartasi orqali. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click or bank card. Once payment is confirmed, your link is ready right away.",
   "O‘z dizaynimni buyurtma qilsam bo‘ladimi?": "Can I order my own design?",
   "Albatta. Qisqa brifni to‘ldiring — dizaynerimiz 24 soat ichida bog‘lanadi va faqat siz uchun taklifnoma chizib beradi.": "Of course. Fill in a short brief — our designer will contact you within 24 hours and create an invitation just for you.",
   // Bosh sahifa — yakun
@@ -319,4 +319,5 @@ export const en: Record<string, string> = {
   // 404
   "Bu sahifa topilmadi": "Page not found",
   "Havola eskirgan yoki xato yozilgan bo‘lishi mumkin. Taklifnoma qidirayotgan bo‘lsangiz — havolani yuborgan odamdan qayta so‘rang.": "The link may have expired or been mistyped. Looking for an invitation? Ask the sender for the link again.",
+  "Bank kartasi": "Bank card",
 };

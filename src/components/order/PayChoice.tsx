@@ -17,18 +17,18 @@ import type { FlowOrder } from "./types";
 export type Provider = "payme" | "click" | "google_pay" | "p2p";
 
 const meta: Record<Provider, { label: string; text: string; icon: React.ReactNode; cta: string; logo?: string }> = {
-  payme: { label: "Payme", text: "Payme ilovasi yoki karta orqali", icon: <Wallet size={20} />, cta: "Payme orqali to‘lash" },
+  payme: { label: "Payme", text: "Payme ilovasi yoki karta orqali", icon: <Wallet size={20} />, cta: "Payme orqali to‘lash", logo: "/pay/payme.svg" },
   click: { label: "Click", text: "Click ilovasi yoki karta orqali", icon: <Card size={20} />, cta: "Click orqali to‘lash", logo: "/pay/click.svg" },
   google_pay: { label: "Google Pay", text: "Telefon hamyoni orqali", icon: <Mobile size={20} />, cta: "Google Pay orqali to‘lash" },
-  p2p: { label: "P2P o‘tkazma", text: "Kartadan kartaga o‘tkazish", icon: <MoneySend size={20} />, cta: "Kartaga o‘tkazish" },
+  p2p: { label: "Bank kartasi orqali", text: "Uzcard yoki Humo kartadan o‘tkazma", icon: <MoneySend size={20} />, cta: "Karta orqali to‘lash" },
 };
 
 export const PAY_URL_KEY = (id: string) => `shohnoma:pay:${id}`;
 
-export function PayChoice({ order, template, providers }: { order: FlowOrder; template: Template; providers: Provider[] }) {
+export function PayChoice({ order, template, providers, soon = [] }: { order: FlowOrder; template: Template; providers: Provider[]; soon?: Provider[] }) {
   const router = useLocalRouter();
   const t = useT();
-  const [p, setP] = useState<Provider>(providers[0]);
+  const [p, setP] = useState<Provider | null>(providers[0] ?? null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const live = useMemo(() => liveTemplate(template, order), [template, order]);
@@ -36,6 +36,7 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
   const locale = useLocale();
 
   const pay = async () => {
+    if (!p) return;
     setBusy(true);
     setError(null);
     try {
@@ -60,8 +61,8 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
   };
 
   const button = (
-    <button type="button" onClick={pay} disabled={busy} className="btn btn-primary w-full">
-      {busy ? t("Kuting…") : t(meta[p].cta)} <ArrowRight size={16} />
+    <button type="button" onClick={pay} disabled={busy || !p} className="btn btn-primary w-full disabled:opacity-50">
+      {busy ? t("Kuting…") : p ? t(meta[p].cta) : t("To‘lov usuli tez kunda ishga tushadi")} {p && <ArrowRight size={16} />}
     </button>
   );
   const err = error && (
@@ -97,21 +98,24 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
         <MobileTemplateCard template={template} live={live} order={order} />
         <SectionTitle>{t("Qanday to‘lamoqchisiz?")}</SectionTitle>
         <div role="radiogroup" aria-label={t("To‘lov usuli")} className="flex flex-col gap-3">
-          {providers.map((k) => {
-            const active = p === k;
+          {[...providers, ...soon.filter((k) => !providers.includes(k))].map((k) => {
+            const off = !providers.includes(k);
+            const active = !off && p === k;
             return (
               <button
                 key={k}
                 type="button"
                 role="radio"
                 aria-checked={active}
+                aria-disabled={off || undefined}
+                disabled={off}
                 onClick={() => setP(k)}
                 className={`flex items-center gap-3.5 rounded-xl border px-4 py-4 text-left transition-colors ${
-                  active ? "border-maroon bg-bg-soft" : "border-line bg-bg-base hover:bg-bg-soft/60"
+                  off ? "cursor-not-allowed border-line bg-bg-base" : active ? "border-maroon bg-bg-soft" : "border-line bg-bg-base hover:bg-bg-soft/60"
                 }`}
               >
-                {!meta[k].logo && <span className={active ? "text-maroon" : "text-ink-2"}>{meta[k].icon}</span>}
-                <span className="flex flex-1 flex-col gap-0.5">
+                {!meta[k].logo && <span className={off ? "text-ink-2/50" : active ? "text-maroon" : "text-ink-2"}>{meta[k].icon}</span>}
+                <span className={`flex flex-1 flex-col gap-0.5 ${off ? "opacity-45 grayscale" : ""}`}>
                   {meta[k].logo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={meta[k].logo} alt={meta[k].label} width={86} height={22} className="h-[22px] w-auto self-start" />
@@ -120,7 +124,13 @@ export function PayChoice({ order, template, providers }: { order: FlowOrder; te
                   )}
                   <span className="t-body-s text-ink-2">{t(meta[k].text)}</span>
                 </span>
-                {active ? <TickCircle size={20} color="var(--color-maroon)" /> : <span className="size-[18px] rounded-full border border-ink/70" />}
+                {off ? (
+                  <span className="shrink-0 rounded-full bg-bg-soft px-2.5 py-1 t-body-s font-medium text-ink-2">{t("Tez kunda")}</span>
+                ) : active ? (
+                  <TickCircle size={20} color="var(--color-maroon)" />
+                ) : (
+                  <span className="size-[18px] rounded-full border border-ink/70" />
+                )}
               </button>
             );
           })}

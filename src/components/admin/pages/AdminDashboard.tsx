@@ -36,7 +36,7 @@ export function AdminDashboard() {
         <StatCard label="Bugun yangi buyurtmalar" value={data.todayOrders} hint={`${data.todayPaid} tasi to‘langan`} />
         <StatCard label="Shu oy tushum" value={formatPrice(data.monthRevenue)} hint={`${data.monthPaidCount} ta to‘lov`} tone="success" />
         <StatCard label="Faol taklifnomalar" value={data.activeInvitations} />
-        <StatCard label="Tekshiriladigan P2P cheklar" value={data.pendingP2p} tone={data.pendingP2p ? "pending" : "ink"} hint={<Link href="/admin/tolovlar/" className="text-maroon hover:underline">Ko‘rish →</Link>} />
+        <StatCard label="Tekshiriladigan karta cheklari" value={data.pendingP2p} tone={data.pendingP2p ? "pending" : "ink"} hint={<Link href="/admin/tolovlar/" className="text-maroon hover:underline">Ko‘rish →</Link>} />
         <StatCard label="Yangi briflar" value={data.newBriefs} hint={<Link href="/admin/briflar/" className="text-maroon hover:underline">Ko‘rish →</Link>} />
         <StatCard label="Yangi xabarlar" value={data.newLeads} hint={<Link href="/admin/xabarlar/" className="text-maroon hover:underline">Ko‘rish →</Link>} />
       </div>

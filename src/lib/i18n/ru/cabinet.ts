@@ -258,4 +258,5 @@ export const ru: Record<string, string> = {
   "Rasm yuklanmadi": "Картинка не загрузилась",
   "Rasm hajmi 2 MB dan oshmasin": "Размер картинки — не более 2 МБ",
   "Rasmni saqlab bo‘lmadi": "Не удалось сохранить картинку",
+  "Bank kartasi": "Банковская карта",
 };

@@ -34,7 +34,7 @@ export const providerLabel: Record<Payment["provider"], string> = {
   payme: "Payme",
   click: "Click",
   google_pay: "Google Pay",
-  p2p: "P2P o‘tkazma",
+  p2p: "Bank kartasi",
 };
 
 export function toFlowOrder(r: OrderResponse): FlowOrder {
