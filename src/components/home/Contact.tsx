@@ -70,7 +70,7 @@ export function Contact() {
               <li key={c.name}>
                 <a
                   href={c.href}
-                  target={c.href.startsWith("http") ? "_blank" : undefined}
+                  target={c.href.startsWith("http") || c.href.startsWith("/api/") ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   className="flex h-full flex-col gap-4 rounded-[18px] border border-line p-4 transition-colors hover:bg-bg-soft sm:p-[22px]"
                 >

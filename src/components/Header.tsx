@@ -237,6 +237,8 @@ function MobileMenu({
           <div className="flex gap-2">
             <a
               href={site.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
               className="icon-btn !h-10 !w-10"
               aria-label="Telegram"
             >
@@ -448,7 +450,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
 
           <div className="hidden items-center gap-2.5 lg:flex">
             <LangSwitcher />
-            <a href={site.telegram} className="icon-btn" aria-label="Telegram">
+            <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="Telegram">
               <TelegramIcon size={18} />
             </a>
             <a
@@ -473,6 +475,8 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
             <LangSwitcher compact />
             <a
               href={site.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
               className="icon-btn !h-10 !w-10"
               aria-label="Telegram"
             >

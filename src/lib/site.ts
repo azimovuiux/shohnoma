@@ -2,8 +2,9 @@
 export const site = {
   name: "Shohnoma",
   domain: "shohnoma.uz",
-  telegram: "https://t.me/shohnoma",
-  telegramHandle: "@shohnoma",
+  /** Support Telegram bot: /api/support-tg → admin sozlamalaridagi bot (t.me/<bot>?start=support) */
+  telegram: "/api/support-tg",
+  telegramHandle: "Telegram bot",
   phone: "+998 90 123 45 67",
   phoneHref: "tel:+998901234567",
   whatsapp: "https://wa.me/998901234567",

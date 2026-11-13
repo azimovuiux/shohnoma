@@ -61,6 +61,8 @@ export function Footer() {
                 <a
                   key={s.label}
                   href={s.href}
+                  target={s.href.startsWith("tel:") ? undefined : "_blank"}
+                  rel="noopener noreferrer"
                   aria-label={t(s.label)}
                   className="flex size-10 items-center justify-center rounded-full border border-ink-inverse/30 transition-colors hover:bg-white/10"
                 >
@@ -73,11 +75,17 @@ export function Footer() {
             {columns.map((c) => (
               <div key={c.title} className="flex w-[180px] max-w-full flex-col gap-3.5">
                 <p className="t-annotation text-[#e2c48c]">{t(c.title)}</p>
-                {c.links.map((l) => (
-                  <Link key={l.label} href={l.href} className="t-body-m opacity-85 transition-opacity hover:opacity-100">
-                    {t(l.label)}
-                  </Link>
-                ))}
+                {c.links.map((l) =>
+                  l.href.startsWith("/api/") ? (
+                    <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="t-body-m opacity-85 transition-opacity hover:opacity-100">
+                      {t(l.label)}
+                    </a>
+                  ) : (
+                    <Link key={l.label} href={l.href} className="t-body-m opacity-85 transition-opacity hover:opacity-100">
+                      {t(l.label)}
+                    </Link>
+                  ),
+                )}
               </div>
             ))}
           </div>

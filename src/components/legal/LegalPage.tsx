@@ -24,8 +24,8 @@ export function LegalPage({ title, italic, updated, children }: { title: string;
         </div>
         <div className="mt-12 rounded-panel bg-bg-soft p-6 t-body-m text-ink-2">
           {t("Savollar bo‘yicha:")}{" "}
-          <a href={site.telegram} className="text-maroon hover:underline">
-            Telegram {site.telegramHandle}
+          <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="text-maroon hover:underline">
+            {site.telegramHandle}
           </a>{" "}
           ·{" "}
           <a href={site.phoneHref} className="text-maroon hover:underline">

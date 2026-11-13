@@ -85,6 +85,14 @@ route('POST', '/chat/messages', function () {
     json_out(['ok' => true, 'message' => chat_msg_out($m)]);
 });
 
+/** Saytdagi barcha «Telegram» havolalari → support bot (admin sozlamalaridagi) */
+route('GET', '/support-tg', function () {
+    $bot = env('TELEGRAM_BOT_TOKEN') ? tg_bot_username() : null;
+    header('Cache-Control: no-store');
+    header('Location: ' . ($bot ? "https://t.me/$bot?start=support" : site_url() . '/#aloqa'), true, 302);
+    exit;
+});
+
 /* ── Admin ── */
 route('GET', '/admin/chats', function () {
     require_admin();
@@ -112,8 +120,10 @@ route('POST', '/admin/chats/:id', function ($p) {
     $text = str_in($b['text'] ?? '', 2000);
     if ($text === '') fail('Xabar bo‘sh', 422);
     // Telegram mijozi: javob botdan uning chatiga yuboriladi
-    if (!empty($s['tg_chat_id']) && tg_api('sendMessage', ['chat_id' => $s['tg_chat_id'], 'text' => $text]) === null) fail('Telegram’ga yuborilmadi — mijoz botni to‘xtatgan bo‘lishi mumkin', 502);
+    $sent = null;
+    if (!empty($s['tg_chat_id']) && ($sent = tg_api('sendMessage', ['chat_id' => $s['tg_chat_id'], 'text' => $text])) === null) fail('Telegram’ga yuborilmadi — mijoz botni to‘xtatgan bo‘lishi mumkin', 502);
     $m = chat_add($s['id'], 'admin', $text);
+    if (!empty($sent['message_id'])) q('UPDATE chat_messages SET tg_user_msg_id = ? WHERE id = ?', [(int)$sent['message_id'], (int)$m['id']]);
     json_out(['ok' => true, 'message' => chat_msg_out($m)]);
 });
 
@@ -158,11 +168,14 @@ function tg_webhook_handle(array $u): void
     if (!$s) json_out(['ok' => true]);
     if (!empty($s['tg_chat_id'])) {
         // Telegram mijozi: javob botdan mijozga boradi (matn yoki rasm/ovoz/fayl — nusxa)
-        $ok = isset($msg['text'])
-            ? tg_api('sendMessage', ['chat_id' => $s['tg_chat_id'], 'text' => mb_substr($text, 0, 4000)]) !== null
-            : tg_api('copyMessage', ['chat_id' => $s['tg_chat_id'], 'from_chat_id' => $admin, 'message_id' => (int)$msg['message_id']]) !== null;
-        if (!$ok) tg_send($admin, '⚠️ Javob yetkazilmadi — mijoz botni to‘xtatgan (bloklagan) bo‘lishi mumkin.');
-        chat_add($s['id'], 'admin', $text !== '' ? mb_substr($text, 0, 2000) : tg_media_label($msg));
+        // mijoz chatida ham o‘sha xabariga reply bo‘lib boradi (agar u xabar mijozniki yoki botniki bo‘lsa)
+        $rp = !empty($orig['tg_user_msg_id']) ? ['reply_parameters' => ['message_id' => (int)$orig['tg_user_msg_id'], 'allow_sending_without_reply' => true]] : [];
+        $sent = isset($msg['text'])
+            ? tg_api('sendMessage', ['chat_id' => $s['tg_chat_id'], 'text' => mb_substr($text, 0, 4000)] + $rp)
+            : tg_api('copyMessage', ['chat_id' => $s['tg_chat_id'], 'from_chat_id' => $admin, 'message_id' => (int)$msg['message_id']] + $rp);
+        if ($sent === null) tg_send($admin, '⚠️ Javob yetkazilmadi — mijoz botni to‘xtatgan (bloklagan) bo‘lishi mumkin.');
+        $row = chat_add($s['id'], 'admin', $text !== '' ? mb_substr($text, 0, 2000) : tg_media_label($msg), (int)$msg['message_id']);
+        if (!empty($sent['message_id'])) q('UPDATE chat_messages SET tg_user_msg_id = ? WHERE id = ?', [(int)$sent['message_id'], (int)$row['id']]);
         json_out(['ok' => true]);
     }
     if ($text === '' || !isset($msg['text'])) { tg_send($admin, 'Saytdagi chatga faqat matnli javob yuboriladi.'); json_out(['ok' => true]); }
@@ -209,19 +222,29 @@ function tg_support_incoming(array $msg, string $admin): void
     $m = chat_add($s['id'], 'user', $stored);
 
     $who = "{$name}" . ($username ? " (@{$username})" : '') . ($s['phone'] ? " · {$s['phone']}" : '');
+    $userMsgId = (int)$msg['message_id'];
+    q('UPDATE chat_messages SET tg_user_msg_id = ? WHERE id = ?', [$userMsgId, (int)$m['id']]);
+    // Mijoz qaysi xabarga reply qilgan bo‘lsa — guruhda ham o‘sha xabarga reply bo‘lib boradi
+    $rp = [];
+    $ref = (int)($msg['reply_to_message']['message_id'] ?? 0);
+    if ($ref) {
+        $t = one('SELECT tg_message_id FROM chat_messages WHERE session_id = ? AND tg_user_msg_id = ? AND tg_message_id IS NOT NULL ORDER BY id DESC LIMIT 1', [$s['id'], $ref]);
+        if ($t) $rp = ['reply_parameters' => ['message_id' => (int)$t['tg_message_id'], 'allow_sending_without_reply' => true]];
+    }
     $tgId = null;
     if ($admin && env('TELEGRAM_BOT_TOKEN')) {
         if (isset($msg['text'])) {
-            $tgId = tg_send_id($admin, "🤖 Botda · {$who}\n\n{$text}\n\n↩️ Javob berish uchun shu xabarga Reply qiling");
+            $r = tg_api('sendMessage', ['chat_id' => $admin, 'text' => "🤖 Botda · {$who}\n\n{$text}\n\n↩️ Javob berish uchun shu xabarga Reply qiling", 'disable_web_page_preview' => true] + $rp);
+            $tgId = $r['message_id'] ?? null;
         } else {
             // rasm/ovoz/fayl: avval sarlavha, keyin xabarning nusxasi (ikkalasiga ham Reply qilsa bo‘ladi)
-            $head = tg_send_id($admin, "🤖 Botda · {$who}\n\n" . tg_media_label($msg) . "\n\n↩️ Javob berish uchun shu xabarga yoki pastdagisiga Reply qiling");
-            $copy = tg_api('copyMessage', ['chat_id' => $admin, 'from_chat_id' => $chat, 'message_id' => (int)$msg['message_id']]);
-            $tgId = $head;
-            if (!empty($copy['message_id'])) q('INSERT INTO chat_messages (session_id, sender, text, tg_message_id) VALUES (?, \'system\', ?, ?)', [$s['id'], 'media', (int)$copy['message_id']]);
+            $r = tg_api('sendMessage', ['chat_id' => $admin, 'text' => "🤖 Botda · {$who}\n\n" . tg_media_label($msg) . "\n\n↩️ Javob berish uchun shu xabarga yoki pastdagisiga Reply qiling"] + $rp);
+            $tgId = $r['message_id'] ?? null;
+            $copy = tg_api('copyMessage', ['chat_id' => $admin, 'from_chat_id' => $chat, 'message_id' => $userMsgId]);
+            if (!empty($copy['message_id'])) q('INSERT INTO chat_messages (session_id, sender, text, tg_message_id, tg_user_msg_id) VALUES (?, \'system\', ?, ?, ?)', [$s['id'], 'media', (int)$copy['message_id'], $userMsgId]);
         }
     }
-    if ($tgId) q('UPDATE chat_messages SET tg_message_id = ? WHERE id = ?', [$tgId, (int)$m['id']]);
+    if ($tgId) q('UPDATE chat_messages SET tg_message_id = ? WHERE id = ?', [(int)$tgId, (int)$m['id']]);
     // Birinchi xabarga (yoki 1 soat jim turgandan keyin) qisqa javob — mijoz xabari yetganini bilsin
     if (!$quiet) tg_api('sendMessage', ['chat_id' => $chat, 'text' => 'Xabaringiz qabul qilindi ✅ Support jamoamiz shu chatda javob beradi (odatda bir necha daqiqada, ish vaqtida).']);
 }
