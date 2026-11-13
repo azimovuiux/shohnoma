@@ -79,7 +79,7 @@ export function cardTexts(input: ShareCardInput, design?: Design): Texts {
   const guest = clean(input.guest, 80);
   return {
     guest: guest ? tr(lang, "Hurmatli {guest}", { guest }) : "",
-    kicker: tr(lang, KICKER[input.ceremony] ?? KICKER.nikoh),
+    kicker: KICKER[input.ceremony] ? tr(lang, KICKER[input.ceremony]) : "",
     a: clean(input.personA, 60),
     b,
     amp,

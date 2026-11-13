@@ -73,6 +73,9 @@ $desc = trim($date . ($inv['venue_name'] ? ', ' . $inv['venue_name'] : ''), ', '
 $url = site_url() . '/' . $slug . '/';
 // Ulashish kartasi (3:4, mijoz ma’lumoti bilan; shaxsiy havola ?g=/?m= uchun — o‘sha mehmon kartasi), bo‘lmasa umumiy shablon rasmi
 $card = share_og($inv, $guestName);
+// Karta hali yuklanmagan bo‘lsa — shablon uslubidagi «Taklifnoma» kartasi (3:4), u ham bo‘lmasa umumiy rasm
+$tplCard = '/og/' . preg_replace('/[^a-z0-9-]/', '', (string)$inv['template_slug']) . '-card.jpg';
+if (!$card && is_file(__DIR__ . $tplCard)) $card = [site_url() . $tplCard . '?v=' . filemtime(__DIR__ . $tplCard), 1080, 1440];
 [$image, $imgW, $imgH] = $card ?? [site_url() . '/og/' . $inv['template_slug'] . '.png', 1200, 630];
 
 $h = fn(string $s) => htmlspecialchars($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');

@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { isPaidStatus } from "@/lib/types";
 import { InvitationNav } from "./InvitationNav";
+import { useShareCardSync } from "@/components/share/ShareInvite";
 import { InvitationProvider, NotFoundBox, useInvitationData, useSiteUrl, type SwitcherItem } from "./data";
 
 const wrap = "mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-20 pt-6 lg:flex-row lg:gap-10 lg:px-10 xl:px-[120px] lg:pb-[100px] lg:pt-10";
@@ -25,6 +26,8 @@ function Inner({ children }: { children: ReactNode }) {
     status: order.status,
     templateSlug: order.templateSlug,
   };
+  // og:image (Telegram/WhatsApp havola rasmi) — kabinetning istalgan sahifasida eskirgan bo‘lsa orqa fonda yangilanadi
+  useShareCardSync(isPaidStatus(order.status) ? { invitationId: inv.id, templateSlug: order.templateSlug, invitation: inv } : null);
   return (
     <div className={wrap}>
       <InvitationNav

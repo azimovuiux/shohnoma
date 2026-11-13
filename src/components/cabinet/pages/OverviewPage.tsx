@@ -8,7 +8,7 @@ import { StatusBadge } from "@/components/ui";
 import { InvitationHeader } from "../InvitationHeader";
 import { InvitationThumb } from "../InvitationThumb";
 import { CopyLink } from "../LinkActions";
-import { ShareInvite, useShareCardSync } from "@/components/share/ShareInvite";
+import { ShareInvite } from "@/components/share/ShareInvite";
 import { isPaidStatus } from "@/lib/types";
 import { relTime, useInvitationData, useSiteUrl } from "../data";
 import { daysUntil, initials, rsvpView } from "@/lib/display";
@@ -86,8 +86,6 @@ export function OverviewPage() {
   const recent = { list: (data.recent ?? []).slice(0, 4) };
   const url = `${siteUrl}/${inv.slug}/`;
   const days = daysUntil(inv.date);
-  // og:image (ulashish kartasi) eskirgan bo‘lsa — orqa fonda yangilanadi
-  useShareCardSync(paid ? { invitationId: inv.id, templateSlug: order.templateSlug, invitation: inv } : null);
   const flow = (step: "marosim" | "tafsilotlar") => `/buyurtma/${order.id}/${step}/?qaytish=kabinet`;
 
   const statCards = [
