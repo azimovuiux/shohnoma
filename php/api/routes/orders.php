@@ -18,13 +18,40 @@ route('PATCH', '/orders/:id', function ($p) {
     $b = owned_order_or_404($p['id']);
     if ($b['order']['status'] === 'archived') fail('Taklifnoma arxivlangan', 409);
     $body = body();
-    if (!$body) fail('Ma’lumot yo‘q');
+    // Qoralama rejimi (buyurtma to‘ldirilayotganda): noto‘g‘ri/to‘liq bo‘lmagan maydon butun so‘rovni yiqitmaydi —
+    // o‘sha maydon o‘tkazib yuboriladi (`skipped`), qolganlari saqlanadi. Majburiy maydonlar faqat «Davom etish»da tekshiriladi.
+    $draft = !empty($body['_draft']) && !is_paid_status($b['order']['status']);
+    unset($body['_draft']);
+    if (!$body) {
+        if ($draft) json_out(['ok' => true, 'invitation' => invitation_out($b['invitation']), 'skipped' => []]);
+        fail('Ma’lumot yo‘q');
+    }
     if (array_key_exists('templateSlug', $body)) {
         $t = is_string($body['templateSlug']) ? template_get($body['templateSlug']) : null;
         if (!$t) fail('Shablon topilmadi', 404);
         if (is_paid_status($b['order']['status'])) fail('To‘lovdan so‘ng shablonni almashtirib bo‘lmaydi', 409);
         q('UPDATE orders SET template_slug = ?, amount = ?, promo_code = NULL, promo_discount = 0 WHERE id = ?', [$t['slug'], tpl_price($t), $b['order']['id']]);
         unset($body['templateSlug']);
+    }
+    if ($draft) {
+        // sana + vaqt birga, qolganlari alohida: bittasi xato bo‘lsa — faqat o‘sha o‘tkazib yuboriladi
+        $groups = [];
+        foreach (array_keys($body) as $k) {
+            if ($k === 'day' || $k === 'time') $groups['date'][$k] = $body[$k];
+            else $groups[$k] = [$k => $body[$k]];
+        }
+        $skipped = [];
+        $inv = $b['invitation'];
+        foreach ($groups as $part) {
+            try {
+                $inv = apply_invitation_patch($b, $part, true);
+                $b['invitation'] = $inv;
+            } catch (HttpError $e) {
+                if ($e->status !== 422) throw $e;
+                array_push($skipped, ...array_keys($part));
+            }
+        }
+        json_out(['ok' => true, 'invitation' => invitation_out($inv), 'skipped' => $skipped]);
     }
     $inv = apply_invitation_patch($b, $body);
     json_out(['ok' => true, 'invitation' => invitation_out($inv)]);

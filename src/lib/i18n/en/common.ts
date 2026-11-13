@@ -127,7 +127,6 @@ export const en: Record<string, string> = {
   "Odatda 15 daqiqada tasdiqlanadi.": "Usually confirmed within 15 minutes.",
   "Chekingizni oldik. Sahifani yopsangiz ham bo‘ladi.": "Receipt received. You can close this page.",
   "QR kodni yuklab olish": "Download QR code",
-  "Ma’lumotlar saqlanadi — kabinetdan davom ettirasiz.": "Your details are saved — continue from your account.",
   "Havola eskirgan bo‘lishi mumkin.": "The link may have expired.",
   "Bir nechtasini tanlash mumkin": "You can choose several",
   "Brif bepul.": "The brief is free.",

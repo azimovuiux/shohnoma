@@ -16,8 +16,15 @@ type ChatResp = { session: Session | null; messages: Msg[] };
 const time = (iso: string, locale: Locale = "uz") => new Date(iso).toLocaleTimeString(locale === "ru" ? "ru-RU" : locale === "en" ? "en-GB" : "uz-UZ", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Tashkent" });
 const SEEN_KEY = "sh_chat_seen";
 
-/** Suzuvchi chat — har sahifada, o‘ng pastda. Ism + telefon → yozishma (admin panel va Telegram bot orqali javob) */
-export function FloatingContact() {
+/** Chatni boshqa joydan ochish (masalan buyurtma oqimi sarlavhasidagi «Yordam»): window.dispatchEvent(new Event(OPEN_CHAT_EVENT)) */
+export const OPEN_CHAT_EVENT = "shohnoma:open-chat";
+export const openChat = () => window.dispatchEvent(new Event(OPEN_CHAT_EVENT));
+
+/**
+ * Suzuvchi chat — har sahifada, o‘ng pastda. Ism + telefon → yozishma (admin panel va Telegram bot orqali javob)
+ * @param launcher "desktop" — suzuvchi tugma faqat katta ekranda (mobilda pastki panel tugmalarini yopmasin; chat sarlavhadagi «Yordam»dan ochiladi)
+ */
+export function FloatingContact({ launcher = "all" }: { launcher?: "all" | "desktop" }) {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [session, setSession] = useState<Session | null | undefined>(undefined);
@@ -80,6 +87,12 @@ export function FloatingContact() {
   }, [open, msgs]);
 
   useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener(OPEN_CHAT_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_CHAT_EVENT, onOpen);
+  }, []);
+
+  useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("keydown", onKey);
@@ -128,7 +141,7 @@ export function FloatingContact() {
         aria-label={open ? t("Chatni yopish") : t("Savolingiz bormi? Yozing")}
         aria-expanded={open}
         // oyna (Modal, tezkor ko‘rish, menyu) ochiq bo‘lsa — tugma uning tugmalarini yopib qo‘ymasin
-        className={`group fixed bottom-5 right-5 z-[71] items-center gap-2.5 lg:bottom-8 lg:right-8 [body:has([aria-modal=true])_&]:hidden ${open ? "hidden sm:flex" : "flex"}`}
+        className={`group fixed bottom-5 right-5 z-[71] items-center gap-2.5 lg:bottom-8 lg:right-8 [body:has([aria-modal=true])_&]:hidden ${open ? "hidden sm:flex" : "flex"} ${launcher === "desktop" ? "max-lg:!hidden" : ""}`}
       >
         {!open && (
           <span className="hidden rounded-full border border-line bg-bg-base px-4 py-2.5 text-[13px] font-medium leading-none text-ink shadow-[0_4px_6px_rgba(26,13,10,0.08)] lg:block">

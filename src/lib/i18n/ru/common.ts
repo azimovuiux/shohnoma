@@ -127,7 +127,6 @@ export const ru: Record<string, string> = {
   "Odatda 15 daqiqada tasdiqlanadi.": "Обычно подтверждаем в течение 15 минут.",
   "Chekingizni oldik. Sahifani yopsangiz ham bo‘ladi.": "Чек получен. Страницу можно закрыть.",
   "QR kodni yuklab olish": "Скачать QR-код",
-  "Ma’lumotlar saqlanadi — kabinetdan davom ettirasiz.": "Данные сохранятся — продолжите из личного кабинета.",
   "Havola eskirgan bo‘lishi mumkin.": "Возможно, ссылка устарела.",
   "Bir nechtasini tanlash mumkin": "Можно выбрать несколько",
   "Brif bepul.": "Бриф бесплатный.",

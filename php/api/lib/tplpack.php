@@ -381,9 +381,14 @@ function tpl_headers(): void
 }
 
 /** Mijoz kiritgan qo‘shimcha maydonlarni shablon `fields` sxemasi bo‘yicha tekshirish */
-function tpl_clean_extra(mixed $in, array $fields): array
+/**
+ * @param array|null $prev qoralama rejimi: berilsa — noto‘g‘ri qiymatli maydon xato bermaydi, avvalgi saqlangan qiymati qoladi;
+ *                         ro‘yxatdagi majburiy ustuni bo‘sh qatorlar ham saqlanadi (to‘liqligi «Davom etish»da tekshiriladi)
+ */
+function tpl_clean_extra(mixed $in, array $fields, ?array $prev = null): array
 {
     if (!is_array($in)) fail('Qo‘shimcha ma’lumot noto‘g‘ri', 422);
+    $lenient = $prev !== null;
     $one = function (mixed $v, array $f, string $label) {
         $v = is_scalar($v) ? trim((string)$v) : '';
         $max = (int)($f['max'] ?? ($f['type'] === 'textarea' ? 1000 : 160));
@@ -407,17 +412,27 @@ function tpl_clean_extra(mixed $in, array $fields): array
                 if (!is_array($row)) continue;
                 $r = [];
                 foreach ($f['item'] as $ck => $cf) {
-                    $r[$ck] = $one($row[$ck] ?? '', $cf, $cf['label']);
-                    if (!empty($cf['required']) && $r[$ck] === '') fail("«{$f['label']}»: «{$cf['label']}» ni to‘ldiring", 422);
+                    try {
+                        $r[$ck] = $one($row[$ck] ?? '', $cf, $cf['label']);
+                    } catch (HttpError $e) {
+                        if (!$lenient) throw $e;
+                        $r[$ck] = '';
+                    }
+                    if (!$lenient && !empty($cf['required']) && $r[$ck] === '') fail("«{$f['label']}»: «{$cf['label']}» ni to‘ldiring", 422);
                 }
                 if (array_filter($r, fn($x) => $x !== '')) $clean[] = $r;
             }
             $out[$k] = $clean;
         } else {
-            $out[$k] = $one($in[$k], $f, $f['label']);
+            try {
+                $out[$k] = $one($in[$k], $f, $f['label']);
+            } catch (HttpError $e) {
+                if (!$lenient) throw $e;
+                if (array_key_exists($k, $prev)) $out[$k] = $prev[$k];
+            }
         }
     }
     // Taklifnoma tili (sxemadan tashqari, barcha shablonlar uchun)
-    if (isset($in['lang']) && in_array($in['lang'], ['uz', 'ru'], true)) $out['lang'] = $in['lang'];
+    if (isset($in['lang']) && in_array($in['lang'], ['uz', 'ru', 'en'], true)) $out['lang'] = $in['lang'];
     return $out;
 }

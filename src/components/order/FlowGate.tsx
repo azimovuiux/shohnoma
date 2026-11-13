@@ -15,8 +15,10 @@ import { isPaidStatus } from "@/lib/types";
 import { getTemplate, type Template } from "@/lib/templates";
 import type { FlowOrder } from "./types";
 import { CreateDraft } from "./CreateDraft";
+import { useFlowPage, type FlowStep } from "./FlowGuard";
 
 export type Step = "marosim" | "tafsilotlar" | "korib-chiqish" | "tolov" | "other";
+const stepNo: Partial<Record<Step, FlowStep>> = { marosim: 1, tafsilotlar: 2, "korib-chiqish": 3, tolov: 4 };
 
 export type OrderResponse = { ok: boolean; order: Order; invitation: Invitation; payment: Payment | null; missing: string[] };
 
@@ -154,6 +156,14 @@ export function FlowGate({
   useEffect(() => {
     if (target) router.replace(target);
   }, [target, router]);
+
+  // To‘ldirish bosqichi (yoki kabinetdan tahrirlash) — FlowGuard ogohlantirishlari va oqim sarlavhasi uchun
+  const no = stepNo[step];
+  useFlowPage(
+    ctx && !target && no
+      ? { kind: ctx.editing ? "edit" : "fill", orderId: ctx.order.id, step: ctx.editing ? null : no, templateSlug: ctx.order.templateSlug }
+      : null,
+  );
 
   if (id === undefined) return <PageLoading />;
   if (draftTemplate) return <CreateDraft templateSlug={draftTemplate.slug} name={draftTemplate.name} />;

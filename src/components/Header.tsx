@@ -38,7 +38,8 @@ import { mainNav, site } from "@/lib/site";
 
 type Lang = "uz" | "ru" | "en";
 
-function LangSwitcher({ compact = false }: { compact?: boolean }) {
+/** @param navigate o‘tishni o‘zi bajaradi (masalan buyurtma oqimida — avval qoralamani saqlab) */
+export function LangSwitcher({ compact = false, navigate }: { compact?: boolean; navigate?: (href: string) => void }) {
   const [open, setOpen] = useState(false);
   const lang = useLocale();
   const t = useT();
@@ -58,7 +59,9 @@ function LangSwitcher({ compact = false }: { compact?: boolean }) {
     setOpen(false);
     document.cookie = `lang=${l}; path=/; max-age=31536000`;
     if (l === lang) return;
-    window.location.href = switchPath(window.location.pathname, l) + window.location.search + window.location.hash;
+    const href = switchPath(window.location.pathname, l) + window.location.search + window.location.hash;
+    if (navigate) navigate(href);
+    else window.location.href = href;
   };
 
   return (

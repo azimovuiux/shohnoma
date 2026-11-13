@@ -104,6 +104,14 @@ function missing_fields(array $inv): array
             $v = $extra[$f['key']] ?? null;
             $min = (int)($f['min'] ?? 0);
             $missing = $f['type'] === 'list' ? ($min > 0 && count((array)$v) < $min) : (!empty($f['required']) && trim((string)$v) === '');
+            // qoralamada chala qatorlar ham saqlanadi — majburiy ustuni bo‘sh qator bo‘lsa, ma’lumot hali to‘liq emas
+            if ($f['type'] === 'list' && !$missing) {
+                foreach ((array)$v as $row) {
+                    foreach ($f['item'] ?? [] as $ck => $cf) {
+                        if (!empty($cf['required']) && trim((string)(is_array($row) ? ($row[$ck] ?? '') : '')) === '') $missing = true;
+                    }
+                }
+            }
             if ($missing) $m[] = 'extra.' . $f['key'];
         }
     }
@@ -116,7 +124,8 @@ function latest_payment(string $orderId): ?array
 }
 
 /** Taklifnoma maydonlarini qisman yangilash (spec 02/03, kabinet tahrirlash) */
-function apply_invitation_patch(array $b, array $p): array
+/** @param bool $draft qoralama: ro‘yxatdagi to‘liq bo‘lmagan qatorlar ham saqlanadi (majburiy ustunlar keyin tekshiriladi) */
+function apply_invitation_patch(array $b, array $p, bool $draft = false): array
 {
     $inv = $b['invitation'];
     $set = [];
@@ -169,7 +178,7 @@ function apply_invitation_patch(array $b, array $p): array
     }
     if (array_key_exists('extra', $p)) {
         $t = template_get($b['order']['template_slug']);
-        $set['extra'] = json_encode(tpl_clean_extra($p['extra'], $t['fields'] ?? []), JSON_UNESCAPED_UNICODE);
+        $set['extra'] = json_encode(tpl_clean_extra($p['extra'], $t['fields'] ?? [], $draft ? (jdec($inv['extra'] ?? null) ?: []) : null), JSON_UNESCAPED_UNICODE);
     }
     if (array_key_exists('photos', $p)) {
         if (!is_array($p['photos']) || count($p['photos']) > 10) fail('Ko‘pi bilan 10 ta surat', 422);

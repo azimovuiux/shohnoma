@@ -24,8 +24,14 @@ export const LOCALES: Locale[] = ["uz", "ru", "en"];
 const DICT: Record<string, string> = { ...common, ...site, ...order, ...cabinet, ...invite };
 const DICT_EN: Record<string, string> = { ...commonEn, ...siteEn, ...orderEn, ...cabinetEn, ...inviteEn };
 
+/**
+ * Bir xil o‘zbekcha so‘z turli ma’noda kelsa — kontekst bilan: t("oqim::Chiqish") (buyurtmadan chiqish, «Sign out» emas).
+ * Lug‘at kaliti to‘liq ("oqim::Chiqish"), o‘zbekchada va topilmaganda — "::" dan keyingi qism.
+ */
 export function tr(locale: Locale, s: string, vars?: Record<string, string | number>): string {
-  let out = locale === "ru" ? (DICT[s] ?? s) : locale === "en" ? (DICT_EN[s] ?? s) : s;
+  const ctx = s.indexOf("::");
+  const plain = ctx > 0 ? s.slice(ctx + 2) : s;
+  let out = locale === "ru" ? (DICT[s] ?? plain) : locale === "en" ? (DICT_EN[s] ?? plain) : plain;
   if (vars) for (const [k, v] of Object.entries(vars)) out = out.split(`{${k}}`).join(String(v));
   return out;
 }

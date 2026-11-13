@@ -13,7 +13,7 @@ import { isDarkTheme } from "@/components/TemplateCard";
 import { formatPhoneDisplay } from "@/lib/display";
 import type { Template } from "@/lib/templates";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
-import { FlowColumns } from "./FlowTop";
+import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
 import { SectionTitle } from "./fields";
 import { liveTemplate, dayTime, hasCustomDesign } from "./live";
 import { namesOf } from "./labels";
@@ -219,9 +219,11 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
         </ul>
       </div>
 
+      <StepNav back={`${base}/tafsilotlar/`}>{button}</StepNav>
+
       <MobileBar>
         {agreeBox}
-        {button}
+        <MobileActions back={`${base}/tafsilotlar/`}>{button}</MobileActions>
       </MobileBar>
     </FlowColumns>
   );

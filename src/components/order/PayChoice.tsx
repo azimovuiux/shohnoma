@@ -8,7 +8,7 @@ import { api } from "@/components/ui";
 import { ArrowRight, Card, Mobile, MoneySend, TickCircle, Wallet, WalletCheck } from "@/components/icons";
 import type { Template } from "@/lib/templates";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
-import { FlowColumns } from "./FlowTop";
+import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
 import { SectionTitle } from "./fields";
 import { liveTemplate, dayTime } from "./live";
 import { namesOf } from "./labels";
@@ -137,8 +137,10 @@ export function PayChoice({ order, template, providers, soon = [] }: { order: Fl
         </div>
         <PromoBox orderId={order.id} state={promo} onChange={setPromo} />
       </div>
+      <StepNav back={`/buyurtma/${order.id}/korib-chiqish/`}>{button}</StepNav>
+
       <MobileBar>
-        {button}
+        <MobileActions back={`/buyurtma/${order.id}/korib-chiqish/`}>{button}</MobileActions>
         {err}
       </MobileBar>
     </FlowColumns>

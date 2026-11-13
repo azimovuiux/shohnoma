@@ -7,7 +7,8 @@ import { Add, ArrowRight, CloseCircle, Location, Trash } from "@/components/icon
 import { ceremonyLabel, tplKinds, type Ceremony, type Template } from "@/lib/templates";
 import { FlowField, IconInput, bareInput, flowInput, SectionTitle } from "./fields";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
-import { FlowColumns } from "./FlowTop";
+import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
+import { useFlowSaver } from "./FlowGuard";
 import { useAutosave } from "./useAutosave";
 import { liveTemplate, dayTime } from "./live";
 import { namesOf, needsPersonB, personLabels } from "./labels";
@@ -49,11 +50,12 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
   const setExtra = (v: Extra) => {
     setO((p) => ({ ...p, extra: v }));
     setExtraErr({});
-    if (extraReady(fields, v)) queue({ extra: v });
+    // qoralamada to‘liq bo‘lmagan qatorlar ham saqlanadi (server qabul qiladi); tahrirlashda — faqat to‘liq bo‘lsa
+    if (!editing || extraReady(fields, v)) queue({ extra: v });
   };
   const [showMap, setShowMap] = useState(!!order.mapUrl);
   const [busy, setBusy] = useState(false);
-  const { queue, flush, state, error: saveError } = useAutosave(order.id);
+  const { queue, flush, dirty, discard, hold, resume, state, error: saveError } = useAutosave(order.id, { draft: !editing });
   const labels = personLabels(o.ceremony);
   const live = useMemo(() => liveTemplate(template, o), [template, o]);
 
@@ -83,8 +85,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
       document.querySelector("[aria-invalid=true]")?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
-    // standart til hali saqlanmagan bo‘lsa — hozir saqlaymiz
-    if (langMissing) queue({ extra: o.extra, message: o.message, program: o.program });
+    queueLang();
     setBusy(true);
     const ok = await flush();
     setBusy(false);
@@ -93,13 +94,33 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
     router.refresh();
   };
 
+  const queueLang = () => {
+    // standart til hali saqlanmagan bo‘lsa — hozir saqlaymiz
+    if (langMissing) queue({ extra: o.extra, message: o.message, program: o.program });
+  };
+  const mapOk = (v: string) => !v || /^https?:\/\//.test(v);
+  const programOk = (p: FlowOrder["program"]) => p.every((i) => /^\d{2}:\d{2}$/.test(i.time) && i.title.trim());
+  // serverga yuborilmagan (chala) qiymatlar — tahrirlashda; qoralamada server o‘zi aytadi (skipped)
+  const localDirty = editing && (!mapOk(o.mapUrl) || !extraReady(fields, o.extra as Extra) || !programOk(o.program));
+  useFlowSaver({
+    flush: async () => {
+      queueLang();
+      return flush();
+    },
+    dirty: () => dirty() || localDirty,
+    discard,
+    hold,
+    resume,
+  });
+
   const program = o.program;
   const setProgram = (p: FlowOrder["program"]) => {
     setO((x) => ({ ...x, program: p }));
-    if (p.every((i) => /^\d{2}:\d{2}$/.test(i.time) && i.title.trim())) queue({ program: p });
+    if (programOk(p)) queue({ program: p });
   };
 
   const actionLabel = editing ? t("Saqlash") : t("Davom etish");
+  const back = editing ? `/kabinet/t/${order.invitationId}/` : `/shablonlar/${template.slug}/`;
   const lang: InviteLang = o.extra?.lang === "ru" || o.extra?.lang === "en" ? o.extra.lang : "uz";
   const setLang = (v: InviteLang) => {
     // standart taklif matni va dastur bandlari ham shu tilga o‘tadi (mijoz yozganiga tegilmaydi)
@@ -238,7 +259,13 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
               <span className="flex items-center gap-2">
                 <input
                   value={o.mapUrl}
-                  onChange={(e) => set("mapUrl", e.target.value, { mapUrl: e.target.value || null })}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setO((p) => ({ ...p, mapUrl: v }));
+                    setErrors((x) => ({ ...x, mapUrl: undefined }));
+                    // tahrirlashda noto‘g‘ri havola yuborilmaydi (server rad etib, qolgan o‘zgarishlarni ham to‘xtatardi)
+                    if (!editing || mapOk(v)) queue({ mapUrl: v || null });
+                  }}
                   placeholder="https://yandex.uz/maps/…"
                   inputMode="url"
                   autoFocus={!order.mapUrl}
@@ -304,8 +331,10 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
         )}
       </div>
 
+      <StepNav back={back}>{button}</StepNav>
+
       <MobileBar>
-        {button}
+        <MobileActions back={back}>{button}</MobileActions>
         <SaveIndicator state={state} error={saveError} compact />
       </MobileBar>
     </FlowColumns>

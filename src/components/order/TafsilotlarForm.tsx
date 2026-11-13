@@ -8,7 +8,8 @@ import { PhoneInput, Toggle, phoneDigits, phoneToLocal, useToast } from "@/compo
 import { photoSlots, type Template } from "@/lib/templates";
 import { FlowField, flowInput, SectionTitle } from "./fields";
 import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
-import { FlowColumns } from "./FlowTop";
+import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
+import { useFlowSaver } from "./FlowGuard";
 import { useAutosave } from "./useAutosave";
 import { liveTemplate, dayTime } from "./live";
 import { namesOf } from "./labels";
@@ -25,7 +26,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
   const [phone, setPhone] = useState(phoneToLocal(order.contactPhone));
   const [errors, setErrors] = useState<{ phone?: string; message?: string }>({});
   const [busy, setBusy] = useState(false);
-  const { queue, flush, state, error: saveError } = useAutosave(order.id);
+  const { queue, flush, dirty, discard, hold, resume, state, error: saveError } = useAutosave(order.id, { draft: !editing });
   const live = useMemo(() => liveTemplate(template, o), [template, o]);
   const slots = photoSlots(template);
 
@@ -37,10 +38,16 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
   const onPhone = (v: string) => {
     setPhone(v);
     setErrors((e) => ({ ...e, phone: undefined }));
-    if (phoneDigits(v).length === 9) queue({ contactPhone: `+998${phoneDigits(v)}` });
+    const n = phoneDigits(v).length;
+    if (n === 9) queue({ contactPhone: `+998${phoneDigits(v)}` });
+    else if (n === 0 && !editing) queue({ contactPhone: null });
   };
 
   const [slotBusy, setSlotBusy] = useState<number | null>(null);
+  // chala telefon raqam serverga yuborilmaydi; surat yuklanayotgan bo‘lsa ham hali saqlanmagan
+  const digits = phoneDigits(phone).length;
+  const localDirty = (digits > 0 && digits < 9) || slotBusy !== null;
+  useFlowSaver({ flush, dirty: () => dirty() || localDirty, discard, hold, resume });
   const slotRef = useRef<HTMLInputElement>(null);
   const pendingSlot = useRef(0);
   /** Bitta aniq joyga surat: band bo‘lsa — almashtiriladi, bo‘sh bo‘lsa — keyingi joyga qo‘shiladi */
@@ -97,6 +104,8 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
       {editing ? t("Saqlash") : t("Tekshirishga o‘tish")} <ArrowRight size={16} />
     </button>
   );
+
+  const back = editing ? `/kabinet/t/${order.invitationId}/` : `/buyurtma/${order.id}/marosim/`;
 
   const toggles: { key: "rsvpEnabled" | "musicEnabled"; title: string }[] = [
     { key: "rsvpEnabled", title: "Mehmonlar javobi" },
@@ -247,8 +256,10 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
         </div>
       </div>
 
+      <StepNav back={back}>{button}</StepNav>
+
       <MobileBar>
-        {button}
+        <MobileActions back={back}>{button}</MobileActions>
         <SaveIndicator state={state} error={saveError} compact />
       </MobileBar>
     </FlowColumns>

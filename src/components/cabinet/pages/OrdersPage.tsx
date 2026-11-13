@@ -182,9 +182,17 @@ export function OrdersPage() {
                   </Link>
                 ) : (
                   <>
+                    {/* /tolov/ — ma’lumot to‘liq bo‘lmasa FlowGate o‘zi kerakli bosqichga (marosim/tafsilotlar) yo‘naltiradi */}
                     <Link href={`/buyurtma/${order.id}/tolov/`} className="btn btn-primary w-full !py-[13px]">
-                      <span className="sm:hidden">{tr("To‘lash")}</span>
-                      <span className="hidden sm:inline">{tr("To‘lovni davom ettirish")}</span> <ArrowRight size={16} />
+                      {order.status === "draft" ? (
+                        tr("Davom ettirish")
+                      ) : (
+                        <>
+                          <span className="sm:hidden">{tr("To‘lash")}</span>
+                          <span className="hidden sm:inline">{tr("To‘lovni davom ettirish")}</span>
+                        </>
+                      )}{" "}
+                      <ArrowRight size={16} />
                     </Link>
                     <Link href={`/buyurtma/${order.id}/marosim/?qaytish=kabinet`} className="btn btn-secondary w-full !py-[13px]">
                       <Edit size={16} /> {tr("Tahrirlash")}
