@@ -38,6 +38,8 @@ Lead        { id, name, phone, ceremony, message, replyVia, status, createdAt }
 | GET | `/api/me/orders` | `{ok, items: {order, invitation, stats, payment: Payment|null}[]}` (yangilari birinchi) |
 | GET | `/api/me/payments` | `{ok, items: {payment, order, invitation}[]}` |
 | GET/POST/DELETE | `/api/me/favorites` | GET → `{ok, slugs: string[]|null}` (null = kirilmagan); POST `{slug}` yoki `{slugs:[]}`; DELETE `{slug}` |
+| GET | `/api/me/notifications?after=<id>` | `{ok, items: Notif[], unread, last}` — saytdagi bildirishnomalar (faqat o‘z taklifnomalari); `after`siz oxirgi 30 ta, `after` bilan faqat yangilari. `Notif = {id, kind: rsvp_new|rsvp_edit|guest_open|pay_ok|pay_reject, invitationId, orderId, invitation, refId, data, createdAt, read}` |
+| POST | `/api/me/notifications/read` | `{id}` / `{ids:[]}` / `{all:true}` / `{invitationId, kinds:[]}` → `{ok, unread}` |
 
 ## Kirish
 
@@ -68,7 +70,7 @@ Lead        { id, name, phone, ceremony, message, replyVia, status, createdAt }
 ## Kabinet — taklifnoma
 
 | GET | `/api/invitations/:id` | `{ok, order, invitation, stats, recent: Guest[] (5 ta), payments: Payment[], switcher: {id, names, date, status, templateSlug}[], special: {total, opened}}` — egasi yoki admin |
-| GET | `/api/invitations/:id/responses?status=&q=&page=1&per=8` | `{ok, total, list: Guest[], stats, views, wishes: Guest[] (oxirgi 3 ta tilakli)}` |
+| GET | `/api/invitations/:id/responses?status=&q=&page=1&per=8` | `{ok, total, list: Guest[], stats, views, wishes: Guest[] (oxirgi 3 ta tilakli), newIds: string[], editedIds: string[] (o‘qilmagan bildirishnomali javoblar — «Yangi»/«O‘zgartirildi»)}` |
 | GET | `/api/invitations/:id/guests` | CSV yuklab olish (BOM, `;`) |
 | GET | `/api/invitations/:id/special-guests` | Maxsus mehmonlar: `{ok, list: {id, name, note, token, openCount, firstOpenedAt, lastOpenedAt, createdAt, response: {name, status, count, wish, at} \| null}[], max: 1000, editable}` |
 | POST | `/api/invitations/:id/special-guests` | `{names: string[]}` (bitta yoki ro‘yxat, takrorlar o‘tkaziladi) → `{ok, added, skipped}` — faqat faol taklifnoma |

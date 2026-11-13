@@ -124,6 +124,7 @@ route('DELETE', '/admin/users/:id', function ($p) {
     q('UPDATE orders SET user_id = NULL WHERE user_id = ?', [$u['id']]);
     q('DELETE FROM sessions WHERE user_id = ?', [$u['id']]);
     q('DELETE FROM favorites WHERE user_id = ?', [$u['id']]);
+    q('DELETE FROM notifications WHERE user_id = ?', [$u['id']]);
     q('DELETE FROM users WHERE id = ?', [$u['id']]);
     json_out(['ok' => true]);
 });

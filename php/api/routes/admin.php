@@ -141,6 +141,7 @@ route('POST', '/admin/payments/:id', function ($p) {
         $i = one('SELECT * FROM invitations WHERE order_id = ?', [$pay['order_id']]);
         $owner = $o['user_id'] ? one('SELECT * FROM users WHERE id = ?', [$o['user_id']]) : null;
         $phone = $owner['phone'] ?? $i['contact_phone'] ?? null;
+        notif_add($o['user_id'], $i['id'] ?? null, 'pay_reject', $pay['id'], ['code' => $o['code'], 'reason' => $reason]);
         $text = "Shohnoma: {$o['code']} bo‘yicha chek qabul qilinmadi: $reason";
         try {
             if ($phone) send_sms($phone, $text);

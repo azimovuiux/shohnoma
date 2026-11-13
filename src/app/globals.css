@@ -23,6 +23,8 @@
   --color-pending: #8a6230;
   --color-muted: #7a7265;
   --color-danger: #6b2436;
+  /* «Kela olmaydi» — bordo brend rangidan ajralib turadigan qizil */
+  --color-decline: #b42318;
 
   /* Sayt shriftlari (Figma hero, 208:17210) */
   --font-serif: "Instrument Serif", Georgia, serif;
@@ -47,6 +49,7 @@
   --pending-bg: rgba(173, 127, 60, 0.15);
   --muted-bg: rgba(122, 114, 101, 0.12);
   --danger-bg: rgba(107, 36, 54, 0.08);
+  --decline-bg: rgba(180, 35, 24, 0.1);
 }
 
 html {

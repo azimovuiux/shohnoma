@@ -52,6 +52,7 @@ function order_purge(string $orderId): void
 {
     $inv = one('SELECT id FROM invitations WHERE order_id = ?', [$orderId]);
     if ($inv) q('DELETE FROM guest_responses WHERE invitation_id = ?', [$inv['id']]);
+    if ($inv) q('DELETE FROM notifications WHERE invitation_id = ?', [$inv['id']]);
     q('DELETE FROM invitations WHERE order_id = ?', [$orderId]);
     q('DELETE FROM payments WHERE order_id = ?', [$orderId]);
     q('DELETE FROM orders WHERE id = ?', [$orderId]);
@@ -101,4 +102,44 @@ route('DELETE', '/me/favorites', function () {
     $slug = body()['slug'] ?? null;
     if (is_string($slug)) q('DELETE FROM favorites WHERE user_id = ? AND template_slug = ?', [$u['id'], $slug]);
     json_out(['ok' => true]);
+});
+
+/*
+ * Saytdagi bildirishnomalar (faqat o‘z taklifnomalari bo‘yicha).
+ *   GET  /me/notifications?after=<id> — after berilmasa oxirgi 30 ta, berilsa faqat undan yangilari; + o‘qilmaganlar soni
+ *   POST /me/notifications/read       — {id} | {ids:[]} | {all:true} | {invitationId, kinds:[]}
+ */
+route('GET', '/me/notifications', function () {
+    $u = require_user();
+    $after = isset($_GET['after']) && ctype_digit((string)$_GET['after']) ? (int)$_GET['after'] : 0;
+    $rows = all('SELECT n.*, i.person_a, i.person_b, i.order_id ' . NOTIF_FROM . ' AND n.id > ? ORDER BY n.id DESC LIMIT ' . NOTIF_LIST, [$u['id'], $after]);
+    header('Cache-Control: no-store');
+    json_out([
+        'ok' => true,
+        'items' => array_map('notif_out', $rows),
+        'unread' => notif_unread($u['id']),
+        'last' => $rows ? (int)$rows[0]['id'] : $after,
+    ]);
+});
+
+route('POST', '/me/notifications/read', function () {
+    $u = require_user();
+    $b = body();
+    $now = now_utc();
+    if (!empty($b['all'])) {
+        q('UPDATE notifications SET read_at = ? WHERE user_id = ? AND read_at IS NULL', [$now, $u['id']]);
+    } elseif (isset($b['invitationId']) && is_string($b['invitationId'])) {
+        $kinds = array_values(array_intersect(is_array($b['kinds'] ?? null) ? $b['kinds'] : NOTIF_KINDS, NOTIF_KINDS));
+        if ($kinds) {
+            $in = implode(',', array_fill(0, count($kinds), '?'));
+            q("UPDATE notifications SET read_at = ? WHERE user_id = ? AND invitation_id = ? AND read_at IS NULL AND kind IN ($in)", [$now, $u['id'], $b['invitationId'], ...$kinds]);
+        }
+    } else {
+        $ids = array_merge(is_array($b['ids'] ?? null) ? $b['ids'] : [], isset($b['id']) ? [$b['id']] : []);
+        $ids = array_slice(array_values(array_unique(array_map('intval', array_filter($ids, fn($x) => is_int($x) || (is_string($x) && ctype_digit($x)))))), 0, 100);
+        if (!$ids) fail('Ma’lumot noto‘g‘ri', 422);
+        $in = implode(',', array_fill(0, count($ids), '?'));
+        q("UPDATE notifications SET read_at = ? WHERE user_id = ? AND read_at IS NULL AND id IN ($in)", [$now, $u['id'], ...$ids]);
+    }
+    json_out(['ok' => true, 'unread' => notif_unread($u['id'])]);
 });

@@ -243,6 +243,7 @@ function mark_order_paid(string $orderId, string $provider, ?string $paymentId =
         $owner = find_or_create_user_by_phone($inv['contact_phone']);
         q('UPDATE orders SET user_id = ? WHERE id = ?', [$owner['id'], $orderId]);
     }
+    notif_add($owner['id'] ?? null, $inv['id'], 'pay_ok', $paymentId, ['code' => $b['order']['code'], 'amount' => (int)$b['order']['amount'], 'slug' => $slug]);
     $link = preg_replace('#^https?://#', '', site_url()) . '/' . $slug;
     $text = "Taklifnomangiz tayyor: $link";
     $phone = $owner['phone'] ?? $inv['contact_phone'];

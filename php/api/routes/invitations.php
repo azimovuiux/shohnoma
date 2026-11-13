@@ -24,7 +24,7 @@ route('GET', '/invitations/:id', function ($p) {
 });
 
 route('GET', '/invitations/:id/responses', function ($p) {
-    [$i] = owned_invitation($p['id']);
+    [$i, , $u] = owned_invitation($p['id']);
     $status = $_GET['status'] ?? '';
     $qtext = trim((string)($_GET['q'] ?? ''));
     $per = max(1, min(100, (int)($_GET['per'] ?? 8)));
@@ -37,7 +37,9 @@ route('GET', '/invitations/:id/responses', function ($p) {
     $offset = ($page - 1) * $per;
     $list = array_map('guest_out', all("SELECT * FROM guest_responses WHERE $where ORDER BY created_at DESC LIMIT $per OFFSET $offset", $args));
     $wishes = array_map('guest_out', all("SELECT * FROM guest_responses WHERE invitation_id = ? AND wish IS NOT NULL AND wish <> '' ORDER BY created_at DESC LIMIT 3", [$i['id']]));
-    json_out(['ok' => true, 'total' => $total, 'list' => $list, 'stats' => invitation_stats($i['id']), 'views' => (int)$i['views'], 'wishes' => $wishes]);
+    json_out(['ok' => true, 'total' => $total, 'list' => $list, 'stats' => invitation_stats($i['id']), 'views' => (int)$i['views'], 'wishes' => $wishes,
+        // Egasi hali ko‘rmagan javoblar (bildirishnoma o‘qilmagan) — ro‘yxatda «Yangi» / «O‘zgartirildi» belgisi
+        'newIds' => notif_unread_refs($u['id'], $i['id'], ['rsvp_new']), 'editedIds' => notif_unread_refs($u['id'], $i['id'], ['rsvp_edit'])]);
 });
 
 route('GET', '/invitations/:id/guests', function ($p) {

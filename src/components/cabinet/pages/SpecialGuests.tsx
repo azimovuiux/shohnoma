@@ -20,6 +20,7 @@ import { isPaidStatus, type SpecialGuest } from "@/lib/types";
 import { GuestSearch } from "../GuestSearch";
 import { relTime, useInvitationData, useSiteUrl } from "../data";
 import { csvDict, downloadCsvTranslated } from "../csv";
+import { markInvitationNotifsRead, NOTIF_NEW_EVENT, type Notif } from "@/components/Notifications";
 
 type Resp = { ok: boolean; list: SpecialGuest[]; max: number; editable: boolean };
 type Filter = "all" | "unopened" | "opened" | "coming" | "not_coming";
@@ -384,6 +385,20 @@ function SpecialGuestsInner() {
     res.reload(true);
     reloadBundle(true);
   };
+  // Bildirishnomalar: tab ochilganda «… taklifnomani ochdi» o‘qilgan; sahifa ochiq turganda yangisi kelsa — ro‘yxat yangilanadi
+  const { reload: reloadList } = res;
+  useEffect(() => {
+    void markInvitationNotifsRead(inv.id, ["guest_open"]);
+    const on = (e: Event) => {
+      const l = (e as CustomEvent<Notif[]>).detail ?? [];
+      if (!l.some((n) => n.invitationId === inv.id && (n.kind === "guest_open" || !!n.data.sg))) return;
+      void reloadList(true);
+      void reloadBundle(true);
+      if (l.some((n) => n.invitationId === inv.id && n.kind === "guest_open")) void markInvitationNotifsRead(inv.id, ["guest_open"]);
+    };
+    window.addEventListener(NOTIF_NEW_EVENT, on);
+    return () => window.removeEventListener(NOTIF_NEW_EVENT, on);
+  }, [inv.id, reloadList, reloadBundle]);
   const link = (g: SpecialGuest) => `${siteUrl}/${inv.slug}/?g=${g.token}`;
   const remove = async (g: SpecialGuest) => {
     const ok = await confirmDialog({

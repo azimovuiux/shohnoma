@@ -316,4 +316,19 @@ export const en: Record<string, string> = {
   "Bank kartasi": "Bank card",
   "Uzun murojaat ba’zi shablonlarda mayda chiqadi — qisqaroq yozgan ma’qul (masalan, «Karimovlar oilasi»)": "A long greeting looks small in some templates — shorter is better (e.g. “The Karimov family”)",
   "Boshqa usul": "Other method",
+
+  // Saytdagi bildirishnomalar (qo‘ng‘iroqcha)
+  "{n} ta o‘qilmagan": "{n} unread",
+  "Hammasini o‘qilgan deb belgilash": "Mark all as read",
+  "Hozircha bildirishnoma yo‘q": "No notifications yet",
+  "Mehmonlar javob berganda yoki maxsus mehmon taklifnomani ochganda shu yerda ko‘rasiz.": "You’ll see guest responses here, and when a special guest opens the invitation.",
+  "{name} taklifnomani ochdi": "{name} opened the invitation",
+  "To‘lov tasdiqlandi — taklifnoma faol": "Payment confirmed — the invitation is live",
+  "Javob o‘zgartirildi": "Response updated",
+  "Maxsus mehmon": "Special guest",
+  "Yangi": "New",
+  "O‘zgartirildi": "Updated",
+  "{n} ta yangi bildirishnoma": "{n} new notifications",
+  "bildirishnoma::Boraman": "Attending",
+  "1 kishi": "1 guest",
 };

@@ -35,6 +35,7 @@ import { Logo } from "./Logo";
 import { TelegramIcon } from "./TelegramIcon";
 import { FlagGB, FlagRU, FlagUZ } from "./Flag";
 import { mainNav, site } from "@/lib/site";
+import { NotificationBellDesktop, NotificationBellMobile, NotificationToasts, useNotifications } from "./Notifications";
 
 type Lang = "uz" | "ru" | "en";
 
@@ -414,6 +415,8 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
   };
   const [menuOpen, setMenuOpen] = useState(false);
   const { compact, hidden } = useScrollHeader();
+  // Saytdagi bildirishnomalar (taklifnoma egasi): yangi javoblar, maxsus mehmon ochishi, to‘lov holati
+  const notif = useNotifications(me?.user?.id ?? null);
 
   return (
     <>
@@ -422,7 +425,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
       <header
         className={`fixed inset-x-0 top-0 z-40 border-b border-line bg-bg-base/[0.97] will-change-transform transition-[transform,box-shadow] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
           compact ? "shadow-[0_8px_24px_-18px_rgba(38,20,10,0.35)]" : ""
-        } ${hidden && !menuOpen ? "-translate-y-[calc(100%+2px)]" : "translate-y-0"}`}
+        } ${hidden && !menuOpen && !notif.open ? "-translate-y-[calc(100%+2px)]" : "translate-y-0"}`}
       >
         <div
           className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:px-10 xl:px-[120px] ${
@@ -460,6 +463,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
             >
               <Call size={18} />
             </a>
+            {user && <NotificationBellDesktop s={notif} />}
             {user ? (
               <AccountMenu user={user} onLogout={logout} />
             ) : meLoading && !me ? (
@@ -482,6 +486,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
             >
               <TelegramIcon size={18} />
             </a>
+            {user && <NotificationBellMobile s={notif} />}
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
@@ -493,6 +498,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
           </div>
         </div>
       </header>
+      {user && <NotificationToasts s={notif} />}
       {menuOpen && (
         <MobileMenu
           onClose={() => setMenuOpen(false)}

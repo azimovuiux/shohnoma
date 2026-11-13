@@ -68,12 +68,15 @@ function sg_viewer_is_owner(array $order): bool
     return $u && ($u['id'] === $order['user_id'] || $u['is_admin']);
 }
 
-/** Mehmon havolani ochdi: birinchi/oxirgi vaqt va son (SG_OPEN_GAP ichidagi qayta ochishlar bitta) */
-function sg_mark_open(array $g): void
+/** Mehmon havolani ochdi: birinchi/oxirgi vaqt va son (SG_OPEN_GAP ichidagi qayta ochishlar bitta). true — birinchi ochilish */
+function sg_mark_open(array $g): bool
 {
     $now = now_utc();
+    // Birinchi ochilish shartli UPDATE bilan aniqlanadi — bir vaqtdagi ikki so‘rov ikki marta «birinchi» bo‘lmaydi
+    $first = q('UPDATE special_guests SET first_opened_at = ? WHERE id = ? AND first_opened_at IS NULL', [$now, $g['id']])->rowCount() === 1;
     q('UPDATE special_guests SET open_count = open_count + IF(last_opened_at IS NULL OR last_opened_at < ?, 1, 0), first_opened_at = COALESCE(first_opened_at, ?), last_opened_at = ? WHERE id = ?',
         [gmdate('Y-m-d H:i:s', time() - SG_OPEN_GAP), $now, $now, $g['id']]);
+    return $first;
 }
 
 /** Ochilish hisoblansinmi: bot emas, egasi emas, arxiv emas */

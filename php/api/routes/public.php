@@ -40,7 +40,8 @@ route('GET', '/i/:slug', function ($p) {
     $out = ['ok' => true, 'invitation' => $inv, 'templateSlug' => $r['order']['template_slug'], 'archived' => $r['order']['status'] === 'archived'];
     // Maxsus mehmon havolasi (?g=token): ism va (bo‘lsa) avvalgi javobini tahrirlash tokeni
     if (isset($_GET['g']) && ($g = sg_find($r['invitation']['id'], $_GET['g']))) {
-        if (sg_should_count($r['order'])) sg_mark_open($g);
+        // Birinchi ochilish — egasiga saytda bildirishnoma
+        if (sg_should_count($r['order']) && sg_mark_open($g)) notif_add($r['order']['user_id'], $r['invitation']['id'], 'guest_open', $g['id'], ['sg' => $g['name']]);
         $prev = scalar('SELECT edit_token FROM guest_responses WHERE special_guest_id = ? ORDER BY created_at DESC LIMIT 1', [$g['id']]);
         $out['guest'] = ['name' => $g['name'], 'editToken' => $prev ?: null];
     }
@@ -87,12 +88,15 @@ route('POST', '/i/:slug/rsvp', function ($p) {
         $prev = one('SELECT id, edit_token FROM guest_responses WHERE special_guest_id = ? ORDER BY created_at DESC LIMIT 1', [$sg['id']]);
         if ($prev) {
             q('UPDATE guest_responses SET name = ?, status = ?, `count` = ?, wish = ?, updated_at = ? WHERE id = ?', [$in['name'], $in['status'], $in['count'], $in['wish'], now_utc(), $prev['id']]);
+            notif_rsvp($r['invitation']['id'], $prev['id'], $in, $sg, true);
             json_out(['ok' => true, 'editToken' => $prev['edit_token'], 'count' => $in['count']]);
         }
     }
     $token = new_token(24);
+    $rid = new_id();
     q('INSERT INTO guest_responses (id, invitation_id, name, status, `count`, wish, edit_token, special_guest_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [new_id(), $r['invitation']['id'], $in['name'], $in['status'], $in['count'], $in['wish'], $token, $sg['id'] ?? null]);
+        [$rid, $r['invitation']['id'], $in['name'], $in['status'], $in['count'], $in['wish'], $token, $sg['id'] ?? null]);
+    notif_rsvp($r['invitation']['id'], $rid, $in, $sg, false);
     rsvp_notify($r, $in, $sg);
     json_out(['ok' => true, 'editToken' => $token, 'count' => $in['count']]);
 });
@@ -110,10 +114,14 @@ route('PATCH', '/i/:slug/rsvp/:token', function ($p) {
     $g = one('SELECT id, special_guest_id FROM guest_responses WHERE edit_token = ? AND invitation_id = ?', [$p['token'], $r['invitation']['id']]) ?? fail('Topilmadi', 404);
     q('UPDATE guest_responses SET name = ?, status = ?, `count` = ?, wish = ?, updated_at = ? WHERE id = ?', [$in['name'], $in['status'], $in['count'], $in['wish'], now_utc(), $g['id']]);
     // Maxsus mehmon havolasidan tahrirlandi, javob hali bog‘lanmagan va mehmonning boshqa javobi yo‘q — bog‘lanadi
+    $sg = $g['special_guest_id'] ? one('SELECT * FROM special_guests WHERE id = ?', [$g['special_guest_id']]) : null;
     if (!$g['special_guest_id'] && ($sg = rsvp_special_guest($r)) && !scalar('SELECT 1 FROM guest_responses WHERE special_guest_id = ?', [$sg['id']])) {
         q('UPDATE guest_responses SET special_guest_id = ? WHERE id = ?', [$sg['id'], $g['id']]);
         rsvp_mark_guest_opened($sg);
+    } elseif (!$g['special_guest_id']) {
+        $sg = null;
     }
+    notif_rsvp($r['invitation']['id'], $g['id'], $in, $sg, true);
     json_out(['ok' => true]);
 });
 

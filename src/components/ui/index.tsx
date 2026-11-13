@@ -167,12 +167,13 @@ export function Stepper({ value, onChange, min = 1, max = 10 }: { value: number;
 
 /* ── Status belgilari (spec §4.1 holat ranglari) ── */
 
-export type Tone = "success" | "pending" | "muted" | "danger" | "maroon";
+export type Tone = "success" | "pending" | "muted" | "danger" | "decline" | "maroon";
 const toneStyle: Record<Tone, React.CSSProperties> = {
   success: { color: "var(--color-success)", background: "var(--success-bg)" },
   pending: { color: "var(--color-pending)", background: "var(--pending-bg)" },
   muted: { color: "var(--color-muted)", background: "var(--muted-bg)" },
   danger: { color: "var(--color-danger)", background: "var(--danger-bg)" },
+  decline: { color: "var(--color-decline)", background: "var(--decline-bg)" },
   maroon: { color: "var(--color-ink-inverse)", background: "var(--color-maroon)" },
 };
 export function StatusBadge({ tone, children, dot = false }: { tone: Tone; children: ReactNode; dot?: boolean }) {

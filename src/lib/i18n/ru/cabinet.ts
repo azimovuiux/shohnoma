@@ -316,4 +316,19 @@ export const ru: Record<string, string> = {
   "Bank kartasi": "Банковская карта",
   "Uzun murojaat ba’zi shablonlarda mayda chiqadi — qisqaroq yozgan ma’qul (masalan, «Karimovlar oilasi»)": "Длинное обращение в некоторых шаблонах выглядит мелко — лучше короче (например, «Семья Каримовых»)",
   "Boshqa usul": "Другой способ",
+
+  // Saytdagi bildirishnomalar (qo‘ng‘iroqcha)
+  "{n} ta o‘qilmagan": "непрочитанных: {n}",
+  "Hammasini o‘qilgan deb belgilash": "Отметить все как прочитанные",
+  "Hozircha bildirishnoma yo‘q": "Пока уведомлений нет",
+  "Mehmonlar javob berganda yoki maxsus mehmon taklifnomani ochganda shu yerda ko‘rasiz.": "Здесь появятся ответы гостей и отметки о том, что особый гость открыл приглашение.",
+  "{name} taklifnomani ochdi": "{name} открыл(а) приглашение",
+  "To‘lov tasdiqlandi — taklifnoma faol": "Оплата подтверждена — приглашение активно",
+  "Javob o‘zgartirildi": "Ответ изменён",
+  "Maxsus mehmon": "Особый гость",
+  "Yangi": "Новый",
+  "O‘zgartirildi": "Изменён",
+  "{n} ta yangi bildirishnoma": "Новых уведомлений: {n}",
+  "bildirishnoma::Boraman": "Приду",
+  "1 kishi": "1 чел.",
 };
