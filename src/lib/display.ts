@@ -65,7 +65,7 @@ export const orderStatusView = {
 export const rsvpView = {
   coming: { label: "Boraman", tone: "success" },
   maybe: { label: "Hali aniq emas", tone: "pending" },
-  not_coming: { label: "Kela olmayman", tone: "muted" },
+  not_coming: { label: "Kela olmayman", tone: "danger" },
 } as const;
 
 export const initials = (name?: string | null) =>

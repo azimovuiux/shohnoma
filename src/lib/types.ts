@@ -112,6 +112,8 @@ export interface Stats {
   notComing: number;
   total: number;
   responses: number;
+  /** javoblar soni holat bo‘yicha (filtr chiplari uchun); coming/maybe/notComing — kishilar soni */
+  responsesBy?: { coming: number; maybe: number; notComing: number };
 }
 
 export interface Brief {

@@ -106,11 +106,16 @@ function AllResponses() {
     { icon: <Eye size={16} />, label: t("Taklifnomani ochdi"), value: String(views), color: "text-gold" },
     { icon: <TickCircle size={16} />, label: t("Boraman"), value: t("{n} kishi", { n: stats.coming }), color: "text-success" },
     { icon: <Clock size={16} />, label: t("Aniq emas"), value: String(stats.maybe), color: "text-gold" },
-    { icon: <CloseCircle size={16} />, label: t("Kela olmaydi"), value: String(stats.notComing), color: "text-muted" },
+    { icon: <CloseCircle size={16} />, label: t("Kela olmaydi"), value: String(stats.notComing), color: "text-danger" },
   ];
   const chips: { key?: RsvpStatus; label: string; n: number }[] = [
-    { label: t("Barchasi"), n: stats.total },
-    ...statuses.map((s) => ({ key: s, label: t(chipLabel[s]), n: s === "coming" ? stats.coming : s === "maybe" ? stats.maybe : stats.notComing })),
+    // chiplar — javoblar soni (ro‘yxatdagi qatorlar bilan bir xil); kishilar soni — kartalarda
+    { label: t("Barchasi"), n: stats.responses ?? stats.total },
+    ...statuses.map((s) => {
+      const rb = stats.responsesBy;
+      const n = rb ? (s === "coming" ? rb.coming : s === "maybe" ? rb.maybe : rb.notComing) : s === "coming" ? stats.coming : s === "maybe" ? stats.maybe : stats.notComing;
+      return { key: s, label: t(chipLabel[s]), n };
+    }),
   ];
   const statusText = (s: RsvpStatus) => t(s === "maybe" ? "Hali aniq emas" : rsvpView[s].label);
   const from = desk.total ? (page - 1) * PER + 1 : 0;
@@ -130,8 +135,8 @@ function AllResponses() {
       </div>
 
       <section className="flex flex-col gap-4 rounded-card border border-line bg-bg-base p-4 lg:p-5">
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:px-0">
+        <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-center 2xl:justify-between">
+          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
             {chips.map((c) => {
               const active = c.key === status;
               return (
@@ -142,6 +147,7 @@ function AllResponses() {
                   aria-current={active ? "true" : undefined}
                   className={`inline-flex h-[38px] shrink-0 items-center gap-1.5 rounded-full px-4 t-nav transition-colors ${active ? "bg-maroon text-ink-inverse" : "bg-bg-soft text-ink hover:bg-gold-soft"}`}
                 >
+                  {c.key && <span aria-hidden className="size-2 rounded-full" style={{ background: c.key === "coming" ? "var(--color-success)" : c.key === "maybe" ? "var(--color-pending)" : "var(--color-danger)" }} />}
                   {c.label} <span className="text-[12px] opacity-70">{c.n}</span>
                 </Link>
               );

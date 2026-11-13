@@ -94,7 +94,7 @@ export function OverviewPage() {
     { icon: <Timer1 size={16} />, label: t("To‘yga qadar"), value: days === null ? "—" : days === 0 ? t("Bugun") : t("{n} kun", { n: days }), color: "text-gold" },
     { icon: <TickCircle size={16} />, label: t("Boraman"), value: t("{n} kishi", { n: stats.coming }), color: "text-success" },
     { icon: <Clock size={16} />, label: t("Aniq emas"), value: String(stats.maybe), color: "text-gold" },
-    { icon: <CloseCircle size={16} />, label: t("Kela olmaydi"), value: String(stats.notComing), color: "text-muted" },
+    { icon: <CloseCircle size={16} />, label: t("Kela olmaydi"), value: String(stats.notComing), color: "text-danger" },
   ];
   const quick = [
     { icon: <Edit size={16} />, label: t("Ismlar va matn"), href: flow("marosim") },

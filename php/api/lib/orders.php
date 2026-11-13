@@ -262,13 +262,17 @@ function invitation_stats(string $invitationId): array
 {
     $rows = all('SELECT status, SUM(`count`) AS people, COUNT(*) AS n FROM guest_responses WHERE invitation_id = ? GROUP BY status', [$invitationId]);
     $by = [];
+    $cnt = [];
     $responses = 0;
     foreach ($rows as $r) {
         $by[$r['status']] = (int)$r['people'];
+        $cnt[$r['status']] = (int)$r['n'];
         $responses += (int)$r['n'];
     }
     $c = $by['coming'] ?? 0;
     $m = $by['maybe'] ?? 0;
     $n = $by['not_coming'] ?? 0;
-    return ['coming' => $c, 'maybe' => $m, 'notComing' => $n, 'total' => $c + $m + $n, 'responses' => $responses];
+    // coming/maybe/notComing — kishilar soni; responsesBy — javoblar soni (filtr chiplari uchun)
+    return ['coming' => $c, 'maybe' => $m, 'notComing' => $n, 'total' => $c + $m + $n, 'responses' => $responses,
+        'responsesBy' => ['coming' => $cnt['coming'] ?? 0, 'maybe' => $cnt['maybe'] ?? 0, 'notComing' => $cnt['not_coming'] ?? 0]];
 }
