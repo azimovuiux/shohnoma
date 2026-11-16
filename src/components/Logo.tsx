@@ -19,7 +19,7 @@ export function Logo({ className = "", light = false }: { className?: string; li
   const t = useT();
   return (
     <Link href="/" className={`inline-flex items-center ${className}`} aria-label={t("Shohnoma — bosh sahifa")}>
-      <LogoMark className="h-8 w-auto lg:h-10" light={light} />
+      <LogoMark className="h-8 w-auto max-[374px]:h-7 lg:h-10" light={light} />
     </Link>
   );
 }

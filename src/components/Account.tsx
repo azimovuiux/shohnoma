@@ -132,7 +132,7 @@ export function MobileAccountButton({ user }: { user: AccountUser }) {
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-label={t("Hisob menyusi")}
-        className="flex size-10 items-center justify-center rounded-full ring-1 ring-maroon/15 ring-offset-2 ring-offset-bg-base"
+        className="flex size-10 items-center justify-center rounded-full ring-1 ring-maroon/15 ring-offset-2 ring-offset-bg-base max-[374px]:size-9"
       >
         <AccountAvatar name={user.name} size={40} />
       </button>

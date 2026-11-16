@@ -428,7 +428,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
         } ${hidden && !menuOpen && !notif.open ? "-translate-y-[calc(100%+2px)]" : "translate-y-0"}`}
       >
         <div
-          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:px-10 xl:px-[120px] ${
+          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 max-[374px]:px-3 transition-[height] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:px-10 xl:px-[120px] ${
             compact ? "h-[55px] lg:h-[70px]" : "h-[69px] lg:h-[87px]"
           }`}
         >
@@ -475,7 +475,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
             )}
           </div>
 
-          <div className={`flex items-center lg:hidden ${user ? "gap-1.5" : "gap-2"}`}>
+          <div className={`flex items-center lg:hidden max-[374px]:!gap-1 max-[374px]:[&_.icon-btn]:!h-9 max-[374px]:[&_.icon-btn]:!w-9 ${user ? "gap-1.5" : "gap-2"}`}>
             <LangSwitcher compact tight={!!user} />
             {/* Kirgan foydalanuvchida Telegram o‘rnida hisob tugmasi (Telegram/yordam — burger va hisob menyusida) */}
             {!user && !(meLoading && !me) && (
