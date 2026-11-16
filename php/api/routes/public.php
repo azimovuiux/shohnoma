@@ -134,7 +134,9 @@ route('GET', '/i/:slug/calendar', function ($p) {
         $ts = strtotime(str_replace('T', ' ', $local) . ':00 +05:00') + $plusHours * 3600;
         return gmdate('Ymd\THis\Z', $ts);
     };
-    $names = trim($inv['person_a'] . ($inv['person_b'] ? ' & ' . $inv['person_b'] : ''));
+    // sunnat / tug‘ilgan kun: ikkinchi maydon — ota-ona (ism juftligi emas)
+    $pair = in_array($inv['ceremony'] ?? 'nikoh', ['nikoh', 'fotiha'], true);
+    $names = trim($inv['person_a'] . ($pair && $inv['person_b'] ? ' & ' . $inv['person_b'] : ''));
     $title = $names . ' — ' . ceremony_label($inv['ceremony']);
     $url = site_url() . '/' . $inv['slug'] . '/';
     $ics = implode("\r\n", [

@@ -1,0 +1,971 @@
+/*
+ * Ertak — sunnat to‘yi taklifnomasi (Figma 424:7316 mobil, 426:7350 laptop). «Ertak kitobi»: qog‘oz qatlamlar soya bilan.
+ * Shriftlar: Yeseva One (sarlavhalar) + Nunito (matn) + Lora Italic (iqtibos) — lotin va kirill.
+ * Ranglar: qog‘oz #fbf3e6, shaftoli #f6c99a, marjon #d9674a, firuza #2a9d96, to‘q firuza #1e5c63, tun #23325a, oltin #e9b44c, siyoh #2b2a3a.
+ * Birlik `--u`: kontent ustuni (mobil 390 kanvas; laptopda ustun = mobil × 1.45). Ochilish, hero va final — o‘z kanvasi.
+ * Harakat («Motion — 12 · Ertak»): scroll bilan — kitob yaqinlashadi (1 → 1.08), muqova umurtqa atrofida ochiladi (rotateY 0 → −170°,
+ * perspektiva 1400), 3 sahifa varaqlanadi, oxirgi sahifa ortida hero sahnasi qatlamlari pastdan navbat bilan tik turadi (scaleY 0 → 1),
+ * so‘ng sahifa «oynasi» ekranni to‘ldirguncha kattalashadi (shaffoflik yo‘q — «sharpa» yo‘q); keyin parallaks (bulutlar 0.3x, siluet 0.5x,
+ * ot 0.8x, old tepalik 1x), ot sekin chayqaladi. Osilib turgan bezaklar (bayroqchalar, fonuslar, xatcho‘p) tebranmaydi — faqat paydo bo‘ladi.
+ * Final — kun tunga aylanadi, mushaklar ochiladi, yulduzlar miltillaydi (scroll bilan, sahifa oxirigacha tugaydi). Hamma rasmlar Normal blend.
+ */
+@font-face {
+  font-family: "Yeseva One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/yeseva-one-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Yeseva One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/yeseva-one-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Yeseva One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/yeseva-one-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-cyrillic-600-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-latin-ext-600-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-cyrillic-700-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-latin-ext-700-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Ertak Nunito";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/nunito-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Ertak Lora";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/lora-cyrillic-400-italic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Ertak Lora";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/lora-latin-ext-400-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Ertak Lora";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/ertak/fonts/lora-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --bounce: cubic-bezier(0.3, 1.9, 0.6, 1);
+  --paper: #fbf3e6;
+  --peach: #f6c99a;
+  --coral: #d9674a;
+  --turq: #2a9d96;
+  --teal: #1e5c63;
+  --gold: #e9b44c;
+  --ink: #2b2a3a;
+  --mute: #7a6a5e;
+  --gate: #e9d8be;
+  --sh-loader-a: #fbebd3;
+  --sh-loader-b: #f6c99a;
+  --sh-ring: rgba(217, 103, 74, 0.55);
+  position: relative;
+  container-type: inline-size;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Ertak Nunito", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: var(--paper);
+}
+.ye {
+  font-family: "Yeseva One", Georgia, serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.nr {
+  font-family: "Ertak Nunito", system-ui, sans-serif;
+  font-weight: 400;
+}
+.ns {
+  font-family: "Ertak Nunito", system-ui, sans-serif;
+  font-weight: 600;
+}
+.nb {
+  font-family: "Ertak Nunito", system-ui, sans-serif;
+  font-weight: 700;
+}
+.lo {
+  font-family: "Ertak Lora", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.clamp2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.art {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni; chok bezaklari (fonuslar, bulut) qo‘shni bo‘lim ustiga chiqadi ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.paper {
+  background: var(--paper);
+}
+.peach {
+  background: var(--peach);
+}
+.teal {
+  background: var(--teal);
+  color: var(--paper);
+}
+.coral {
+  background: var(--coral);
+}
+.night {
+  background: linear-gradient(180deg, #23325a 0%, #33407a 60%, #3b4a82 100%);
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+}
+.seamDeco {
+  position: relative;
+  width: 100%;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 18));
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 40));
+}
+.root [data-a="rise"] {
+  --t: 1.3s;
+}
+/* qog‘oz qatlamlar — pastdan tik turadi (pop-up kitob) */
+.root [data-a="layer"],
+.root [data-a="popUp"] {
+  transform-origin: 50% 100%;
+  --t: 1.1s;
+  --e: var(--spring);
+}
+.root [data-a="layer"]:not([data-in]),
+.root [data-a="popUp"]:not([data-in]) {
+  transform: scaleY(0);
+}
+.root [data-a="pop"],
+.root [data-a="star"],
+.root [data-a="sunPop"] {
+  --t: 0.9s;
+  --e: var(--spring);
+}
+.root [data-a="pop"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.4);
+}
+.root [data-a="star"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0) rotate(-70deg);
+}
+.root [data-a="sunPop"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.55);
+}
+/* taymer doiralari — sakrab chiqadi */
+.root [data-a="bounce"] {
+  --t: 1s;
+  --e: var(--bounce);
+}
+.root [data-a="bounce"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.3);
+}
+/* osilib turgan bezaklar (fonuslar, bayroqchalar) — tepadan tushadi, tebranmaydi */
+.root [data-a="drop"] {
+  --t: 1.4s;
+}
+.root [data-a="drop"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * -50));
+}
+.root [data-a="cloudL"],
+.root [data-a="cloudR"] {
+  --t: 1.6s;
+}
+.root [data-a="cloudL"]:not([data-in]) {
+  opacity: 0;
+  transform: translateX(calc(var(--u) * -50));
+}
+.root [data-a="cloudR"]:not([data-in]) {
+  opacity: 0;
+  transform: translateX(calc(var(--u) * 50));
+}
+.root [data-a="ground"] {
+  --t: 1.1s;
+}
+.root [data-a="ground"]:not([data-in]) {
+  transform: scaleX(0);
+}
+/* katta raqam — mask ortidan pastdan ko‘tariladi */
+.mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.12em 0.08em 0.3em;
+  margin: -0.12em -0.08em -0.3em;
+}
+.maskIn {
+  display: inline-block;
+}
+.root [data-a="mask"] {
+  --t: 1.3s;
+}
+.root [data-a="mask"]:not([data-in]) {
+  transform: translateY(112%);
+}
+
+/* ═════ 00 · Ochilish — ertak kitobi (scroll bilan) ═════
+ * JS faqat --o (0…1, lerp), --zk (oyna ekranni qoplaydigan kattalashtirish) va varaqlarning z-index’ini yozadi; qolgani shu yerda.
+ * Vaqt chizig‘i (ErtakSite.tsx `T` bilan bir xil): kitob 1→1.08 (0…0.1), muqova (0.04…0.34), varaqlar (0.22 + 0.06·i … +0.16),
+ * hero qatlamlari (0.36 + 0.035·k … +0.2), oyna kattalashadi (0.5…0.92). Fon — oyna atrofidagi ulkan soya: hero faqat oynadan ko‘rinadi. */
+.opening {
+  --o: 0;
+}
+.gateWrap,
+.gateHold {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  height: calc(100svh * 2.3);
+  margin-bottom: calc(100svh * -2.3);
+}
+.gateHold {
+  background: var(--gate);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.zoom {
+  position: absolute;
+  inset: 0;
+  --z: clamp(0, (var(--o) - 0.5) / 0.42, 1);
+  --ze: calc(var(--z) * var(--z) * var(--z));
+  transform: scale(calc(1 + (var(--zk, 3) - 1) * var(--ze)));
+  will-change: transform;
+}
+.book {
+  position: absolute;
+  --b1: clamp(0, var(--o) / 0.1, 1);
+  transform: scale(calc(1 + 0.08 * var(--b1) * var(--b1) * (3 - 2 * var(--b1))));
+  animation: bookIn 1.4s 0.15s var(--ease) both;
+}
+@keyframes bookIn {
+  from {
+    translate: 0 calc(var(--u) * 46);
+  }
+}
+.hole {
+  position: absolute;
+  box-shadow: 0 0 0 300vmax var(--gate);
+}
+.pagesSh {
+  position: absolute;
+  box-shadow: 0 calc(var(--bu) * 14) calc(var(--bu) * 30) rgba(77, 46, 26, 0.22);
+}
+/* sahifalar qirrasi (Figma «Sahifa qirrasi», +4 px) — faqat sahifa blokidan tashqaridagi ingichka tasma */
+.edge {
+  position: absolute;
+  background: #f1e6d2;
+  clip-path: polygon(98.69% 0, 100% 0, 100% 100%, 0 100%, 0 99.33%, 98.69% 99.33%);
+}
+.leaf {
+  position: absolute;
+  transform-style: preserve-3d;
+  transform-origin: 0 50%;
+  --k: clamp(0, (var(--o) - (0.22 + var(--i) * 0.06)) / 0.16, 1);
+  --e: calc(var(--k) * var(--k) * var(--k) * (var(--k) * (var(--k) * 6 - 15) + 10));
+  transform: rotateY(calc(var(--e) * (-168deg + var(--i) * 2deg)));
+  will-change: transform;
+}
+.leafFace {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background:
+    linear-gradient(to left, #f1e6d2 calc(var(--bu) * 8), transparent 0),
+    linear-gradient(to top, #f1e6d2 calc(var(--bu) * 8), transparent 0),
+    linear-gradient(to right, rgba(77, 46, 26, 0.12), rgba(77, 46, 26, 0) calc(var(--bu) * 26)),
+    var(--paper);
+}
+.leafBack {
+  transform: rotateY(180deg);
+  background:
+    linear-gradient(to left, rgba(77, 46, 26, 0.14), rgba(77, 46, 26, 0) calc(var(--bu) * 30)),
+    #f6ecdb;
+}
+.cover {
+  position: absolute;
+  transform-style: preserve-3d;
+  transform-origin: 0 50%;
+  --k: clamp(0, (var(--o) - 0.04) / 0.3, 1);
+  --e: calc(var(--k) * var(--k) * var(--k) * (var(--k) * (var(--k) * 6 - 15) + 10));
+  transform: rotateY(calc(var(--e) * -170deg));
+  will-change: transform;
+}
+.cFace {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--teal);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 calc(var(--bu) * 16) calc(var(--bu) * 36) rgba(77, 46, 26, 0.28);
+}
+.cBack {
+  transform: rotateY(180deg);
+  box-shadow: none;
+}
+/* muqova ichi — yulduzchali forzats (ertak kitobidagidek) */
+.cBackPaper {
+  position: absolute;
+  background-color: #f6c99a;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cg fill='%23e9b44c' fill-opacity='.55'%3E%3Cpath d='M15 9l1.9 4.6 4.9.4-3.8 3.2 1.2 4.8L15 19.4l-4.2 2.6 1.2-4.8L8.2 14l4.9-.4z'/%3E%3Cpath d='M45 39l1.4 3.4 3.6.3-2.8 2.4.9 3.6L45 46.8l-3.1 1.9.9-3.6-2.8-2.4 3.6-.3z'/%3E%3C/g%3E%3Ccircle cx='44' cy='14' r='1.2' fill='%23fbf3e6'/%3E%3Ccircle cx='14' cy='44' r='1' fill='%23fbf3e6'/%3E%3C/svg%3E");
+  background-size: calc(var(--bu) * 54) calc(var(--bu) * 54);
+}
+.leafFrame {
+  position: absolute;
+  border-style: solid;
+  border-color: rgba(233, 180, 76, 0.55);
+  pointer-events: none;
+}
+.leafFrame2 {
+  border-color: rgba(233, 180, 76, 0.35);
+}
+.spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: #174a50;
+}
+.cFrame {
+  position: absolute;
+  border-style: solid;
+  border-color: var(--gold);
+  pointer-events: none;
+}
+.mini {
+  position: absolute;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f6c99a, #fbebd3);
+  box-shadow: 0 calc(var(--bu) * -3) calc(var(--bu) * 10) rgba(77, 46, 26, 0.25);
+}
+.cText {
+  position: absolute;
+  inset: 0;
+}
+/* muqova yozuvlari yuklanganda sokin paydo bo‘ladi (muqova shaffof emas — orqasi ko‘rinmaydi) */
+.cIn {
+  animation: fadeUp 1.3s var(--cd, 0.45s) var(--ease) both;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    translate: 0 calc(var(--bu, var(--u)) * 10);
+  }
+}
+.ribbon {
+  transform: translateZ(1px);
+  transform-origin: 50% 0;
+  animation: ribbonIn 1.3s 0.6s var(--ease) both;
+}
+@keyframes ribbonIn {
+  from {
+    scale: 1 0.2;
+  }
+}
+.gDeco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.gDrop {
+  animation: dropIn 1.6s 0.35s var(--ease) both;
+}
+@keyframes dropIn {
+  from {
+    translate: 0 calc(var(--u) * -300);
+  }
+}
+.gStar {
+  animation: starIn 1s var(--d, 0.6s) var(--spring) both;
+}
+@keyframes starIn {
+  from {
+    scale: 0;
+    rotate: -70deg;
+  }
+}
+/* mokap ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 01 · Hero — ochilgan sahna (pop-up), kitob ortida (sticky), --o bilan ═════ */
+.openWrap {
+  position: relative;
+}
+.openWrap > .hero {
+  position: sticky;
+  top: 0;
+}
+.openStill > .hero {
+  position: relative;
+}
+.openSpacer {
+  height: calc(100svh * 1.3);
+}
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--peach);
+}
+.hSky {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, #f6c99a 0%, #fbebd3 62%, #fbf3e6 100%);
+}
+/* qatlam pastdan tik turadi: scaleY 0 → 1 (yengil «qog‘oz» sakrashi bilan), keyin parallaks (--hs × --f) */
+.pop {
+  position: absolute;
+  transform-origin: 50% 100%;
+  --pp: clamp(0, (var(--o) - (0.36 + var(--pk) * 0.035)) / 0.2, 1);
+  --pq: calc(var(--pp) - 1);
+  --pe: calc(1 + 2.2 * var(--pq) * var(--pq) * var(--pq) + 1.2 * var(--pq) * var(--pq));
+  transform: translateY(calc(var(--hs, 0px) * var(--f, 0))) scaleY(var(--pe));
+  will-change: transform;
+}
+.hillImg {
+  position: absolute;
+}
+/* ot sekin chayqaladi (2 s) */
+.sway {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 92%;
+  animation: sway 2s ease-in-out infinite alternate;
+}
+@keyframes sway {
+  from {
+    rotate: -1.4deg;
+  }
+  to {
+    rotate: 1.4deg;
+  }
+}
+.flags {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --fl: clamp(0, (var(--o) - 0.58) / 0.22, 1);
+  transform: translateY(calc((1 - var(--fl)) * (1 - var(--fl)) * var(--u) * -90));
+}
+.hText {
+  position: absolute;
+  inset: 0;
+}
+.ht {
+  --hp: clamp(0, (var(--o) - (0.6 + var(--ti) * 0.06)) / 0.22, 1);
+  opacity: var(--hp);
+  transform: translateY(calc((1 - var(--hp)) * var(--u) * 14));
+}
+.heroStill * {
+  animation: none !important;
+}
+
+/* ═════ 03 · Bizning shohzoda ═════ */
+.arch {
+  pointer-events: none;
+}
+
+/* ═════ 04 · Bayram kuni ═════ */
+.sideSun {
+  position: absolute;
+  pointer-events: none;
+}
+.sun {
+  position: absolute;
+  inset: 0;
+}
+/* Figma «Quyosh»: uch halqa (r 0.491 / 0.373 / 0.255 quti eniga nisbatan), qog‘oz soyasi; halqalar sekin «nafas oladi» */
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  animation: breathe 5s ease-in-out infinite alternate;
+}
+.r1 {
+  width: 98.18%;
+  height: 98.18%;
+  background: #f9ddb4;
+  box-shadow: 0 calc(var(--s) * 2.73) calc(var(--s) * 9.55) rgba(89, 51, 26, 0.12);
+}
+.r2 {
+  width: 74.55%;
+  height: 74.55%;
+  background: #f5c17e;
+  box-shadow: 0 calc(var(--s) * 2.05) calc(var(--s) * 6.82) rgba(89, 51, 26, 0.14);
+  animation-delay: -1.6s;
+}
+.r3 {
+  width: 50.91%;
+  height: 50.91%;
+  background: #ee9a5e;
+  box-shadow: 0 calc(var(--s) * 2.05) calc(var(--s) * 5.45) rgba(89, 51, 26, 0.16);
+  animation-delay: -3.2s;
+}
+@keyframes breathe {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.035;
+  }
+}
+.tCircle {
+  border-radius: 50%;
+  background: var(--turq);
+  box-shadow: 0 calc(var(--u) * 5) calc(var(--u) * 10) rgba(77, 46, 26, 0.22);
+}
+.digits {
+  display: inline-flex;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.slot {
+  display: inline-block;
+}
+/* o‘zgargan raqam — yuqoridan sekin tushadi; shaffoflik yo‘q, kesilmaydi (padded «0» hech qachon yo‘qolmaydi) */
+.tick {
+  display: inline-block;
+  animation: tick 0.5s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: translateY(-0.14em);
+  }
+}
+
+/* ═════ 05 · Bayram yo‘li ═════ */
+.road {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+.roadMask {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--dp, 0));
+}
+.stop {
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 calc(var(--u) * 6) calc(var(--u) * 14) rgba(77, 46, 26, 0.3);
+}
+
+/* ═════ Tugmalar, karta ═════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
+  white-space: nowrap;
+  background: var(--turq);
+  color: var(--paper);
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  background: #258c86;
+}
+.card {
+  background: var(--paper);
+  color: var(--ink);
+}
+.lbl {
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-style: solid;
+  border-color: var(--turq);
+  background: transparent;
+  transition: box-shadow 0.3s var(--ease);
+}
+.field:focus-within {
+  box-shadow: 0 0 0 3px rgba(42, 157, 150, 0.18);
+}
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.4;
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.input::placeholder {
+  color: rgba(122, 106, 94, 0.7);
+  opacity: 1;
+}
+.choice {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: var(--coral);
+  color: var(--coral);
+  background: transparent;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--turq);
+  border-color: var(--turq);
+  color: var(--paper);
+}
+.step {
+  border-style: solid;
+  border-color: var(--turq);
+  color: var(--teal);
+  background: var(--paper);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.submit {
+  background: var(--teal);
+  color: var(--paper);
+  transition: transform 0.4s var(--spring);
+}
+.submit:hover {
+  transform: translateY(-2px);
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+
+/* ═════ 09 · Final — tungi sahna, scroll bilan (--fc: 0 … 1 = Figma kadri) ═════ */
+.finalWrap {
+  --fc: 0;
+}
+/* osmon: kunduzgi shaftoli → shom → tun; uch qavat gradient yuqoriga suriladi (faqat transform — ranglar ustma-ust shaffof aralashmaydi) */
+.fSkyBox {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.fSky {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 300%;
+  background: linear-gradient(180deg, #23325a 0%, #33407a 20%, #3b4a82 33.34%, #5d4f8c 44%, #b0697a 54%, #e7956b 63%, #f6c99a 76%, #fbebd3 100%);
+  --sk: clamp(0, var(--fc) / 0.5, 1);
+  transform: translateY(calc(-66.666% * (1 - var(--sk) * var(--sk) * (3 - 2 * var(--sk)))));
+  will-change: transform;
+}
+.fBoom {
+  position: absolute;
+  --fb: clamp(0, (var(--fc) - 0.34 - var(--fd, 0)) / 0.32, 1);
+  --fbq: calc(1 - var(--fb));
+  --fbe: calc(1 - var(--fbq) * var(--fbq) * var(--fbq));
+  opacity: clamp(0, calc(var(--fb) * 4), 1);
+  transform: scale(calc(0.15 + 0.85 * var(--fbe))) rotate(calc(var(--fbq) * -30deg));
+  will-change: transform;
+}
+.fMoon {
+  --fm: clamp(0, (var(--fc) - 0.2) / 0.35, 1);
+  opacity: var(--fm);
+  transform: translateY(calc((1 - var(--fm)) * (1 - var(--fm)) * var(--u) * 50));
+}
+.fStar {
+  --fs: clamp(0, (var(--fc) - 0.42 - var(--si) * 0.03) / 0.2, 1);
+  opacity: var(--fs);
+  transform: scale(var(--fs));
+}
+.fStar img {
+  animation: twinkle 2.2s ease-in-out infinite alternate;
+  animation-delay: calc(var(--si) * -0.37s);
+}
+@keyframes twinkle {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+.fIn {
+  margin: 0;
+  --fp: clamp(0, (var(--fc) - 0.52 - var(--fi) * 0.07) / 0.28, 1);
+  opacity: var(--fp);
+  transform: translateY(calc((1 - var(--fp)) * var(--u) * 14));
+}
+.fCity {
+  position: absolute;
+  pointer-events: none;
+}
+.fHorse {
+  position: absolute;
+  --fh: clamp(0, (var(--fc) - 0.12) / 0.55, 1);
+  --fhq: calc(1 - var(--fh));
+  transform: translateX(calc(var(--fhq) * var(--fhq) * var(--u) * 120));
+}
+
+/* ═════ Musiqa tugmasi (Figma: krem doira 52, oltin halqa, 3 marjon chiziq) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: #fbf3e6;
+  box-shadow: 0 3px 8px rgba(77, 46, 26, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: musicIn 0.8s 1.2s var(--ease) both;
+}
+@keyframes musicIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.music svg {
+  display: block;
+  width: 52px;
+  height: 52px;
+}
+.musicEmbedded {
+  position: absolute;
+}
+.bar {
+  fill: #d9674a;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition:
+    fill 0.3s var(--ease),
+    fill-opacity 0.3s var(--ease);
+}
+.music:not(.playing) .bar {
+  fill: #7a6a5e;
+  fill-opacity: 0.4;
+}
+.music.playing .bar {
+  animation: eq 1.05s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.35s);
+}
+@keyframes eq {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.4);
+  }
+}
+.strike {
+  stroke: #d9674a;
+  stroke-width: 2;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  transition: stroke-dashoffset 0.3s var(--ease);
+}
+.music:not(.playing) .strike {
+  stroke-dashoffset: 0;
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--teal);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

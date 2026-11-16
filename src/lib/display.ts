@@ -75,3 +75,15 @@ export const initials = (name?: string | null) =>
     .slice(0, 2)
     .map((w) => w[0]?.toUpperCase())
     .join("") || "S";
+
+/**
+ * Mehmonga ko‘rinadigan ismlar: nikoh/fotiha — «Jasur & Madina»; sunnat va tug‘ilgan kunda ikkinchi maydon — ota-ona (imzo),
+ * u ism juftligi emas — faqat birinchi ism. `withParents` — kabinet sarlavhasi uchun «Amirxon (Jamshid va Nodira)».
+ */
+export function inviteNames(a: string | null | undefined, b: string | null | undefined, ceremony?: string | null, withParents = false) {
+  const x = (a ?? "").trim();
+  const y = (b ?? "").trim();
+  if (!y) return x;
+  if (!ceremony || ceremony === "nikoh" || ceremony === "fotiha") return x ? `${x} & ${y}` : y;
+  return withParents && x ? `${x} (${y})` : x;
+}

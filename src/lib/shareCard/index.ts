@@ -74,7 +74,9 @@ function dateLine(input: ShareCardInput, fmt: "dots" | "long") {
 
 export function cardTexts(input: ShareCardInput, design?: Design): Texts {
   const lang = input.lang;
-  const b = clean(input.personB, 60);
+  // sunnat / tug‘ilgan kun: ikkinchi maydon — ota-ona (ism juftligi emas) — kartada faqat bola/yubilyar ismi
+  const pair = input.ceremony === "nikoh" || input.ceremony === "fotiha";
+  const b = pair ? clean(input.personB, 60) : "";
   const amp = design?.amp === "va" ? tr(lang, "{a} va {b}", { a: "", b: "" }).trim() || "&" : "&";
   const guest = clean(input.guest, 80);
   return {

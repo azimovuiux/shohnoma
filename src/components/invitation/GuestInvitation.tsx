@@ -1,5 +1,6 @@
 "use client";
 
+import { inviteNames } from "@/lib/display";
 import Link from "@/components/LocalLink";
 import { useEffect, useState } from "react";
 import { LocaleProvider, tr, useLocale } from "@/lib/i18n";
@@ -60,7 +61,7 @@ export function GuestInvitation() {
     const meta = document.querySelector('meta[name="theme-color"]') ?? document.head.appendChild(Object.assign(document.createElement("meta"), { name: "theme-color" }));
     meta.setAttribute("content", template.theme.bg[0]);
     if (data) {
-      const names = [data.invitation.personA, data.invitation.personB].filter(Boolean).join(" & ");
+      const names = inviteNames(data.invitation.personA, data.invitation.personB, data.invitation.ceremony);
       document.title = tr(lang, "{names} — taklifnoma", { names });
     }
   }, [template, data, lang]);
@@ -78,7 +79,7 @@ export function GuestInvitation() {
     return (
       <LocaleProvider locale={lang}>
         <Shell
-          names={[data.invitation.personA, data.invitation.personB].filter(Boolean).join(" & ")}
+          names={inviteNames(data.invitation.personA, data.invitation.personB, data.invitation.ceremony)}
           title="Bu taklifnoma arxivlangan"
           text="Marosim o‘tib ketgan, shuning uchun sahifa endi faol emas. Ishtirokingiz uchun rahmat!"
         />

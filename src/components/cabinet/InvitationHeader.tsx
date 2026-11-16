@@ -4,12 +4,12 @@ import Link from "@/components/LocalLink";
 import { ArrowRight, Clock } from "@/components/icons";
 import { StatusBadge } from "@/components/ui";
 import { getTemplate, ceremonyLabel, type Ceremony } from "@/lib/templates";
-import { orderStatusView, splitDate } from "@/lib/display";
+import { inviteNames, orderStatusView, splitDate } from "@/lib/display";
 import type { Invitation, Order } from "@/lib/types";
 import { useT } from "@/lib/i18n";
 
-export const invTitle = (inv: Pick<Invitation, "personA" | "personB">, tt: (s: string) => string = (s) => s) =>
-  [inv.personA, inv.personB].filter(Boolean).join(" & ") || tt("Yangi taklifnoma");
+export const invTitle = (inv: Pick<Invitation, "personA" | "personB"> & { ceremony?: string }, tt: (s: string) => string = (s) => s) =>
+  inviteNames(inv.personA, inv.personB, inv.ceremony, true) || tt("Yangi taklifnoma");
 
 export function InvitationHeader({ order, invitation: inv, title }: { order: Order; invitation: Invitation; title?: string }) {
   const tr = useT();

@@ -65,7 +65,9 @@ try {
 }
 
 $months = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
-$names = trim($inv['person_a'] . ($inv['person_b'] ? ' & ' . $inv['person_b'] : ''));
+// sunnat / tug‘ilgan kun: ikkinchi maydon — ota-ona (ism juftligi emas)
+$pair = in_array($inv['ceremony'] ?? 'nikoh', ['nikoh', 'fotiha'], true);
+$names = trim($inv['person_a'] . ($pair && $inv['person_b'] ? ' & ' . $inv['person_b'] : ''));
 $date = '';
 if (preg_match('/^(\d{4})-(\d{2})-(\d{2})/', (string)$inv['date'], $m)) $date = (int)$m[3] . ' ' . $months[(int)$m[2] - 1] . ' ' . $m[1];
 $title = "$names — taklifnoma";

@@ -36,6 +36,8 @@ const f = {
   forum: '"sc-forum", Georgia, serif',
   bodoni: '"sc-bodoni", "sc-playfair", Georgia, serif',
   bodoniS: '"sc-bodoni-s", "sc-playfair", Georgia, serif',
+  yeseva: '"sc-yeseva", "sc-playfair", Georgia, serif',
+  nunito: '"sc-nunito", system-ui, sans-serif',
 };
 const st = (family: string, size: number, color: string, o: Partial<TextStyle> = {}): TextStyle => ({ family, size, color, ...o });
 
@@ -331,6 +333,29 @@ export const DESIGNS: Record<string, Design> = {
         ],
       },
       { y: 1266, anchor: "top", w: 700, items: [{ k: "kicker", s: st(f.jost, 22, "#7a736a", { min: 16 }) }] },
+    ],
+  },
+
+  /* Ertak (sunnat): yopiq ertak kitobi — muqovada taklif turi (oltin), bola ismi, joy; yulduzchalar ostida sana; mehmon — kitob ustida */
+  ertak: {
+    fill: "#e9d8be",
+    bg: true,
+    date: "dots",
+    stacks: [
+      { y: 104, anchor: "center", w: 940, maxH: 160, items: [{ k: "guest", s: st(f.yeseva, 48, "#1e5c63", { maxLines: 2, min: 32, lh: 1.2 }) }] },
+      {
+        x: 548,
+        y: 860,
+        anchor: "center",
+        w: 340,
+        maxH: 200,
+        items: [
+          { k: "kicker", s: st(f.nunito, 28, "#e9b44c", { weight: 700, ls: 0.06, min: 18 }) },
+          { k: "names", mode: "two", s: st(f.yeseva, 88, "#fbf3e6", { min: 50, lh: 1.16 }), gap: 18 },
+        ],
+      },
+      { x: 548, y: 1002, anchor: "center", w: 330, maxH: 92, items: [{ k: "venue", s: st(f.nunito, 26, "rgba(251,243,230,.85)", { weight: 600, maxLines: 2, min: 19, lh: 1.3 }) }] },
+      { x: 548, y: 1138, anchor: "center", w: 330, items: [{ k: "date", s: st(f.nunito, 28, "#e9b44c", { weight: 700, ls: 0.16, min: 18 }) }] },
     ],
   },
 };

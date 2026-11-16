@@ -4,6 +4,7 @@
  * Kabinet sahifalari uchun ma’lumot (statik eksport, PHP API).
  * /kabinet/t/<id>/... — id URL'dan o‘qiladi (Apache /kabinet/t/_/... qobig‘ini beradi).
  */
+import { inviteNames } from "@/lib/display";
 import Link from "@/components/LocalLink";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { ArrowLeft } from "@/components/icons";
@@ -66,8 +67,8 @@ export function InvitationProvider({ children, fallback }: { children: ReactNode
   return <InvCtx.Provider value={{ data, reload }}>{children}</InvCtx.Provider>;
 }
 
-export const invTitle = (inv: Pick<Invitation, "personA" | "personB">, tt: (s: string) => string = (s) => s) =>
-  [inv.personA, inv.personB].filter(Boolean).join(" & ") || tt("Yangi taklifnoma");
+export const invTitle = (inv: Pick<Invitation, "personA" | "personB"> & { ceremony?: string }, tt: (s: string) => string = (s) => s) =>
+  inviteNames(inv.personA, inv.personB, inv.ceremony, true) || tt("Yangi taklifnoma");
 
 /** ISO UTC → "12.09.2026" (Toshkent) */
 export function dayTk(iso: string | null | undefined) {

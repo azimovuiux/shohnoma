@@ -58,6 +58,10 @@ const FACES: Face[] = [
   // Gloock’da kirill yo‘q — shablondagi kabi Prata kirilli (lino.module.css)
   { family: "sc-gloock", weight: 400, style: "normal", files: [...subs(T("lino"), "gloock", "400-normal", ["latin", "latin-ext"]), ["cyrillic", `${T("savsan")}/prata-cyrillic-400-normal.woff2`]] },
   { family: "sc-forum", weight: 400, style: "normal", files: subs(T("kumush"), "forum", "400-normal") },
+  { family: "sc-yeseva", weight: 400, style: "normal", files: subs(T("ertak"), "yeseva-one", "400-normal") },
+  { family: "sc-nunito", weight: 400, style: "normal", files: subs(T("ertak"), "nunito", "400-normal") },
+  { family: "sc-nunito", weight: 600, style: "normal", files: subs(T("ertak"), "nunito", "600-normal") },
+  { family: "sc-nunito", weight: 700, style: "normal", files: subs(T("ertak"), "nunito", "700-normal") },
   // Bodoni Moda’da kirill yo‘q — riviera.module.css dagi kabi Playfair Display
   {
     family: "sc-bodoni",

@@ -1,0 +1,18 @@
+<svg preserveAspectRatio="none" width="33.105" height="31.7775" viewBox="0 0 33.105 31.7775" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Ertak / Yulduz (qog&#226;&#128;&#152;oz)">
+<g id="Vector" filter="url(#filter0_d_0_257)">
+<path d="M16.5525 1.5L20.3025 10.59L30.105 11.3475L22.6125 17.7225L24.93 27.2775L16.5525 22.125L8.175 27.2775L10.4925 17.7225L3 11.3475L12.8025 10.59L16.5525 1.5Z" fill="#E9B44C"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_0_257" x="0" y="0" width="33.105" height="31.7775" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="1.5"/>
+<feGaussianBlur stdDeviation="1.5"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.35 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.18 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_257"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_257" result="shape"/>
+</filter>
+</defs>
+</svg>

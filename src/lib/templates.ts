@@ -500,6 +500,41 @@ const builtin: Template[] = [
       { key: "quote", type: "textarea", label: "Iqtibos", placeholder: "Sevgi — eng go‘zal safar.", max: 80, hint: "Ixtiyoriy · monogramma ostida; bo‘sh qolsa — «Sevgi — eng go‘zal safar.»" },
     ],
   },
+  {
+    number: 12,
+    slug: "ertak",
+    name: "Ertak",
+    ceremony: "sunnat",
+    ceremonies: ["sunnat"],
+    style: "milliy",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Ertak kitobi uslubidagi sunnat to‘yi taklifnomasi: shaftoli va firuza ranglar, qog‘ozdan kesilgandek bulutlar, quyosh va otdagi shohzoda. Sahifani pastga surganingizda kitob muqovasi ochiladi, sahifalar varaqlanadi va ichidan shahar, tepaliklar va otliq shohzoda birin-ketin ko‘tariladi. Keyin taklif matni, o‘g‘lingiz suratlari, sana va sanoq, bayram dasturi, manzil, dress-kod va mehmonlar javobi; oxirida — mushakbozlikli tungi sahna.",
+    descriptionRu: "Приглашение на суннат-той в стиле книги сказок: персиковые и бирюзовые цвета, облака, солнце и маленький шахзода на коне, будто вырезанные из бумаги. Когда вы листаете страницу вниз, обложка книги открывается, страницы перелистываются, и из неё одна за другой поднимаются город, холмы и всадник. Дальше текст приглашения, фото сына, дата и отсчёт, программа праздника, адрес, дресс-код и ответы гостей; в конце — ночная сцена с салютом.",
+    descriptionEn: "A sunnat celebration invitation in the style of a fairy-tale book: peach and turquoise colours, with clouds, a sun and a little prince on horseback that look cut from paper. As you scroll down, the book cover opens, the pages turn, and a city, hills and the rider rise up one by one. Then the invitation text, photos of your son, the date and a countdown, the day’s programme, the venue, the dress code and guest replies; at the end — a night scene with fireworks.",
+    palette: ["#1E5C63", "#F6C99A", "#D9674A", "#E9B44C"],
+    sample: { a: "Amirxon", b: "Karimovlar oilasi", date: "15 · 05 · 2027", venue: "«Shohsaroy» to‘yxonasi", time: "07:00" },
+    theme: { bg: ["#1e5c63", "#174a50"], ink: "#fbf3e6", accent: "#e9b44c", soft: "#f6c99a", script: "cormorant", color: "moviy" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "Bayram dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Nahor oshi", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Erta tongda palov dasturxoni", max: 60 },
+        },
+      },
+      { key: "age", type: "number", label: "O‘g‘lingizning yoshi", placeholder: "7", max: 2, hint: "Ixtiyoriy · «Bizning shohzoda» bo‘limida: «7 yoshda»" },
+      { key: "quote", type: "text", label: "Iqtibos", placeholder: "Kichkina yurak — katta orzular.", max: 60, hint: "Ixtiyoriy · «Bizning shohzoda» bo‘limida; bo‘sh qolsa — «Kichkina yurak — katta orzular.»" },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Milliy", "Bayramona", "Klassik", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Bolalar milliy do‘ppida, kattalar bayramona libosda kelsa — quvonchimiz ikki barobar.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -675,6 +710,11 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Asosiy surat", where: "Jurnal muqovasida (bo‘lmasa — guldasta surati)" },
     { title: "Surat · 2", where: "Taklif matni yonida — detal surat (guldasta, uzuklar…)" },
     { title: "Surat · 3", where: "«Bazm manzili» bo‘limida (bo‘lmasa — suratsiz)" },
+  ],
+  /** Ertak (sunnat) — sahnalar shablonning o‘z rasmlari; mijoz suratlari «Bizning shohzoda» bo‘limida */
+  ertak: [
+    { title: "Asosiy surat", where: "«Bizning shohzoda» — ark ichidagi katta surat. Bo‘lmasa — bo‘lim chiqmaydi" },
+    { title: "Surat · 2", where: "«Bizning shohzoda» — doira ichidagi kichik surat" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

@@ -3,7 +3,7 @@ import { PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { splitDate } from "@/lib/display";
 
-type Inv = { personA: string; personB: string | null; date: string; venueName: string };
+type Inv = { personA: string; personB: string | null; date: string; venueName: string; ceremony?: string };
 
 function isDark(t: Template) {
   const hex = t.theme.bg[0].replace("#", "");
@@ -21,7 +21,8 @@ export function invitationTemplate(slug: string, inv: Inv): Template | null {
     isLive: true,
     sample: {
       a: inv.personA || t.sample.a,
-      b: inv.personA ? inv.personB ?? undefined : t.sample.b,
+      // sunnat / tug‘ilgan kun: ikkinchi maydon — ota-ona, ism juftligi emas
+      b: (inv.ceremony ?? t.ceremony) === "nikoh" || (inv.ceremony ?? t.ceremony) === "fotiha" ? (inv.personA ? inv.personB ?? undefined : t.sample.b) : undefined,
       date: d?.dots ?? t.sample.date,
       venue: inv.venueName || t.sample.venue,
       time: d?.time || t.sample.time,
