@@ -102,6 +102,25 @@ QR kod brauzerda yaratiladi (`qrcode` paketi) — server endpointi yo‘q.
 | GET | `/api/admin/leads` · PATCH `/api/admin/leads/:id` | `{ok, items: Lead[]}` · `{status}` |
 | GET | `/api/admin/counts` | `{ok, pendingP2p, newBriefs, newLeads}` |
 
+## Maqolalar (blog)
+
+`Article { id, slug, lang: uz|ru|en, groupId (tarjimalar guruhi), title, excerpt, category: maslahatlar|matnlar|tashkilot|yangiliklar|null, cover, body (tozalangan HTML), seoTitle, seoDescription, status: draft|published, publishedAt, createdAt, updatedAt }`.
+Ommaviy sahifalar serverda yig‘iladi (`php/article.php`): `/maqolalar/`, `/maqolalar/<slug>/` (+ `/ru/`, `/en/`) — title, description, canonical, hreflang (tarjimalar + x-default), OG/Twitter, JSON-LD (`BlogPosting`/`Blog` + `BreadcrumbList`) va to‘liq HTML statik qobiqdagi `#sh-ssr` ichiga qo‘yiladi. Yo‘q/qoralama slug → 404; boshqa tildagi slug → shu tildagi tarjimaga 301 (yo‘q bo‘lsa ro‘yxatga 302). `/sitemap-maqolalar.xml` — dinamik sitemap (robots.txt’da ikkinchi `Sitemap:`).
+
+| Metod | Yo‘l | |
+|---|---|---|
+| GET | `/api/articles?lang=uz&category=&page=1` | `{ok, items: Card[], total, all, page, pages, per, category, categories: {slug,count}[]}` (9 tadan, faqat nashr etilganlar) |
+| GET | `/api/articles/:slug[?preview=1]` | `{ok, article: Card & {html, toc: {id,text}[], wordCount, readingMinutes, seoTitle, seoDescription, description, status, translations: {id,lang,slug,title,status,url}[]}, related: Card[]}` — qoralama faqat admin + `preview=1` |
+| GET | `/api/admin/articles` | `{ok, items: (Article − body & {wordCount, url, translations: {id,lang,status}[]})[]}` |
+| GET | `/api/admin/articles/:id` | `{ok, article, translations}` |
+| POST | `/api/admin/articles` | `{title, slug?, lang, excerpt?, category?, cover?, body?, seoTitle?, seoDescription?, status?, translationOf?}` → `{ok, article, translations}`; slug bo‘sh — sarlavhadan; band → 409 |
+| PATCH | `/api/admin/articles/:id` | qisman, + `translationOf` (guruhga qo‘shish) / `unlink: true` (guruhdan ajratish); guruhda shu til bor → 409; nashrda matn bo‘sh → 422 |
+| DELETE | `/api/admin/articles/:id` | `{ok}` |
+| GET | `/api/admin/articles-slug?slug=&id=` | `{ok, slug, valid, available, suggestion}` |
+| POST | `/api/admin/articles-image` | multipart `file` (jpg/png/webp ≤ 8 MB) → `{ok, url, width, height}` |
+
+`body` saqlashda allowlist bilan tozalanadi: p, h2–h4, strong, em, s, ul/ol/li, blockquote, a[href,title], img[src,alt,width,height], figure, figcaption, br, hr, table, code, pre; `script`/`style`/`iframe`, `on*`/`style`/`class` atributlar va `javascript:` havolalar olib tashlanadi; tashqi havolalarga `target="_blank" rel="noopener noreferrer"`.
+
 ## Boshqa
 
 | GET | `/files/<dir>/<name>` | yuklangan fayl (`STORAGE_DIR/uploads`) |

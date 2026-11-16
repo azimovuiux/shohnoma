@@ -178,7 +178,7 @@ route('POST', '/track/ping', function () {
 /** Sayt sahifasimi yoki mehmon taklifnomasi (/<slug>/) */
 function stat_page_kind(string $path): string
 {
-    if (preg_match('#^/(shablonlar|namuna|buyurtma|kabinet|kirish|maxsus-dizayn|maxfiylik|shartlar)(/|$)#', $path) || $path === '/') return 'site';
+    if (preg_match('#^/(shablonlar|namuna|buyurtma|kabinet|kirish|maxsus-dizayn|maxfiylik|shartlar|maqolalar|ru|en)(/|$)#', $path) || $path === '/') return 'site';
     return preg_match('#^/[a-z0-9][a-z0-9-]{1,79}/$#', $path) ? 'invite' : 'site';
 }
 

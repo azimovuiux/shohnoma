@@ -4,6 +4,9 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $root = __DIR__;
 if (preg_match('#^/(api(/|$)|files/)#', $uri)) { require $root . '/api/index.php'; return true; }
 if ($uri !== '/' && is_file($root . $uri)) return false;
+if ($uri === '/sitemap-maqolalar.xml') { $_GET['sitemap'] = '1'; require $root . '/article.php'; return true; }
+if (preg_match('#^/(?:(ru|en)/)?maqolalar/(?:([^/]+)/)?$#', $uri, $m)) { $_GET['lang'] = $m[1] ?? ''; if (!empty($m[2])) $_GET['slug'] = $m[2]; require $root . '/article.php'; return true; }
+if (preg_match('#^/((?:ru/|en/)?)maqolalar/[a-z0-9-]+/index\.txt$#', $uri, $m)) { readfile($root . '/' . $m[1] . 'maqolalar/_/index.txt'); return true; }
 if (is_dir($root . $uri) && is_file(rtrim($root . $uri, '/') . '/index.html')) { readfile(rtrim($root . $uri, '/') . '/index.html'); return true; }
 $map = [
   '#^/buyurtma/[^/]+/(.*)$#' => '/buyurtma/_/$1',

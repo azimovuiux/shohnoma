@@ -17,5 +17,6 @@ export const mainNav = [
   { label: "Qanday ishlaydi", href: "/#qanday-ishlaydi" },
   { label: "Imkoniyatlar", href: "/#imkoniyatlar" },
   { label: "Savollar", href: "/#savollar" },
+  { label: "Maqolalar", href: "/maqolalar/" },
   { label: "Aloqa", href: "/#aloqa" },
 ];

@@ -13,7 +13,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api", "/admin", "/files", ...["", "/ru", "/en"].flatMap((l) => [`${l}/kabinet`, `${l}/buyurtma`, `${l}/kirish`])],
       },
     ],
-    sitemap: `${base}/sitemap.xml`,
+    // Maqolalar admin paneldan qo‘shiladi — ularning sitemap’i serverda dinamik (php/article.php)
+    sitemap: [`${base}/sitemap.xml`, `${base}/sitemap-maqolalar.xml`],
     host: base,
   };
 }

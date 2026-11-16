@@ -11,6 +11,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
     { href: "/admin/buyurtmalar/", label: "Buyurtmalar", n: 0 },
     { href: "/admin/foydalanuvchilar/", label: "Foydalanuvchilar", n: 0 },
     { href: "/admin/shablonlar/", label: "Shablonlar", n: 0 },
+    { href: "/admin/maqolalar/", label: "Maqolalar", n: 0 },
     { href: "/admin/musiqa/", label: "Musiqa", n: 0 },
     { href: "/admin/chegirmalar/", label: "Chegirmalar", n: 0 },
     { href: "/admin/tolovlar/", label: "Karta cheklari", n: counts.p2p },

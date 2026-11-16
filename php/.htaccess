@@ -49,6 +49,13 @@ RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 RewriteRule ^api(/.*)?$ api/index.php [QSA,L]
 RewriteRule ^files/(.*)$ api/index.php [QSA,L]
 
+# Maqolalar — server tomonda yig‘iladi (SEO: to‘liq matn va meta JS’siz ham), php/article.php
+RewriteRule ^sitemap-maqolalar\.xml$ article.php?sitemap=1 [L]
+RewriteRule ^(?:(ru|en)/)?maqolalar/$ article.php?lang=$1 [QSA,L]
+RewriteRule ^(?:(ru|en)/)?maqolalar/([^/]+)/$ article.php?lang=$1&slug=$2 [QSA,L]
+# Brauzerdagi o‘tishlar (Next RSC) uchun — maqola qobig‘i
+RewriteRule ^(ru/|en/)?maqolalar/[a-z0-9-]+/index\.txt$ $1maqolalar/_/index.txt [L]
+
 # Mavjud fayl/papka — o‘zi
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
