@@ -34,6 +34,18 @@ export const en: Record<string, string> = {
   Yordam: "Help",
   Chiqish: "Sign out",
   Kabinet: "Account",
+  // Mobil hisob menyusi, chiqish, profil holati
+  "Akkauntdan chiqasizmi?": "Sign out of your account?",
+  "Buyurtmalaringiz va taklifnomalaringiz saqlanib qoladi — istalgan payt qayta kirishingiz mumkin.": "Your orders and invitations stay saved — you can sign back in any time.",
+  "Shaxsiy kabinet": "Personal account",
+  "Hisob menyusi": "Account menu",
+  "tab::Tahrirlash": "Edit",
+  "Almashtirish": "Switch",
+  "Taklifnomani tanlang": "Choose an invitation",
+  "hozir ochiq": "open now",
+  "Ma’lumotlar saqlangan": "All changes saved",
+  "Ism kiritilmagan — yuqoriga yozing": "No name yet — type it above",
+  "Bu qurilmada hisobdan chiqasiz. Buyurtmalar va taklifnomalar saqlanib qoladi.": "You’ll be signed out on this device. Your orders and invitations stay saved.",
 
   // Taklifnoma paneli
   "Barcha taklifnomalar": "All invitations",

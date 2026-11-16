@@ -2,12 +2,13 @@
 
 import { useMe } from "@/lib/client";
 import { useState } from "react";
-import { TickCircle } from "@/components/icons";
+import { Card, LogoutCurve, TickCircle } from "@/components/icons";
+import Link from "@/components/LocalLink";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { Field, Input, Toggle, api, useToast } from "@/components/ui";
-import { formatPhoneDisplay, initials } from "@/lib/display";
+import { formatPhoneDisplay } from "@/lib/display";
 import { TelegramLogin } from "./TelegramLogin";
-import { useLogout } from "./CabinetNav";
+import { AccountAvatar, LogoutButton, accountTitle, useLogout } from "@/components/Account";
 import { useT } from "@/lib/i18n";
 
 type U = {
@@ -68,9 +69,11 @@ export function ProfileForm({ user }: { user: U }) {
       <form onSubmit={save} className={card}>
         <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("Shaxsiy ma’lumotlar")}</p>
         <div className="flex items-center gap-4">
-          <span className="flex size-16 items-center justify-center rounded-full bg-maroon font-serif text-[28px] font-medium text-ink-inverse">{initials(name || "S")}</span>
-          <div className="flex flex-col gap-0.5">
-            <span className="font-serif text-[24px] font-medium leading-[1.2] text-ink">{name || t("Ismingizni kiriting")}</span>
+          <AccountAvatar name={name} size={64} serif />
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="truncate font-serif text-[24px] font-medium leading-[1.2] text-ink">
+              {accountTitle({ name: name.trim() || null, phone: user.phone, telegramUser: user.telegramUser }, t)}
+            </span>
             <span className="t-body-s text-ink-2">{t("Mijoz: {since}dan", { since: user.since })}</span>
           </div>
         </div>
@@ -99,11 +102,22 @@ export function ProfileForm({ user }: { user: U }) {
             )}
           </Field>
         </div>
-        <div>
-          <button type="submit" disabled={saving || name === (user.name ?? "")} className="btn btn-primary">
-            {saving ? t("Saqlanmoqda…") : t("Saqlash")}
-          </button>
-        </div>
+        {/* Holat aniq: o‘zgarish bo‘lmasa — «Saqlangan», bo‘lsa — Saqlash / Bekor qilish */}
+        {name === (user.name ?? "") && !saving ? (
+          <p className="inline-flex min-h-12 items-center gap-2 t-body-s text-ink-2">
+            {user.name ? <TickCircle size={16} className="text-success" /> : null}
+            {user.name ? t("Ma’lumotlar saqlangan") : t("Ism kiritilmagan — yuqoriga yozing")}
+          </p>
+        ) : (
+          <div className="flex flex-wrap gap-2.5">
+            <button type="submit" disabled={saving} className="btn btn-primary max-sm:flex-1">
+              <TickCircle size={16} /> {saving ? t("Saqlanmoqda…") : t("Saqlash")}
+            </button>
+            <button type="button" disabled={saving} onClick={() => setName(user.name ?? "")} className="btn btn-secondary max-sm:flex-1">
+              {t("Bekor qilish")}
+            </button>
+          </div>
+        )}
       </form>
 
       <section className={card}>
@@ -129,18 +143,27 @@ export function ProfileForm({ user }: { user: U }) {
         </div>
       </section>
 
-      <ProfileLogout onLogout={logout} />
-    </>
-  );
-}
+      <Link href="/kabinet/tolovlar/" className="flex min-h-[64px] items-center gap-3 rounded-card border border-line bg-bg-base p-5 transition-colors hover:bg-bg-soft lg:p-6">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">
+          <Card size={18} />
+        </span>
+        <span className="flex-1 text-[15px] font-semibold leading-[1.35] text-ink">{t("To‘lovlar tarixi")}</span>
+        <span className="t-nav text-maroon">{t("Ko‘rish")} →</span>
+      </Link>
 
-function ProfileLogout({ onLogout }: { onLogout: () => void }) {
-  const t = useT();
-  return (
-    <div>
-      <button type="button" onClick={onLogout} className="t-nav text-ink-2 hover:text-maroon">
-        {t("Akkauntdan chiqish")}
-      </button>
-    </div>
+      {/* Chiqish — sahifa oxirida alohida, aniq tugma (tasdiqlash oynasi bilan) */}
+      <section className={`${card} !gap-4`}>
+        <div className="flex items-start gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--decline-bg)] text-decline">
+            <LogoutCurve size={18} />
+          </span>
+          <div className="flex flex-col gap-0.5">
+            <p className="text-[15px] font-semibold leading-[1.35] text-ink">{t("Akkauntdan chiqish")}</p>
+            <p className="t-body-s text-ink-2">{t("Bu qurilmada hisobdan chiqasiz. Buyurtmalar va taklifnomalar saqlanib qoladi.")}</p>
+          </div>
+        </div>
+        <LogoutButton onClick={logout} label="Chiqish" className="w-full sm:w-auto sm:self-start" />
+      </section>
+    </>
   );
 }

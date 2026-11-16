@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "@/components/LocalLink";
-import { Receipt2 } from "@/components/icons";
 import { PageLoading, useMe } from "@/lib/client";
 import { monthsUz } from "@/lib/display";
 import { ProfileForm } from "../ProfileForm";
@@ -43,13 +41,6 @@ export function ProfilePage() {
           notifyDayBefore: user.notifyDayBefore,
         }}
       />
-      <Link href="/kabinet/tolovlar/" className="flex items-center gap-3 rounded-card border border-line bg-bg-base p-5 transition-colors hover:bg-bg-soft lg:p-6">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-soft text-maroon">
-          <Receipt2 size={18} />
-        </span>
-        <span className="flex-1 text-[15px] font-semibold leading-[1.35] text-ink">{t("To‘lovlar tarixi")}</span>
-        <span className="t-nav text-maroon">{t("Ko‘rish")} →</span>
-      </Link>
     </>
   );
 }

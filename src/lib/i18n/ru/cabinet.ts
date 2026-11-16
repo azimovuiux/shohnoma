@@ -34,6 +34,18 @@ export const ru: Record<string, string> = {
   Yordam: "Помощь",
   Chiqish: "Выйти",
   Kabinet: "Кабинет",
+  // Mobil hisob menyusi, chiqish, profil holati
+  "Akkauntdan chiqasizmi?": "Выйти из аккаунта?",
+  "Buyurtmalaringiz va taklifnomalaringiz saqlanib qoladi — istalgan payt qayta kirishingiz mumkin.": "Ваши заказы и приглашения сохранятся — войти снова можно в любое время.",
+  "Shaxsiy kabinet": "Личный кабинет",
+  "Hisob menyusi": "Меню аккаунта",
+  "tab::Tahrirlash": "Изменить",
+  "Almashtirish": "Сменить",
+  "Taklifnomani tanlang": "Выберите приглашение",
+  "hozir ochiq": "открыто сейчас",
+  "Ma’lumotlar saqlangan": "Данные сохранены",
+  "Ism kiritilmagan — yuqoriga yozing": "Имя не указано — введите его выше",
+  "Bu qurilmada hisobdan chiqasiz. Buyurtmalar va taklifnomalar saqlanib qoladi.": "Вы выйдете из аккаунта на этом устройстве. Заказы и приглашения сохранятся.",
 
   // Taklifnoma paneli
   "Barcha taklifnomalar": "Все приглашения",

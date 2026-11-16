@@ -4,28 +4,17 @@ import Link from "@/components/LocalLink";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { PageLoading, useMe, useRequireUser } from "@/lib/client";
-import { DocumentText, Heart, LogoutCurve, Messages, Receipt2, UserTick } from "@/components/icons";
+import { LogoutCurve, MessageQuestion } from "@/components/icons";
 import { site } from "@/lib/site";
-import { formatPhoneDisplay, initials } from "@/lib/display";
-import { currentLocale, lpath, useLpath, useT } from "@/lib/i18n";
+import { ACCOUNT_SECTIONS, AccountAvatar, accountSubtitle, accountTitle, samePath, useLogout } from "@/components/Account";
+import { useLpath, useT } from "@/lib/i18n";
 
 type Props = { name: string | null; phone: string | null; telegramUser: string | null; orders: number; favorites: number };
 
-const items = [
-  { href: "/kabinet/", label: "Buyurtmalarim", icon: DocumentText, count: "orders" as const },
-  { href: "/kabinet/tolovlar/", label: "To‘lovlar", icon: Receipt2, count: null },
-  { href: "/kabinet/sevimlilar/", label: "Sevimlilar", icon: Heart, count: "favorites" as const },
-  { href: "/kabinet/profil/", label: "Profil", icon: UserTick, count: null },
-];
+// Bo‘limlar va ikonkalar — sarlavhadagi hisob menyusi bilan bir xil (Account.tsx)
+const items = ACCOUNT_SECTIONS;
 
-export function useLogout() {
-  return async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    window.location.assign(lpath(currentLocale(), "/"));
-  };
-}
-
-const samePath = (a: string, b: string) => a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
+export { useLogout };
 
 /** Kabinet darajasidagi sahifalar qobig‘i: kirishni tekshiradi, chap panel + kontent */
 export function CabinetShell({ children }: { children: ReactNode }) {
@@ -53,12 +42,10 @@ export function CabinetNav(p: Props) {
     <>
       <aside className="hidden w-[264px] shrink-0 flex-col gap-1.5 self-start rounded-card bg-bg-soft px-4 py-5 lg:flex">
         <div className="flex items-center gap-3 pb-3.5 pl-2">
-          <span className="flex size-11 items-center justify-center rounded-full bg-maroon font-serif text-[20px] font-medium text-ink-inverse">
-            {initials(p.name ?? "S")}
-          </span>
+          <AccountAvatar name={p.name} size={44} serif />
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="truncate t-title text-ink">{p.name || t("Mening kabinetim")}</span>
-            <span className="t-body-s text-ink-2">{p.phone ? formatPhoneDisplay(p.phone) : p.telegramUser}</span>
+            <span className="truncate t-title text-ink">{accountTitle(p, t)}</span>
+            <span className="truncate t-body-s text-ink-2">{accountSubtitle(p, t)}</span>
           </div>
         </div>
         {items.map((it) => {
@@ -85,25 +72,35 @@ export function CabinetNav(p: Props) {
         })}
         <span className="my-1 h-px bg-line-dark/10" />
         <a href={site.telegram} target="_blank" rel="noopener noreferrer" className={`${row} text-ink hover:bg-bg-base/60`}>
-          <Messages size={18} /> {t("Yordam")}
+          <MessageQuestion size={18} /> {t("Yordam")}
         </a>
-        <button type="button" onClick={logout} className={`${row} text-ink-2 hover:bg-bg-base/60`}>
+        <button type="button" onClick={logout} className={`${row} text-decline hover:bg-[var(--decline-bg)]`}>
           <LogoutCurve size={18} /> {t("Chiqish")}
         </button>
       </aside>
 
-      <nav className="flex rounded-full bg-bg-soft p-1 lg:hidden" aria-label={t("Kabinet")}>
+      {/* Mobil: 4 ta katta bo‘lim — ikonka + nom (bosish maydoni ≥56px), son ikonka burchagida */}
+      <nav className="grid grid-cols-4 gap-0.5 rounded-[20px] bg-bg-soft p-1 lg:hidden" aria-label={t("Kabinet")}>
         {items.map((it) => {
           const active = samePath(path, lp(it.href));
+          const Icon = it.icon;
+          const n = it.count ? p[it.count] : 0;
           return (
             <Link
               key={it.href}
               href={it.href}
               aria-current={active ? "page" : undefined}
-              className={`flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full t-nav ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2"}`}
+              className={`flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-2 text-[12px] tracking-[-0.01em] max-[374px]:text-[11.5px] font-medium leading-[1.15] transition-colors ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2 active:bg-bg-base/60"}`}
             >
-              {it.label === "Buyurtmalarim" ? t("Buyurtmalar") : t(it.label)}
-              {it.count && <span className="text-[11px] opacity-70">{p[it.count]}</span>}
+              <span className="relative">
+                <Icon size={21} variant={active ? "Bold" : "Linear"} />
+                {n > 0 && (
+                  <span className="absolute -right-2.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-maroon px-1 text-[10px] font-semibold leading-none text-ink-inverse">
+                    {n}
+                  </span>
+                )}
+              </span>
+              <span className="max-w-full truncate">{t(it.short)}</span>
             </Link>
           );
         })}

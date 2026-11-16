@@ -2,8 +2,10 @@
 
 import Link from "@/components/LocalLink";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { ArrowDown2, ArrowLeft, Edit, Eye, Grid2, Profile2User, Receipt2 } from "@/components/icons";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { ArrowDown2, ArrowLeft, ArrowRight2, Card, CloseCircle, Edit, Eye, Grid2, Profile2User } from "@/components/icons";
+import { Modal } from "@/components/ui";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { invitationTemplate } from "./InvitationThumb";
 import { splitDate } from "@/lib/display";
@@ -16,7 +18,7 @@ const statusShort = (s: string) => (s === "active" || s === "paid" ? "Faol" : s 
 function Mini({ it }: { it: Item }) {
   const t = invitationTemplate(it.templateSlug, it);
   return (
-    <span className="relative h-[60px] w-10 shrink-0 overflow-hidden rounded-lg" style={{ background: t?.theme.bg[0] }}>
+    <span className="relative h-[60px] w-10 shrink-0 overflow-hidden rounded-lg bg-gold-soft" style={t ? { background: t.theme.bg[0] } : undefined}>
       {t && (
         <span className="absolute inset-x-0 top-0 h-[87px]">
           <InvitationScreen t={t} />
@@ -47,8 +49,8 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
   const tabs = [
     { href: `${base}/`, label: "Umumiy", short: "Umumiy", icon: Grid2, n: null },
     { href: `${base}/mehmonlar/`, label: "Mehmonlar javobi", short: "Mehmonlar", icon: Profile2User, n: responses },
-    { href: `${base}/tahrirlash/`, label: "Tahrirlash", short: "Tahrirlash", icon: Edit, n: null },
-    { href: `${base}/tolov/`, label: "To‘lov va chek", short: "To‘lov", icon: Receipt2, n: null },
+    { href: `${base}/tahrirlash/`, label: "Tahrirlash", short: "tab::Tahrirlash", icon: Edit, n: null },
+    { href: `${base}/tolov/`, label: "To‘lov va chek", short: "To‘lov", icon: Card, n: null },
   ];
   const d = splitDate(current.date);
   const row = "flex w-full items-center gap-3 rounded-xl px-3 py-[11px] text-[13px] font-medium leading-none transition-colors";
@@ -117,28 +119,101 @@ export function InvitationNav({ current, others, responses, siteUrl, paid }: { c
         )}
       </aside>
 
-      {/* Mobil */}
-      <div className="flex flex-col gap-4 lg:hidden">
-        <Link href="/kabinet/" className="flex items-center gap-2 t-nav text-ink-2">
-          <ArrowLeft size={16} /> {t("Barcha taklifnomalar")}
-        </Link>
-        <nav className="no-scrollbar -mx-5 flex overflow-x-auto border-b border-line px-5" aria-label={t("Taklifnoma")}>
+      {/* Mobil: orqaga + taklifnomalar orasida almashish (pastki oyna) + ikonkali 4 bo‘lim */}
+      <div className="flex flex-col gap-3 lg:hidden">
+        <div className="flex items-center justify-between gap-2">
+          <Link href="/kabinet/" className="-ml-1 flex min-h-11 items-center gap-2 px-1 t-nav text-ink-2">
+            <ArrowLeft size={16} /> {t("Barcha taklifnomalar")}
+          </Link>
+          {others.length > 0 && <MobileSwitcher current={current} others={others} paid={paid} title={title} />}
+        </div>
+        <nav className="grid grid-cols-4 gap-0.5 rounded-[20px] bg-bg-soft p-1" aria-label={t("Taklifnoma")}>
           {tabs.map((tab) => {
             const active = same(path, tab.href);
+            const Icon = tab.icon;
             return (
               <Link
                 key={tab.href}
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
-                className={`-mb-px shrink-0 border-b-2 px-3 pb-3 pt-1 t-nav ${active ? "border-maroon text-maroon" : "border-transparent text-ink-2"}`}
+                className={`flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-2 text-[12px] tracking-[-0.01em] max-[374px]:text-[11.5px] font-medium leading-[1.15] transition-colors ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2 active:bg-bg-base/60"}`}
               >
-                {t(tab.short)}
-                {tab.n !== null ? ` (${tab.n})` : ""}
+                <span className="relative">
+                  <Icon size={21} variant={active ? "Bold" : "Linear"} />
+                  {tab.n !== null && tab.n > 0 && (
+                    <span className="absolute -right-2.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-maroon px-1 text-[10px] font-semibold leading-none text-ink-inverse">
+                      {tab.n}
+                    </span>
+                  )}
+                </span>
+                <span className="max-w-full truncate">{t(tab.short)}</span>
               </Link>
             );
           })}
         </nav>
       </div>
+    </>
+  );
+}
+
+/** Mobil: joriy taklifnoma tugmasi → pastdan ro‘yxat (boshqa taklifnomaga o‘tish) */
+function MobileSwitcher({ current, others, paid, title }: { current: Item; others: Item[]; paid: boolean; title: (it: Item) => string }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const close = useCallback(() => setOpen(false), []);
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        className="flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-line bg-bg-base px-3.5 t-nav text-ink"
+      >
+        {t("Almashtirish")} <ArrowDown2 size={14} />
+      </button>
+      {mounted &&
+        createPortal(
+          <Modal open={open} onClose={close} label={t("Taklifnomani tanlang")} className="pb-[max(16px,env(safe-area-inset-bottom))]">
+            <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-line sm:hidden" aria-hidden />
+            <div className="flex items-center justify-between gap-3 px-5 pb-2 pt-3">
+              <p className="font-serif text-[26px] font-light leading-[1.1] text-ink">{t("Taklifnomani tanlang")}</p>
+              <button type="button" onClick={close} className="icon-btn !h-11 !w-11 shrink-0" aria-label={t("Yopish")}>
+                <CloseCircle size={20} />
+              </button>
+            </div>
+            <div className="flex flex-col gap-1 px-3 pb-2">
+              {[current, ...others].map((o) => {
+                const isCur = o.id === current.id;
+                const d = splitDate(o.date);
+                return (
+                  <Link
+                    key={o.id}
+                    href={`/kabinet/t/${o.id}/`}
+                    onClick={close}
+                    aria-current={isCur ? "page" : undefined}
+                    className={`flex items-center gap-3 rounded-2xl p-2 ${isCur ? "bg-bg-soft" : "active:bg-bg-soft"}`}
+                  >
+                    <Mini it={o} />
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="truncate font-serif text-[19px] font-medium leading-[1.2] text-ink">{title(o)}</span>
+                      <span className="flex items-center gap-1.5 text-[12px] leading-[1.4] text-ink-2">
+                        {isCur && <span className={`size-1.5 rounded-full ${paid ? "bg-success" : "bg-pending"}`} />}
+                        {t(statusShort(o.status))}
+                        {d ? ` · ${d.day}` : ""}
+                        {isCur ? ` · ${t("hozir ochiq")}` : ""}
+                      </span>
+                    </span>
+                    {!isCur && <ArrowRight2 size={16} className="shrink-0 text-ink-2" />}
+                  </Link>
+                );
+              })}
+            </div>
+          </Modal>,
+          document.body,
+        )}
     </>
   );
 }

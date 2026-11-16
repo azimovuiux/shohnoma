@@ -4,6 +4,7 @@ import Link from "@/components/LocalLink";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowDown2,
+  ArrowRight2,
   Call,
   CloseCircle,
   HambergerMenu,
@@ -18,19 +19,13 @@ import {
   LogoutCurve,
   Setting2,
 } from "@/components/icons";
-import { useLocalRouter } from "@/lib/useLocalRouter";
 import { useMe } from "@/lib/client";
 import { switchPath, useLocale, useT } from "@/lib/i18n";
 
-export type HeaderUser = {
-  name: string | null;
-  phone: string | null;
-  telegramUser: string | null;
-  orders: number;
-  favorites: number;
-  isAdmin: boolean;
-} | null;
-import { formatPhoneDisplay, initials } from "@/lib/display";
+import { ACCOUNT_SECTIONS, AccountAvatar, LogoutButton, MobileAccountButton, accountSubtitle, accountTitle, useLogout, type AccountUser } from "./Account";
+import { openChat } from "./FloatingContact";
+
+export type HeaderUser = AccountUser | null;
 import { Logo } from "./Logo";
 import { TelegramIcon } from "./TelegramIcon";
 import { FlagGB, FlagRU, FlagUZ } from "./Flag";
@@ -40,7 +35,8 @@ import { NotificationBellDesktop, NotificationBellMobile, NotificationToasts, us
 type Lang = "uz" | "ru" | "en";
 
 /** @param navigate o‘tishni o‘zi bajaradi (masalan buyurtma oqimida — avval qoralamani saqlab) */
-export function LangSwitcher({ compact = false, navigate }: { compact?: boolean; navigate?: (href: string) => void }) {
+/** @param tight juda tor ekranda (<390px) faqat bayroq — sarlavhada hisob tugmasiga joy qolsin */
+export function LangSwitcher({ compact = false, tight = false, navigate }: { compact?: boolean; tight?: boolean; navigate?: (href: string) => void }) {
   const [open, setOpen] = useState(false);
   const lang = useLocale();
   const t = useT();
@@ -75,10 +71,10 @@ export function LangSwitcher({ compact = false, navigate }: { compact?: boolean;
         aria-label={t("Tilni tanlash")}
         className={`inline-flex items-center gap-1.5 rounded-full border border-line t-nav text-ink hover:bg-bg-soft ${
           compact ? "h-10 px-2.5" : "h-[42px] px-3"
-        }`}
+        } ${tight ? "max-[389px]:w-10 max-[389px]:justify-center max-[389px]:px-0" : ""}`}
       >
         {lang === "uz" ? <FlagUZ /> : lang === "ru" ? <FlagRU /> : <FlagGB />}
-        <span>{lang.toUpperCase()}</span>
+        <span className={tight ? "max-[389px]:sr-only" : ""}>{lang.toUpperCase()}</span>
         {!compact && <ArrowDown2 size={14} />}
       </button>
       {open && (
@@ -165,46 +161,49 @@ function MobileMenu({
           <CloseCircle size={20} />
         </button>
       </div>
+      <div className="flex-1 overflow-y-auto overscroll-contain">
       {user && (
-        <div className="mx-5 mt-5 flex flex-col gap-4 rounded-panel bg-bg-soft p-4">
-          <div className="flex items-center gap-3">
-            <span className="flex size-11 items-center justify-center rounded-full bg-gold-soft font-semibold text-maroon">
-              {initials(user.name ?? "S")}
+        <div className="mx-5 mt-5 flex flex-col gap-3 rounded-panel bg-bg-soft p-3">
+          <Link href="/kabinet/" onClick={onClose} className="flex items-center gap-3 rounded-2xl p-1.5">
+            <AccountAvatar name={user.name} size={44} />
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="truncate t-title text-ink">{accountTitle(user, t)}</span>
+              <span className="truncate t-body-s text-ink-2">{accountSubtitle(user, t)}</span>
             </span>
-            <div className="flex min-w-0 flex-col">
-              <span className="truncate t-title text-ink">
-                {user.name || t("Mening kabinetim")}
-              </span>
-              <span className="t-body-s text-ink-2">
-                {user.phone
-                  ? formatPhoneDisplay(user.phone)
-                  : user.telegramUser}
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            {[
-              ["/kabinet/", "Buyurtmalar", user.orders],
-              ["/kabinet/tolovlar/", "To‘lovlar", null],
-              ["/kabinet/sevimlilar/", "Sevimlilar", user.favorites],
-              ["/kabinet/profil/", "Profil", null],
-            ].map(([href, label, n]) => (
+            <span className="inline-flex shrink-0 items-center gap-1 t-nav text-maroon">
+              {t("Kabinet")} <ArrowRight2 size={14} />
+            </span>
+          </Link>
+          <div className="grid grid-cols-2 gap-2">
+            {ACCOUNT_SECTIONS.map((s) => {
+              const Icon = s.icon;
+              return (
+                <Link
+                  key={s.href}
+                  href={s.href}
+                  onClick={onClose}
+                  className="flex min-h-12 min-w-0 items-center gap-2.5 rounded-xl bg-bg-base px-3 py-2 t-body-s font-medium text-ink"
+                >
+                  <Icon size={19} className="shrink-0 text-maroon" />
+                  <span className="min-w-0 flex-1 truncate">{t(s.short)}</span>
+                  {s.count && <span className="shrink-0 text-[12px] font-normal text-ink-2">{user[s.count]}</span>}
+                </Link>
+              );
+            })}
+            {user.isAdmin && (
               <Link
-                key={href as string}
-                href={href as string}
+                href="/admin/"
                 onClick={onClose}
-                className="flex flex-col items-center gap-0.5 rounded-xl bg-bg-base px-2 py-2.5 t-body-s text-ink"
+                className="col-span-2 flex min-h-12 items-center gap-2.5 rounded-xl bg-bg-base px-3 py-2 t-body-s font-medium text-ink"
               >
-                <span className="font-serif text-[20px] font-medium leading-none text-maroon">
-                  {n ?? "·"}
-                </span>
-                {t(label as string)}
+                <Setting2 size={19} className="shrink-0 text-maroon" />
+                <span className="flex-1">{t("Admin panel")}</span>
               </Link>
-            ))}
+            )}
           </div>
         </div>
       )}
-      <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-5 pt-6">
+      <nav className="flex flex-col gap-1 px-5 pt-4" aria-label={t("Asosiy")}>
         {links.map((l) => (
           <Link
             key={l.href}
@@ -215,16 +214,25 @@ function MobileMenu({
             {t(l.label)}
           </Link>
         ))}
-      </nav>
-      <div className="flex flex-col gap-5 px-5 pb-8 pt-6">
-        {user ? (
+        {app && (
+          // Ish sahifalarida suzuvchi chat tugmasi mobilda yo‘q — yordam shu yerdan
           <button
             type="button"
-            onClick={onLogout}
-            className="t-nav text-ink-2 hover:text-maroon"
+            onClick={() => {
+              onClose();
+              openChat();
+            }}
+            className="flex items-center justify-between border-b border-line py-4 text-left font-serif text-[34px] font-light leading-none text-ink"
           >
-            {t("Akkauntdan chiqish")}
+            {t("Yordam")}
+            <MessageQuestion size={24} className="text-maroon" />
           </button>
+        )}
+      </nav>
+      </div>
+      <div className="flex flex-col gap-5 border-t border-line px-5 pb-[max(24px,env(safe-area-inset-bottom))] pt-4">
+        {user ? (
+          <LogoutButton onClick={onLogout} className="w-full" />
         ) : (
           <Link
             href="/kirish/"
@@ -306,9 +314,7 @@ function AccountMenu({
         aria-expanded={open}
         className="btn btn-primary btn-sm !py-[9px] !pl-[9px]"
       >
-        <span className="flex size-6 items-center justify-center rounded-full bg-ink-inverse text-[11px] font-semibold text-maroon">
-          {initials(user.name ?? "S")}
-        </span>
+        <AccountAvatar name={user.name} size={24} tone="inverse" />
         {t("Kabinet")}
       </button>
       {open && (
@@ -317,12 +323,8 @@ function AccountMenu({
           className="absolute right-0 top-[calc(100%+8px)] z-50 w-64 rounded-2xl border border-line bg-bg-base p-1.5 shadow-menu"
         >
           <div className="px-3 pb-2.5 pt-2">
-            <p className="truncate t-title text-ink">
-              {user.name || t("Mening kabinetim")}
-            </p>
-            <p className="t-body-s text-ink-2">
-              {user.phone ? formatPhoneDisplay(user.phone) : user.telegramUser}
-            </p>
+            <p className="truncate t-title text-ink">{accountTitle(user, t)}</p>
+            <p className="truncate t-body-s text-ink-2">{accountSubtitle(user, t)}</p>
           </div>
           <Link
             role="menuitem"
@@ -381,8 +383,11 @@ function AccountMenu({
           <button
             role="menuitem"
             type="button"
-            onClick={onLogout}
-            className={`${item} w-full text-left`}
+            onClick={() => {
+              setOpen(false);
+              onLogout();
+            }}
+            className={`${item} w-full text-left !text-decline hover:!bg-[var(--decline-bg)]`}
           >
             <LogoutCurve size={18} /> {t("Chiqish")}
           </button>
@@ -394,9 +399,8 @@ function AccountMenu({
 
 export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
   const app = variant === "app";
-  const router = useLocalRouter();
   const t = useT();
-  const { me, reload, loading: meLoading } = useMe();
+  const { me, loading: meLoading } = useMe();
   const user: HeaderUser = me?.user
     ? {
         name: me.user.name,
@@ -407,12 +411,8 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
         isAdmin: me.user.isAdmin,
       }
     : null;
-  const logout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    await reload();
-    setMenuOpen(false);
-    router.push("/");
-  };
+  // Tasdiqlash oynasi bilan; sessiya o‘chgach bosh sahifaga to‘liq yangilanadi
+  const logout = useLogout();
   const [menuOpen, setMenuOpen] = useState(false);
   const { compact, hidden } = useScrollHeader();
   // Saytdagi bildirishnomalar (taklifnoma egasi): yangi javoblar, maxsus mehmon ochishi, to‘lov holati
@@ -475,18 +475,23 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
             )}
           </div>
 
-          <div className="flex items-center gap-2 lg:hidden">
-            <LangSwitcher compact />
-            <a
-              href={site.telegram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="icon-btn !h-10 !w-10"
-              aria-label="Telegram"
-            >
-              <TelegramIcon size={18} />
-            </a>
+          <div className={`flex items-center lg:hidden ${user ? "gap-1.5" : "gap-2"}`}>
+            <LangSwitcher compact tight={!!user} />
+            {/* Kirgan foydalanuvchida Telegram o‘rnida hisob tugmasi (Telegram/yordam — burger va hisob menyusida) */}
+            {!user && !(meLoading && !me) && (
+              <a
+                href={site.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="icon-btn !h-10 !w-10"
+                aria-label="Telegram"
+              >
+                <TelegramIcon size={18} />
+              </a>
+            )}
+            {meLoading && !me && <span className="size-10" aria-hidden />}
             {user && <NotificationBellMobile s={notif} />}
+            {user && <MobileAccountButton user={user} />}
             <button
               type="button"
               onClick={() => setMenuOpen(true)}

@@ -347,7 +347,11 @@ function ConfirmHost() {
             <button type="button" className="btn btn-secondary" onClick={close} autoFocus={!req.typeToConfirm}>
               {req.cancel ?? tr(lc, "Bekor qilish")}
             </button>
-            <button type="submit" disabled={okDisabled} className="btn btn-primary">
+            <button
+              type="submit"
+              disabled={okDisabled}
+              className={req.danger ? "btn bg-decline text-ink-inverse hover:bg-[color-mix(in_srgb,var(--color-decline)_85%,black)]" : "btn btn-primary"}
+            >
               {req.ok ?? tr(lc, "Tasdiqlash")}
             </button>
           </div>
