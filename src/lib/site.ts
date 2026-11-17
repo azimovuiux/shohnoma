@@ -13,7 +13,7 @@ export const site = {
 };
 
 export const mainNav = [
-  { label: "Shablonlar", href: "/#shablonlar" },
+  { label: "Shablonlar", href: "/shablonlar/" },
   { label: "Qanday ishlaydi", href: "/#qanday-ishlaydi" },
   { label: "Imkoniyatlar", href: "/#imkoniyatlar" },
   { label: "Savollar", href: "/#savollar" },
