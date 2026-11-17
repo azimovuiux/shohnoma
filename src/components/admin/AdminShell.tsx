@@ -40,7 +40,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
     <CountsCtx.Provider value={() => counts.reload(true)}>
       <div className="min-h-dvh bg-bg-base">
         <header className="sticky top-0 z-30 border-b border-line bg-bg-base/95 backdrop-blur">
-          <div className="mx-auto flex max-w-[1440px] flex-col gap-1 px-5 pt-3 lg:px-10">
+          <div className="mx-auto flex max-w-[1440px] flex-col gap-1 px-5 pt-3 max-[374px]:px-3 lg:px-10">
             <div className="flex items-center justify-between gap-4">
               <Link href="/admin/" className="inline-flex items-center gap-2 text-ink">
                 <LogoMark className="h-8 w-auto" />
@@ -57,16 +57,17 @@ export function AdminShell({ children }: { children: ReactNode }) {
                     await fetch("/api/auth/logout", { method: "POST" });
                     window.location.replace("/kirish/admin/");
                   }}
+                  aria-label="Chiqish"
                   className="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 t-nav text-ink transition-colors hover:border-maroon hover:text-maroon"
                 >
-                  <LogoutCurve size={15} /> Chiqish
+                  <LogoutCurve size={15} /> <span className="max-[374px]:sr-only">Chiqish</span>
                 </button>
               </div>
             </div>
             <AdminNav counts={{ p2p: c?.pendingP2p ?? 0, briefs: c?.newBriefs ?? 0, leads: c?.newLeads ?? 0, chats: c?.unreadChats ?? 0 }} />
           </div>
         </header>
-        <main className="mx-auto max-w-[1440px] px-5 py-8 lg:px-10">{children}</main>
+        <main className="mx-auto max-w-[1440px] px-5 py-8 max-[374px]:px-3 lg:px-10">{children}</main>
       </div>
     </CountsCtx.Provider>
   );

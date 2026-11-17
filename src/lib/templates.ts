@@ -638,6 +638,8 @@ export const builtinSlugs = builtinTemplates.map((t) => t.slug);
 declare global {
   interface Window {
     __SHOHNOMA_TEMPLATES__?: Template[];
+    /** Bosh sahifadagi shablonlar slug’lari (admin tartibida) */
+    __SHOHNOMA_HOME__?: string[];
   }
 }
 
@@ -655,6 +657,22 @@ const sortByNumber = (a: Template, b: Template) => a.number - b.number;
 /** Barcha shablonlar (faollari), raqam bo‘yicha */
 export const templates: Template[] = all.filter((t) => t.active !== false).sort(sortByNumber);
 export const featuredTemplates = templates.filter((t) => t.featured);
+
+/** Bosh sahifada ko‘pi bilan shuncha shablon (admin → Shablonlar → «Bosh sahifa») */
+export const HOME_MAX = 10;
+
+/** Bosh sahifa ro‘yxati: admin tanlagan tartib bo‘lsa — o‘sha; aks holda «Bosh sahifada» belgilanganlar raqam tartibida */
+export function pickHome(list: Template[], slugs?: string[] | null): Template[] {
+  if (Array.isArray(slugs) && slugs.length) {
+    const by = new Map(list.map((t) => [t.slug, t]));
+    return slugs.map((s) => by.get(s)).filter((t): t is Template => !!t && t.active !== false).slice(0, HOME_MAX);
+  }
+  return list.filter((t) => t.featured).slice(0, HOME_MAX);
+}
+/** Statik HTML (server) uchun — kodga kiritilgan ro‘yxatdan */
+export const builtinHomeTemplates = pickHome([...builtinTemplates].sort(sortByNumber));
+/** Brauzerda — /api/templates.js dagi admin tartibi */
+export const homeTemplates = pickHome(templates, typeof window !== "undefined" ? window.__SHOHNOMA_HOME__ : null);
 
 /** Slug bo‘yicha (nofaol shablonlar ham — eski buyurtmalar uchun) */
 export function getTemplate(slug: string) {

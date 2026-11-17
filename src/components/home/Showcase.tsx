@@ -9,7 +9,7 @@ import { useCategories } from "@/lib/useCategories";
 import { CategoryIcon } from "@/lib/categoryIcons";
 import { hasCeremony } from "@/lib/templates";
 import { CountBadge } from "@/components/CountBadge";
-import { useTemplates } from "@/lib/useTemplates";
+import { useHomeTemplates, useTemplates } from "@/lib/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
 import { SectionTitle } from "./SectionTitle";
 
@@ -20,8 +20,8 @@ export function Showcase() {
   const categories = useCategories();
   const templates = useTemplates();
   const t = useT();
-  const featured = templates.filter((x) => x.featured).slice(0, 10);
-  // Bosh sahifada 10 ta; marosim tanlansa — shu marosimning barcha shablonlari
+  // Bosh sahifada admin tanlagan 10 ta (o‘sha tartibda); marosim tanlansa — shu marosimning barcha shablonlari
+  const featured = useHomeTemplates();
   const list = ceremony ? templates.filter((x) => hasCeremony(x, ceremony)) : featured;
   const count = (c: string) => templates.filter((x) => hasCeremony(x, c)).length;
 

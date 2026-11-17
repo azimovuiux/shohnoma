@@ -10,8 +10,9 @@ route('GET', '/templates.js', function () {
         $list = [];
     }
     try { $cats = categories(); } catch (Throwable $e) { $cats = CATEGORY_DEFAULTS; }
+    try { $home = home_templates(); } catch (Throwable $e) { $home = []; }
     $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP;
-    $js = 'window.__SHOHNOMA_TEMPLATES__=' . json_encode($list, $flags) . ';window.__SHOHNOMA_CATEGORIES__=' . json_encode($cats, $flags) . ';';
+    $js = 'window.__SHOHNOMA_TEMPLATES__=' . json_encode($list, $flags) . ';window.__SHOHNOMA_CATEGORIES__=' . json_encode($cats, $flags) . ';window.__SHOHNOMA_HOME__=' . json_encode($home, $flags) . ';';
     // Har safar tekshiriladi (o‘zgarmagan bo‘lsa — 304), admin o‘zgarishi darhol ko‘rinadi
     $etag = '"' . substr(sha1($js), 0, 20) . '"';
     header('Content-Type: application/javascript; charset=utf-8');
@@ -24,7 +25,7 @@ route('GET', '/templates.js', function () {
 });
 
 route('GET', '/templates', function () {
-    json_out(['ok' => true, 'templates' => array_map('tpl_public', array_values(array_filter(templates(), fn($t) => $t['active']))), 'categories' => categories()]);
+    json_out(['ok' => true, 'templates' => array_map('tpl_public', array_values(array_filter(templates(), fn($t) => $t['active']))), 'categories' => categories(), 'home' => home_templates()]);
 });
 
 /* ── Admin: kategoriyalar (nomi uz/ru/en, ikonka, taklifnoma turi) ── */
@@ -170,7 +171,35 @@ route('GET', '/admin/templates', function () {
     require_admin();
     $rows = [];
     foreach (templates() as $t) $rows[] = $t + ['orders' => tpl_usage($t['slug'])];
-    json_out(['ok' => true, 'templates' => $rows]);
+    json_out(['ok' => true, 'templates' => $rows, 'home' => home_templates()]);
+});
+
+/** Bosh sahifadagi shablonlar va tartibi: `slugs` — tartiblangan ro‘yxat (ko‘pi bilan HOME_MAX ta, faqat faol shablonlar) */
+route('PUT', '/admin/templates-home', function () {
+    require_admin();
+    $b = body();
+    $in = is_array($b['slugs'] ?? null) ? array_values($b['slugs']) : fail('Shablonlar ro‘yxati kerak', 422);
+    if (count($in) > HOME_MAX) fail('Bosh sahifaga ko‘pi bilan ' . HOME_MAX . ' ta shablon tanlanadi', 422);
+    $all = templates(true);
+    $slugs = [];
+    foreach ($in as $slug) {
+        if (!is_string($slug) || !isset($all[$slug])) fail('Shablon topilmadi: ' . (is_string($slug) ? $slug : '?'), 422);
+        if (empty($all[$slug]['active'])) fail('«' . $all[$slug]['name'] . '» saytda yashirilgan — avval uni yoqing', 422);
+        if (in_array($slug, $slugs, true)) fail('Bir shablon ikki marta tanlangan: ' . $all[$slug]['name'], 422);
+        $slugs[] = $slug;
+    }
+    setting_set('home_templates', json_encode($slugs));
+    // «Bosh sahifada» belgisi ro‘yxat bilan bir xil bo‘lsin
+    foreach ($all as $slug => $t) {
+        $want = in_array($slug, $slugs, true);
+        if (!empty($t['featured']) === $want) continue;
+        $d = $t;
+        unset($d['active'], $d['number']);
+        $d['featured'] = $want;
+        q('UPDATE templates SET data = ?, updated_at = UTC_TIMESTAMP() WHERE slug = ?', [json_encode($d, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), $slug]);
+    }
+    templates(true);
+    json_out(['ok' => true, 'home' => home_templates()]);
 });
 
 route('POST', '/admin/templates', function () {

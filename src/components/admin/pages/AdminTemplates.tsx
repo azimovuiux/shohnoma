@@ -11,16 +11,18 @@ import { PhoneFrame } from "@/components/mockups/Devices";
 import { InvitationScreen } from "@/components/mockups/InvitationScreen";
 import { AdminError, AdminLoading, AdminTitle, Empty } from "../shared";
 import { AdminCategories } from "../AdminCategories";
+import { AdminHomeTemplates } from "../AdminHomeTemplates";
 
 export type AdminTemplate = Template & { orders: number };
 
 export function AdminTemplates() {
-  const { data, loading, error, reload } = useApi<{ ok: boolean; templates: AdminTemplate[] }>("/api/admin/templates");
+  const { data, loading, error, reload } = useApi<{ ok: boolean; templates: AdminTemplate[]; home?: string[] }>("/api/admin/templates");
   const toast = useToast();
   const [busy, setBusy] = useState<string | null>(null);
   if (loading && !data) return <AdminLoading />;
   if (!data) return <AdminError message={error?.message} onRetry={() => reload()} />;
   const list = data.templates;
+  const home = data.home ?? [];
 
   const patch = async (t: AdminTemplate, body: Record<string, unknown>, msg: string) => {
     setBusy(t.slug);
@@ -54,10 +56,11 @@ export function AdminTemplates() {
         title="Shablonlar"
         sub={`${list.filter((t) => t.active).length} ta faol, jami ${list.length} ta. O‘zgarishlar saytda darhol ko‘rinadi.`}
       />
+      {list.length > 0 && <AdminHomeTemplates templates={list} home={home} onSaved={() => reload(true)} />}
       {list.length === 0 ? (
         <Empty>Hali shablon yo‘q</Empty>
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {list.map((t) => (
             <li key={t.slug} className={`flex gap-4 rounded-panel border border-line bg-bg-base p-4 ${t.active ? "" : "opacity-60"}`}>
               <PhoneFrame className="w-[92px] shrink-0">
@@ -84,10 +87,9 @@ export function AdminTemplates() {
                     Saytda ko‘rinadi
                     <Toggle checked={!!t.active} onChange={(v) => busy !== t.slug && patch(t, { active: v }, v ? "Shablon yoqildi" : "Shablon yashirildi")} label="Faol" />
                   </label>
-                  <label className="flex items-center justify-between gap-2 t-body-s text-ink">
-                    Bosh sahifada
-                    <Toggle checked={!!t.featured} onChange={(v) => busy !== t.slug && patch(t, { featured: v }, "Saqlandi")} label="Bosh sahifada" />
-                  </label>
+                  {home.includes(t.slug) && (
+                    <p className="t-body-s text-maroon">Bosh sahifada · {home.indexOf(t.slug) + 1}-o‘rin</p>
+                  )}
                   <div className="flex items-center gap-1.5 pt-1">
                     <Link href={`/admin/shablonlar/tahrir/?slug=${t.slug}`} className="btn btn-secondary btn-sm flex-1 !px-3 !py-2.5">
                       <Edit size={15} /> Tahrirlash

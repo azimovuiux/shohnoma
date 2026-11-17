@@ -254,9 +254,7 @@ export function AdminTemplateEdit() {
                 <label className="flex items-center justify-between gap-3 t-body-m text-ink">
                   Saytda ko‘rinadi <Toggle checked={t.active !== false} onChange={(v) => set({ active: v })} label="Faol" />
                 </label>
-                <label className="flex items-center justify-between gap-3 t-body-m text-ink">
-                  Bosh sahifada <Toggle checked={t.featured} onChange={(v) => set({ featured: v })} label="Bosh sahifada" />
-                </label>
+                <p className="t-body-s text-ink-2">Bosh sahifadagi o‘rni — «Shablonlar» ro‘yxatining tepasidagi «Bosh sahifa» bo‘limida.</p>
               </div>
             </div>
             <Field label="Tavsif">

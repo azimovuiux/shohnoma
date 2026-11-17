@@ -67,6 +67,29 @@ function templates(bool $fresh = false): array
 function template_get(string $slug): ?array { return templates()[$slug] ?? null; }
 function template_active(string $slug): ?array { $t = template_get($slug); return $t && $t['active'] ? $t : null; }
 
+/* ── Bosh sahifa: admin tanlagan shablonlar va tartibi (ko‘pi bilan HOME_MAX ta) ── */
+const HOME_MAX = 10;
+
+/**
+ * Bosh sahifadagi shablonlar slug’lari (tartib bilan). Admin tanlamagan bo‘lsa — «Bosh sahifada» belgilanganlar
+ * raqam tartibida. Faqat mavjud va faol shablonlar qaytadi.
+ */
+function home_templates(): array
+{
+    $all = templates();
+    $raw = db_settings()['home_templates'] ?? '';
+    $list = $raw !== '' ? (json_decode($raw, true) ?: []) : null;
+    $out = [];
+    if (is_array($list)) {
+        foreach ($list as $slug) {
+            if (is_string($slug) && !empty($all[$slug]['active']) && !in_array($slug, $out, true)) $out[] = $slug;
+        }
+        return array_slice($out, 0, HOME_MAX);
+    }
+    foreach ($all as $slug => $t) if (!empty($t['active']) && !empty($t['featured'])) $out[] = $slug;
+    return array_slice($out, 0, HOME_MAX);
+}
+
 /* ── Kategoriyalar (katalog filtrlari) — admin qo‘shadi; `kind` — taklifnoma turi (buyurtma formasi) ── */
 const CATEGORY_DEFAULTS = [
     ['slug' => 'nikoh', 'name' => 'Nikoh to‘yi', 'nameRu' => 'Никах', 'nameEn' => 'Wedding', 'icon' => 'Heart', 'kind' => 'nikoh', 'builtin' => true],
