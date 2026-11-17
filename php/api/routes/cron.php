@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * To‘yga 1 kun qolganda eslatma. Plesk "Planировщик задач" → har kuni:
+ * Marosimga (to‘y, tug‘ilgan kun) 1 kun qolganda eslatma. Plesk "Planировщик задач" → har kuni:
  *   https://shohnoma.uz/api/cron/reminders?secret=CRON_SECRET
  */
 route('GET', '/cron/reminders', function () {
@@ -15,7 +15,8 @@ route('GET', '/cron/reminders', function () {
         $owner = $inv['user_id'] ? one('SELECT * FROM users WHERE id = ?', [$inv['user_id']]) : null;
         if ($owner && $owner['notify_day_before'] && $owner['telegram_id']) {
             $s = invitation_stats($inv['id']);
-            notify_user($owner['telegram_id'], "🎉 Ertaga to‘yingiz! Javoblar: {$s['coming']} boraman · {$s['maybe']} aniq emas · {$s['notComing']} kela olmaydi");
+            $what = ($inv['ceremony'] ?? '') === 'tugilgan-kun' ? 'tug‘ilgan kun bayrami' : 'to‘yingiz';
+            notify_user($owner['telegram_id'], "🎉 Ertaga {$what}! Javoblar: {$s['coming']} boraman · {$s['maybe']} aniq emas · {$s['notComing']} kela olmaydi");
             $sent++;
         }
         q('UPDATE invitations SET day_before_sent_at = UTC_TIMESTAMP() WHERE id = ?', [$inv['id']]);

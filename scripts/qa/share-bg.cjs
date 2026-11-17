@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -43,6 +43,8 @@ const CFG = {
   /* Sandiq: yopiq sandiq (Figma 00) — atlas chiziqlari, iliq nur (nafas animatsiyasi to‘xtatiladi), sandiq va ajratgich fonda;
    * «…ning» / «sunnat to‘yi» / sana / oila kartada chiziladi */
   sandiq: { css: `nextjs-portal{display:none!important}[class*="_glow__"]{animation:none!important;opacity:1!important}` },
+  /* Sovg‘a: pudra fonda atlas bantli sovg‘a qutisi va kumush uchqunlar (Figma 00); «…ning» / «tug‘ilgan kuni» / sana kartada chiziladi */
+  sovga: { css: `nextjs-portal{display:none!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;
 

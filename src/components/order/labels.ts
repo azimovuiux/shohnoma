@@ -14,6 +14,9 @@ export function personLabels(c: Ceremony): { a: string; b: string | null; bOptio
 
 export const needsPersonB = (c: Ceremony) => c === "nikoh" || c === "fotiha";
 
+/** Xulosa qatoridagi yorliq: tug‘ilgan kunda bitta ism — «Ism», qolganlarida «Ismlar» */
+export const namesLabel = (c: Ceremony) => (c === "tugilgan-kun" ? "Ism" : "Ismlar");
+
 export function namesOf(o: { personA: string; personB: string; ceremony: Ceremony }) {
   if (!o.personA) return "";
   if (o.personB && needsPersonB(o.ceremony)) return `${o.personA} & ${o.personB}`;

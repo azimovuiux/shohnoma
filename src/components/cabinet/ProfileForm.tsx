@@ -126,7 +126,7 @@ export function ProfileForm({ user }: { user: U }) {
           {(
             [
               ["notifyRsvpTelegram", "Mehmon javob qoldirganda", "Telegram"],
-              ["notifyDayBefore", "To‘yga 1 kun qolganda eslatma", "Telegram"],
+              ["notifyDayBefore", "Marosimga 1 kun qolganda eslatma", "Telegram"],
             ] as const
           ).map(([key, title, ch]) => (
             <div key={key} className="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0">

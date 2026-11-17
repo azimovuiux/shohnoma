@@ -430,4 +430,46 @@ export const ru: Record<string, string> = {
   "«Bizning shahzoda» — doira ichidagi surat. Bo‘lmasa — non ushlagan qo‘llar (asosiy surat ham bo‘lmasa — bo‘lim chiqmaydi)":
     "«Наш шахзода» — фото в круге. Если нет — руки с лепёшкой (если нет и основного фото — раздел не показывается)",
   "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati": "«Адрес» — фото тойханы. Если нет — фото айвана",
+  // ── Sovg‘a (18 yosh tug‘ilgan kun) ──
+  "{n} yoshga to‘ladi": "отмечает {n}-летие",
+  "tug‘ilgan kuni": "день рождения",
+  "{words} — yangi bob boshlanishi.": "{words} — начало новой главы.",
+  "Har bir yil — yangi bob boshlanishi.": "Каждый год — начало новой главы.",
+  "Shu sahifani siz bilan birga ochmoqchiman.": "Хочу открыть эту страницу вместе с вами.",
+  "Shu sahifani siz bilan birga ochmoqchimiz.": "Хотим открыть эту страницу вместе с вами.",
+  "Soat {time}": "Начало в {time}",
+  "{name}ga tilak…": "Ваше пожелание…",
+  "Tilagingiz…": "Ваше пожелание…",
+  "Aziz do‘stlarim!": "Дорогие друзья!",
+  "Mehr bilan,": "С любовью,",
+  "Yangi bob": "Новая глава",
+  "Kecha dasturi": "Программа вечера",
+  "Javobingizni {date} kutaman": "Жду вашего ответа {date}",
+  "Javobingizni kutaman": "Жду вашего ответа",
+  "Javobingiz uchun rahmat!": "Спасибо за ваш ответ!",
+  "Sizni kutaman!": "Жду вас!",
+  "Bu kecha sizsiz to‘liq bo‘lmaydi.": "Без вас этот вечер не будет полным.",
+  "Hayotimdagi eng muhim sanalardan biri — {age} yoshimni siz bilan nishonlamoqchiman. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "Одна из самых важных дат в моей жизни — мне исполняется {age}, и я хочу отметить это вместе с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
+  "Hayotimdagi eng muhim sanalardan biri — tug‘ilgan kunimni siz bilan nishonlamoqchiman. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "Мой день рождения — особенный день, и я хочу отметить его вместе с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
+  "{name} {age} yoshga to‘lmoqda — bu quvonchli sanani siz bilan nishonlamoqchimiz. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "{name} отмечает {age}-летие — и мы хотим разделить эту радость с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
+  "{name}ning tug‘ilgan kunini siz bilan nishonlamoqchimiz. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "{name} празднует день рождения — и мы хотим отметить его вместе с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
+  Kokteyl: "Коктейль",
+  "Kokteyl libos — nafis, yengil va bayramona.": "Коктейльный наряд — изящный, лёгкий и праздничный.",
+  "Bayramona, yorqin kiyim — kechamizga ko‘tarinki kayfiyat olib keling.": "Праздничная яркая одежда — приносите с собой хорошее настроение.",
+  "Klassik uslub: kostyum yoki nafis ko‘ylak.": "Классический стиль: костюм или элегантное платье.",
+  Sofiya: "София",
+  "«Lumière» restorani": "Ресторан «Lumière»",
+  // buyurtma formasi (templates.ts → fields, PHOTO_SLOTS.sovga)
+  "Nechanchi yosh": "Сколько исполняется",
+  "Ixtiyoriy · raqamlari kumush sharlarda chiqadi; bo‘sh qolsa — sharlar o‘rnida atlas bant": "Необязательно · цифры будут на серебристых шарах; если пусто — вместо шаров атласный бант",
+  "Taklif qiluvchi": "Кто приглашает",
+  "Ixtiyoriy · bo‘sh qolsa — taklif yubilyarning o‘zi nomidan, imzo — uning ismi": "Необязательно · если пусто — приглашение от имени именинника, подпись — его имя",
+  "Limonad va jonli musiqa": "Лимонад и живая музыка",
+  "Sharlar ostidagi ravoq ichida. Bo‘lmasa — ravoqda sovg‘a qutisi": "В арке под шарами. Если нет — в арке подарочная коробка",
+  "«Yangi bob» — kvadrat surat. Bo‘lmasa — bu bo‘lim chiqmaydi": "«Новая глава» — квадратное фото. Если нет — раздел не показывается",
+  "«Manzil» — restoran surati. Bo‘lmasa — shablonning restoran surati": "«Адрес» — фото ресторана. Если нет — фото ресторана из шаблона",
 };

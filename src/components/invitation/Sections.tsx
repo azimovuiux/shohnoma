@@ -25,7 +25,7 @@ function parts(ms: number) {
   return [Math.floor(t / 86400), Math.floor((t % 86400) / 3600), Math.floor((t % 3600) / 60), t % 60];
 }
 
-export function Countdown({ date, p }: { date: string; p: Palette }) {
+export function Countdown({ date, p, ceremony }: { date: string; p: Palette; ceremony?: string }) {
   const t = useT();
   const lang = useLocale();
   const [now, setNow] = useState<number | null>(null);
@@ -39,10 +39,12 @@ export function Countdown({ date, p }: { date: string; p: Palette }) {
   const left = now === null ? null : target - now;
   const v = left === null ? null : parts(left);
   const labels = timerUnits(lang);
+  // tug‘ilgan kunda «to‘y» emas — «bayram»
+  const until = t(ceremony === "tugilgan-kun" ? "Bayramga qadar" : "To‘yga qadar");
   return (
-    <section className="text-center" style={{ background: `linear-gradient(to bottom, ${p.deep}, ${p.deep2})`, padding: `${s(36)} ${s(24)} ${s(48)}` }} aria-label={t("To‘yga qadar")}>
+    <section className="text-center" style={{ background: `linear-gradient(to bottom, ${p.deep}, ${p.deep2})`, padding: `${s(36)} ${s(24)} ${s(48)}` }} aria-label={until}>
       <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(26), color: p.onDeep }}>
-        {left !== null && left <= 0 ? t("Baxtli kun keldi!") : t("To‘yga qadar")}
+        {left !== null && left <= 0 ? t("Baxtli kun keldi!") : until}
       </p>
       <div className="mx-auto grid grid-cols-4" style={{ gap: s(10), marginTop: s(20), maxWidth: s(300) }} role="timer" aria-live="off">
         {labels.map((l, i) => (

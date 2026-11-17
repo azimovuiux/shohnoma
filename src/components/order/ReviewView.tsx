@@ -16,7 +16,7 @@ import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
 import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
 import { SectionTitle } from "./fields";
 import { liveTemplate, dayTime, hasCustomDesign } from "./live";
-import { namesOf } from "./labels";
+import { namesLabel, namesOf } from "./labels";
 import { toInvitationData } from "./toInvitationData";
 import type { FlowOrder } from "./types";
 
@@ -109,7 +109,7 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
   };
 
   const checks: [string, string, string][] = [
-    ["Ismlar", namesOf(order), `${base}/marosim/`],
+    [namesLabel(order.ceremony), namesOf(order), `${base}/marosim/`],
     ["Sana va vaqt", dayTime(order.day, order.time), `${base}/marosim/`],
     ["Manzil", order.venueName, `${base}/marosim/`],
     ["Aloqa", formatPhoneDisplay(order.contactPhone), `${base}/tafsilotlar/`],
@@ -166,7 +166,7 @@ export function ReviewView({ order, template }: { order: FlowOrder; template: Te
           order={order}
           amount={order.amount}
           rows={[
-            ["Ismlar", namesOf(order)],
+            [namesLabel(order.ceremony), namesOf(order)],
             ["Sana", dayTime(order.day, order.time)],
             ["Joy", order.venueName],
             ["Aloqa", formatPhoneDisplay(order.contactPhone)],

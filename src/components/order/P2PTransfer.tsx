@@ -14,7 +14,7 @@ import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
 import { FlowColumns } from "./FlowTop";
 import { SectionTitle } from "./fields";
 import { liveTemplate, dayTime } from "./live";
-import { namesOf } from "./labels";
+import { namesLabel, namesOf } from "./labels";
 import type { FlowOrder } from "./types";
 
 export type P2PCard = { card: string; holder: string; bank: string };
@@ -120,7 +120,7 @@ export function P2PTransfer({
           amount={order.amount}
           rows={[
             ["Buyurtma", `№ ${order.code}`],
-            ["Ismlar", namesOf(order)],
+            [namesLabel(order.ceremony), namesOf(order)],
             ["Sana", dayTime(order.day, order.time)],
           ]}
           action={
@@ -269,7 +269,7 @@ export function P2PSupport({ order, template, tg, phone }: { order: FlowOrder; t
           amount={order.amount}
           rows={[
             ["Buyurtma", `№ ${order.code}`],
-            ["Ismlar", namesOf(order)],
+            [namesLabel(order.ceremony), namesOf(order)],
             ["Sana", dayTime(order.day, order.time)],
           ]}
           action={button}

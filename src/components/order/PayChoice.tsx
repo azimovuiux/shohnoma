@@ -11,7 +11,7 @@ import { OrderSummary, MobileBar, MobileTemplateCard } from "./OrderSummary";
 import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
 import { SectionTitle } from "./fields";
 import { liveTemplate, dayTime } from "./live";
-import { namesOf } from "./labels";
+import { namesLabel, namesOf } from "./labels";
 import type { FlowOrder } from "./types";
 
 export type Provider = "payme" | "click" | "google_pay" | "p2p";
@@ -81,7 +81,7 @@ export function PayChoice({ order, template, providers, soon = [], p2pMode = "ca
           amount={promo.amount}
           rows={[
             ["Buyurtma", `№ ${order.code}`],
-            ["Ismlar", namesOf(order)],
+            [namesLabel(order.ceremony), namesOf(order)],
             ["Sana", dayTime(order.day, order.time)],
             ...(promo.code ? ([[t("Promokod {code}", { code: promo.code }), `−${formatPrice(promo.discount, true, locale)}`]] as [string, string][]) : []),
           ]}

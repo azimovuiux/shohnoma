@@ -452,4 +452,46 @@ export const en: Record<string, string> = {
   "«Bizning shahzoda» — doira ichidagi surat. Bo‘lmasa — non ushlagan qo‘llar (asosiy surat ham bo‘lmasa — bo‘lim chiqmaydi)":
     "“Our little prince” — photo in the circle. If none — hands holding bread (if there is no main photo either — the section is hidden)",
   "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati": "“Venue” — photo of the hall. If none — a photo of a terrace",
+  // ── Sovg‘a (18th birthday) ──
+  "{n} yoshga to‘ladi": "turns {n}",
+  "tug‘ilgan kuni": "birthday",
+  "{words} — yangi bob boshlanishi.": "{words} — the start of a new chapter.",
+  "Har bir yil — yangi bob boshlanishi.": "Every year is the start of a new chapter.",
+  "Shu sahifani siz bilan birga ochmoqchiman.": "I’d love to open this page together with you.",
+  "Shu sahifani siz bilan birga ochmoqchimiz.": "We’d love to open this page together with you.",
+  "Soat {time}": "Starts at {time}",
+  "{name}ga tilak…": "A wish for {name}…",
+  "Tilagingiz…": "Your wish…",
+  "Aziz do‘stlarim!": "Dear friends!",
+  "Mehr bilan,": "With love,",
+  "Yangi bob": "A new chapter",
+  "Kecha dasturi": "The evening",
+  "Javobingizni {date} kutaman": "Please reply {date}",
+  "Javobingizni kutaman": "I look forward to your reply",
+  "Javobingiz uchun rahmat!": "Thank you for your reply!",
+  "Sizni kutaman!": "Hope to see you!",
+  "Bu kecha sizsiz to‘liq bo‘lmaydi.": "The evening won’t be complete without you.",
+  "Hayotimdagi eng muhim sanalardan biri — {age} yoshimni siz bilan nishonlamoqchiman. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "One of the most important dates of my life — I’m turning {age} and I want to celebrate it with you. Please come: cake, music and the warmest wishes are waiting for you.",
+  "Hayotimdagi eng muhim sanalardan biri — tug‘ilgan kunimni siz bilan nishonlamoqchiman. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "My birthday is a special day, and I want to celebrate it with you. Please come: cake, music and the warmest wishes are waiting for you.",
+  "{name} {age} yoshga to‘lmoqda — bu quvonchli sanani siz bilan nishonlamoqchimiz. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "{name} is turning {age}, and we want to share this happy day with you. Please come: cake, music and the warmest wishes are waiting for you.",
+  "{name}ning tug‘ilgan kunini siz bilan nishonlamoqchimiz. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
+    "We want to celebrate {name}’s birthday with you. Please come: cake, music and the warmest wishes are waiting for you.",
+  Kokteyl: "Cocktail",
+  "Kokteyl libos — nafis, yengil va bayramona.": "Cocktail attire — elegant, light and festive.",
+  "Bayramona, yorqin kiyim — kechamizga ko‘tarinki kayfiyat olib keling.": "Bright, festive clothes — bring your best mood to the party.",
+  "Klassik uslub: kostyum yoki nafis ko‘ylak.": "Classic style: a suit or an elegant dress.",
+  Sofiya: "Sofiya",
+  "«Lumière» restorani": "Lumière Restaurant",
+  // order form (templates.ts → fields, PHOTO_SLOTS.sovga)
+  "Nechanchi yosh": "Age they are turning",
+  "Ixtiyoriy · raqamlari kumush sharlarda chiqadi; bo‘sh qolsa — sharlar o‘rnida atlas bant": "Optional · the digits appear on silver balloons; if empty — a satin bow instead of the balloons",
+  "Taklif qiluvchi": "Who is inviting",
+  "Ixtiyoriy · bo‘sh qolsa — taklif yubilyarning o‘zi nomidan, imzo — uning ismi": "Optional · if empty — the invitation comes from the birthday person, signed with their name",
+  "Limonad va jonli musiqa": "Lemonade and live music",
+  "Sharlar ostidagi ravoq ichida. Bo‘lmasa — ravoqda sovg‘a qutisi": "In the arch under the balloons. If missing — a gift box in the arch",
+  "«Yangi bob» — kvadrat surat. Bo‘lmasa — bu bo‘lim chiqmaydi": "“A new chapter” — a square photo. If missing — the section is hidden",
+  "«Manzil» — restoran surati. Bo‘lmasa — shablonning restoran surati": "“Venue” — a restaurant photo. If missing — the template’s restaurant photo",
 };

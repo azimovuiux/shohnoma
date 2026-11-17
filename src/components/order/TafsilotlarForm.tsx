@@ -12,7 +12,7 @@ import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
 import { useFlowSaver } from "./FlowGuard";
 import { useAutosave } from "./useAutosave";
 import { liveTemplate, dayTime } from "./live";
-import { namesOf } from "./labels";
+import { namesLabel, namesOf } from "./labels";
 import type { FlowOrder } from "./types";
 import { SaveIndicator } from "./SaveIndicator";
 import { MusicPicker } from "./MusicPicker";
@@ -121,7 +121,7 @@ export function TafsilotlarForm({ order, template, editing }: { order: FlowOrder
           order={o}
           amount={o.amount}
           rows={[
-            ["Ismlar", namesOf(o)],
+            [namesLabel(o.ceremony), namesOf(o)],
             ["Sana", dayTime(o.day, o.time)],
             ["Joy", o.venueName],
             ["Mehmonlar javobi", o.rsvpEnabled ? t("Yoqilgan") : t("O‘chirilgan")],

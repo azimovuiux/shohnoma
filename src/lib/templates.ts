@@ -606,6 +606,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Atlas, adras yoki milliy naqshli kiyimlar bayramimizga yanada ko‘rk beradi.", max: 160 },
     ],
   },
+  {
+    number: 15,
+    slug: "sovga",
+    name: "Sovg‘a",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Tug‘ilgan kun taklifnomasi: pudra-pushti, to‘q gilos va kumush ranglar. Sahifani pastga surganingizda sovg‘a qutisining atlas banti yechiladi, qopqog‘i ochiladi va ichidan yoshingiz raqamlari yozilgan kumush sharlar ko‘tariladi. Keyin surat va ism, taklif matni, sana va sanoq, kecha dasturi, manzil, dress-kod va mehmonlar javobi; oxirida sharlar yana uchib keladi.",
+    descriptionRu: "Приглашение на день рождения: пудрово-розовый, вишнёвый и серебристый цвета. Когда вы листаете страницу вниз, атласный бант на подарочной коробке развязывается, крышка открывается, и из коробки поднимаются серебристые шары-цифры с вашим возрастом. Дальше фото и имя, текст приглашения, дата и отсчёт, программа вечера, адрес, дресс-код и ответы гостей; в конце шары прилетают снова.",
+    descriptionEn: "A birthday invitation in powder pink, deep cherry and silver. As you scroll down, the satin bow on a gift box comes undone, the lid opens and silver number balloons showing your age rise out of the box. Then the photo and name, the invitation text, the date and a countdown, the evening’s schedule, the venue, the dress code and guest replies; at the end the balloons fly in once more.",
+    palette: ["#F6E1E1", "#5B1A2E", "#D99AA3", "#AEB3BC"],
+    sample: { a: "Sofiya", date: "19 · 06 · 2027", venue: "«Lumière» restorani", time: "19:00" },
+    theme: { bg: ["#f6e1e1", "#edcccf"], ink: "#5b1a2e", accent: "#d99aa3", soft: "#8a7476", script: "cormorant", color: "pushti" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "18", max: 3, hint: "Ixtiyoriy · raqamlari kumush sharlarda chiqadi; bo‘sh qolsa — sharlar o‘rnida atlas bant" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Karimovlar oilasi", max: 60, hint: "Ixtiyoriy · bo‘sh qolsa — taklif yubilyarning o‘zi nomidan, imzo — uning ismi" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Kutib olish", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Limonad va jonli musiqa", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Kokteyl", "Bayramona", "Klassik", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kokteyl libos — nafis, yengil va bayramona.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -817,6 +852,12 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Asosiy surat", where: "Ochilgan sandiq ortidagi ravoq ichida. Bo‘lmasa — non ushlagan qo‘llar surati" },
     { title: "Surat · 2", where: "«Bizning shahzoda» — doira ichidagi surat. Bo‘lmasa — non ushlagan qo‘llar (asosiy surat ham bo‘lmasa — bo‘lim chiqmaydi)" },
     { title: "Surat · 3", where: "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati" },
+  ],
+  /** Sovg‘a (tug‘ilgan kun) — bo‘sh slotlar: hero’da ravoq ichida sovg‘a qutisi, «Yangi bob» — chiqmaydi, manzil — restoran surati */
+  sovga: [
+    { title: "Asosiy surat", where: "Sharlar ostidagi ravoq ichida. Bo‘lmasa — ravoqda sovg‘a qutisi" },
+    { title: "Surat · 2", where: "«Yangi bob» — kvadrat surat. Bo‘lmasa — bu bo‘lim chiqmaydi" },
+    { title: "Surat · 3", where: "«Manzil» — restoran surati. Bo‘lmasa — shablonning restoran surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

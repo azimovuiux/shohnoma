@@ -38,6 +38,7 @@ export const en: Record<string, string> = {
   Jami: "Total",
   "Savolingiz bormi? Telegramda yozing": "Questions? Message us on Telegram",
   Ismlar: "Names",
+  Ism: "Name",
   Sana: "Date",
   Joy: "Venue",
   Aloqa: "Contact",

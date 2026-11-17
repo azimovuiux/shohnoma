@@ -11,7 +11,7 @@ import { FlowColumns, MobileActions, StepNav } from "./FlowTop";
 import { useFlowSaver } from "./FlowGuard";
 import { useAutosave } from "./useAutosave";
 import { liveTemplate, dayTime } from "./live";
-import { namesOf, needsPersonB, personLabels } from "./labels";
+import { namesLabel, namesOf, needsPersonB, personLabels } from "./labels";
 import type { FlowOrder } from "./types";
 import { SaveIndicator } from "./SaveIndicator";
 import { DateField, SelectField, TimeField } from "./pickers";
@@ -148,7 +148,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
           order={o}
           amount={o.amount}
           rows={[
-            ["Ismlar", namesOf(o)],
+            [namesLabel(o.ceremony), namesOf(o)],
             ["Sana", dayTime(o.day, o.time)],
             ["Joy", o.venueName],
           ]}
@@ -232,7 +232,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
               id="f-venue"
               value={o.venueName}
               onChange={(e) => set("venueName", e.target.value)}
-              placeholder={t("Oqsaroy to‘yxonasi")}
+              placeholder={t(o.ceremony === "tugilgan-kun" ? "«Lumière» restorani" : "Oqsaroy to‘yxonasi")}
               maxLength={160}
               aria-invalid={!!errors.venueName}
               className={bareInput}

@@ -11,7 +11,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = Path(__file__).resolve().parent / "out"
-ALL = "anor zumrad parvoz shato savsan muhr kalit sayohat lino kumush riviera ertak farmon sandiq".split()
+ALL = "anor zumrad parvoz shato savsan muhr kalit sayohat lino kumush riviera ertak farmon sandiq sovga".split()
 
 for slug in sys.argv[1:] or ALL:
     a = Image.open(OUT / f"share-{slug}-a.png").convert("RGB")

@@ -31,6 +31,7 @@ import { RivieraSite } from "@/components/templates/riviera/RivieraSite";
 import { ErtakSite } from "@/components/templates/ertak/ErtakSite";
 import { FarmonSite } from "@/components/templates/farmon/FarmonSite";
 import { SandiqSite } from "@/components/templates/sandiq/SandiqSite";
+import { SovgaSite } from "@/components/templates/sovga/SovgaSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -61,7 +62,7 @@ function useMusic(url: string | null, enabled: boolean) {
  * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
  */
 /** Kodda yozilgan dizaynlar — yangi shablon qo‘shilganda shu ro‘yxatga ham qo‘shiladi */
-const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq"] as const;
+const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga"] as const;
 
 export function InvitationSite(props: InvitationSiteProps) {
   const lang = inviteLang(props.data.extra, useLocale());
@@ -99,6 +100,8 @@ export function InvitationSite(props: InvitationSiteProps) {
         <FarmonSite {...props} />
       ) : ds === "sandiq" ? (
         <SandiqSite {...props} />
+      ) : ds === "sovga" ? (
+        <SovgaSite {...props} />
       ) : stale ? (
         <StaleReload slug={props.template.slug} />
       ) : (
@@ -284,7 +287,7 @@ function GenericSite({ template, data: raw, mode, embedded = false }: Invitation
       </header>
 
       <div ref={countdownRef} style={{ scrollMarginTop: 0 }}>
-        <Countdown date={data.date} p={p} />
+        <Countdown date={data.date} p={p} ceremony={data.ceremony} />
       </div>
       <Program items={data.program} p={p} />
       <Venue d={data} p={p} linkable={mode !== "preview"} />
