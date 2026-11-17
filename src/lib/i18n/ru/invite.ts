@@ -407,4 +407,27 @@ export const ru: Record<string, string> = {
   "«Bizning shahzoda» — ravoqdagi katta surat. Bo‘lmasa — bo‘lim chiqmaydi": "«Наш шахзода» — большое фото в арке. Если нет — раздел не показывается",
   "«Bizning shahzoda» — kichik kvadrat surat. Bo‘lmasa — do‘ppi surati": "«Наш шахзода» — маленькое квадратное фото. Если нет — фото тюбетейки",
   "«Manzil» — oltin ramkadagi surat. Bo‘lmasa — saroy zali surati": "«Адрес» — фото в золотой рамке. Если нет — фото дворцового зала",
+  // ── Sandiq (zamonaviy o‘zbekona sunnat to‘yi) ──
+  "{name}ning": "{name}",
+  "{family} taklif etadi": "Вас приглашает {family}",
+  "Hurmatli {guest}!": "{guest}!",
+  "Xonadonimizning kenja shahzodasi — {name}ning sunnat to‘yiga sizni lutfan taklif etamiz. Dasturxonimiz va quvonchimizga sherik bo‘ling.":
+    "Наш младший шахзода {name} празднует суннат-той! Приглашаем вас разделить с нами дастархан и нашу радость.",
+  "O‘g‘limiz {name}ning sunnat to‘yiga sizni lutfan taklif etamiz. Dasturxonimiz va quvonchimizga sherik bo‘ling.":
+    "Наш сын {name} празднует суннат-той! Приглашаем вас разделить с нами дастархан и нашу радость.",
+  "Mehmon — atoyi Xudo.": "Гость — дар Всевышнего.",
+  "Sizni dasturxonimizning to‘rida ko‘rishni istaymiz.": "Будем рады видеть вас на почётном месте за нашим дастарханом.",
+  "Soat 07:00 — nahor oshi": "В 07:00 — утренний плов",
+  "Atlas, adras yoki milliy naqshli kiyimlar bayramimizga yanada ko‘rk beradi.": "Атлас, адрас или одежда с национальными узорами сделают наш праздник ещё красивее.",
+  "Bayramona va qulay kiyim — ayniqsa, kichik mehmonlarimiz uchun.": "Праздничная и удобная одежда — особенно для наших маленьких гостей.",
+  "Dasturxonimiz sizsiz to‘kis emas.": "Без вас наш дастархан не будет полным.",
+  "«Bog‘ishamol» to‘yxonasi": "Тойхона «Богишамол»",
+  // buyurtma formasi (templates.ts → fields, PHOTO_SLOTS.sandiq)
+  "Erta tongda yaqinlar bilan osh": "Плов с близкими ранним утром",
+  "Ixtiyoriy · «Bizning shahzoda» bo‘limida: «Amirxon, 7 yoshda»": "Необязательно · в разделе «Наш шахзода»: «Амирхон, 7 лет»",
+  "Ixtiyoriy · «Bizning shahzoda» bo‘limida; bo‘sh qolsa — «Mehmon — atoyi Xudo.»": "Необязательно · в разделе «Наш шахзода»; если пусто — «Гость — дар Всевышнего.»",
+  "Ochilgan sandiq ortidagi ravoq ichida. Bo‘lmasa — non ushlagan qo‘llar surati": "В арке за открытым сундуком. Если нет — фото рук с лепёшкой",
+  "«Bizning shahzoda» — doira ichidagi surat. Bo‘lmasa — non ushlagan qo‘llar (asosiy surat ham bo‘lmasa — bo‘lim chiqmaydi)":
+    "«Наш шахзода» — фото в круге. Если нет — руки с лепёшкой (если нет и основного фото — раздел не показывается)",
+  "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati": "«Адрес» — фото тойханы. Если нет — фото айвана",
 };

@@ -1,0 +1,971 @@
+/*
+ * Sandiq — zamonaviy o‘zbekona sunnat to‘yi taklifnomasi (Figma 433:8146 mobil, 434:8469 laptop).
+ * Shriftlar: Philosopher (sarlavhalar — Bold, kursiv — Italic) + Manrope (matn) — lotin va kirill.
+ * Ranglar (Figma «14 · Sandiq — Assets»): anor #7a1e2c, och anor #9e2f3a, za’faron #e0a23b, firuza #1f8a8a, qum #efe3d0,
+ * krem #faf4ea, yong‘oq #4a2e22, siyoh #2a1a16, xira #7d6a5c. Anor rang bo‘limlar — markazdan radial (#a33644 → #812532 → #5e1420).
+ * Birlik `--u`: kontent ustuni (mobil 390 kanvas; laptopda ustun = mobil × 1.45). Ochilish, hero va final — o‘z kanvasi.
+ * Harakat («Motion — 14 · Sandiq»), faqat scroll bilan (--o: 0…1; bosish talab qilinmaydi): yopiq sandiq ortidagi nur «nafas oladi»,
+ * yozuvlar so‘nadi, atlas chiziqlari yon tomonlarga tarqaladi, sandiq yengil silkinadi, qopqoq qulfi bilan 3D ko‘tarilib ichidan nur sizadi,
+ * nur chaqnaydi va yopiq rasm ochiq rasmga almashadi; iliq nur doira bo‘lib kengayadi va hero’ni ochadi (doira ichida — to‘liq shaffofsiz,
+ * «sharpa» yo‘q); sandiq pastga tushadi, shahzoda surati ravoq bilan sandiq ortidan ko‘tariladi, ism harfma-harf yoziladi.
+ * Skrollda: atlas lentalar chok ustida to‘lqinlanib suzib kiradi, lagan aylanib keladi, taymer kartalari flip, kun tartibidagi bodomlar
+ * navbat bilan yonadi. Final (--fc) — sandiq yana ochiladi, nur yuqoriga ko‘tariladi. Hamma rasmlar Normal blend.
+ */
+@font-face {
+  font-family: "Sandiq Philosopher";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/sandiq/fonts/philosopher-cyrillic-700-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Sandiq Philosopher";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/sandiq/fonts/philosopher-latin-ext-700-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Sandiq Philosopher";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/sandiq/fonts/philosopher-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Sandiq Philosopher";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/sandiq/fonts/philosopher-cyrillic-400-italic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Sandiq Philosopher";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/sandiq/fonts/philosopher-latin-ext-400-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Sandiq Philosopher";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/sandiq/fonts/philosopher-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --pom: #7a1e2c;
+  --pomL: #9e2f3a;
+  --saf: #e0a23b;
+  --turq: #1f8a8a;
+  --sand: #efe3d0;
+  --cream: #faf4ea;
+  --wal: #4a2e22;
+  --ink: #2a1a16;
+  --mute: #7d6a5c;
+  --grad: radial-gradient(ellipse 50% 50% at 50% 50%, #a33644 0%, #812532 50%, #5e1420 100%);
+  --sh-loader-a: #a33644;
+  --sh-loader-b: #5e1420;
+  --sh-ring: rgba(224, 162, 59, 0.6);
+  position: relative;
+  container-type: inline-size;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: "Manrope", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: var(--cream);
+}
+.phB {
+  font-family: "Sandiq Philosopher", Georgia, serif;
+  font-weight: 700;
+  font-style: normal;
+}
+.phI {
+  font-family: "Sandiq Philosopher", Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+}
+.ms {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 400;
+}
+.msM {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 500;
+}
+.clamp2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  /* kursiv harflarning yon chiqishi kesilmasin (balandlik o‘zgarmaydi) */
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.flip {
+  transform: scaleX(-1);
+}
+.art {
+  position: absolute;
+  pointer-events: none;
+}
+.svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* ajratgich: chiziqlar (data-s) va bodom/nuqtalar (data-f) */
+.draw path[data-s] {
+  fill: none;
+  stroke: #e0a23b;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 0;
+}
+.draw [data-f] {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.cream {
+  background: var(--cream);
+}
+.sand {
+  background: var(--sand);
+}
+.wal {
+  background: var(--wal);
+  color: var(--cream);
+}
+.grad {
+  background: var(--grad);
+  color: var(--cream);
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+}
+.deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sideLine {
+  position: absolute;
+  display: block;
+  min-width: 1px;
+  background: rgba(224, 162, 59, 0.55);
+}
+.sideAtlas {
+  position: absolute;
+}
+/* chok ustidagi bezaklar (lenta, yulduz) — qo‘shni bo‘lim ustiga chiqadi */
+.seamLenta {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+}
+.seamStar {
+  z-index: 4;
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 18));
+}
+.root [data-a="fade"]:not([data-in]) {
+  opacity: 0;
+}
+.root [data-a="rise"] {
+  --t: 1.3s;
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 40));
+}
+.root [data-a="right"] {
+  --t: 0.9s;
+}
+.root [data-a="right"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateX(calc(var(--u) * 22));
+}
+.root [data-a="pop"] {
+  --t: 0.9s;
+  --e: var(--spring);
+}
+.root [data-a="pop"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.5);
+}
+/* girih yulduzi — aylanib chiqadi */
+.root [data-a="spin"] {
+  --t: 1.1s;
+}
+.root [data-a="spin"]:not([data-in]) {
+  opacity: 0;
+  transform: rotate(-120deg) scale(0.4);
+}
+/* bodom (kun tartibi) — navbat bilan «yonadi»: xira → to‘liq, qisqa iliq chaqnash */
+.root [data-a="lit"] {
+  --t: 0.8s;
+}
+.root [data-a="lit"]:not([data-in]) {
+  opacity: 0.25;
+  transform: scale(0.82);
+}
+.root [data-a="lit"][data-in] {
+  animation: lit 1.4s var(--d, 0s) var(--ease) both;
+}
+@keyframes lit {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(255, 210, 120, 0));
+  }
+  35% {
+    filter: drop-shadow(0 0 calc(var(--u) * 10) rgba(255, 210, 120, 0.95));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgba(255, 210, 120, 0));
+  }
+}
+/* chiziqlar — chetdan chetga */
+.root [data-a="rule"] {
+  --t: 1.2s;
+  transform-origin: 0 50%;
+}
+.root [data-a="rule"]:not([data-in]) {
+  transform: scaleX(0);
+}
+/* yon chiziqlar — o‘rtadagi oraliqdan chetga chiziladi */
+.root [data-a="lineUp"],
+.root [data-a="lineDown"] {
+  --t: 1.6s;
+}
+.root [data-a="lineUp"] {
+  transform-origin: 50% 100%;
+}
+.root [data-a="lineDown"] {
+  transform-origin: 50% 0;
+}
+.root [data-a="lineUp"]:not([data-in]),
+.root [data-a="lineDown"]:not([data-in]) {
+  transform: scaleY(0);
+}
+/* ajratgich: chiziqlar markazdan chetga chiziladi, bodom va nuqtalar keyin «pop» */
+.root [data-a="draw"] path[data-s] {
+  transition: stroke-dashoffset 1.4s var(--ease) var(--d, 0s);
+}
+.root [data-a="draw"]:not([data-in]) path[data-s] {
+  stroke-dashoffset: 1.001;
+}
+.root [data-a="draw"] [data-f] {
+  transition:
+    transform 0.7s var(--spring) calc(var(--d, 0s) + 0.1s),
+    opacity 0.4s var(--ease) calc(var(--d, 0s) + 0.1s);
+}
+.root [data-a="draw"] [data-f][data-k] {
+  transition-delay: calc(var(--d, 0s) + 0.35s);
+}
+.root [data-a="draw"]:not([data-in]) [data-f] {
+  opacity: 0;
+  transform: scale(0);
+}
+/* za’faron halqa chiziladi */
+.ring circle {
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 0;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 1.8s var(--ease) 0.1s;
+}
+.root [data-a="ring"]:not([data-in]) circle {
+  stroke-dashoffset: 1.001;
+}
+/* surat — ramka ichida 1.08 → 1 */
+.root [data-a="zoom"] {
+  --t: 1.2s;
+}
+.root [data-a="zoom"]:not([data-in]) {
+  opacity: 0;
+}
+.zoomImg {
+  transition: transform 1.8s var(--ease) var(--d, 0s);
+}
+.root [data-a]:not([data-in]) .zoomImg {
+  transform: scale(1.08);
+}
+.circle {
+  border-radius: 50%;
+  background: #c3a987;
+}
+/* lagan — sekin aylanib keladi */
+.root [data-a="lagan"] {
+  --t: 1.6s;
+}
+.root [data-a="lagan"]:not([data-in]) {
+  opacity: 0;
+  transform: rotate(-110deg) scale(0.7);
+}
+/* katta raqam — mask ortidan pastdan ko‘tariladi (Philosopher raqamlari — qirqilmasin: padding/margin) */
+.mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.12em 0.08em 0.3em;
+  margin: -0.12em -0.08em -0.3em;
+}
+.maskIn {
+  display: inline-block;
+}
+.root [data-a="mask"] {
+  --t: 1.3s;
+}
+.root [data-a="mask"]:not([data-in]) {
+  transform: translateY(112%);
+}
+/* taymer kartalari — flip (yuqori cheti atrofida) */
+.flipRow {
+  perspective: calc(var(--u) * 600);
+}
+.root [data-a="flip"] {
+  --t: 1s;
+  transform-origin: 50% 0;
+}
+.root [data-a="flip"]:not([data-in]) {
+  opacity: 0;
+  transform: rotateX(-88deg);
+}
+/* atlas lenta — chok ustida to‘lqinlanib suzib kiradi */
+.root [data-a="wave"] {
+  --t: 1.6s;
+}
+.root [data-a="wave"]:not([data-in]) {
+  opacity: 0;
+  transform: translateX(calc(var(--u) * -40)) rotate(-2deg);
+}
+.root .waveR[data-a="wave"]:not([data-in]) {
+  transform: translateX(calc(var(--u) * 40)) rotate(2deg);
+}
+
+/* ═════ Iliq nur (Figma «Iliq nur»: #F6C66A 75% → 0) ═════ */
+.glowBox {
+  position: absolute;
+  pointer-events: none;
+}
+.glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(246, 198, 106, 0.75) 0%, rgba(246, 198, 106, 0) 100%);
+}
+
+/* ═════ Sandiq (yopiq ↔ ochiq) ═════
+ * Ichki o‘zgaruvchilar (har sahnada o‘zicha hisoblanadi): --shk (silkinish), --ph (faza), --lift (qopqoq 0…1), --fl (chaqnash),
+ * --sw (almashish), --cm (harakat start → target). */
+.chest {
+  position: absolute;
+  --cmE: calc(var(--cm) * var(--cm) * (3 - 2 * var(--cm)));
+  transform: translate(calc(var(--u) * var(--dx) * (1 - var(--cmE))), calc(var(--u) * var(--dy) * (1 - var(--cmE))))
+    scale(calc(var(--s0) + (1 - var(--s0)) * var(--cmE)));
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.cShut {
+  position: absolute;
+  opacity: calc(1 - var(--sw));
+}
+.cShake {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 82%;
+  rotate: calc(sin(var(--ph) * 1rad) * 1.8deg * var(--shk));
+  translate: 0 calc(var(--u) * -3 * var(--shk) * sin(var(--ph) * 1rad) * sin(var(--ph) * 1rad));
+}
+.cBody,
+.cLid {
+  position: absolute;
+  inset: 0;
+}
+/* tana (qopqoqsiz) — qopqoq bilan chok bo‘yicha (qulf tilchasi qopqoqqa tegishli) */
+.cBody {
+  clip-path: polygon(0 32.23%, 3.91% 32.52%, 21% 39.84%, 22.46% 39.65%, 58.4% 36.62%, 58.4% 39.75%, 62.11% 39.75%, 62.11% 36.33%, 96.19% 33.5%, 100% 33.69%, 100% 100%, 0 100%);
+}
+/* qopqoq — orqa cheti atrofida 3D ko‘tariladi (qulf tilchasi bilan) */
+.cLid {
+  --liftE: calc(var(--lift) * var(--lift) * (3 - 2 * var(--lift)));
+  clip-path: polygon(0 0, 100% 0, 100% 34.08%, 96.19% 33.89%, 62.11% 36.67%, 62.11% 39.84%, 58.4% 39.84%, 58.4% 36.96%, 22.46% 40.04%, 21% 40.23%, 3.91% 32.91%, 0 32.62%);
+  transform-origin: 50% 22.5%;
+  transform: translateY(calc(var(--liftE) * -5%)) perspective(calc(var(--u) * 700)) rotateX(calc(var(--liftE) * 62deg));
+}
+/* qopqoq ostidan sizgan nur */
+.cSlit {
+  --liftE: calc(var(--lift) * var(--lift) * (3 - 2 * var(--lift)));
+  position: absolute;
+  left: 14%;
+  top: 25%;
+  width: 80%;
+  height: 24%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 236, 180, 1) 0%, rgba(255, 210, 120, 0.85) 40%, rgba(246, 198, 106, 0) 100%);
+  opacity: calc(var(--liftE) * 1.2);
+  transform: scaleY(calc(0.4 + 0.8 * var(--liftE)));
+}
+.cOpen {
+  position: absolute;
+  inset: 0;
+  opacity: var(--sw);
+}
+/* nur chaqnashi — yopiq/ochiq almashuvi shu yorug‘lik ichida */
+.cFlash {
+  position: absolute;
+  width: 190%;
+  height: 190%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 250, 232, 1) 0%,
+    rgba(255, 228, 160, 0.95) 22%,
+    rgba(246, 198, 106, 0.55) 52%,
+    rgba(246, 198, 106, 0) 100%
+  );
+  opacity: var(--fl);
+  transform: scale(calc(0.3 + 0.7 * var(--fl)));
+}
+
+/* ═════ 00 · Ochilish — yopiq sandiq (scroll bilan) ═════
+ * JS faqat --o (0…1, lerp) ni `.opening` ga yozadi; qolgani shu yerda. Vaqt chizig‘i:
+ * fon almashadi (0…0.02, ko‘rinmas — hero orqa foni bir xil); yozuvlar so‘nadi (0.02…0.12); atlas chiziqlari tarqaladi (0.02…0.32);
+ * silkinish (0.02…0.13); qopqoq ko‘tariladi (0.08…0.2); chaqnash (0.15…0.3, cho‘qqisi 0.205); almashish (0.198…0.21);
+ * nur doirasi kengayadi (0.2…0.52); sandiq hero joyiga tushadi (0.22…0.54); hero sandig‘iga almashadi (0.58);
+ * surat ko‘tariladi (0.3…0.72); ism harflari (0.46…0.93); qator (0.7…0.92); yulduzlar (0.76…0.98). */
+.opening {
+  --o: 0;
+}
+.gateWrap,
+.gateHold {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  height: calc(100svh * 2.3);
+  margin-bottom: calc(100svh * -2.3);
+}
+.gateHold {
+  background: var(--grad);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.gBg {
+  position: absolute;
+  inset: 0;
+  background: var(--grad);
+}
+.gateWrap:not(.still) .gBg {
+  opacity: calc(1 - clamp(0, var(--o) / 0.02, 1));
+}
+/* yuklanganda — sokin kirish (o‘zi alohida qatlam: scroll transformlari bilan to‘qnashmaydi) */
+.gateWrap:not(.still) .gIn {
+  animation: gIn 1.2s var(--gd, 0s) var(--ease) both;
+}
+@keyframes gIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 16));
+  }
+}
+.gateWrap:not(.still) .gDraw path[data-s] {
+  animation: gDraw 1.6s calc(var(--gd, 0s) + 0.1s) var(--ease) both;
+}
+.gateWrap:not(.still) .gDraw [data-f] {
+  animation: gPop 0.7s calc(var(--gd, 0s) + 0.6s) var(--spring) both;
+}
+@keyframes gDraw {
+  from {
+    stroke-dashoffset: 1.001;
+  }
+}
+@keyframes gPop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+.gText {
+  position: absolute;
+  inset: 0;
+  --tf: clamp(0, (var(--o) - 0.02) / 0.1, 1);
+  opacity: calc(1 - var(--tf));
+  transform: translateY(calc(var(--u) * -18 * var(--tf)));
+}
+/* atlas chiziqlari — yon tomonlarga tarqaladi */
+.gStripe {
+  position: absolute;
+  --sp: clamp(0, (var(--o) - 0.02) / 0.3, 1);
+  --spE: calc(var(--sp) * var(--sp) * (3 - 2 * var(--sp)));
+  /* ekran chetidan butunlay chiqib ketadi (keng ekranda ham): 50cqw − sahna markazigacha masofa */
+  transform: translateX(calc(var(--side) * var(--spE) * (50cqw - var(--u) * var(--sx))));
+}
+/* nur «nafas oladi» (0.6 ↔ 1, 2 s); scrollda kuchayadi va so‘nadi */
+.gGlow {
+  --gl: clamp(0, (var(--o) - 0.04) / 0.16, 1);
+  opacity: calc(1 - clamp(0, (var(--o) - 0.22) / 0.14, 1));
+  transform: scale(calc(1 + 0.35 * var(--gl)));
+}
+.gateWrap:not(.still) .gGlow .glow {
+  animation: breathe 2s ease-in-out infinite alternate;
+}
+@keyframes breathe {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+.gChest {
+  --shk: calc(clamp(0, (var(--o) - 0.02) / 0.03, 1) * (1 - clamp(0, (var(--o) - 0.07) / 0.06, 1)));
+  --ph: calc(var(--o) * 170);
+  --lift: clamp(0, (var(--o) - 0.08) / 0.12, 1);
+  --fl: calc(clamp(0, (var(--o) - 0.15) / 0.055, 1) * (1 - clamp(0, (var(--o) - 0.205) / 0.095, 1)));
+  --sw: clamp(0, (var(--o) - 0.198) / 0.012, 1);
+  --cm: clamp(0, (var(--o) - 0.22) / 0.32, 1);
+  /* hero sandig‘i aynan shu joyda — almashuv ko‘rinmaydi */
+  opacity: calc(1 - clamp(0, (var(--o) - 0.58) * 1000, 1));
+}
+/* mokap/poster ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 01 · Hero — ochilgan sandiq, ochilish ostida (sticky), --o bilan ═════ */
+.openWrap {
+  position: relative;
+}
+.openWrap > .hero {
+  position: sticky;
+  top: 0;
+}
+.openStill > .hero {
+  position: relative;
+}
+.openSpacer {
+  height: calc(100svh * 1.3);
+}
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  --w: clamp(0, (var(--o) - 0.2) / 0.32, 1);
+  --cm: clamp(0, (var(--o) - 0.22) / 0.32, 1);
+  --cmE: calc(var(--cm) * var(--cm) * (3 - 2 * var(--cm)));
+  --we: calc(1 - (1 - var(--w)) * (1 - var(--w)));
+}
+/* orqa fon — ochilish foni bilan bir xil (anor rang) */
+.hBack {
+  position: absolute;
+  inset: 0;
+  background: var(--grad);
+}
+/* nur doirasi chetidagi iliq yorug‘lik (doira tashqarisida, anor rang ustida) */
+.hHalo {
+  position: absolute;
+  width: calc(var(--we) * 80vmax * 2.5);
+  height: calc(var(--we) * 80vmax * 2.5);
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 236, 190, 1) 0%, rgba(255, 220, 150, 0.95) 76%, rgba(246, 198, 106, 0.5) 86%, rgba(246, 198, 106, 0) 100%);
+  opacity: calc(clamp(0, var(--w) * 30, 1) * (1 - clamp(0, (var(--w) - 0.55) / 0.45, 1)));
+  pointer-events: none;
+}
+/* hero — kengayayotgan nur doirasi ichida, to‘liq shaffofsiz */
+.hFront {
+  position: absolute;
+  inset: 0;
+  background: var(--sand);
+  clip-path: circle(calc(var(--we) * 80vmax) at var(--wx) var(--wy));
+}
+.heroStill .hFront {
+  clip-path: none;
+}
+.hGlow {
+  opacity: clamp(0, (var(--o) - 0.34) / 0.26, 1);
+}
+.hWide {
+  opacity: clamp(0, (var(--o) - 0.3) / 0.25, 1);
+}
+.hLenta {
+  position: absolute;
+  --lp: clamp(0, (var(--o) - 0.44) / 0.36, 1);
+  --lpE: calc(1 - (1 - var(--lp)) * (1 - var(--lp)));
+  opacity: var(--lp);
+}
+.hLentaL {
+  transform: translateX(calc(var(--u) * -120 * (1 - var(--lpE))));
+}
+.hLentaR {
+  transform: translateX(calc(var(--u) * 120 * (1 - var(--lpE))));
+}
+.hStar {
+  --sp: clamp(0, (var(--o) - 0.76 - var(--sd, 0)) / 0.16, 1);
+  opacity: var(--sp);
+  transform: rotate(calc((1 - var(--sp)) * -120deg)) scale(calc(0.4 + 0.6 * var(--sp)));
+}
+/* ravoq va surat — sandiq ortidan ko‘tariladi */
+.hArch {
+  position: absolute;
+  inset: 0;
+  --pa: clamp(0, (var(--o) - 0.3) / 0.42, 1);
+  --paE: calc(1 - (1 - var(--pa)) * (1 - var(--pa)) * (1 - var(--pa)));
+  opacity: clamp(0, (var(--o) - 0.3) / 0.06, 1);
+  transform: translateY(calc((1 - var(--paE)) * var(--u) * 170));
+  /* sandiq ostidan chiqib ko‘rinmasin — sandiq pastki cheti (harakatlanayotgan) ostidagi qism kesiladi */
+  clip-path: inset(-100vh 0 calc(var(--u) * (var(--H) - var(--cb0) - (var(--cb1) - var(--cb0)) * var(--cmE)) + var(--u) * (1 - var(--paE)) * 170) 0);
+}
+.hFrame {
+  position: absolute;
+  border-style: solid;
+  border-color: var(--saf);
+}
+.hPhoto {
+  position: absolute;
+  overflow: hidden;
+  background: #c6b297;
+}
+.hChest {
+  position: absolute;
+  opacity: clamp(0, (var(--o) - 0.58) * 1000, 1);
+}
+.letter {
+  display: inline-block;
+  --lp: clamp(0, (var(--o) - var(--li)) / 0.07, 1);
+  opacity: var(--lp);
+  transform: translateY(calc((1 - var(--lp)) * 0.32em));
+}
+.hSub {
+  --s: clamp(0, (var(--o) - 0.7) / 0.22, 1);
+  opacity: var(--s);
+  transform: translateY(calc((1 - var(--s)) * var(--u) * 10));
+}
+
+/* ═════ 04 · Bayram kuni ═════ */
+.timer {
+  background: var(--cream);
+  border-style: solid;
+  border-color: var(--saf);
+  overflow: hidden;
+}
+.digits {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+}
+.slot {
+  display: inline-block;
+}
+/* o‘zgargan raqam — yuqoridan sekin tushadi; shaffoflik yo‘q, kesilmaydi (padded «0» hech qachon yo‘qolmaydi) */
+.tick {
+  display: inline-block;
+  animation: tick 0.5s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: translateY(-0.14em);
+  }
+}
+
+/* ═════ 05 · Kun tartibi ═════ */
+.rule {
+  display: block;
+  background: rgba(224, 162, 59, 0.35);
+}
+
+/* ═════ Tugmalar, karta ═════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
+  white-space: nowrap;
+  background: var(--pom);
+  color: var(--cream);
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  background: #8c2433;
+}
+.card {
+  background: var(--cream);
+  color: var(--ink);
+}
+.cardStripe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-repeat: repeat-x;
+}
+.lbl {
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-style: solid;
+  border-color: var(--saf);
+  background: transparent;
+  transition: box-shadow 0.3s var(--ease);
+}
+.field:focus-within {
+  box-shadow: 0 0 0 3px rgba(224, 162, 59, 0.22);
+}
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.4;
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.input::placeholder {
+  color: rgba(125, 106, 92, 0.7);
+  opacity: 1;
+}
+.choice {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: var(--wal);
+  color: var(--wal);
+  background: transparent;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--pom);
+  border-color: var(--pom);
+  color: var(--cream);
+}
+.step {
+  border-style: solid;
+  border-color: var(--saf);
+  color: var(--pom);
+  background: transparent;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.submit {
+  background: var(--wal);
+  color: var(--cream);
+  transition: transform 0.4s var(--spring);
+}
+.submit:hover {
+  transform: translateY(-2px);
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+
+/* ═════ 09 · Final — scroll bilan (--fc: 0 … 1 = Figma kadri; sahifa oxirigacha albatta tugaydi) ═════ */
+.finalWrap {
+  --fc: 0;
+}
+.fStripe {
+  position: absolute;
+}
+.fChest {
+  --shk: calc(clamp(0, var(--fc) / 0.04, 1) * (1 - clamp(0, (var(--fc) - 0.1) / 0.1, 1)));
+  --ph: calc(var(--fc) * 95);
+  --lift: clamp(0, (var(--fc) - 0.14) / 0.26, 1);
+  --fl: calc(clamp(0, (var(--fc) - 0.32) / 0.1, 1) * (1 - clamp(0, (var(--fc) - 0.42) / 0.18, 1)));
+  --sw: clamp(0, (var(--fc) - 0.41) / 0.02, 1);
+  --cm: 1;
+}
+/* iliq nur — ochilganda kuchayadi; ustidan nur ustuni yuqoriga ko‘tarilib so‘nadi */
+.fGlow {
+  --fg: clamp(0, (var(--fc) - 0.3) / 0.2, 1);
+  opacity: calc(0.55 + 0.45 * var(--fg));
+}
+.beam {
+  position: absolute;
+  left: 30%;
+  width: 40%;
+  top: 0;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 236, 180, 0.9) 0%, rgba(246, 198, 106, 0.45) 55%, rgba(246, 198, 106, 0) 100%);
+  --bm: clamp(0, (var(--fc) - 0.42) / 0.5, 1);
+  opacity: calc(clamp(0, var(--bm) * 6, 1) * (1 - var(--bm)));
+  transform: translateY(calc(var(--u) * (20 - 260 * var(--bm)))) scaleY(calc(0.6 + 0.8 * var(--bm)));
+}
+
+/* ═════ Musiqa tugmasi (Figma: anor doira 52, za’faron halqa, 3 za’faron chiziq) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--pom);
+  box-shadow: 0 3px 8px rgba(51, 13, 8, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: musicIn 0.8s 1.2s var(--ease) both;
+}
+@keyframes musicIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.music svg {
+  display: block;
+  width: 52px;
+  height: 52px;
+}
+.musicEmbedded {
+  position: absolute;
+}
+.bar {
+  fill: #e0a23b;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: fill-opacity 0.3s var(--ease);
+}
+.music:not(.playing) .bar {
+  fill-opacity: 0.35;
+}
+.music.playing .bar {
+  animation: eq 1.05s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.35s);
+}
+@keyframes eq {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.4);
+  }
+}
+.strike {
+  stroke: #faf4ea;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  transition: stroke-dashoffset 0.3s var(--ease);
+}
+.music:not(.playing) .strike {
+  stroke-dashoffset: 0;
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--wal);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

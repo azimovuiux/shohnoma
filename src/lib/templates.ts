@@ -571,6 +571,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Bolalar — milliy to‘n va do‘ppida, kattalar — nafis bayramona libosda.", max: 160 },
     ],
   },
+  {
+    number: 14,
+    slug: "sandiq",
+    name: "Sandiq",
+    ceremony: "sunnat",
+    ceremonies: ["sunnat"],
+    style: "milliy",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Zamonaviy o‘zbekona uslubdagi sunnat to‘yi taklifnomasi: anor rang, za’faron va qum ranglari, xon-atlas naqshlari. Sahifani pastga surganingizda yopiq yog‘och sandiqning qopqog‘i ko‘tariladi, ichidan iliq nur taraladi va o‘g‘lingizning surati sandiq ortidan ko‘tariladi. Keyin taklif matni, suratlar, sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi; oxirida sandiq yana ochiladi.",
+    descriptionRu: "Приглашение на суннат-той в современном узбекском стиле: гранатовый, шафрановый и песочный цвета, узоры хан-атласа. Когда вы листаете страницу вниз, крышка закрытого деревянного сундука поднимается, изнутри льётся тёплый свет, а из-за сундука поднимается фото вашего сына. Дальше текст приглашения, фотографии, дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей; в конце сундук открывается снова.",
+    descriptionEn: "A sunnat celebration invitation in a modern Uzbek style: pomegranate red, saffron and sand colours with khan-atlas patterns. As you scroll down, the lid of a closed wooden chest lifts, warm light pours out and your son’s photo rises from behind the chest. Then the invitation text, photos, the date and a countdown, the day’s schedule, the venue, the dress code and guest replies; at the end the chest opens once more.",
+    palette: ["#7A1E2C", "#E0A23B", "#EFE3D0", "#1F8A8A"],
+    sample: { a: "Amirxon", b: "Karimovlar oilasi", date: "15 · 05 · 2027", venue: "«Bog‘ishamol» to‘yxonasi", time: "07:00" },
+    theme: { bg: ["#7a1e2c", "#5e1420"], ink: "#faf4ea", accent: "#e0a23b", soft: "#efe3d0", script: "cormorant", color: "bordo" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "Kun tartibi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Nahor oshi", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Erta tongda yaqinlar bilan osh", max: 60 },
+        },
+      },
+      { key: "age", type: "number", label: "O‘g‘lingizning yoshi", placeholder: "7", max: 2, hint: "Ixtiyoriy · «Bizning shahzoda» bo‘limida: «Amirxon, 7 yoshda»" },
+      { key: "quote", type: "text", label: "Iqtibos", placeholder: "Mehmon — atoyi Xudo.", max: 60, hint: "Ixtiyoriy · «Bizning shahzoda» bo‘limida; bo‘sh qolsa — «Mehmon — atoyi Xudo.»" },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Milliy", "Bayramona", "Klassik", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Atlas, adras yoki milliy naqshli kiyimlar bayramimizga yanada ko‘rk beradi.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -776,6 +811,12 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Surat · 2", where: "«Bizning shahzoda» — ravoqdagi katta surat. Bo‘lmasa — bo‘lim chiqmaydi" },
     { title: "Surat · 3", where: "«Bizning shahzoda» — kichik kvadrat surat. Bo‘lmasa — do‘ppi surati" },
     { title: "Surat · 4", where: "«Manzil» — oltin ramkadagi surat. Bo‘lmasa — saroy zali surati" },
+  ],
+  /** Sandiq (sunnat) — bo‘sh slotlar o‘rnida shablonning o‘z rasmlari (non ushlagan qo‘llar, ayvon) */
+  sandiq: [
+    { title: "Asosiy surat", where: "Ochilgan sandiq ortidagi ravoq ichida. Bo‘lmasa — non ushlagan qo‘llar surati" },
+    { title: "Surat · 2", where: "«Bizning shahzoda» — doira ichidagi surat. Bo‘lmasa — non ushlagan qo‘llar (asosiy surat ham bo‘lmasa — bo‘lim chiqmaydi)" },
+    { title: "Surat · 3", where: "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

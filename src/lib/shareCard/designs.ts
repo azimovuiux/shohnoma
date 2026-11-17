@@ -38,6 +38,7 @@ const f = {
   bodoniS: '"sc-bodoni-s", "sc-playfair", Georgia, serif',
   yeseva: '"sc-yeseva", "sc-playfair", Georgia, serif',
   nunito: '"sc-nunito", system-ui, sans-serif',
+  philosopher: '"sc-philosopher", "sc-playfair", Georgia, serif',
 };
 const st = (family: string, size: number, color: string, o: Partial<TextStyle> = {}): TextStyle => ({ family, size, color, ...o });
 
@@ -380,6 +381,30 @@ export const DESIGNS: Record<string, Design> = {
       },
       { y: 1213, anchor: "center", w: 560, items: [{ k: "date", s: st(f.manrope, 24, "#c8a25a", { weight: 600, ls: 0.28, min: 18 }) }] },
       { y: 1258, anchor: "top", w: 400, maxH: 80, items: [{ k: "venue", s: st(f.manrope, 26, "rgba(245,239,227,.8)", { maxLines: 2, min: 19, lh: 1.3 }) }] },
+    ],
+  },
+
+  /* Sandiq (sunnat): anor rang fon, xon-atlas chiziqlari, iliq nur va yopiq sandiq (Figma 00) — ajratgich fonda;
+   * mehmon — eng tepada; taklif turi (za’faron kursiv) + bola ismi (krem) — ajratgich ustida (ism 2 qatorga bo‘linsa — yuqoriga o‘sadi);
+   * sanadan keyin joy — sandiq ostida */
+  sandiq: {
+    fill: "#7a1e2c",
+    bg: true,
+    date: "dots",
+    stacks: [
+      { y: 108, anchor: "center", w: 470, maxH: 140, items: [{ k: "guest", s: st(f.philosopher, 44, "#faf4ea", { italic: true, maxLines: 2, min: 30, lh: 1.15 }) }] },
+      {
+        y: 350,
+        anchor: "bottom",
+        w: 470,
+        maxH: 215,
+        items: [
+          { k: "kicker", s: st(f.philosopher, 42, "#e0a23b", { italic: true, min: 28, lh: 1.15 }) },
+          { k: "names", mode: "two", s: st(f.philosopher, 96, "#faf4ea", { weight: 700, min: 58, lh: 1.08 }), gap: 2 },
+        ],
+      },
+      { y: 1102, anchor: "center", w: 470, items: [{ k: "date", s: st(f.manrope, 28, "#faf4ea", { weight: 600, ls: 0.24, min: 18 }) }] },
+      { y: 1150, anchor: "top", w: 460, maxH: 100, items: [{ k: "venue", s: st(f.philosopher, 36, "rgba(250,244,234,.85)", { italic: true, maxLines: 2, min: 26, lh: 1.2 }) }] },
     ],
   },
 };

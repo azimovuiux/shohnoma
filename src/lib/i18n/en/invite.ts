@@ -429,4 +429,27 @@ export const en: Record<string, string> = {
   "«Bizning shahzoda» — ravoqdagi katta surat. Bo‘lmasa — bo‘lim chiqmaydi": "“Our little prince” — large photo in the arch. If none — the section is hidden",
   "«Bizning shahzoda» — kichik kvadrat surat. Bo‘lmasa — do‘ppi surati": "“Our little prince” — small square photo. If none — a photo of a skullcap",
   "«Manzil» — oltin ramkadagi surat. Bo‘lmasa — saroy zali surati": "“Venue” — photo in the gold frame. If none — a photo of a palace hall",
+  // ── Sandiq (modern Uzbek sunnat celebration) ──
+  "{name}ning": "{name}’s",
+  "{family} taklif etadi": "Invitation from {family}",
+  "Hurmatli {guest}!": "Dear {guest}!",
+  "Xonadonimizning kenja shahzodasi — {name}ning sunnat to‘yiga sizni lutfan taklif etamiz. Dasturxonimiz va quvonchimizga sherik bo‘ling.":
+    "Our youngest prince, {name}, is celebrating his sunnat! We warmly invite you to share our table and our joy.",
+  "O‘g‘limiz {name}ning sunnat to‘yiga sizni lutfan taklif etamiz. Dasturxonimiz va quvonchimizga sherik bo‘ling.":
+    "Our son {name} is celebrating his sunnat! We warmly invite you to share our table and our joy.",
+  "Mehmon — atoyi Xudo.": "A guest is a gift from God.",
+  "Sizni dasturxonimizning to‘rida ko‘rishni istaymiz.": "We would love to welcome you to the seat of honour at our table.",
+  "Soat 07:00 — nahor oshi": "07:00 — morning plov",
+  "Atlas, adras yoki milliy naqshli kiyimlar bayramimizga yanada ko‘rk beradi.": "Atlas, adras or clothes with national patterns will make our celebration even more beautiful.",
+  "Bayramona va qulay kiyim — ayniqsa, kichik mehmonlarimiz uchun.": "Festive and comfortable clothes — especially for our little guests.",
+  "Dasturxonimiz sizsiz to‘kis emas.": "Our table is not complete without you.",
+  "«Bog‘ishamol» to‘yxonasi": "Bogishamol Hall",
+  // order form (templates.ts → fields, PHOTO_SLOTS.sandiq)
+  "Erta tongda yaqinlar bilan osh": "Plov with our loved ones at dawn",
+  "Ixtiyoriy · «Bizning shahzoda» bo‘limida: «Amirxon, 7 yoshda»": "Optional · in the “Our little prince” section: “Amirxon, 7 years old”",
+  "Ixtiyoriy · «Bizning shahzoda» bo‘limida; bo‘sh qolsa — «Mehmon — atoyi Xudo.»": "Optional · in the “Our little prince” section; if empty — “A guest is a gift from God.”",
+  "Ochilgan sandiq ortidagi ravoq ichida. Bo‘lmasa — non ushlagan qo‘llar surati": "In the arch behind the open chest. If none — a photo of hands holding bread",
+  "«Bizning shahzoda» — doira ichidagi surat. Bo‘lmasa — non ushlagan qo‘llar (asosiy surat ham bo‘lmasa — bo‘lim chiqmaydi)":
+    "“Our little prince” — photo in the circle. If none — hands holding bread (if there is no main photo either — the section is hidden)",
+  "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati": "“Venue” — photo of the hall. If none — a photo of a terrace",
 };
