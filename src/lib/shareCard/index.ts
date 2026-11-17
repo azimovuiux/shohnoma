@@ -10,7 +10,7 @@
  * Qayta ishlatish: shaxsiy havolalar — maxsus mehmonlar (?g=token) va eski ?m=Ism — `guest` maydoni bilan.
  */
 import { tr, type Locale } from "@/lib/i18n";
-import { monthsEn, monthsRu, monthsUz, splitDate } from "@/lib/display";
+import { greetGuest, monthsEn, monthsRu, monthsUz, splitDate } from "@/lib/display";
 import type { Ceremony, TemplateTheme } from "@/lib/templates";
 import { tplImgVersions } from "@/lib/tplImgVersions";
 import { star8Path } from "@/lib/ornament";
@@ -19,7 +19,7 @@ import { H, W, drawPhoto, drawStack, fontNeeds, loadImage, type Stack, type Text
 import { loadFonts } from "./fonts";
 
 /** Dizayn yoki chizish usuli o‘zgarsa — oshiriladi (serverdagi eski rasmlar qayta yaratiladi) */
-export const SHARE_CARD_VERSION = 2;
+export const SHARE_CARD_VERSION = 3;
 export const SHARE_CARD_SIZE = { width: W, height: H };
 
 export type ShareCardInput = {
@@ -55,7 +55,14 @@ const PHRASE: Record<Ceremony, string> = {
 
 export const hasShareDesign = (design: string) => design in DESIGNS;
 
-const clean = (s: string | null | undefined, max = 80) => (s ?? "").replace(/\s+/g, " ").trim().slice(0, max);
+/** Bo‘shliqlarni tozalab, `max` belgigacha qisqartiradi — so‘z o‘rtasida emas, so‘z chegarasida «…» bilan */
+const clean = (s: string | null | undefined, max = 80) => {
+  const v = (s ?? "").replace(/\s+/g, " ").trim();
+  if (v.length <= max) return v;
+  const cut = v.slice(0, max);
+  const i = cut.lastIndexOf(" ");
+  return i > max * 0.6 ? cut.slice(0, i).replace(/[\s,.;:–—-]+$/, "") + "…" : cut;
+};
 
 /** «12-sentabr 2026» / «12 сентября 2026» / «12 September 2026» */
 function longDate(iso: string, lang: Locale) {
@@ -80,7 +87,8 @@ export function cardTexts(input: ShareCardInput, design?: Design): Texts {
   const amp = design?.amp === "va" ? tr(lang, "{a} va {b}", { a: "", b: "" }).trim() || "&" : "&";
   const guest = clean(input.guest, 80);
   return {
-    guest: guest ? tr(lang, "Hurmatli {guest}", { guest }) : "",
+    // ism o‘zi murojaat bilan boshlansa («Hurmatli …», «Уважаемая …», «Dear …») — qayta qo‘shilmaydi
+    guest: guest ? greetGuest(tr(lang, "Hurmatli {guest}", { guest }), guest) : "",
     kicker: KICKER[input.ceremony] ? tr(lang, KICKER[input.ceremony]) : "",
     a: clean(input.personA, 60),
     b,

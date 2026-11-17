@@ -6,7 +6,7 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, usePreload, useMusic } from "../shared/runtime";
@@ -407,7 +407,7 @@ function Gate({ d, wide, onStart, still = false }: { d: D; wide: boolean; onStar
 /* ═════════════ 01 · Taklif ═════════════ */
 function Taklif({ d, z }: { d: D; z: number }) {
   const t = useT();
-  const hello = d.guest ? `${t("Hurmatli {guest}", { guest: d.guest })},` : t("Aziz mehmonimiz,");
+  const hello = d.guest ? `${guestHello(t, "Hurmatli {guest}", d.guest)},` : t("Aziz mehmonimiz,");
   // imzo surat chapidagi tor ustunga (106) sig‘sa — Figma’dagidek yonida; aks holda (uzun ism) — surat ostida
   const words = d.pairVa.split(/\s+/);
   const side = Math.max(0, ...words.map((w) => [...w].length)) <= 9 && words.length <= 4;

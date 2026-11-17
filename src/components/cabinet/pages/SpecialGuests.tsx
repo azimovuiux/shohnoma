@@ -13,7 +13,7 @@ import { Add, ArrowDown, ArrowLeft2, ArrowRight2, Copy, Edit2, ExportSquare, Eye
 import { Field, Input, Modal, Segment, StatusBadge, Textarea, api, confirmDialog, inputClass, useCopy, useToast, type Tone } from "@/components/ui";
 import { ShareInvite } from "@/components/share/ShareInvite";
 import { useApi } from "@/lib/client";
-import { initials, rsvpView } from "@/lib/display";
+import { hasHonorific, initials, rsvpView } from "@/lib/display";
 import { star8Path } from "@/lib/ornament";
 import { useLocale, useT } from "@/lib/i18n";
 import { isPaidStatus, type SpecialGuest } from "@/lib/types";
@@ -183,7 +183,7 @@ function EditDialog({ guest, invitationId, onClose, onSaved }: { guest: SpecialG
         <p className="font-serif text-[26px] font-medium leading-[1.15] text-ink">{t("Mehmonni tahrirlash")}</p>
         <Field
           label={t("Murojaat (taklifnomada shunday chiqadi)")}
-          hint={name.trim().length > NAME_SOFT ? t(LONG_HINT) : t("«Hurmatli {name}»", { name: name.trim() || "…" })}
+          hint={name.trim().length > NAME_SOFT ? t(LONG_HINT) : hasHonorific(name) ? `«${name.trim()}»` : t("«Hurmatli {name}»", { name: name.trim() || "…" })}
           error={err}
         >
           <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={NAME_MAX} autoFocus aria-invalid={!!err} />

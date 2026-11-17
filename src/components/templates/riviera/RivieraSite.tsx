@@ -6,7 +6,7 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, usePreload, useMusic } from "../shared/runtime";
@@ -471,7 +471,7 @@ function Gate({ d, wide, onStart, still = false }: { d: D; wide: boolean; onStar
   const Y = (y: number) => `calc(100% - ${U(H - y)})`;
   const [sx, sy, ss] = G.seal;
   // Figma’dagi «Muhrni bosing — …» ko‘rsatmasi o‘rniga (bosish yo‘q): shaxsiy murojaat yoki «Taklifnoma»
-  const foot = d.guest ? t("Hurmatli {guest}", { guest: d.guest }) : t("Taklifnoma");
+  const foot = d.guest ? guestHello(t, "Hurmatli {guest}", d.guest) : t("Taklifnoma");
   const frame = (side: "l" | "r") => (
     <>
       <span aria-hidden className={st.frame} style={side === "l" ? { top: U(G.f1), bottom: U(G.f1), left: U(G.f1), right: 0, borderRightWidth: 0 } : { top: U(G.f1), bottom: U(G.f1), right: U(G.f1), left: 0, borderLeftWidth: 0 }} />

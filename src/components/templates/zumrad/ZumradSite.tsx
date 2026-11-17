@@ -17,7 +17,7 @@ import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { timerUnits } from "@/components/invitation/data";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
 import { DRESS, calendarWords, coordsFrom, downloadIcs, untilPhrase, type ProgramItem } from "../anor/data";
@@ -254,7 +254,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
           </p>
           {d.guest && (
             <p className={st.fadeIn} style={{ fontSize: U(15), color: "rgba(247,243,234,.75)", marginTop: U(6), animationDelay: "1.2s" }}>
-              {t("Hurmatli {guest}", { guest: d.guest })}
+              {guestHello(t, "Hurmatli {guest}", d.guest)}
             </p>
           )}
         </div>

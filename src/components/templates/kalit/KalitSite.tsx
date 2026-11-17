@@ -9,7 +9,7 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
@@ -658,7 +658,7 @@ function Dust({ still }: { still: boolean }) {
 
 function Nur({ d, wide, z, still }: { d: D; wide: boolean; z: number; still: boolean }) {
   const t = useT();
-  const hello = d.guest ? `${t("Hurmatli {guest}", { guest: d.guest })},` : t("Aziz mehmonimiz,");
+  const hello = d.guest ? `${guestHello(t, "Hurmatli {guest}", d.guest)},` : t("Aziz mehmonimiz,");
   return (
     <Sec wide={wide} z={z} className={st.nur} colStyle={{ minHeight: U(900), paddingTop: U(670), paddingBottom: U(81.5) }}>
       <div className="absolute" style={at([0, 0, 390, 900], { overflow: "hidden" })}>

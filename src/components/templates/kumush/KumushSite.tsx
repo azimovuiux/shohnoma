@@ -6,7 +6,7 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, usePreload, useMusic } from "../shared/runtime";
@@ -425,7 +425,7 @@ function Taklif({ d, z }: { d: D; z: number }) {
       <Title text={t("Taklifnoma")} size={34} h={38} track={0.2} light />
       {d.guest && (
         <p data-a="up" className={cx(st.ml, "mx-auto text-center")} style={vars({ marginTop: U(32), width: U(310), fontSize: U(17), lineHeight: 1.4, color: "var(--grey)", overflowWrap: "anywhere", "--d": "0.1s" })}>
-          {t("Hurmatli {guest}", { guest: d.guest })},
+          {guestHello(t, "Hurmatli {guest}", d.guest)},
         </p>
       )}
       {d.message && (

@@ -87,3 +87,30 @@ export function inviteNames(a: string | null | undefined, b: string | null | und
   if (!ceremony || ceremony === "nikoh" || ceremony === "fotiha") return x ? `${x} & ${y}` : y;
   return withParents && x ? `${x} (${y})` : x;
 }
+
+/**
+ * Mehmon ismi o‘zi murojaat bilan boshlanadimi («Hurmatli Ali», «Уважаемая Анна», «Dear John», «Mr Smith»)?
+ * Shunda shablon/karta o‘z «Hurmatli …» qo‘shimchasini qo‘shmaydi (takrorlanmasin).
+ * «Aziz» — ism ham (Aziz Karimov): murojaat deb faqat keyingi so‘z kichik harf bilan bo‘lsa («Aziz mehmon», «aziz do‘stim») olinadi.
+ */
+const HONORIFIC_RE =
+  /^(?:hurmatli|muhtaram|qadrli|qadrdon|ҳурматли|муҳтарам|уважаем(?:ый|ая|ые|ое)|многоуважаем(?:ый|ая|ые)|дорог(?:ой|ая|ие)|милый|милая|dear|dearest|mr|mrs|ms|mx|miss|sir|madam|madame|monsieur|mme|dr|hon)(?=$|[\s.,!])/iu;
+export function hasHonorific(name: string | null | undefined): boolean {
+  const s = (name ?? "").trim();
+  if (!s) return false;
+  if (HONORIFIC_RE.test(s)) return true;
+  const m = s.match(/^aziz(?:im|lar)?[\s,]+(\S)/iu);
+  return !!m && (/^aziz(?:im|lar)/iu.test(s) || m[1] === m[1].toLocaleLowerCase());
+}
+
+/**
+ * Shaxsiy murojaat: `full` — tarjima qilingan «Hurmatli {guest},» kabi satr. Ism o‘zi murojaat bilan boshlansa —
+ * faqat ism (satr oxiridagi tinish belgisi saqlanadi), aks holda `full` o‘zgarishsiz.
+ */
+export function greetGuest(full: string, guest: string): string {
+  const g = guest.trim();
+  if (!hasHonorific(g)) return full;
+  const tail = full.match(/[,!.:]\s*$/)?.[0].trim() ?? "";
+  // murojaat boshida turadi — birinchi harf bosh harf («hurmatli Ali» → «Hurmatli Ali,»)
+  return g.charAt(0).toLocaleUpperCase() + g.slice(1) + tail;
+}

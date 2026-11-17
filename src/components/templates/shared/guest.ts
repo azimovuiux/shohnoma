@@ -9,6 +9,15 @@
  * → ?m=Ism (eski shaxsiy havola) → fallback (namuna). Ism yo‘q bo‘lsa — "" (shablon avvalgidek umumiy murojaat qiladi).
  */
 import { useEffect, useState } from "react";
+import { greetGuest } from "@/lib/display";
+
+/**
+ * Shablon sarlavhasidagi murojaat: t("Hurmatli {guest},", { guest }) o‘rniga. Mehmon ismi o‘zi «Hurmatli …»,
+ * «Уважаемая …», «Dear …» bilan boshlansa — ikkinchi marta qo‘shilmaydi (faqat ism + tinish belgisi).
+ */
+export function guestHello(t: (s: string, v?: Record<string, string | number>) => string, key: string, guest: string): string {
+  return greetGuest(t(key, { guest }), guest);
+}
 
 const TOKEN_RE = /^[a-z0-9]{10}$/;
 let resolved: { token: string; name: string } | null = null;

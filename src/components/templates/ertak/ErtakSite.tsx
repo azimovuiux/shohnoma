@@ -6,7 +6,7 @@ import { musicSrc } from "@/lib/music";
 import { tr, useLocale, useT, type Locale } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, usePreload, useMusic } from "../shared/runtime";
@@ -748,7 +748,7 @@ function Hero({ d, wide, still }: { d: D; wide: boolean; still: boolean }) {
 /* ═════════════ 02 · Taklif — salom, taklif matni, imzo ═════════════ */
 function Taklif({ d, z, wide }: { d: D; z: number; wide: boolean }) {
   const t = useT();
-  const hello2 = d.guest ? t("hurmatli {guest}!", { guest: d.guest }) : t("qadrli mehmonlar!");
+  const hello2 = d.guest ? guestHello(t, "hurmatli {guest}!", d.guest) : t("qadrli mehmonlar!");
   const lantern = (x: number, flip: boolean) => (
     <Art src={`${P}/fonuslar.webp`} box={[x, 0, 170, 255]} unit={C} a="drop" d={0.1} fit="cover" flip={flip} />
   );

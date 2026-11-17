@@ -10,7 +10,7 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useWide } from "../shared/hooks";
 import { Loader, usePreload, useMusic } from "../shared/runtime";
@@ -279,7 +279,7 @@ function Title({ text, d0 = 0.15, size = 34 }: { text: string; d0?: number; size
 /** 02 · Taklif */
 function Taklif({ d, G }: { d: D; G: Stage }) {
   const t = useT();
-  const hello = d.guest ? `${t("Hurmatli {guest}", { guest: d.guest })}!` : t("Aziz mehmonimiz!");
+  const hello = d.guest ? `${guestHello(t, "Hurmatli {guest}", d.guest)}!` : t("Aziz mehmonimiz!");
   return (
     <Slot G={G} y={70} w={330} maxBottom={G.maxBottom}>
       <Card>

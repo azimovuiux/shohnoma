@@ -6,7 +6,7 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
@@ -644,7 +644,7 @@ function Invite({ d, wide, z }: { d: D; wide: boolean; z: number }) {
       <Deco c={box(290.26, 40, 79.061, 79.061).slice(0, 2).concat([70, 70]) as Box} rot={8} z={9} a="stick" d={1} src={`${P}/stamp.webp`} />
       <div data-a="place" className={cx("relative", st.paper)} style={vars({ marginLeft: CX(30.52), width: U(330), rotate: "1.5deg", borderRadius: U(6), padding: `${U(30)} ${U(28)}`, boxShadow: `0 ${U(14)} ${U(30)} ${U(-6)} rgba(31,41,26,.14)`, zIndex: 3, "--rr": "-3deg" })}>
         <p className={cx(st.prata, "text-center")} style={{ fontSize: U(30), lineHeight: 1.15, color: "var(--ink)", overflowWrap: "anywhere" }}>
-          {d.guest ? t("Hurmatli {guest}", { guest: d.guest }) : t("Aziz mehmonlarimiz!")}
+          {d.guest ? guestHello(t, "Hurmatli {guest}", d.guest) : t("Aziz mehmonlarimiz!")}
         </p>
         {d.paragraphs.map((p, i) => (
           <p key={i} className={cx(st.sans, "text-center")} style={{ fontSize: U(16), lineHeight: 1.6, color: "var(--muted)", marginTop: U(12), whiteSpace: "pre-line", overflowWrap: "anywhere" }}>

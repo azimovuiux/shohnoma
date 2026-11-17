@@ -9,7 +9,7 @@ import { musicSrc } from "@/lib/music";
 import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { timerUnits } from "@/components/invitation/data";
 import { useCountdown, useCountUp, useInView, useScrollProgress, useWide } from "../shared/hooks";
 import { Loader, MusicButton, usePreload, useMusic } from "../shared/runtime";
@@ -486,7 +486,7 @@ function Welcome({ d, wide, ready, tail, z }: { d: D; wide: boolean; ready: bool
   const text = (center: boolean) => (
     <>
       <p data-a="blur" className={st.serifI} style={{ fontSize: U(wide ? 64 : 42), lineHeight: 1.05, color: "var(--ink)", overflowWrap: "anywhere" }}>
-        {d.guest ? t("Hurmatli {guest}", { guest: d.guest }) : t("Aziz yaqinlarimiz!")}
+        {d.guest ? guestHello(t, "Hurmatli {guest}", d.guest) : t("Aziz yaqinlarimiz!")}
       </p>
       {d.paragraphs.map((p, i) => (
         <p

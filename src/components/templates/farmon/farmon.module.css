@@ -1,0 +1,908 @@
+/*
+ * Farmon — shohona sunnat to‘yi taklifnomasi (Figma 429:7598 mobil, 430:7750 laptop).
+ * Shriftlar: Playfair Display (sarlavhalar, kursiv) + Manrope (matn) — lotin va kirill (@fontsource).
+ * Ranglar (Figma «13 · Farmon — Assets»): zumrad #0f3b33, to‘q #0a2a24, oltin #c8a25a, fil suyagi #f5efe3, pergament #efe4cc,
+ * bordo #6e1f2a, siyoh #1f2a26, xira #7b7468. Zumrad bo‘limlar — markazdan radial (#17564a → #114037 → #0a2a24).
+ * Birlik `--u`: kontent ustuni (mobil 390 kanvas; laptopda ustun = mobil × 1.45). Ochilish, hero va final — o‘z kanvasi.
+ * Harakat («Motion — 13 · Farmon»), scroll bilan (--o: 0…1): toj yorishadi (glow), muhr yorilib ikkiga ajraladi va tushadi, zar ip sirg‘alib
+ * tushadi, o‘ram yuqoriga ko‘tarilib ikki tayoqqa aylanadi, pastki tayoq tushib varaq yuqoridan pastga ochiladi; «Shohona farmon» siyoh bilan
+ * yozilgandek (clip chapdan o‘ngga), surat ravoq ichida 1.08 → 1, oltin ravoq chiziladi, muhr bosiladi. Ochilish sahnasining o‘z foni yo‘q —
+ * fon hero’niki (bir xil zumrad), shuning uchun hech qachon kontent fon orqasidan yarim shaffof ko‘rinmaydi («sharpa» yo‘q).
+ * Skrollda: burchak bezaklari va ajratgichlar chiziladi, chok rombi aylanib chiqadi, kun tartibi chizig‘i to‘ladi, taymer sakkizburchaklari
+ * sekin aylanadi. Final — toj ko‘tariladi, ustida yaltirash, muhr «bosiladi» (1.3 → 1). Hamma rasmlar Normal blend.
+ */
+@property --gi {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --emerald: #0f3b33;
+  --deep: #0a2a24;
+  --gold: #c8a25a;
+  --ivory: #f5efe3;
+  --parch: #efe4cc;
+  --burg: #6e1f2a;
+  --ink: #1f2a26;
+  --mute: #7b7468;
+  --grad: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    #17564a 0%,
+    #114037 50%,
+    #0a2a24 100%
+  );
+  --sh-loader-a: #17564a;
+  --sh-loader-b: #0a2a24;
+  --sh-ring: rgba(200, 162, 90, 0.6);
+  position: relative;
+  container-type: inline-size;
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: "Manrope", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: var(--ivory);
+}
+.pf {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.pfi {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+}
+.ms {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 400;
+}
+.msM {
+  font-family: "Manrope", system-ui, sans-serif;
+  font-weight: 500;
+}
+.clamp2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  /* kursiv harflarning yon chiqishi kesilmasin (balandlik o‘zgarmaydi) */
+  padding: 0 0.12em;
+  margin: 0 -0.12em;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.contain {
+  object-fit: contain;
+}
+.fill {
+  object-fit: fill;
+}
+.art {
+  position: absolute;
+  pointer-events: none;
+}
+.svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* oltin vektor bezak: chiziqlar (data-s) va to‘ldirilgan romb/doiralar (data-f) */
+.draw path[data-s] {
+  fill: none;
+  stroke: #c8a25a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 0;
+}
+.draw [data-f] {
+  fill: #c8a25a;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni; chok rombi qo‘shni bo‘lim ustiga chiqadi ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.ivory {
+  background: var(--ivory);
+}
+.emerald {
+  background: var(--grad);
+  color: var(--ivory);
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+}
+.deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sideLine {
+  position: absolute;
+  min-width: 1px;
+  background: rgba(200, 162, 90, 0.6);
+}
+.seam {
+  position: absolute;
+  left: 50%;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 18));
+}
+.root [data-a="fade"]:not([data-in]) {
+  opacity: 0;
+}
+.root [data-a="rise"] {
+  --t: 1.3s;
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 40));
+}
+.root [data-a="right"] {
+  --t: 0.9s;
+}
+.root [data-a="right"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateX(calc(var(--u) * 22));
+}
+.root [data-a="pop"] {
+  --t: 0.9s;
+  --e: var(--spring);
+}
+.root [data-a="pop"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.5);
+}
+/* romb — chok ustida aylanib chiqadi (tinch holatda Figma’dagidek) */
+.root [data-a="spin"] {
+  --t: 1.1s;
+}
+.root [data-a="spin"]:not([data-in]) {
+  opacity: 0;
+  transform: rotate(-135deg) scale(0.4);
+}
+/* yon chiziqlar — o‘rtadagi oraliqdan chetga chiziladi */
+.root [data-a="lineUp"],
+.root [data-a="lineDown"] {
+  --t: 1.6s;
+}
+.root [data-a="lineUp"] {
+  transform-origin: 50% 100%;
+}
+.root [data-a="lineDown"] {
+  transform-origin: 50% 0;
+}
+.root [data-a="lineUp"]:not([data-in]),
+.root [data-a="lineDown"]:not([data-in]) {
+  transform: scaleY(0);
+}
+/* chizilish: chiziqlar uchidan chiziladi, romb/doiralar keyin «pop» */
+.root [data-a="draw"] path[data-s] {
+  transition: stroke-dashoffset 1.5s var(--ease) var(--d, 0s);
+}
+.root [data-a="draw"]:not([data-in]) path[data-s] {
+  stroke-dashoffset: 1.001;
+}
+.root [data-a="draw"] [data-f] {
+  transition:
+    transform 0.7s var(--spring) calc(var(--d, 0s) + 0.45s),
+    opacity 0.4s var(--ease) calc(var(--d, 0s) + 0.45s);
+}
+.root [data-a="draw"] [data-f][data-k] {
+  transition-delay: calc(var(--d, 0s) + 0.6s);
+}
+.root [data-a="draw"]:not([data-in]) [data-f] {
+  opacity: 0;
+  transform: scale(0);
+}
+/* surat — ramka ichida 1.08 → 1 */
+.zoomImg {
+  transition: transform 1.8s var(--ease) var(--d, 0s);
+}
+.root [data-a]:not([data-in]) .zoomImg {
+  transform: scale(1.08);
+}
+/* katta raqam — mask ortidan pastdan ko‘tariladi */
+.mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.12em 0.08em 0.3em;
+  margin: -0.12em -0.08em -0.3em;
+}
+.maskIn {
+  display: inline-block;
+}
+.root [data-a="mask"] {
+  --t: 1.3s;
+}
+.root [data-a="mask"]:not([data-in]) {
+  transform: translateY(112%);
+}
+
+/* ═════ 00 · Ochilish — o‘ralgan farmon (scroll bilan) ═════
+ * JS faqat --o (0…1, lerp) ni `.opening` ga yozadi; qolgani shu yerda. Vaqt chizig‘i:
+ * toj yorishadi (0…0.1) va ko‘tarilib so‘nadi (0.1…0.22); yozuvlar/burchaklar so‘nadi (0.02…0.14); muhr yoriladi (0.03…0.09) va tushadi
+ * (0.07…0.23); zar ip sirg‘alib tushadi (0.05…0.2); o‘ram yuqoriga ko‘tariladi va tayoqlarga aylanadi (0.12…0.24); pastki tayoq tushib,
+ * varaq ochiladi (0.24…0.82); surat, ravoq, «Shohona farmon» (0.3…0.92); muhr bosiladi (0.8…0.92). */
+.opening {
+  --o: 0;
+}
+.gateWrap,
+.gateHold {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  height: calc(100svh * 2.3);
+  margin-bottom: calc(100svh * -2.3);
+}
+.gateHold {
+  background: var(--grad);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: visible;
+}
+/* ochilish foni — hero foni bilan aynan bir xil; scroll boshlanishi bilan (hero’da hali hech narsa ko‘rinmaganda) yo‘qoladi */
+.gBg {
+  position: absolute;
+  inset: 0;
+  background: var(--grad);
+}
+.gateWrap:not(.still) .gBg {
+  opacity: calc(1 - clamp(0, var(--o) / 0.02, 1));
+}
+.gCorners {
+  position: absolute;
+  inset: 0;
+  opacity: calc(1 - clamp(0, (var(--o) - 0.02) / 0.12, 1));
+}
+/* laptop: hero’da ham burchaklar aynan shu joyda — ochilish foni bilan birga almashadi */
+.gCornersL {
+  opacity: calc(1 - clamp(0, var(--o) / 0.02, 1));
+}
+/* yuklanganda — sokin kirish (o‘zi alohida qatlam: scroll transformlari bilan to‘qnashmaydi) */
+.gateWrap:not(.still) .gIn {
+  animation: gIn 1.2s var(--gd, 0s) var(--ease) both;
+}
+@keyframes gIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 16));
+  }
+}
+.gateWrap:not(.still) .gCrownIn {
+  animation-name: gCrownIn;
+  animation-duration: 1.6s;
+}
+@keyframes gCrownIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * -10)) scale(0.92);
+  }
+}
+.gateWrap:not(.still) .gRollIn {
+  animation-name: gRollIn;
+  animation-duration: 1.4s;
+}
+@keyframes gRollIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 30));
+  }
+}
+.gateWrap:not(.still) .gDraw path[data-s] {
+  animation: gDraw 1.8s calc(var(--gd, 0s) + 0.1s) var(--ease) both;
+}
+.gateWrap:not(.still) .gDraw [data-f] {
+  animation: gPop 0.7s calc(var(--gd, 0s) + 0.7s) var(--spring) both;
+}
+@keyframes gDraw {
+  from {
+    stroke-dashoffset: 1.001;
+  }
+}
+@keyframes gPop {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+.gCrown {
+  --kf: clamp(0, (var(--o) - 0.1) / 0.12, 1);
+  opacity: calc(1 - var(--kf));
+  transform: translateY(calc(var(--u) * -26 * var(--kf)))
+    scale(calc(1 - 0.12 * var(--kf)));
+}
+.gCrownIn {
+  position: absolute;
+  inset: 0;
+}
+/* toj nuri: yuklanganda sekin yorishadi (--gi), scroll boshida to‘liq (glow 0 → 1) */
+.glow {
+  position: absolute;
+  inset: -34% -22%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(240, 210, 130, 0.62) 0%,
+    rgba(200, 162, 90, 0.26) 42%,
+    rgba(200, 162, 90, 0) 100%
+  );
+  opacity: calc(var(--gi) + (1 - var(--gi)) * clamp(0, var(--o) / 0.1, 1));
+  pointer-events: none;
+}
+.gateWrap:not(.still) .glow {
+  animation: glowIn 2.6s 0.9s ease-in-out both;
+}
+@keyframes glowIn {
+  to {
+    --gi: 0.3;
+  }
+}
+/* o‘ram → tayoqlar: tashuvchi (CSS: --dx, --dy, --s0 — o‘ram tanasi joyi) yakunda yuqori tayoq o‘rniga keladi */
+.carrier {
+  position: absolute;
+  --a: clamp(0, (var(--o) - 0.12) / 0.12, 1);
+  --eA: calc(var(--a) * var(--a) * (3 - 2 * var(--a)));
+  transform: translate(
+      calc(var(--u) * var(--dx) * (1 - var(--eA))),
+      calc(var(--u) * var(--dy) * (1 - var(--eA)))
+    )
+    scale(calc(var(--s0) + (1 - var(--s0)) * var(--eA)));
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+.rollBody {
+  opacity: calc(1 - clamp(0, (var(--o) - 0.17) / 0.07, 1));
+}
+/* zar ip — pastga sirg‘alib tushadi */
+.cord {
+  --cf: clamp(0, (var(--o) - 0.05) / 0.15, 1);
+  transform: translateY(calc(var(--u) * 90 * var(--cf) * var(--cf)));
+  opacity: calc(1 - clamp(0, (var(--o) - 0.1) / 0.1, 1));
+}
+/* muhr: ikkiga yoriladi (0.5 s ga teng qism), yarmlari aylanib tushadi */
+.seal {
+  --sk: clamp(0, (var(--o) - 0.03) / 0.06, 1);
+  --sf: clamp(0, (var(--o) - 0.07) / 0.16, 1);
+  opacity: calc(1 - clamp(0, (var(--o) - 0.16) / 0.07, 1));
+}
+.sealHalf {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50.2% 46%;
+}
+.sealL {
+  clip-path: polygon(
+    0 0,
+    50.6% 0,
+    50.6% 35%,
+    49.6% 39%,
+    51.2% 43%,
+    49.4% 47%,
+    51% 51%,
+    49.8% 55%,
+    50.4% 58%,
+    50.4% 100%,
+    0 100%
+  );
+  transform: translate(
+      calc(var(--u) * (var(--sk) * -2.5 - var(--sf) * 26)),
+      calc(var(--sf) * var(--sf) * var(--u) * 240)
+    )
+    rotate(calc(var(--sf) * -24deg));
+}
+.sealR {
+  clip-path: polygon(
+    50.6% 0,
+    100% 0,
+    100% 100%,
+    50.4% 100%,
+    50.4% 58%,
+    49.8% 55%,
+    51% 51%,
+    49.4% 47%,
+    51.2% 43%,
+    49.6% 39%,
+    50.6% 35%
+  );
+  transform: translate(
+      calc(var(--u) * (var(--sk) * 2.5 + var(--sf) * 28)),
+      calc(var(--sf) * var(--sf) * var(--u) * 260)
+    )
+    rotate(calc(var(--sf) * 22deg));
+}
+.gText {
+  position: absolute;
+  inset: 0;
+  --tf: clamp(0, (var(--o) - 0.02) / 0.1, 1);
+  opacity: calc(1 - var(--tf));
+  transform: translateY(calc(var(--u) * 16 * var(--tf)));
+}
+/* mokap/poster ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 01 · Hero — ochilgan farmon, ochilish ostida (sticky), --o bilan ═════ */
+.openWrap {
+  position: relative;
+}
+.openWrap > .hero {
+  position: sticky;
+  top: 0;
+}
+.openStill > .hero {
+  position: relative;
+}
+.openSpacer {
+  height: calc(100svh * 1.3);
+}
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--grad);
+}
+.hDeco {
+  position: absolute;
+  pointer-events: none;
+}
+.rodTop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 50%;
+}
+.rodTop,
+.rodBot {
+  opacity: clamp(0, (var(--o) - 0.15) / 0.07, 1);
+}
+.rodBot,
+.sheet {
+  --c: clamp(0, (var(--o) - 0.24) / 0.58, 1);
+  /* tez boshlanib sekinlashadi (tezlik 1.4 → 0.6): tayoqlar kelishi bilan varaq darrov ko‘rinarli ochiladi (o‘lik oraliq yo‘q) */
+  --eC: calc(var(--c) * (1.4 - 0.4 * var(--c)));
+}
+.rodBot {
+  transform: translateY(calc(var(--fu) * 672 * var(--eC)));
+  will-change: transform;
+}
+.rod {
+  position: absolute;
+  background: linear-gradient(180deg, #f7f0e0 0%, #e3d3b0 55%, #bfa97e 100%);
+  box-shadow: 0 calc(var(--fu) * 6) calc(var(--fu) * 12) rgba(0, 13, 8, 0.35);
+}
+.knob {
+  position: absolute;
+  border-radius: 50%;
+  background: #c8a25a;
+  box-shadow: 0 calc(var(--fu) * 2) calc(var(--fu) * 4) rgba(0, 13, 8, 0.3);
+}
+/* varaq: soya (drop-shadow) ochilgan qism bilan birga o‘sadi */
+.sheetSh {
+  position: absolute;
+  filter: drop-shadow(
+    0 calc(var(--fu) * 10) calc(var(--fu) * 15) rgba(0, 13, 8, 0.35)
+  );
+}
+.sheet {
+  position: absolute;
+  inset: 0;
+  opacity: clamp(0, (var(--o) - 0.236) / 0.01, 1);
+  clip-path: inset(0 0 max(0px, calc(var(--fu) * (671 - 672 * var(--eC)))) 0);
+}
+.parch {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #f3ead6 0%, #efe4cc 50%, #e8dab9 100%);
+}
+.pBorder {
+  position: absolute;
+  border-style: solid;
+  border-color: var(--gold);
+}
+/* «Shohona farmon» — siyoh bilan yozilgandek (chapdan o‘ngga) */
+.ink {
+  --ik: clamp(0, (var(--o) - 0.42) / 0.3, 1);
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--ik) * 125% - 25%), transparent calc(var(--ik) * 125%));
+  mask-image: linear-gradient(90deg, #000 calc(var(--ik) * 125% - 25%), transparent calc(var(--ik) * 125%));
+}
+.hPhoto {
+  position: absolute;
+  overflow: hidden;
+  background: #13291f;
+}
+.zoomIn {
+  --z: clamp(0, (var(--o) - 0.3) / 0.62, 1);
+  transform: scale(calc(1.08 - 0.08 * var(--z)));
+}
+.hArch path[data-s] {
+  stroke-dashoffset: calc(1.001 - 1.001 * clamp(0, (var(--o) - 0.34) / 0.44, 1));
+}
+.hSeal {
+  position: absolute;
+  --m: clamp(0, (var(--o) - 0.8) / 0.12, 1);
+  opacity: clamp(0, calc(var(--m) * 3), 1);
+  transform: scale(calc(1.3 - 0.3 * var(--m)));
+}
+/* laptop yon bezaklari (hero) — varaq ochilayotganda chiziladi */
+.oLineUp,
+.oLineDown {
+  transform: scaleY(clamp(0, (var(--o) - 0.36) / 0.36, 1));
+}
+.oLineUp {
+  transform-origin: 50% 100%;
+}
+.oLineDown {
+  transform-origin: 50% 0;
+}
+.oFade {
+  opacity: clamp(0, (var(--o) - 0.5) / 0.24, 1);
+}
+.oSpin {
+  --r: clamp(0, (var(--o) - 0.56) / 0.24, 1);
+  opacity: var(--r);
+  transform: rotate(calc((1 - var(--r)) * -135deg))
+    scale(calc(0.4 + 0.6 * var(--r)));
+}
+
+/* ═════ 03 · Bizning shahzoda ═════ */
+.photoBox {
+  background: #13291f;
+}
+
+/* ═════ 04 · Bayram kuni ═════ */
+/* taymer sakkizburchaklari sekin aylanadi (45° — o‘ziga teng shakl, chok ko‘rinmaydi) */
+.spin {
+  animation: octSpin 16s linear infinite;
+}
+@keyframes octSpin {
+  to {
+    transform: rotate(45deg);
+  }
+}
+.digits {
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+}
+.slot {
+  display: inline-block;
+}
+/* o‘zgargan raqam — yuqoridan sekin tushadi; shaffoflik yo‘q, kesilmaydi (padded «0» hech qachon yo‘qolmaydi) */
+.tick {
+  display: inline-block;
+  animation: tick 0.5s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: translateY(-0.14em);
+  }
+}
+
+/* ═════ 05 · Kun tartibi — oltin chiziq scroll bilan to‘ladi ═════ */
+.track,
+.fillLine {
+  position: absolute;
+  inset: 0;
+}
+.track {
+  background: rgba(200, 162, 90, 0.18);
+}
+.fillLine {
+  background: rgba(200, 162, 90, 0.7);
+  transform-origin: 50% 0;
+  transform: scaleY(var(--dp, 0));
+}
+
+/* ═════ Tugmalar, karta ═════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
+  white-space: nowrap;
+  background: var(--emerald);
+  color: var(--ivory);
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  background: #145046;
+}
+.card {
+  background: var(--ivory);
+  color: var(--ink);
+}
+.lbl {
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-style: solid;
+  border-color: var(--gold);
+  background: transparent;
+  transition: box-shadow 0.3s var(--ease);
+}
+.field:focus-within {
+  box-shadow: 0 0 0 3px rgba(200, 162, 90, 0.22);
+}
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.4;
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.input::placeholder {
+  color: rgba(123, 116, 104, 0.7);
+  opacity: 1;
+}
+.choice {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: var(--emerald);
+  color: var(--emerald);
+  background: transparent;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--emerald);
+  border-color: var(--emerald);
+  color: var(--ivory);
+}
+.choiceNo {
+  border-color: var(--burg);
+  color: var(--burg);
+}
+.choiceNo[aria-checked="true"] {
+  background: var(--burg);
+  border-color: var(--burg);
+  color: var(--ivory);
+}
+.step {
+  border-style: solid;
+  border-color: var(--gold);
+  color: var(--emerald);
+  background: transparent;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.submit {
+  background: var(--burg);
+  color: var(--ivory);
+  transition: transform 0.4s var(--spring);
+}
+.submit:hover {
+  transform: translateY(-2px);
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+
+/* ═════ 09 · Final — scroll bilan (--fc: 0 … 1 = Figma kadri; sahifa oxirigacha albatta tugaydi) ═════ */
+.finalWrap {
+  --fc: 0;
+}
+.fCrown {
+  position: absolute;
+  --fk: clamp(0, var(--fc) / 0.35, 1);
+  opacity: var(--fk);
+  transform: translateY(calc((1 - var(--fk)) * var(--u) * 30))
+    scale(calc(0.9 + 0.1 * var(--fk)));
+}
+/* toj ustida yaltirash — tojning o‘z shakli (alfa) bo‘yicha yorug‘ chiziq chapdan o‘ngga o‘tadi */
+.shimmer {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  background: linear-gradient(
+      105deg,
+      rgba(255, 247, 220, 0) 38%,
+      rgba(255, 247, 220, 0.95) 50%,
+      rgba(255, 247, 220, 0) 62%
+    )
+    no-repeat;
+  background-size: 300% 100%;
+  --sh: clamp(0, (var(--fc) - 0.3) / 0.45, 1);
+  background-position: calc((1 - var(--sh)) * 100%) 0;
+  pointer-events: none;
+}
+.fIn {
+  --fp: clamp(0, (var(--fc) - 0.35 - var(--fi) * 0.07) / 0.25, 1);
+  opacity: var(--fp);
+  transform: translateY(calc((1 - var(--fp)) * var(--u) * 14));
+}
+.fDiv path[data-s] {
+  stroke-dashoffset: calc(1.001 * (1 - clamp(0, (var(--fc) - 0.45) / 0.25, 1)));
+}
+.fDiv [data-f] {
+  --fq: clamp(0, (var(--fc) - 0.58) / 0.15, 1);
+  opacity: var(--fq);
+  transform: scale(var(--fq));
+}
+/* muhr «bosiladi»: 1.3 → 1, soya yaqinlashadi */
+.fSeal {
+  position: absolute;
+  --sm: clamp(0, (var(--fc) - 0.82) / 0.18, 1);
+  opacity: clamp(0, calc(var(--sm) * 2.5), 1);
+  transform: scale(calc(1.3 - 0.3 * var(--sm)));
+  filter: drop-shadow(
+    0 calc(var(--u) * (14 - 10 * var(--sm)))
+      calc(var(--u) * (16 - 10 * var(--sm))) rgba(0, 13, 8, 0.3)
+  );
+}
+
+/* ═════ Musiqa tugmasi (Figma: zumrad doira 52, oltin halqa, 3 oltin chiziq) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: #0f3b33;
+  box-shadow: 0 3px 8px rgba(0, 13, 8, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: musicIn 0.8s 1.2s var(--ease) both;
+}
+@keyframes musicIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.music svg {
+  display: block;
+  width: 52px;
+  height: 52px;
+}
+.musicEmbedded {
+  position: absolute;
+}
+.bar {
+  fill: #c8a25a;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: fill-opacity 0.3s var(--ease);
+}
+.music:not(.playing) .bar {
+  fill-opacity: 0.35;
+}
+.music.playing .bar {
+  animation: eq 1.05s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.35s);
+}
+@keyframes eq {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.4);
+  }
+}
+.strike {
+  stroke: #f5efe3;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  transition: stroke-dashoffset 0.3s var(--ease);
+}
+.music:not(.playing) .strike {
+  stroke-dashoffset: 0;
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--deep);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

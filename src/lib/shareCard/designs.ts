@@ -358,4 +358,28 @@ export const DESIGNS: Record<string, Design> = {
       { x: 548, y: 1138, anchor: "center", w: 330, items: [{ k: "date", s: st(f.nunito, 28, "#e9b44c", { weight: 700, ls: 0.16, min: 18 }) }] },
     ],
   },
+
+  /* Farmon (sunnat): o‘ralgan farmon (Figma 00) — toj va o‘ram fonda; mehmon — toj bilan o‘ram orasida;
+   * pastda taklif turi (oltin kursiv), bola ismi (fil suyagi), ajratgich (fonda), sana (oltin), joy */
+  farmon: {
+    fill: "#0f3b33",
+    bg: true,
+    date: "dots",
+    stacks: [
+      { y: 478, anchor: "center", w: 640, maxH: 170, items: [{ k: "guest", s: st(f.playfair, 50, "#f5efe3", { italic: true, maxLines: 2, min: 34, lh: 1.2 }) }] },
+      // taklif turi + ism — bitta ustun, pastki cheti ajratgich (fonda) ustida: ism 2 qatorga bo‘linsa, ustun yuqoriga o‘sadi (ustma-ust tushmaydi)
+      {
+        y: 1113,
+        anchor: "bottom",
+        w: 660,
+        maxH: 270,
+        items: [
+          { k: "kicker", s: st(f.playfair, 38, "#c8a25a", { italic: true, min: 26, lh: 1.2 }) },
+          { k: "names", mode: "two", s: st(f.playfair, 78, "#f5efe3", { min: 52, lh: 1.15 }), gap: 4 },
+        ],
+      },
+      { y: 1213, anchor: "center", w: 560, items: [{ k: "date", s: st(f.manrope, 24, "#c8a25a", { weight: 600, ls: 0.28, min: 18 }) }] },
+      { y: 1258, anchor: "top", w: 400, maxH: 80, items: [{ k: "venue", s: st(f.manrope, 26, "rgba(245,239,227,.8)", { maxLines: 2, min: 19, lh: 1.3 }) }] },
+    ],
+  },
 };

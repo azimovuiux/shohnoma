@@ -12,7 +12,7 @@ import { useLocale, useT } from "@/lib/i18n";
 import type { InvitationSiteProps } from "@/components/invitation/types";
 import { timerUnits } from "@/components/invitation/data";
 import { fetchSavedAnswer, loadSavedRsvp, rsvpUrl, saveRsvp, type RsvpStatus } from "@/components/invitation/Rsvp";
-import { useGuestName } from "../shared/guest";
+import { guestHello, useGuestName } from "../shared/guest";
 import { useCountdown, useCountUp, useInView, usePointer, useScrollProgress, useWide } from "../shared/hooks";
 import { A, ANOR_DEMO, ANOR_DEMO_RU, ANOR_DEMO_EN, DRESS, calendarWords, coordsFrom, downloadIcs, programIcon, untilPhrase, weekOf, type ProgramItem, type StoryItem } from "./data";
 import st from "./anor.module.css";
@@ -265,7 +265,7 @@ function Gate({ d, wide, onReveal, onStart }: { d: D; wide: boolean; onReveal: (
             ))}
           </h1>
           <p className={st.gateSub} style={{ marginTop: v(18, 14), fontSize: U(18), maxWidth: v(340, 900) }}>
-            {d.guest ? t("Hurmatli {guest},", { guest: d.guest }) : t("Aziz mehmon,")}
+            {d.guest ? guestHello(t, "Hurmatli {guest},", d.guest) : t("Aziz mehmon,")}
             {wide ? " " : <br />}
             {t("ushbu maktub siz uchun")}
           </p>

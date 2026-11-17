@@ -535,6 +535,42 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Bolalar milliy do‘ppida, kattalar bayramona libosda kelsa — quvonchimiz ikki barobar.", max: 160 },
     ],
   },
+  {
+    number: 13,
+    slug: "farmon",
+    name: "Farmon",
+    ceremony: "sunnat",
+    ceremonies: ["sunnat"],
+    style: "klassik",
+    priceOld: 249000,
+    price: 199000,
+    featured: true,
+    description: "Shohona uslubdagi sunnat to‘yi taklifnomasi: zumrad fon, oltin naqshlar va fil suyagi rangidagi farmon varag‘i. Sahifani pastga surganingizda o‘ralgan farmonning muhri sinadi, o‘ram ochilib, ichida o‘g‘lingizning surati va ismi yozilgan «Shohona farmon» ko‘rinadi. Keyin taklif matni, suratlar, sana va sanoq, kun tartibi, manzil, dress-kod va mehmonlar javobi; oxirida — oltin toj va muhr.",
+    descriptionRu: "Приглашение на суннат-той в царском стиле: изумрудный фон, золотые узоры и свиток цвета слоновой кости. Когда вы листаете страницу вниз, печать на свёрнутом указе ломается, свиток разворачивается, и появляется «Царский указ» с фото и именем вашего сына. Дальше текст приглашения, фотографии, дата и отсчёт, программа дня, адрес, дресс-код и ответы гостей; в конце — золотая корона и печать.",
+    descriptionEn: "A royal-style sunnat celebration invitation: an emerald background, gold ornaments and an ivory scroll. As you scroll down, the seal on the rolled decree breaks, the scroll unrolls and a “Royal decree” appears with your son’s photo and name. Then the invitation text, photos, the date and a countdown, the day’s schedule, the venue, the dress code and guest replies; at the end — a golden crown and a seal.",
+    palette: ["#0F3B33", "#0A2A24", "#C8A25A", "#F5EFE3"],
+    sample: { a: "Amirxon", b: "Karimovlar xonadoni", date: "15 · 05 · 2027", venue: "«Oqsaroy» saroyi", time: "07:00" },
+    theme: { bg: ["#0f3b33", "#0a2a24"], ink: "#f5efe3", accent: "#c8a25a", soft: "#efe4cc", script: "cormorant", color: "yashil" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "Kun tartibi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Nahor oshi", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Erta tongda mehmonlar bilan osh", max: 60 },
+        },
+      },
+      { key: "age", type: "number", label: "O‘g‘lingizning yoshi", placeholder: "7", max: 2, hint: "Ixtiyoriy · «Bizning shahzoda» bo‘limida: «7 yoshda»" },
+      { key: "quote", type: "text", label: "Iqtibos", placeholder: "Kichik yoshda — katta qadam.", max: 60, hint: "Ixtiyoriy · «Bizning shahzoda» bo‘limida; bo‘sh qolsa — «Kichik yoshda — katta qadam.»" },
+      { key: "city", type: "text", label: "Shahar", placeholder: "Toshkent", max: 30, hint: "Ixtiyoriy · farmon varag‘ida sana yonida; bo‘sh qolsa — manzildan olinadi" },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Milliy", "Kechki", "Klassik", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Bolalar — milliy to‘n va do‘ppida, kattalar — nafis bayramona libosda.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -715,6 +751,13 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   ertak: [
     { title: "Asosiy surat", where: "«Bizning shohzoda» — ark ichidagi katta surat. Bo‘lmasa — bo‘lim chiqmaydi" },
     { title: "Surat · 2", where: "«Bizning shohzoda» — doira ichidagi kichik surat" },
+  ],
+  /** Farmon (sunnat) — bo‘sh slotlar o‘rnida shablonning o‘z rasmlari (do‘ppi, saroy zali) */
+  farmon: [
+    { title: "Asosiy surat", where: "Farmon varag‘idagi ravoq ichida. Bo‘lmasa — do‘ppi surati" },
+    { title: "Surat · 2", where: "«Bizning shahzoda» — ravoqdagi katta surat. Bo‘lmasa — bo‘lim chiqmaydi" },
+    { title: "Surat · 3", where: "«Bizning shahzoda» — kichik kvadrat surat. Bo‘lmasa — do‘ppi surati" },
+    { title: "Surat · 4", where: "«Manzil» — oltin ramkadagi surat. Bo‘lmasa — saroy zali surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
