@@ -1,18 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDown2, ArrowRight, Call, Instagram, Send2, TickCircle, Whatsapp } from "@/components/icons";
-import { TelegramIcon } from "@/components/TelegramIcon";
+import { ArrowDown2, ArrowRight, Send2, TickCircle } from "@/components/icons";
+import { SocialIcon } from "@/components/SocialIcon";
+import { socialChannels, useSocial } from "@/lib/social";
 import { ceremonyLabel, type Ceremony } from "@/lib/templates";
 import { site } from "@/lib/site";
 import { useT } from "@/lib/i18n";
 
-const channels = [
-  { icon: <TelegramIcon size={20} />, name: "Telegram", action: "Yozish", href: site.telegram },
-  { icon: <Whatsapp size={20} />, name: "WhatsApp", action: "Yozish", href: site.whatsapp },
-  { icon: <Instagram size={20} />, name: "Instagram", action: "Sahifamiz", href: site.instagram },
-  { icon: <Call size={20} />, name: "Qo‘ng‘iroq", action: "Qo‘ng‘iroq qilish", href: site.phoneHref },
-];
 
 type ReplyVia = "telegram" | "call" | "whatsapp";
 const replyLabel: Record<ReplyVia, string> = { telegram: "Telegram", call: "Qo‘ng‘iroq", whatsapp: "WhatsApp" };
@@ -28,6 +23,7 @@ export function formatPhone(raw: string) {
 
 export function Contact() {
   const t = useT();
+  const channels = socialChannels(useSocial(), site.telegram);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [ceremony, setCeremony] = useState<Ceremony | "">("");
@@ -67,14 +63,16 @@ export function Contact() {
           </h2>
           <ul className="grid grid-cols-2 gap-3 sm:gap-4">
             {channels.map((c) => (
-              <li key={c.name}>
+              <li key={c.key}>
                 <a
                   href={c.href}
-                  target={c.href.startsWith("http") || c.href.startsWith("/api/") ? "_blank" : undefined}
+                  target={c.external ? "_blank" : undefined}
                   rel="noopener noreferrer"
                   className="flex h-full flex-col gap-4 rounded-[18px] border border-line p-4 transition-colors hover:bg-bg-soft sm:p-[22px]"
                 >
-                  <span className="flex size-11 items-center justify-center rounded-full bg-maroon text-ink-inverse">{c.icon}</span>
+                  <span className="flex size-11 items-center justify-center rounded-full bg-maroon text-ink-inverse">
+                    <SocialIcon type={c.kind} size={20} />
+                  </span>
                   <span className="flex flex-col gap-1">
                     <span className="text-[15px] font-semibold leading-[1.35] text-ink">{t(c.name)}</span>
                     <span className="inline-flex items-center gap-1.5 t-body-s text-ink-2">

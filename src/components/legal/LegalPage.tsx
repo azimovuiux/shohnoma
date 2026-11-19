@@ -4,10 +4,12 @@ import Link from "@/components/LocalLink";
 import type { ReactNode } from "react";
 import { ArrowLeft, InfoCircle } from "@/components/icons";
 import { site } from "@/lib/site";
+import { phoneDisplay, useSocial } from "@/lib/social";
 import { useT } from "@/lib/i18n";
 
 export function LegalPage({ title, italic, updated, children }: { title: string; italic: string; updated: string; children: ReactNode }) {
   const t = useT();
+  const social = useSocial();
   return (
     <div className="mx-auto max-w-[1440px] px-5 pb-24 pt-8 lg:px-10 xl:px-[120px] lg:pt-10">
       <Link href="/" className="inline-flex items-center gap-2 t-nav text-ink-2 hover:text-maroon">
@@ -26,11 +28,27 @@ export function LegalPage({ title, italic, updated, children }: { title: string;
           {t("Savollar bo‘yicha:")}{" "}
           <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="text-maroon hover:underline">
             {site.telegramHandle}
-          </a>{" "}
-          ·{" "}
-          <a href={site.phoneHref} className="text-maroon hover:underline">
-            {site.phone}
           </a>
+          {social.phone && (
+            <>
+              {" "}
+              ·{" "}
+              <a href={`tel:${social.phone}`} className="text-maroon hover:underline">
+                {phoneDisplay(social.phone)}
+              </a>
+            </>
+          )}
+          {social.links
+            .filter((l) => l.type === "email")
+            .map((l) => (
+              <span key={l.url}>
+                {" "}
+                ·{" "}
+                <a href={l.url} className="text-maroon hover:underline">
+                  {l.url.replace(/^mailto:/, "")}
+                </a>
+              </span>
+            ))}
         </div>
       </article>
     </div>

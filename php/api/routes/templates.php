@@ -11,8 +11,9 @@ route('GET', '/templates.js', function () {
     }
     try { $cats = categories(); } catch (Throwable $e) { $cats = CATEGORY_DEFAULTS; }
     try { $home = home_templates(); } catch (Throwable $e) { $home = []; }
+    try { $social = social_settings(); } catch (Throwable $e) { $social = null; }
     $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP;
-    $js = 'window.__SHOHNOMA_TEMPLATES__=' . json_encode($list, $flags) . ';window.__SHOHNOMA_CATEGORIES__=' . json_encode($cats, $flags) . ';window.__SHOHNOMA_HOME__=' . json_encode($home, $flags) . ';';
+    $js = 'window.__SHOHNOMA_TEMPLATES__=' . json_encode($list, $flags) . ';window.__SHOHNOMA_CATEGORIES__=' . json_encode($cats, $flags) . ';window.__SHOHNOMA_HOME__=' . json_encode($home, $flags) . ';window.__SHOHNOMA_SOCIAL__=' . json_encode($social, $flags) . ';';
     // Har safar tekshiriladi (o‘zgarmagan bo‘lsa — 304), admin o‘zgarishi darhol ko‘rinadi
     $etag = '"' . substr(sha1($js), 0, 20) . '"';
     header('Content-Type: application/javascript; charset=utf-8');

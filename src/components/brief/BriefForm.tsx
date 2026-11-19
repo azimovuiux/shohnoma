@@ -22,6 +22,7 @@ import { TelegramIcon } from "@/components/TelegramIcon";
 import { Field, Input, PhoneInput, Textarea, phoneDigits } from "@/components/ui";
 import { star8Path } from "@/lib/ornament";
 import { site } from "@/lib/site";
+import { useSocial } from "@/lib/social";
 
 type Ceremony = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun" | "boshqa";
 type ContactVia = "telegram" | "call" | "sms";
@@ -112,6 +113,7 @@ function StyleCard({ label, value, active, onClick }: { label: string; value: st
 
 function HowItWorksPanel({ sending, onSubmit }: { sending: boolean; onSubmit?: () => void }) {
   const t = useT();
+  const social = useSocial();
   const steps = [
     { icon: <DocumentText size={16} />, title: "Brif yuborasiz", text: "2–3 daqiqa" },
     { icon: <Messages size={16} />, title: "Dizayner bog‘lanadi", text: "24 soat ichida" },
@@ -147,9 +149,11 @@ function HowItWorksPanel({ sending, onSubmit }: { sending: boolean; onSubmit?: (
         <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary flex-1 !px-3 !py-[13px]">
           <TelegramIcon size={16} /> Telegram
         </a>
-        <a href={site.phoneHref} className="btn btn-secondary flex-1 !px-3 !py-[13px]">
-          <Call size={16} /> {t("Qo‘ng‘iroq")}
-        </a>
+        {social.phone && (
+          <a href={`tel:${social.phone}`} className="btn btn-secondary flex-1 !px-3 !py-[13px]">
+            <Call size={16} /> {t("Qo‘ng‘iroq")}
+          </a>
+        )}
       </div>
       <p className="t-body-s text-ink-2">{t("Brif bepul.")}</p>
     </div>

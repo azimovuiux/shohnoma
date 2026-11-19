@@ -6,6 +6,7 @@ import { Field, Input, Segment, api, confirmDialog, useToast } from "@/component
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { TickCircle } from "@/components/icons";
 import { AdminError, AdminLoading, AdminTitle } from "../shared";
+import { AdminSocialCard } from "../AdminSocialCard";
 
 type Item = { set: boolean; value?: string | null; hint?: string | null; source: "admin" | "env" | null };
 type Resp = {
@@ -60,7 +61,10 @@ export function AdminSettings() {
 
   return (
     <>
-      <AdminTitle title="Sozlamalar" sub="Telegram bot va to‘lov ma’lumotlari. O‘zgarishlar darhol kuchga kiradi — serverdagi faylga tegish shart emas." />
+      <AdminTitle title="Sozlamalar" sub="Ijtimoiy tarmoqlar, Telegram bot va to‘lov ma’lumotlari. O‘zgarishlar darhol kuchga kiradi — serverdagi faylga tegish shart emas." />
+      <div className="mb-6">
+        <AdminSocialCard />
+      </div>
       <div className="grid gap-6 xl:grid-cols-2">
         <TelegramCard data={data} save={save} reload={load} />
         <div className="flex flex-col gap-6">

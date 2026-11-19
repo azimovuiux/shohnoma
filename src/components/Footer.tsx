@@ -3,8 +3,9 @@
 import Link from "@/components/LocalLink";
 import { useT } from "@/lib/i18n";
 import { LogoMark } from "@/components/Logo";
-import { Call, Instagram, ShieldTick, Whatsapp } from "@/components/icons";
-import { TelegramIcon } from "./TelegramIcon";
+import { ShieldTick } from "@/components/icons";
+import { SocialIcon } from "./SocialIcon";
+import { socialChannels, useSocial } from "@/lib/social";
 import { site } from "@/lib/site";
 
 const columns = [
@@ -38,16 +39,11 @@ const columns = [
   },
 ];
 
-const socials = [
-  { label: "Telegram", href: site.telegram, icon: <TelegramIcon size={17} /> },
-  { label: "Instagram", href: site.instagram, icon: <Instagram size={17} /> },
-  { label: "WhatsApp", href: site.whatsapp, icon: <Whatsapp size={17} /> },
-  { label: "Qo‘ng‘iroq", href: site.phoneHref, icon: <Call size={17} /> },
-];
 
 /** To‘liq footer (Figma 75:6312) — maroon-deep fon */
 export function Footer() {
   const t = useT();
+  const channels = socialChannels(useSocial(), site.telegram);
   return (
     <footer className="overflow-hidden bg-maroon-deep text-ink-inverse">
       <div className="mx-auto max-w-[1440px] px-5 pt-16 lg:px-10 xl:px-[120px] lg:pt-24">
@@ -58,16 +54,17 @@ export function Footer() {
             </Link>
             <p className="t-body-s w-[260px] opacity-70">{t("Marosimlar uchun shohona taklifnoma saytlari.")}</p>
             <div className="flex gap-2.5">
-              {socials.map((s) => (
+              {channels.map((c) => (
                 <a
-                  key={s.label}
-                  href={s.href}
-                  target={s.href.startsWith("tel:") ? undefined : "_blank"}
+                  key={c.key}
+                  href={c.href}
+                  target={c.external ? "_blank" : undefined}
                   rel="noopener noreferrer"
-                  aria-label={t(s.label)}
+                  aria-label={t(c.name)}
+                  title={t(c.name)}
                   className="flex size-10 items-center justify-center rounded-full border border-ink-inverse/30 transition-colors hover:bg-white/10"
                 >
-                  {s.icon}
+                  <SocialIcon type={c.kind} size={17} />
                 </a>
               ))}
             </div>

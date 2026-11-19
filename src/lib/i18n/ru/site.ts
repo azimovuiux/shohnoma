@@ -324,4 +324,9 @@ export const ru: Record<string, string> = {
   "Boshqa usul": "Другой способ",
   "Payme, Click yoki boshqa qulay usulda.": "Через Payme, Click или другим удобным способом.",
   "Payme, Click yoki boshqa qulay usulda. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click или другим удобным способом. После подтверждения оплаты ссылка сразу готова.",
+  "Kanalimiz": "Наш канал",
+  "Profilimiz": "Наш профиль",
+  "Telegram kanal": "Telegram-канал",
+  "Sayt / boshqa havola": "Сайт / другая ссылка",
+  "Email": "Email",
 };

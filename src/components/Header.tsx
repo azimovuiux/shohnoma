@@ -8,8 +8,6 @@ import {
   Call,
   CloseCircle,
   HambergerMenu,
-  Instagram,
-  Whatsapp,
   TickCircle,
   Receipt2,
   Card,
@@ -28,6 +26,8 @@ import { openChat } from "./FloatingContact";
 export type HeaderUser = AccountUser | null;
 import { Logo } from "./Logo";
 import { TelegramIcon } from "./TelegramIcon";
+import { SocialIcon } from "./SocialIcon";
+import { phoneDisplay, socialChannels, useSocial, workHoursText } from "@/lib/social";
 import { FlagGB, FlagRU, FlagUZ } from "./Flag";
 import { mainNav, site } from "@/lib/site";
 import { NotificationBellDesktop, NotificationBellMobile, NotificationToasts, useNotifications } from "./Notifications";
@@ -127,6 +127,9 @@ function MobileMenu({
   app?: boolean;
 }) {
   const t = useT();
+  const locale = useLocale();
+  const social = useSocial();
+  const channels = socialChannels(social, site.telegram);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
@@ -242,40 +245,22 @@ function MobileMenu({
             <ProfileCircle size={18} /> {t("Kirish")}
           </Link>
         )}
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            <a
-              href={site.telegram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="icon-btn !h-10 !w-10"
-              aria-label="Telegram"
-            >
-              <TelegramIcon size={18} />
-            </a>
-            <a
-              href={site.instagram}
-              className="icon-btn !h-10 !w-10"
-              aria-label="Instagram"
-            >
-              <Instagram size={18} />
-            </a>
-            <a
-              href={site.whatsapp}
-              className="icon-btn !h-10 !w-10"
-              aria-label="WhatsApp"
-            >
-              <Whatsapp size={18} />
-            </a>
-            <a
-              href={site.phoneHref}
-              className="icon-btn !h-10 !w-10"
-              aria-label={t("Qo‘ng‘iroq")}
-            >
-              <Call size={18} />
-            </a>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            {channels.map((c) => (
+              <a
+                key={c.key}
+                href={c.href}
+                target={c.external ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                className="icon-btn !h-10 !w-10"
+                aria-label={t(c.name)}
+              >
+                <SocialIcon type={c.kind} size={18} />
+              </a>
+            ))}
           </div>
-          <span className="t-body-s text-ink-2">{t(site.workHours)}</span>
+          <span className="t-body-s text-ink-2">{workHoursText(social, locale, t)}</span>
         </div>
       </div>
     </div>
@@ -400,6 +385,7 @@ function AccountMenu({
 export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
   const app = variant === "app";
   const t = useT();
+  const social = useSocial();
   const { me, loading: meLoading } = useMe();
   const user: HeaderUser = me?.user
     ? {
@@ -456,13 +442,11 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
             <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="Telegram">
               <TelegramIcon size={18} />
             </a>
-            <a
-              href={site.phoneHref}
-              className="icon-btn max-xl:!hidden"
-              aria-label={t("Qo‘ng‘iroq")}
-            >
-              <Call size={18} />
-            </a>
+            {social.phone && (
+              <a href={`tel:${social.phone}`} className="icon-btn max-xl:!hidden" aria-label={t("Qo‘ng‘iroq")} title={phoneDisplay(social.phone)}>
+                <Call size={18} />
+              </a>
+            )}
             {user && <NotificationBellDesktop s={notif} />}
             {user ? (
               <AccountMenu user={user} onLogout={logout} />

@@ -6,6 +6,7 @@ import { useLocale, useT } from "@/lib/i18n";
 import { ArrowRight, Call, CloseCircle, Copy, DocumentText, Gallery, Timer1 } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { site } from "@/lib/site";
+import { phoneDisplay, useSocial, workHoursText } from "@/lib/social";
 import { useCopy } from "@/components/ui";
 import { formatPrice } from "@/lib/format";
 import { star8Path } from "@/lib/ornament";
@@ -246,8 +247,10 @@ export function P2PSupport({ order, template, tg, phone }: { order: FlowOrder; t
   const sum = formatPrice(order.amount, true, locale);
   const msg = t("Assalomu alaykum! №{code} buyurtmani to‘lamoqchiman. Summa: {sum}.", { code: order.code, sum });
   const tgUrl = tg ? `https://t.me/${tg}?text=${encodeURIComponent(msg)}` : site.telegram;
-  const phoneShown = phone ? phone.replace(/^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/, "+998 $1 $2 $3 $4") : site.phone;
-  const phoneHref = phone ? `tel:${phone}` : site.phoneHref;
+  const social = useSocial();
+  const phoneNum = phone || social.phone;
+  const phoneShown = phoneDisplay(phoneNum);
+  const phoneHref = phoneNum ? `tel:${phoneNum}` : null;
 
   const button = (
     <a href={tgUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary w-full">
@@ -309,6 +312,7 @@ export function P2PSupport({ order, template, tg, phone }: { order: FlowOrder; t
               <span className="t-body-s text-ink-2">{tg ? `@${tg}` : site.telegramHandle}</span>
             </span>
           </a>
+          {phoneHref && (
           <a href={phoneHref} className="flex items-center gap-3 rounded-xl border border-line bg-bg-base px-4 py-4 hover:bg-bg-soft/60">
             <span className="flex size-10 items-center justify-center rounded-full bg-bg-soft text-maroon">
               <Call size={18} />
@@ -318,12 +322,13 @@ export function P2PSupport({ order, template, tg, phone }: { order: FlowOrder; t
               <span className="t-body-s text-ink-2">{phoneShown}</span>
             </span>
           </a>
+          )}
         </div>
         <p className="flex items-center gap-2 t-body-s text-ink-2">
           <span className="text-gold">
             <Timer1 size={16} />
           </span>
-          {t("Xabaringizga ish vaqtida tez javob beramiz: {hours}.", { hours: t(site.workHours) })}
+          {t("Xabaringizga ish vaqtida tez javob beramiz: {hours}.", { hours: workHoursText(social, locale, t) })}
         </p>
       </div>
       <MobileBar>{button}</MobileBar>

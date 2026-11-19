@@ -96,6 +96,9 @@ QR kod brauzerda yaratiladi (`qrcode` paketi) — server endpointi yo‘q.
 | GET | `/api/admin/dashboard` | `{ok, todayOrders, todayPaid, monthRevenue, monthPaidCount, activeInvitations, pendingP2p, newBriefs, newLeads, recent: {order, invitation}[]}` |
 | GET | `/api/admin/orders?q=&status=&page=` | `{ok, total, items: {order, invitation, owner: {phone,name}|null}[]}` (30 tadan) |
 | PATCH | `/api/admin/orders/:id` | `{status}` |
+| GET | `/api/admin/orders/:id` | id yoki SH-kod → `{ok, order, invitation, owner, contactPhone, payments[], stats, guests[], special[]}` (admin buyurtma sahifasi `/admin/buyurtmalar/b/?id=`) |
+| PUT | `/api/admin/templates-home` | `{slugs: string[]}` (≤10, faol shablonlar) → bosh sahifa ro‘yxati va tartibi; `/api/templates.js` → `window.__SHOHNOMA_HOME__` |
+| GET/PUT | `/api/admin/social` | `{links: {type, url, label?}[], phone, workHours, workHoursRu, workHoursEn, hideTelegramBot}` — ijtimoiy tarmoqlar va aloqa; «@nom»/telefon to‘liq havolaga aylantiriladi; `/api/templates.js` → `window.__SHOHNOMA_SOCIAL__` |
 | GET | `/api/admin/payments` | `{ok, pending: {payment, order, invitation}[], recent: {...}[]}` |
 | POST | `/api/admin/payments/:id` | `{action: approve|reject, note}` |
 | GET | `/api/admin/briefs` · PATCH `/api/admin/briefs/:id` | `{ok, items: Brief[]}` · `{status}` |
