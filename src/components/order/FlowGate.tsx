@@ -16,6 +16,7 @@ import { getTemplate, type Template } from "@/lib/templates";
 import type { FlowOrder } from "./types";
 import { CreateDraft } from "./CreateDraft";
 import { useFlowPage, type FlowStep } from "./FlowGuard";
+import { AdminViewBanner } from "@/components/admin/AdminViewBanner";
 
 export type Step = "marosim" | "tafsilotlar" | "korib-chiqish" | "tolov" | "other";
 const stepNo: Partial<Record<Step, FlowStep>> = { marosim: 1, tafsilotlar: 2, "korib-chiqish": 3, tolov: 4 };
@@ -178,5 +179,10 @@ export function FlowGate({
       </div>
     );
   if (loading || !ctx || target) return <PageLoading />;
-  return <>{children(ctx)}</>;
+  return (
+    <>
+      <AdminViewBanner orderId={ctx.raw.order.id} code={ctx.raw.order.code} userId={ctx.raw.order.userId} />
+      {children(ctx)}
+    </>
+  );
 }

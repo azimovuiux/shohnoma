@@ -77,6 +77,27 @@ route('GET', '/admin/orders', function () {
     json_out(['ok' => true, 'total' => $total, 'items' => admin_order_rows($rows)]);
 });
 
+/** Bitta buyurtma: barcha ma’lumot (egasi, taklifnoma, to‘lovlar, mehmon javoblari, maxsus mehmonlar) */
+route('GET', '/admin/orders/:id', function ($p) {
+    require_admin();
+    $o = one('SELECT * FROM orders WHERE id = ? OR code = ?', [$p['id'], strtoupper($p['id'])]) ?? fail('Buyurtma topilmadi', 404);
+    $i = one('SELECT * FROM invitations WHERE order_id = ?', [$o['id']]);
+    $owner = $o['user_id'] ? one('SELECT * FROM users WHERE id = ?', [$o['user_id']]) : null;
+    $guests = $i ? all('SELECT * FROM guest_responses WHERE invitation_id = ? ORDER BY created_at DESC LIMIT 300', [$i['id']]) : [];
+    $special = $i ? all('SELECT name, open_count, first_opened_at FROM special_guests WHERE invitation_id = ? ORDER BY pos, created_at', [$i['id']]) : [];
+    json_out([
+        'ok' => true,
+        'order' => order_out($o) + ['priceLocked' => !empty($o['price_locked'])],
+        'invitation' => $i ? invitation_out($i) : null,
+        'owner' => $owner ? admin_user_out($owner) : null,
+        'contactPhone' => $i['contact_phone'] ?? null,
+        'payments' => array_map('payment_out', all('SELECT * FROM payments WHERE order_id = ? ORDER BY created_at DESC', [$o['id']])),
+        'stats' => $i ? invitation_stats($i['id']) : null,
+        'guests' => array_map('guest_out', $guests),
+        'special' => array_map(fn($g) => ['name' => $g['name'], 'opens' => (int)$g['open_count'], 'openedAt' => iso($g['first_opened_at'])], $special),
+    ]);
+});
+
 route('PATCH', '/admin/orders/:id', function ($p) {
     require_admin();
     $b = body();

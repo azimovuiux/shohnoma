@@ -53,7 +53,9 @@ export function AdminDashboard() {
           const v = orderStatusView[order.status];
           return (
             <li key={order.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5">
-              <span className="w-24 t-title text-ink">{order.code}</span>
+              <Link href={`/admin/buyurtmalar/b/?id=${order.id}`} className="w-24 t-title text-maroon hover:underline">
+                {order.code}
+              </Link>
               <span className="min-w-0 flex-1 truncate t-body-m text-ink">
                 {[inv.personA, inv.personB].filter(Boolean).join(" & ") || "—"} · <span className="text-ink-2">{getTemplate(order.templateSlug)?.name}</span>
               </span>

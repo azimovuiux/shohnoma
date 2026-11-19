@@ -1,35 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useApi } from "@/lib/client";
 import type { Invitation, Order, OrderStatus } from "@/lib/types";
 import { AdminError, AdminLoading, AdminRefreshProvider, AdminTitle, Empty, fmtDateTime } from "../shared";
 import { StatusSelect } from "../StatusSelect";
 import { useReloadCounts } from "../AdminShell";
-import { StatusBadge, Toggle, api, confirmDialog, useToast } from "@/components/ui";
-import { Edit, ExportSquare, SearchNormal1, Trash } from "@/components/icons";
-import { formatPrice } from "@/lib/format";
+import { StatusBadge } from "@/components/ui";
+import { ExportSquare, SearchNormal1 } from "@/components/icons";
+import { DeleteOrder, MusicToggle, PriceEdit, orderStatuses, priceEditable, statusLabel } from "../orderBits";
 import { formatPhoneDisplay, orderStatusView, splitDate } from "@/lib/display";
 import { getTemplate } from "@/lib/templates";
 import { useTemplates } from "@/lib/useTemplates";
 
 const PAGE = 30;
-const orderStatuses: OrderStatus[] = ["draft", "pending_payment", "payment_processing", "p2p_review", "p2p_rejected", "payment_failed", "paid", "active", "archived"];
 type Row = { order: Order; invitation: Invitation; owner: { phone: string | null; name: string | null; telegramUser?: string | null } | null };
 
-const statusLabel: Record<OrderStatus, string> = {
-  draft: "Qoralama",
-  pending_payment: "To‘lov kutilmoqda",
-  payment_processing: "To‘lov jarayonida",
-  p2p_review: "Chek tekshirilmoqda",
-  p2p_rejected: "Chek rad etilgan",
-  payment_failed: "To‘lov o‘tmadi",
-  paid: "To‘langan",
-  active: "Faol",
-  archived: "Arxiv",
-};
+
 
 export function AdminOrders() {
   return (
@@ -147,7 +136,11 @@ function OrdersInner() {
                 const live = order.status === "active" || order.status === "paid" || order.status === "archived";
                 return (
                   <tr key={order.id} className="align-middle t-body-m text-ink">
-                    <td className="px-4 py-3 font-semibold">{order.code}</td>
+                    <td className="px-4 py-3 font-semibold">
+                      <Link href={`/admin/buyurtmalar/b/?id=${order.id}`} className="text-maroon hover:underline">
+                        {order.code}
+                      </Link>
+                    </td>
                     <td className="px-4 py-3">{getTemplate(order.templateSlug)?.name ?? order.templateSlug}</td>
                     <td className="max-w-[200px] truncate px-4 py-3">{[inv.personA, inv.personB].filter(Boolean).join(" & ") || "—"}</td>
                     <td className="px-4 py-3 t-body-s">{d ? `${d.day} ${d.time}` : "—"}</td>
@@ -166,7 +159,7 @@ function OrdersInner() {
                       <MusicToggle orderId={order.id} initial={inv.musicEnabled} />
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <PriceEdit orderId={order.id} initial={order.amount} editable={["draft", "pending_payment", "payment_failed", "p2p_rejected"].includes(order.status)} />
+                      <PriceEdit orderId={order.id} initial={order.amount} editable={priceEditable(order.status)} />
                     </td>
                     <td className="px-4 py-3 t-body-s text-ink-2 whitespace-nowrap">{fmtDateTime(order.createdAt)}</td>
                     <td className="px-4 py-3 t-body-s whitespace-nowrap">
@@ -179,8 +172,11 @@ function OrdersInner() {
                             /{inv.slug} <ExportSquare size={13} />
                           </a>
                         )}
-                        <Link href={`/kabinet/t/${inv.id}/`} className="text-ink-2 hover:text-maroon">
-                          Kabinetda ochish
+                        <Link href={`/admin/buyurtmalar/b/?id=${order.id}`} className="font-medium text-maroon hover:underline">
+                          Batafsil →
+                        </Link>
+                        <Link href={`/kabinet/t/${inv.id}/tahrirlash/`} className="text-ink-2 hover:text-maroon">
+                          Tahrirlash
                         </Link>
                         <DeleteOrder id={order.id} code={order.code} paid={live} onDone={() => (reload(true), reloadCounts())} />
                       </div>
@@ -214,108 +210,5 @@ function OrdersInner() {
         </div>
       )}
     </>
-  );
-}
-
-/** Taklifnomaning fon musiqasini yoqish/o‘chirish (mijoz ham kabinetida o‘zgartira oladi) */
-/** Narx: to‘lanmagan buyurtmada bosib o‘zgartiriladi */
-function PriceEdit({ orderId, initial, editable }: { orderId: string; initial: number; editable: boolean }) {
-  const toast = useToast();
-  const [amount, setAmount] = useState(initial);
-  const [edit, setEdit] = useState(false);
-  const [val, setVal] = useState(String(initial));
-  const [busy, setBusy] = useState(false);
-  if (!editable) return <>{formatPrice(amount)}</>;
-  if (!edit)
-    return (
-      <button type="button" onClick={() => (setVal(String(amount)), setEdit(true))} className="group inline-flex items-center gap-1.5 hover:text-maroon" title="Narxni o‘zgartirish">
-        {formatPrice(amount)} <Edit size={14} className="opacity-50 group-hover:opacity-100" />
-      </button>
-    );
-  const save = async () => {
-    const n = Number(val.replace(/\D/g, ""));
-    if (n === amount) return setEdit(false);
-    if (!(await confirmDialog({ title: "Narxni o‘zgartirasizmi?", text: `${formatPrice(amount)} → ${formatPrice(n)}. Mijoz yangi narxni to‘laydi.`, ok: "O‘zgartirish" }))) return;
-    setBusy(true);
-    try {
-      await api(`/api/admin/orders/${orderId}`, { method: "PATCH", json: { amount: n } });
-      setAmount(n);
-      setEdit(false);
-      toast("Narx o‘zgartirildi");
-    } catch (e) {
-      toast((e as Error).message, "error");
-    } finally {
-      setBusy(false);
-    }
-  };
-  return (
-    <form
-      className={`flex items-center gap-1.5 ${busy ? "pointer-events-none opacity-60" : ""}`}
-      onSubmit={(e) => {
-        e.preventDefault();
-        void save();
-      }}
-    >
-      <input
-        autoFocus
-        inputMode="numeric"
-        value={val.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
-        onChange={(e) => setVal(e.target.value)}
-        onKeyDown={(e) => e.key === "Escape" && setEdit(false)}
-        aria-label="Yangi narx (so‘m)"
-        className="h-9 w-[110px] rounded-lg border border-line bg-bg-base px-2.5 text-[14px] outline-none focus:border-maroon"
-      />
-      <button type="submit" className="btn btn-primary !h-9 !px-3 !py-0 text-[13px]">Saqlash</button>
-      <button type="button" onClick={() => setEdit(false)} className="px-1 text-[13px] text-ink-2 hover:text-ink">Bekor</button>
-    </form>
-  );
-}
-
-function MusicToggle({ orderId, initial }: { orderId: string; initial: boolean }) {
-  const toast = useToast();
-  const [on, setOn] = useState(initial);
-  const [busy, setBusy] = useState(false);
-  const change = async (v: boolean) => {
-    setBusy(true);
-    setOn(v);
-    try {
-      await api(`/api/admin/orders/${orderId}`, { method: "PATCH", json: { musicEnabled: v } });
-      toast(v ? "Musiqa yoqildi" : "Musiqa o‘chirildi");
-    } catch (e) {
-      setOn(!v);
-      toast((e as Error).message, "error");
-    } finally {
-      setBusy(false);
-    }
-  };
-  return (
-    <span className={busy ? "pointer-events-none opacity-60" : ""}>
-      <Toggle checked={on} onChange={change} label="Fon musiqasi" />
-    </span>
-  );
-}
-
-/** Buyurtmani butunlay o‘chirish (taklifnoma, mehmon javoblari, to‘lov yozuvlari bilan) */
-function DeleteOrder({ id, code, paid, onDone }: { id: string; code: string; paid: boolean; onDone: () => void }) {
-  const toast = useToast();
-  const [busy, setBusy] = useState(false);
-  const run = async () => {
-    const warn = paid ? "DIQQAT: bu to‘langan taklifnoma — mehmonlardagi havola ishlamay qoladi, to‘lov yozuvi ham o‘chadi." : "";
-    if (!(await confirmDialog({ title: `${code} buyurtmasi butunlay o‘chirilsinmi?`, text: warn || "Taklifnoma, mehmon javoblari va to‘lov yozuvlari ham o‘chadi.", ok: "O‘chirish", danger: true, typeToConfirm: paid ? code : undefined }))) return;
-    setBusy(true);
-    try {
-      await api(`/api/admin/orders/${id}`, { method: "DELETE" });
-      toast(`${code} o‘chirildi`);
-      onDone();
-    } catch (e) {
-      toast((e as Error).message, "error");
-    } finally {
-      setBusy(false);
-    }
-  };
-  return (
-    <button type="button" onClick={run} disabled={busy} className="inline-flex items-center gap-1 text-ink-2 hover:text-danger disabled:opacity-50">
-      <Trash size={13} /> {busy ? "O‘chirilmoqda…" : "O‘chirish"}
-    </button>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { AdminViewBanner } from "@/components/admin/AdminViewBanner";
 import { isPaidStatus } from "@/lib/types";
 import { InvitationNav } from "./InvitationNav";
 import { useShareCardSync } from "@/components/share/ShareInvite";
@@ -29,6 +30,8 @@ function Inner({ children }: { children: ReactNode }) {
   // og:image (Telegram/WhatsApp havola rasmi) — kabinetning istalgan sahifasida eskirgan bo‘lsa orqa fonda yangilanadi
   useShareCardSync(isPaidStatus(order.status) ? { invitationId: inv.id, templateSlug: order.templateSlug, invitation: inv } : null);
   return (
+    <>
+    <AdminViewBanner orderId={order.id} code={order.code} userId={order.userId} />
     <div className={wrap}>
       <InvitationNav
         current={current}
@@ -39,6 +42,7 @@ function Inner({ children }: { children: ReactNode }) {
       />
       <div className="flex min-w-0 flex-1 flex-col gap-5">{children}</div>
     </div>
+    </>
   );
 }
 

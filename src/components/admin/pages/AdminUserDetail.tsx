@@ -373,8 +373,11 @@ function Orders({ rows, reload }: { rows: Row[]; reload: () => void }) {
                         /{inv.slug} <ExportSquare size={13} />
                       </a>
                     )}
-                    <Link href={`/kabinet/t/${inv.id}/`} className="text-ink-2 hover:text-maroon">
-                      Kabinetda ochish
+                    <Link href={`/admin/buyurtmalar/b/?id=${order.id}`} className="font-medium text-maroon hover:underline">
+                      Batafsil →
+                    </Link>
+                    <Link href={`/kabinet/t/${inv.id}/tahrirlash/`} className="text-ink-2 hover:text-maroon">
+                      Tahrirlash
                     </Link>
                   </div>
                 </li>
