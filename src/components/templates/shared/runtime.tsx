@@ -98,7 +98,7 @@ export function useMusic(url: string | null, slug: string, enabled: boolean) {
         audio.current.onplay = () => setPlaying(true);
         audio.current.onpause = () => setPlaying(false);
       }
-      audio.current.play().then(() => ramp(0.6, 2000)).catch(() => {});
+      audio.current.play().then(() => ramp(0.6, 2000)).catch(() => setPlaying(false));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [url, enabled, key],
@@ -123,7 +123,9 @@ export function useMusic(url: string | null, slug: string, enabled: boolean) {
     if (a && !a.paused) ramp(a.volume * 0.8, 3000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return { available: !!url && enabled, playing, play, toggle, dim };
+  /** Audio element (bo‘lsa) — pleyer kartasi (Malika) uchun: joriy vaqt, davomiylik, o‘rash */
+  const el = useCallback(() => audio.current, []);
+  return { available: !!url && enabled, playing, play, toggle, dim, el };
 }
 
 export function MusicButton({ m, wide, embedded }: { m: ReturnType<typeof useMusic>; wide: boolean; embedded: boolean }) {

@@ -641,6 +641,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kokteyl libos — nafis, yengil va bayramona.", max: 160 },
     ],
   },
+  {
+    number: 16,
+    slug: "malika",
+    name: "Malika",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "romantik",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Tug‘ilgan kun taklifnomasi malika uslubida: pudra-pushti atlas, marvarid va kumush. Sahifani pastga surganingizda yopiq atlas pardalar ikki tomonga ochiladi, marvarid gerb tiara bilan yuqoriga ko‘tariladi va ortidan surat chiqadi, gul barglari to‘kiladi. Keyin taklif matni, kechaning qo‘shig‘i, kalendar va sanoq, kecha dasturi, manzil, dress-kod va mehmonlar javobi.",
+    descriptionRu: "Приглашение на день рождения в стиле принцессы: пудрово-розовый атлас, жемчуг и серебро. Когда вы листаете страницу вниз, закрытые атласные шторы раздвигаются, жемчужный герб с тиарой поднимается вверх, за ним появляется фото и падают лепестки. Дальше текст приглашения, песня вечера, календарь и отсчёт, программа вечера, адрес, дресс-код и ответы гостей.",
+    descriptionEn: "A birthday invitation in a princess style: powder pink satin, pearls and silver. As you scroll down, the closed satin curtains part, the pearl crest with its tiara rises away, the photo appears behind them and petals fall. Then the invitation text, the song of the evening, a calendar and countdown, the evening’s schedule, the venue, the dress code and guest replies.",
+    palette: ["#F3D9DC", "#B76E79", "#8C4A57", "#EDE7EA"],
+    sample: { a: "Sabina", date: "24 · 07 · 2027", venue: "«Versal» bal zali", time: "18:00" },
+    theme: { bg: ["#f7e4e6", "#efd0d4"], ink: "#8c4a57", accent: "#b76e79", soft: "#8e7479", script: "cormorant", color: "pushti" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "18", max: 3, hint: "Ixtiyoriy · gerb ichida va surat ostida chiqadi" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Rustam va Dilnoza Karimovlar", max: 60, hint: "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), gerb ostida imzo; bo‘sh qolsa — yubilyarning o‘zi nomidan" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Kutib olish", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Mehmonlarni qarshi olish", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Malika uslubida", "Kechki libos", "Kokteyl", "Klassik", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki va bal libosi — nafis, yengil va bayramona.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -858,6 +893,12 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Asosiy surat", where: "Sharlar ostidagi ravoq ichida. Bo‘lmasa — ravoqda sovg‘a qutisi" },
     { title: "Surat · 2", where: "«Yangi bob» — kvadrat surat. Bo‘lmasa — bu bo‘lim chiqmaydi" },
     { title: "Surat · 3", where: "«Manzil» — restoran surati. Bo‘lmasa — shablonning restoran surati" },
+  ],
+  /** Malika (tug‘ilgan kun) — bo‘sh slotlar: hero’da ramkada gerb va ism harfi, choy stoli bo‘limi — chiqmaydi, manzil — bal zali */
+  malika: [
+    { title: "Asosiy surat", where: "Ochilishdan keyingi katta portret. Bo‘lmasa — ramkada marvarid gerb va ism harfi" },
+    { title: "Surat · 2", where: "Kalendardan keyingi to‘liq enli surat. Bo‘lmasa — bu bo‘lim chiqmaydi" },
+    { title: "Surat · 3", where: "«Manzil» — ravoqli surat. Bo‘lmasa — shablonning bal zali surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

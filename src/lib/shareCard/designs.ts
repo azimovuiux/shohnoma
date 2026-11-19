@@ -41,6 +41,8 @@ const f = {
   philosopher: '"sc-philosopher", "sc-playfair", Georgia, serif',
   tenor: '"sc-tenor", "sc-manrope", system-ui, sans-serif',
 };
+/** Malika: atlas burmalari ustidagi matn o‘qilishi uchun krem nur */
+const GLOW = { color: "rgba(255,249,247,.95)", blur: 22 };
 const st = (family: string, size: number, color: string, o: Partial<TextStyle> = {}): TextStyle => ({ family, size, color, ...o });
 
 export const DESIGNS: Record<string, Design> = {
@@ -430,6 +432,30 @@ export const DESIGNS: Record<string, Design> = {
       },
       { y: 1190, anchor: "center", w: 820, items: [{ k: "date", s: st(f.manrope, 30, "#5b1a2e", { weight: 600, ls: 0.24, min: 20 }) }] },
       { y: 1236, anchor: "top", w: 820, maxH: 110, items: [{ k: "venue", s: st(f.cormorant, 42, "#8a7476", { italic: true, weight: 500, maxLines: 2, min: 30, lh: 1.15 }) }] },
+    ],
+  },
+
+  /* Malika (tug‘ilgan kun): yopiq atlas pardalar, yorug‘lik, marvarid gerb va tiara (Figma 00) — fonda;
+   * mehmon — eng tepada; ism (Cormorant kursiv) — gerb ichida (2 qatorga bo‘linsa — gerb ichida kichrayadi);
+   * taklif turi, sana va joy — gerb ostida, yorug‘lik ustida */
+  malika: {
+    fill: "#efd0d4",
+    bg: true,
+    date: "dots",
+    stacks: [
+      { y: 112, anchor: "center", w: 860, maxH: 130, items: [{ k: "guest", s: st(f.cormorant, 48, "#8c4a57", { italic: true, weight: 500, maxLines: 2, min: 34, lh: 1.15, shadow: GLOW }) }] },
+      { y: 668, anchor: "center", w: 218, maxH: 270, items: [{ k: "names", mode: "two", s: st(f.cormorant, 88, "#8c4a57", { italic: true, weight: 500, min: 42, lh: 1.05 }) }] },
+      {
+        y: 975,
+        anchor: "top",
+        w: 860,
+        maxH: 340,
+        items: [
+          { k: "kicker", s: st(f.cormorant, 54, "#3a2a2e", { italic: true, min: 36, lh: 1.15, shadow: GLOW }) },
+          { k: "date", s: st(f.manrope, 30, "#8c4a57", { weight: 600, ls: 0.24, min: 20, shadow: GLOW }), gap: 28 },
+          { k: "venue", s: st(f.cormorant, 42, "#8c4a57", { italic: true, weight: 500, maxLines: 2, min: 30, lh: 1.15, shadow: GLOW }), gap: 16 },
+        ],
+      },
     ],
   },
 };
