@@ -56,7 +56,7 @@ route('PUT', '/admin/settings', function () {
         if (str_ends_with($k, '_DISABLED') || str_ends_with($k, '_SOON')) $v = $v === '1' ? '1' : '';
         if ($k === 'P2P_MODE') $v = $v === 'support' ? 'support' : '';
         if ($k === 'RAHMAT_SANDBOX') $v = $v === '1' ? '1' : '';
-        if ($k === 'RAHMAT_KASSA_ID' && $v !== '' && !preg_match('/^[A-Za-z0-9_-]{4,64}$/', $v)) fail('Kassa ID noto‘g‘ri (masalan: tp_0065de438c92)', 422);
+        if ($k === 'RAHMAT_KASSA_ID' && $v !== '' && !preg_match('/^[A-Za-z0-9_-]{4,64}$/', $v)) fail('Kassa ID noto‘g‘ri (masalan: tp_xxxxxxxxxxxx)', 422);
         if (($k === 'RAHMAT_KASSA_KEY' || $k === 'RAHMAT_TEST_KEY') && $v !== '' && !preg_match('/^sk_[A-Za-z0-9_]{16,200}$/', $v)) fail('Kalit «sk_…» bilan boshlanadi — Rahmat kabinetidan to‘liq nusxalang', 422);
         if ($k === 'RAHMAT_API_URL' && $v !== '' && !preg_match('#^https://[a-z0-9.-]+(/[A-Za-z0-9/_.-]*)?$#i', $v)) fail('API manzili https:// bilan boshlansin', 422);
         if ($k === 'RAHMAT_MXIK' && $v !== '' && !preg_match('/^\d{17}$/', $v)) fail('MXIK (IKPU) 17 ta raqamdan iborat', 422);
