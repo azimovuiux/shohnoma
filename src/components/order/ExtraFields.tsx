@@ -31,16 +31,27 @@ export function extraErrors(fields: TemplateField[], v: Extra, t: T = uzT): Reco
   return e;
 }
 
+/** Ro‘yxatda ko‘rsatish uchun bosh harf (qiymat o‘zgarmaydi): «sammit» → «Sammit» */
+const cap = (x: string) => x.charAt(0).toLocaleUpperCase() + x.slice(1);
+
 function Input({ spec, value, onChange, label }: { spec: FieldSpec; value: string; onChange: (v: string) => void; label: string }) {
   const t = useT();
   const common = { "aria-label": label, value, placeholder: spec.placeholder ? t(spec.placeholder) : undefined, onChange: (e: { target: { value: string } }) => onChange(e.target.value) };
   if (spec.type === "textarea") return <textarea {...common} rows={3} maxLength={spec.max ?? 1000} className={`${flowInput} !h-auto py-3`} />;
   if (spec.type === "select")
-    return <SelectField label={label} value={value} onChange={onChange} options={(spec.options ?? []).map((o) => ({ value: o, label: t(o) }))} />;
+    return <SelectField label={label} value={value} onChange={onChange} options={(spec.options ?? []).map((o) => ({ value: o, label: cap(t(o)) }))} />;
   if (spec.type === "time") return <TimeField label={label} value={value} onChange={onChange} />;
   if (spec.type === "date") return <DateField label={label} value={value} onChange={onChange} />;
   const type = spec.type === "number" ? "number" : "text";
   return <input {...common} type={type} maxLength={spec.max ?? 160} className={flowInput} />;
+}
+
+/** Ro‘yxat qatori ustunlari: birinchi ustun vaqt/son bo‘lsa — tor (124px), aks holda (masalan, spiker ismi) — teng */
+function listGrid(specs: FieldSpec[]) {
+  const narrow = specs[0]?.type === "time" || specs[0]?.type === "number";
+  if (specs.length > 2) return narrow ? "sm:grid-cols-[124px_1fr_1fr]" : "sm:grid-cols-3";
+  if (specs.length === 2) return narrow ? "sm:grid-cols-[124px_1fr]" : "sm:grid-cols-2";
+  return "";
 }
 
 /** HTML shablon `fields` sxemasidan avtomatik qurilgan forma bloklari */
@@ -61,7 +72,7 @@ export function ExtraFields({ fields, value, onChange, errors = {} }: { fields: 
               <SectionTitle>{t(f.label)}</SectionTitle>
               {rows.map((r, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <div className={`grid flex-1 gap-2 ${cols.length > 2 ? "sm:grid-cols-[124px_1fr_1fr]" : cols.length === 2 ? "sm:grid-cols-[124px_1fr]" : ""}`}>
+                  <div className={`grid flex-1 gap-2 ${listGrid(cols.map(([, s]) => s))}`}>
                     {cols.map(([k, s]) => (
                       <Input
                         key={k}

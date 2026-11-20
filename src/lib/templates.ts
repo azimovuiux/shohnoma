@@ -884,6 +884,61 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Qulay, lekin tartibli kiyim: jemper, ko‘ylak yoki blazer.", max: 160 },
     ],
   },
+  {
+    number: 22,
+    slug: "sammit",
+    name: "Sammit",
+    ceremony: "korporativ",
+    ceremonies: ["korporativ"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Moliya, investitsiya yoki biznes sammiti uchun taklifnoma. Ranglari — qora va to‘q qizil, bezaklari — ingichka to‘r, kumushrang tangalar va xira shisha kataklar. Sahifa ochilganda tanga aylanib tushadi, pastga surganingizda tangalar ikki tomonga uchib ketadi va katta sarlavhali birinchi ekran chiqadi. So‘ng mehmonga shaxsiy murojaat, sanoq, kun dasturi, spikerlar, manzil, dress-kod va ishtirokni tasdiqlash anketasi.",
+    descriptionRu: "Приглашение на финансовый, инвестиционный или бизнес-саммит. Цвета — чёрный и тёмно-красный, украшения — тонкая сетка, серебристые монеты и матовые стеклянные ячейки. При открытии страницы монета падает, вращаясь, а когда вы листаете вниз, монеты разлетаются в стороны и появляется первый экран с крупным заголовком. Дальше — личное обращение к гостю, отсчёт, программа дня, спикеры, адрес, дресс-код и анкета для подтверждения участия.",
+    descriptionEn: "An invitation for a finance, investment or business summit. The colours are black and deep red, with a fine grid, silver coins and frosted glass cells as decoration. When the page opens, a coin spins down; as you scroll, the coins fly apart and reveal a first screen with a large title. Then a personal greeting to the guest, a countdown, the day’s schedule, speakers, the venue, the dress code and an RSVP form.",
+    palette: ["#A80F0D", "#0A0A0A", "#DBDBDE", "#FFFFFF"],
+    sample: { a: "Moliya va investitsiya sammiti", b: "Orbis Capital", date: "12 · 03 · 2027", venue: "Hilton Tashkent City", time: "10:00" },
+    theme: { bg: ["#3a0807", "#0a0a0a"], ink: "#ffffff", accent: "#e8e8ea", soft: "#b9b9bf", script: "cormorant", color: "qizil" },
+    fields: [
+      { key: "kind", type: "select", label: "Tadbir turi", options: ["sammit", "forum", "konferensiya", "seminar", "ko‘rgazma", "tadbir"], hint: "Sanoq sarlavhasi («Sammitgacha»); tanlanmasa — «sammit»" },
+      {
+        key: "facts",
+        type: "list",
+        label: "Birinchi ekrandagi qisqa faktlar",
+        min: 0,
+        max: 3,
+        item: {
+          text: { type: "text", label: "Fakt", required: true, placeholder: "Investorlar bilan uchrashuv", max: 28 },
+        },
+      },
+      {
+        key: "program",
+        type: "list",
+        label: "Dastur",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Ochilish nutqi", max: 40 },
+          note: { type: "text", label: "Joyi yoki izoh", placeholder: "Katta zal", max: 30 },
+        },
+      },
+      {
+        key: "speakers",
+        type: "list",
+        label: "Spikerlar",
+        min: 0,
+        max: 6,
+        item: {
+          name: { type: "text", label: "Ism va familiya", required: true, placeholder: "Timur Ahmedov", max: 40 },
+          role: { type: "text", label: "Lavozimi", placeholder: "Boshqaruvchi hamkor", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Black tie", "Business", "Smart casual", "Erkin uslub"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki kostyum, kechki libos.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1114,6 +1169,15 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   ],
   /** Taqvim (korporativ forum) — spikerlar suratlari tartib bilan (1-surat — 1-spiker…); surat bo‘lmasa — ism bosh harflari. Zal va fon suratlari — shablonniki */
   taqvim: [
+    { title: "Spiker · 1", where: "«Spikerlar» — 1-spiker surati (bo‘lmasa — ism bosh harflari)" },
+    { title: "Spiker · 2", where: "«Spikerlar» — 2-spiker surati" },
+    { title: "Spiker · 3", where: "«Spikerlar» — 3-spiker surati" },
+    { title: "Spiker · 4", where: "«Spikerlar» — 4-spiker surati" },
+    { title: "Spiker · 5", where: "«Spikerlar» — 5-spiker surati" },
+    { title: "Spiker · 6", where: "«Spikerlar» — 6-spiker surati" },
+  ],
+  /** Sammit (korporativ sammit) — spikerlar suratlari tartib bilan (1-surat — 1-spiker…); surat bo‘lmasa — ism bosh harflari. Zal surati — shablonniki */
+  sammit: [
     { title: "Spiker · 1", where: "«Spikerlar» — 1-spiker surati (bo‘lmasa — ism bosh harflari)" },
     { title: "Spiker · 2", where: "«Spikerlar» — 2-spiker surati" },
     { title: "Spiker · 3", where: "«Spikerlar» — 3-spiker surati" },

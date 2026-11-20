@@ -650,4 +650,17 @@ export const ru: Record<string, string> = {
   "seminar": "семинар",
   "ko‘rgazma": "выставка",
   "tadbir": "событие",
+  // ── Sammit ──
+  "Moliya va investitsiya sammiti": "Финансовый и инвестиционный саммит",
+  "sammit::Ro‘yxatdan o‘tish": "Зарегистрироваться",
+  "Kechki kostyum, kechki libos. Kumush yoki qizil aksent — ayni muddao.": "Вечерний костюм, вечернее платье. Серебряный или красный акцент — то, что нужно.",
+  "Klassik biznes kostyum.": "Классический деловой костюм.",
+  "Sanoq sarlavhasi («Sammitgacha»); tanlanmasa — «sammit»": "Заголовок отсчёта («До саммита»); если не выбрано — «саммит»",
+  "Birinchi ekrandagi qisqa faktlar": "Короткие факты на первом экране",
+  "Fakt": "Факт",
+  "Investorlar bilan uchrashuv": "Встреча с инвесторами",
+  "Ochilish nutqi": "Вступительное слово",
+  "Timur Ahmedov": "Тимур Ахмедов",
+  "Boshqaruvchi hamkor": "Управляющий партнёр",
+  "Kechki kostyum, kechki libos.": "Вечерний костюм, вечернее платье.",
 };

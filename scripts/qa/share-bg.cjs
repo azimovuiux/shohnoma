@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -63,6 +63,9 @@ const CFG = {
   /* Taqvim: qorong‘i fon, lime nur, shisha plitkalar va lime plitka (Figma 00) — plitka ochilish harakatidagidek kattalashtirilgan panel
    * (--ex 0.4; nur pulsatsiyasi to‘xtatiladi): mehmon (panel tepasida) / taklif turi, kompaniya, tadbir (panel ichida) / sana va joy (panel ostida) — kartada */
   taqvim: { css: `nextjs-portal{display:none!important}[class*="gateWrap"]{--ex:0.4!important}[class*="_gHalo"]{display:none!important}` },
+  /* Sammit: to‘r, uchqunlar, xrom tanga va «12 mart» shisha katagi (Figma 00); qizil shisha chapga-pastga suriladi (kartada matn ustuniga
+   * tegmasin): mehmon (tanga tepasida) / sana (shisha katak ichida) / taklif turi, tadbir, kompaniya, joy (katak ostida) — kartada */
+  sammit: { css: `nextjs-portal{display:none!important}[class*="_gFlyL"]>img{transform:translate(calc(var(--u)*-200),calc(var(--u)*40))!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;
 

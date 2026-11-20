@@ -672,4 +672,17 @@ export const en: Record<string, string> = {
   "seminar": "seminar",
   "ko‘rgazma": "expo",
   "tadbir": "event",
+  // ── Sammit ──
+  "Moliya va investitsiya sammiti": "Finance and Investment Summit",
+  "sammit::Ro‘yxatdan o‘tish": "Register",
+  "Kechki kostyum, kechki libos. Kumush yoki qizil aksent — ayni muddao.": "Evening suit or evening dress. A silver or red accent is just right.",
+  "Klassik biznes kostyum.": "A classic business suit.",
+  "Sanoq sarlavhasi («Sammitgacha»); tanlanmasa — «sammit»": "The countdown heading (“Until the summit”); if not chosen — “summit”",
+  "Birinchi ekrandagi qisqa faktlar": "Short facts on the first screen",
+  "Fakt": "Fact",
+  "Investorlar bilan uchrashuv": "Meet the investors",
+  "Ochilish nutqi": "Opening remarks",
+  "Timur Ahmedov": "Timur Akhmedov",
+  "Boshqaruvchi hamkor": "Managing partner",
+  "Kechki kostyum, kechki libos.": "Evening suit or evening dress.",
 };

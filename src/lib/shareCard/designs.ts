@@ -615,4 +615,28 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+  /* Sammit (moliya sammiti): qoradan to‘q qizilga gradient, to‘r va uchqunlar, xrom tanga, «12 mart» shisha katagi (Figma 00) — fonda;
+   * mehmon — tanga tepasida; sana — shisha katak ichida; taklif turi, tadbir nomi, kompaniya va joy — katak ostida, qizil shisha shakldan
+   * o‘ngda (ustun 230…850). Uzun nom kichrayadi yoki 2 qatorga bo‘linadi; matn bezakka tegmaydi */
+  sammit: {
+    fill: "#0a0a0a",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 175, anchor: "center", w: 880, maxH: 230, items: [{ k: "guest", s: st(f.playfair, 64, "#ffffff", { italic: true, maxLines: 2, min: 40, lh: 1.15 }) }] },
+      { y: 915, anchor: "center", w: 304, maxH: 156, items: [{ k: "date", s: st(f.playfair, 46, "#ffffff", { italic: true, maxLines: 2, min: 40, lh: 1.12 }) }] },
+      {
+        y: 1052,
+        anchor: "top",
+        w: 620,
+        maxH: 360,
+        items: [
+          { k: "kicker", s: st(f.montserrat, 26, "rgba(255,255,255,.72)", { weight: 500, ls: 0.04, min: 20, lh: 1.25 }) },
+          { k: "names", mode: "two", s: st(f.montserrat, 54, "#ffffff", { weight: 400, ls: -0.03, maxLines: 2, min: 32, lh: 1.1 }), gap: 18 },
+          { k: "org", s: st(f.playfair, 40, "#ffffff", { italic: true, maxLines: 2, min: 28, lh: 1.15 }), gap: 16 },
+          { k: "venue", s: st(f.montserrat, 26, "rgba(255,255,255,.75)", { maxLines: 2, min: 20, lh: 1.3 }), gap: 18 },
+        ],
+      },
+    ],
+  },
 };
