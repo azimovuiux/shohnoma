@@ -939,6 +939,40 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki kostyum, kechki libos.", max: 160 },
     ],
   },
+  {
+    number: 23,
+    slug: "tong",
+    name: "Tong",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh"],
+    style: "milliy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "To‘y munosabati bilan beriladigan nahorgi osh uchun taklifnoma. Ranglari — tungi to‘q ko‘k, binafsha, kahrabo va oltin, bezaklari — oltin girih naqshlari. Sahifani pastga surganingizda tungi osmonda quyosh ufqdan ko‘tariladi, osmon tongga aylanadi va katta «06:00» yozuvli birinchi ekran chiqadi. Keyin taklif matni, «Tong dasturxoni» suratlari, oshgacha sanoq, tong tartibi, manzil, dress-kod va mehmonlar javobi; oxirida quyosh yana ko‘tariladi.",
+    descriptionRu: "Приглашение на утренний плов (нахорги ош) по случаю свадьбы. Цвета — ночной тёмно-синий, фиолетовый, янтарный и золото, украшения — золотые узоры гирих. Когда вы листаете страницу вниз, на ночном небе из-за горизонта поднимается солнце, небо светлеет, и появляется первый экран с крупным «06:00». Дальше текст приглашения, фото «утреннего дастархана», отсчёт до плова, порядок утра, адрес, дресс-код и ответы гостей; в конце солнце поднимается снова.",
+    descriptionEn: "An invitation to a wedding morning plov (nahorgi osh). The colours are night navy, violet, amber and gold, with gold girih patterns as decoration. As you scroll down, the sun rises over the horizon in the night sky, the sky turns to dawn, and a first screen with a large “06:00” appears. Then the invitation text, photos of the morning table, a countdown to the plov, the morning schedule, the venue, the dress code and guest replies; at the end the sun rises again.",
+    palette: ["#1B1F4B", "#5B3A7A", "#F2A65A", "#E9C27A"],
+    sample: { a: "Jasur", b: "Madina", date: "12 · 12 · 2027", venue: "«Navro‘z» choyxonasi", time: "06:00" },
+    theme: { bg: ["#1b1f4b", "#0d0f29"], ink: "#ffffff", accent: "#e9c27a", soft: "#f2a65a", script: "cormorant", color: "moviy" },
+    fields: [
+      { key: "hosts", type: "text", label: "Mezbonlar", placeholder: "Karimovlar oilasi", max: 60, hint: "Ochilishda, «Hurmat bilan» imzosida va oxirida chiqadi; bo‘sh qolsa — kuyov va kelin ismlari" },
+      { key: "side", type: "select", label: "Taklif kim nomidan", options: ["Kuyov tomoni", "Kelin tomoni"], hint: "Taklif matni: «O‘g‘limiz … va kelinimiz …» yoki «Qizimiz … va kuyovimiz …»; tanlanmasa — kuyov tomoni" },
+      {
+        key: "program",
+        type: "list",
+        label: "Tong tartibi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Xatmi Qur’on va duo", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Milliy uslub", "Klassik", "Erkin"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Do‘ppi yoki chopon bilan kelsangiz, dasturxon yanada fayzli bo‘ladi.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1184,6 +1218,13 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Spiker · 4", where: "«Spikerlar» — 4-spiker surati" },
     { title: "Spiker · 5", where: "«Spikerlar» — 5-spiker surati" },
     { title: "Spiker · 6", where: "«Spikerlar» — 6-spiker surati" },
+  ],
+  /** Tong (nahorgi osh) — bo‘sh slotlar o‘rnida shablonning o‘z suratlari (qozon, sabzi, choy va non, choyxona zali); lagan surati — shablonniki */
+  tong: [
+    { title: "Surat · 1", where: "«Tong dasturxoni» — katta surat. Bo‘lmasa — olovdagi qozon surati" },
+    { title: "Surat · 2", where: "«Tong dasturxoni» — chapdagi kichik surat. Bo‘lmasa — sabzi surati" },
+    { title: "Surat · 3", where: "«Tong dasturxoni» — o‘ngdagi kichik surat. Bo‘lmasa — choy va non surati" },
+    { title: "Surat · 4", where: "«Manzil» — osh beriladigan joy surati. Bo‘lmasa — choyxona zali surati" },
   ],
   /** Sovg‘a (tug‘ilgan kun) — bo‘sh slotlar: hero’da ravoq ichida sovg‘a qutisi, «Yangi bob» — chiqmaydi, manzil — restoran surati */
   sovga: [

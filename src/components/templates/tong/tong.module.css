@@ -1,0 +1,793 @@
+/*
+ * Tong — nikoh to‘yi munosabati bilan nahorgi osh taklifnomasi (tong otishi): tungi indigo #1b1f4b / #0d0f29, binafsha #5b3a7a,
+ * kahrabo #f2a65a, sut/oq, oltin #e9c27a (Figma 614:23737 mobil, 614:23955 laptop; «23 · Tong — Assets» 614:23700).
+ * Shriftlar: Forum (sarlavhalar, raqamlar) + Manrope 400–700 (matn) — lotin va kirill.
+ * Birlik `--u`: kontent ustuni (mobil 390; laptopda ustun = mobil × 1.2). Ochilish — o‘z kanvasi (390×844 / 1440×1013).
+ * Harakat («Motion — 23 · Tong»), ochilish faqat scroll bilan (--o: 0…1; bosish talab qilinmaydi): quyosh ufqdan ko‘tariladi,
+ * osmon tundan tongga o‘tadi, yulduzlar so‘nadi; keyin sahna yuqoriga ketadi va tong otgan hero chiqadi (qattiq chok — sharpa yo‘q).
+ * Hero — «06:00» raqamlari birin-ketin yorishadi, quyosh nuri «nafas oladi», girih naqshlari sekin aylanadi va parallaks.
+ * Osh — lagan surati oltin halqa ichida aylanadi (40 s), taymer flip; tartib qatorlari chapdan kiradi; final (--fc) — quyosh yana
+ * ko‘tariladi va sahifa yorishadi. Hamma rasmlar Normal blend.
+ */
+@font-face {
+  font-family: "Tong Forum";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/tong/fonts/forum-cyrillic-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: "Tong Forum";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/tong/fonts/forum-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Tong Forum";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/tong/fonts/forum-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Tong Forum";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/tong/fonts/forum-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --navy: #1b1f4b;
+  --night: #0d0f29;
+  --plum: #5b3a7a;
+  --amber: #f2a65a;
+  --peach: #fad9b2;
+  --gold: #e9c27a;
+  --ink: #262133;
+  --line: rgba(233, 194, 122, 0.5);
+  --sh-loader-a: #1b1f4b;
+  --sh-loader-b: #0d0f29;
+  --sh-ring: rgba(233, 194, 122, 0.55);
+  position: relative;
+  container-type: inline-size;
+  background: #fff;
+  color: var(--ink);
+  font-family: "Manrope", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: #fff;
+}
+.fo {
+  font-family: "Tong Forum", Georgia, serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.mr,
+.mr5,
+.mr6,
+.mr7 {
+  font-family: "Manrope", system-ui, sans-serif;
+}
+.mr {
+  font-weight: 400;
+}
+.mr5 {
+  font-weight: 500;
+}
+.mr6 {
+  font-weight: 600;
+}
+.mr7 {
+  font-weight: 700;
+}
+.clamp2,
+.clamp3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.clamp3 {
+  -webkit-line-clamp: 3;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.cover {
+  object-fit: cover;
+}
+.art {
+  position: absolute;
+  pointer-events: none;
+}
+.fill {
+  position: absolute;
+  inset: 0;
+}
+
+/* ── Yulduzlar (Figma: oq doiralar, har biri o‘z shaffofligida) — ikki guruh turli tezlikda miltillaydi ── */
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+}
+.twA {
+  animation: tw 3.4s ease-in-out infinite alternate;
+}
+.twB {
+  animation: tw 4.6s ease-in-out -2.2s infinite alternate;
+}
+@keyframes tw {
+  to {
+    opacity: 0.15;
+  }
+}
+
+/* ── Quyosh (Figma: #FFE09E → #F2A65A doira) va nur (blur doira) ── */
+.sun {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffe09e 0%, #f2a65a 100%);
+}
+.nur {
+  position: absolute;
+}
+/* quyosh nuri «nafas oladi» (1 ↔ 1.06, 4 s) */
+.breath {
+  animation: breath 4s ease-in-out infinite alternate;
+}
+@keyframes breath {
+  to {
+    transform: scale(1.06);
+  }
+}
+/* girih naqshlari sekin aylanadi (60 s / aylanish) — `rotate` (paydo bo‘lish transformi bilan to‘qnashmaydi) */
+.spin {
+  animation: spin 60s linear infinite;
+}
+.spinSlow {
+  animation: spin 40s linear infinite;
+}
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.heroBg {
+  background: linear-gradient(180deg, #1b1f4b 0%, #5b3a7a 45%, #f2a65a 80%, #ffffff 100%);
+}
+.white {
+  background: #fff;
+}
+.navy {
+  background: var(--navy);
+}
+.venue {
+  background: linear-gradient(180deg, #ffffff 0%, var(--peach) 100%);
+}
+.peach {
+  background: var(--peach);
+}
+.dusk {
+  background: linear-gradient(180deg, var(--amber) 0%, var(--plum) 25%, var(--navy) 100%);
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+}
+.deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* chok ustidagi naqsh — qo‘shni bo‘lim ustiga chiqadi */
+.seam {
+  z-index: 4;
+}
+/* skroll parallaksi (JS: --py) */
+.root [data-px] {
+  translate: 0 var(--py, 0px);
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 18));
+}
+.root [data-a="rise"] {
+  --t: 1.2s;
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 60));
+}
+/* tartib qatorlari — chapdan siljib kiradi */
+.root [data-a="left"] {
+  --t: 0.9s;
+}
+.root [data-a="left"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateX(calc(var(--u) * -36));
+}
+/* girih — kichikdan burilib ochiladi */
+.root [data-a="pop"] {
+  --t: 1.4s;
+}
+.root [data-a="pop"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.7) rotate(-40deg);
+}
+/* hero quyoshi — pastdan ko‘tariladi */
+.root [data-a="sun"] {
+  --t: 1.8s;
+}
+.root [data-a="sun"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 90));
+}
+/* «06:00» — raqamlar birin-ketin yorishadi */
+.lit {
+  display: inline-block;
+}
+.root [data-a="lit"] {
+  --t: 0.9s;
+}
+.root [data-a="lit"]:not([data-in]) {
+  opacity: 0.12;
+  filter: blur(4px);
+}
+.root .lit[data-in] {
+  animation: litGlow 1.6s var(--d, 0s) ease-out both;
+}
+@keyframes litGlow {
+  0% {
+    text-shadow: 0 0 0 rgba(255, 224, 158, 0);
+  }
+  40% {
+    text-shadow: 0 0 0.25em rgba(255, 224, 158, 0.9);
+  }
+  100% {
+    text-shadow: 0 0 0 rgba(255, 224, 158, 0);
+  }
+}
+.root [data-a="zoom"] {
+  --t: 1.2s;
+}
+.root [data-a="zoom"]:not([data-in]) {
+  opacity: 0;
+}
+.zoomImg {
+  object-fit: cover;
+  transition: transform 1.8s var(--ease) var(--d, 0s);
+}
+.root [data-a]:not([data-in]) .zoomImg {
+  transform: scale(1.1);
+}
+/* oltin halqa — chiziladi */
+.ring {
+  overflow: visible;
+  pointer-events: none;
+}
+.ring circle {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+  transition: stroke-dashoffset 1.8s var(--ease) var(--d, 0s);
+}
+.root [data-a="ring"]:not([data-in]) circle {
+  stroke-dashoffset: 1;
+}
+/* taymer kartalari — flip (yuqori cheti atrofida) */
+.root [data-a="flip"] {
+  --t: 1s;
+  transform-origin: 50% 0;
+}
+.root [data-a="flip"]:not([data-in]) {
+  opacity: 0;
+  transform: perspective(calc(var(--u) * 400)) rotateX(-80deg);
+}
+
+/* ═════ 00 · Ochilish — tun, ufq (scroll bilan) ═════
+ * JS faqat --o (0…1, lerp) ni `.gateWrap` ga yozadi; qolgani shu yerda. Vaqt chizig‘i:
+ * quyosh ufqdan ko‘tariladi va kattalashadi, nuri kengayadi (0…1); tong osmoni (0.02…0.92);
+ * yulduzlar so‘nadi (0.04…0.9); ufq yorug‘ligi (0.02…0.6). */
+.gateWrap,
+.gateHold {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  height: calc(100svh * 1.85);
+  --o: 0;
+}
+.gateHold {
+  height: 100svh;
+  margin-bottom: calc(100svh * 0.85);
+  background: linear-gradient(180deg, var(--night), var(--navy));
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.gBg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--night) 0%, var(--navy) 100%);
+}
+/* tong osmoni — fon qatlami (orqasida kontent yo‘q) */
+.gDawn {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: linear-gradient(180deg, #1b1f4b 0%, #33285f 38%, #5b3a7a 66%, #b26a68 88%, #f2a65a 100%);
+  --dw: clamp(0, (var(--o) - 0.02) / 0.9, 1);
+  opacity: calc(0.5 * var(--dw) + 0.5 * var(--dw) * var(--dw) * (3 - 2 * var(--dw)));
+}
+.gStars {
+  opacity: calc(1 - 0.85 * clamp(0, (var(--o) - 0.04) / 0.86, 1));
+}
+/* quyosh — scroll bilan ko‘tariladi (--rise) va kattalashadi */
+.gSun {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --sp: clamp(0, var(--o), 1);
+  /* yarim chiziqli, yarim smoothstep — boshida ham, oxirida ham har kadrda sezilarli harakat */
+  --se: calc(0.5 * var(--sp) + 0.5 * var(--sp) * var(--sp) * (3 - 2 * var(--sp)));
+  transform: translateY(calc(var(--rise) * var(--se)));
+}
+.gSun .sun {
+  transform: scale(calc(1 + 0.22 * var(--se)));
+}
+.gNur {
+  transform: scale(calc(1 + 0.75 * var(--se)));
+}
+/* yuklanganda — quyosh ufq ortidan sekin chiqadi (y +120 → 0, 2.2 s) */
+.gRise {
+  position: absolute;
+  inset: 0;
+}
+.gateWrap:not(.still) .gRise {
+  animation: rise 2.2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes rise {
+  from {
+    transform: translateY(var(--from));
+  }
+}
+/* ufq yorug‘ligi — oltin tasma (yerdan yuqori yarmi ko‘rinadi) */
+.gGlow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(255, 210, 140, 0.6) 0%, rgba(242, 166, 90, 0.28) 45%, rgba(242, 166, 90, 0) 100%);
+  opacity: clamp(0, (var(--o) - 0.02) / 0.58, 1);
+}
+.gLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(233, 194, 122, 0.7);
+  transform-origin: 50% 50%;
+}
+.gateWrap:not(.still) .gLine {
+  animation: line 1.6s 0.1s var(--ease) both;
+}
+@keyframes line {
+  from {
+    transform: scaleX(0);
+  }
+}
+.gGround {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--night);
+}
+/* yuklanganda — sokin kirish */
+.gateWrap:not(.still) .gIn {
+  animation: gIn 1.2s var(--gd, 0s) var(--ease) both;
+}
+@keyframes gIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 14));
+  }
+}
+/* mokap/poster ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 03 · Galereya / 06 · Manzil — suratlar ═════ */
+.photo {
+  overflow: hidden;
+  background: rgba(91, 58, 122, 0.12);
+  isolation: isolate;
+}
+
+/* ═════ 04 · Osh va taymer ═════ */
+.lagan {
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--plum);
+  isolation: isolate;
+}
+.tbox {
+  background: rgba(255, 255, 255, 0.08);
+  border: calc(var(--u) * 1) solid var(--line);
+}
+.digits {
+  display: inline-flex;
+}
+.slot {
+  display: inline-block;
+}
+/* o‘zgargan raqam — yuqoridan sekin tushadi; shaffoflik yo‘q, kesilmaydi (padded «0» hech qachon yo‘qolmaydi) */
+.tick {
+  display: inline-block;
+  animation: tick 0.5s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: translateY(-0.14em);
+  }
+}
+
+/* ═════ Tugmalar ═════ */
+.btnGold,
+.btnNavy,
+.btnLine {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease);
+}
+.btnGold {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btnNavy {
+  background: var(--navy);
+  color: #fff;
+}
+.btnLine {
+  border-style: solid;
+  border-color: rgba(27, 31, 75, 0.6);
+  color: var(--navy);
+  background: transparent;
+}
+.btnGold:hover,
+.btnNavy:hover,
+.btnLine:hover {
+  transform: translateY(-2px);
+}
+
+/* ═════ 05 · Tong tartibi ═════ */
+.row {
+  background: #fff;
+  border: calc(var(--u) * 1) solid var(--line);
+}
+
+/* ═════ 07 · Dress-kod / 08 · Anketa — oq karta ═════ */
+.card {
+  background: #fff;
+  color: var(--ink);
+}
+.lbl {
+  color: var(--plum);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #fff;
+  border: calc(var(--u) * 1) solid var(--line);
+  transition: box-shadow 0.3s var(--ease);
+}
+.field:focus-within {
+  box-shadow: 0 0 0 2px rgba(233, 194, 122, 0.55);
+}
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.35;
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.input::placeholder {
+  color: rgba(38, 33, 51, 0.5);
+  opacity: 1;
+}
+.choice {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: rgba(27, 31, 75, 0.6);
+  color: var(--navy);
+  background: transparent;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+/* «Kelaman» — tugmadan kichik quyosh chiqib yorishadi */
+.miniSun {
+  position: absolute;
+  left: 50%;
+  bottom: 60%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffe09e 0%, #f2a65a 100%);
+  pointer-events: none;
+  animation: miniSun 1.4s var(--ease) forwards;
+}
+.miniGlow {
+  position: absolute;
+  inset: -80%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 140, 0.75) 0%, rgba(242, 166, 90, 0) 65%);
+  animation: miniGlow 1.4s ease-out forwards;
+}
+@keyframes miniSun {
+  0% {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 14)) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * -46)) scale(1);
+  }
+}
+@keyframes miniGlow {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+.step {
+  color: var(--plum);
+  background: transparent;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 50%;
+}
+.step:disabled {
+  opacity: 0.35;
+}
+.submit {
+  background: var(--gold);
+  color: var(--navy);
+  transition: transform 0.4s var(--spring);
+}
+.submit:hover {
+  transform: translateY(-2px);
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+.sunLow .sun {
+  filter: saturate(0.8);
+}
+
+/* ═════ 09 · Final — scroll bilan (--fc: 0 … 1 = Figma kadri; sahifa oxirigacha albatta tugaydi) ═════ */
+.finalWrap {
+  --fc: 0;
+  pointer-events: none;
+}
+/* quyosh pastdan ko‘tariladi (ease-out), kichikdan Figma o‘lchamiga */
+.fSun {
+  --fr: clamp(0, var(--fc) / 0.85, 1);
+  --fe: calc(1 - (1 - var(--fr)) * (1 - var(--fr)) * (1 - var(--fr)));
+  transform: translateY(calc((1 - var(--fe)) * var(--u) * 170));
+}
+.fSun .sun {
+  transform: scale(calc(0.72 + 0.28 * var(--fe)));
+}
+.fNur {
+  transform: scale(calc(0.5 + 0.5 * var(--fe)));
+  opacity: calc(0.3 + 0.7 * var(--fe));
+}
+/* «sahifa yorishadi» — tong nuri ko‘tarilib, so‘ng Figma holatiga qaytadi (fc = 1 da 0) */
+.fLight {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  top: 10%;
+  bottom: -10%;
+  background: radial-gradient(ellipse 50% 45% at 50% 55%, rgba(242, 166, 90, 0.42) 0%, rgba(91, 58, 122, 0.22) 45%, rgba(27, 31, 75, 0) 75%);
+  --fl: clamp(0, (var(--fc) - 0.15) / 0.5, 1);
+  --fd: clamp(0, (var(--fc) - 0.7) / 0.3, 1);
+  opacity: calc(var(--fl) * (1 - var(--fd)));
+}
+
+/* ═════ Musiqa tugmasi (Figma: shisha doira 52, oltin halqa, 4 ta oltin chiziq) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(233, 194, 122, 0.7);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  animation: musicIn 0.8s 1.2s var(--ease) both;
+}
+@keyframes musicIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.musicEmbedded {
+  position: absolute;
+}
+.music::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(233, 194, 122, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+.music.playing::after {
+  animation: halo 2.4s var(--ease) infinite;
+}
+@keyframes halo {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+.bar {
+  display: block;
+  width: 3px;
+  height: var(--h);
+  border-radius: 1.5px;
+  background: var(--gold);
+  transition: height 0.3s var(--ease);
+}
+.music:not(.playing) .bar {
+  height: 4px;
+}
+.music.playing .bar {
+  animation: eq 0.9s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.27s);
+}
+@keyframes eq {
+  to {
+    transform: scaleY(0.45);
+  }
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--night);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

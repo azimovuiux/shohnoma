@@ -91,7 +91,7 @@ export function cardTexts(input: ShareCardInput, design?: Design): Texts {
   return {
     // ism o‘zi murojaat bilan boshlansa («Hurmatli …», «Уважаемая …», «Dear …») — qayta qo‘shilmaydi
     guest: guest ? greetGuest(tr(lang, "Hurmatli {guest}", { guest }), guest) : "",
-    kicker: KICKER[input.ceremony] ? tr(lang, KICKER[input.ceremony]) : "",
+    kicker: design?.kicker ? tr(lang, design.kicker) : KICKER[input.ceremony] ? tr(lang, KICKER[input.ceremony]) : "",
     a: clean(input.personA, 60),
     b,
     amp,
@@ -104,9 +104,10 @@ export function cardTexts(input: ShareCardInput, design?: Design): Texts {
 
 /** Rasm ostidagi matn (Telegram/WhatsApp): 2–3 qator + havola, taklifnoma tilida */
 export function shareCaption(input: ShareCardInput, url: string): string {
-  const t = cardTexts(input);
+  const design = DESIGNS[input.design];
+  const t = cardTexts(input, design);
   const names = input.ceremony === "korporativ" ? [t.org, t.a].filter(Boolean).join(" · ") : [t.a, t.b].filter(Boolean).join(" & ");
-  const first = `${names} — ${tr(input.lang, PHRASE[input.ceremony] ?? PHRASE.nikoh)} 💌`;
+  const first = `${names} — ${tr(input.lang, design?.phrase ?? PHRASE[input.ceremony] ?? PHRASE.nikoh)} 💌`;
   const meta = [dateLine(input, "long"), t.venue].filter(Boolean).join(" · ");
   return [t.guest ? `${t.guest}!` : "", first, meta, url].filter(Boolean).join("\n");
 }

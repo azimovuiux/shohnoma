@@ -15,6 +15,10 @@ export type Design = {
   date: "dots" | "long";
   /** ismlar orasidagi so‘z: & yoki va (tarjima qilinadi) */
   amp?: "&" | "va";
+  /** taklif turi qatori (o‘zbekcha kalit, tarjima qilinadi) — marosimning umumiy iborasi o‘rniga (masalan, «Nahorgi oshga taklif») */
+  kicker?: string;
+  /** rasm ostidagi matndagi ibora (o‘zbekcha kalit) — «… nahorgi oshga taklif qilamiz» */
+  phrase?: string;
   /** fon ustidan qo‘shimcha soya (matn o‘qilishi uchun): y0→y1 gradient */
   shade?: { y0: number; y1: number; from: string; to: string }[];
   stacks: Stack[];
@@ -635,6 +639,39 @@ export const DESIGNS: Record<string, Design> = {
           { k: "names", mode: "two", s: st(f.montserrat, 54, "#ffffff", { weight: 400, ls: -0.03, maxLines: 2, min: 32, lh: 1.1 }), gap: 18 },
           { k: "org", s: st(f.playfair, 40, "#ffffff", { italic: true, maxLines: 2, min: 28, lh: 1.15 }), gap: 16 },
           { k: "venue", s: st(f.montserrat, 26, "rgba(255,255,255,.75)", { maxLines: 2, min: 20, lh: 1.3 }), gap: 18 },
+        ],
+      },
+    ],
+  },
+  /* Tong (nahorgi osh): tungi osmon, yulduzlar, ufq chizig‘i, ufqdan bosh ko‘targan quyosh va yer (Figma 00) — fonda;
+   * mehmon — osmon tepasida; «Nahorgi oshga taklif» va ismlar — osmonda, quyosh nuridan yuqorida (≤ 690); sana va joy — yerda
+   * (ufq 958 dan pastda, 1020…1360). Uzun matn kichrayadi yoki 2 qatorga bo‘linadi; matn quyosh va ufqqa tegmaydi */
+  tong: {
+    fill: "#0d0f29",
+    bg: true,
+    date: "long",
+    kicker: "Nahorgi oshga taklif",
+    phrase: "nahorgi oshga taklif qilamiz",
+    stacks: [
+      { y: 150, anchor: "center", w: 900, maxH: 170, items: [{ k: "guest", s: st(f.forum, 54, "rgba(255,255,255,.88)", { maxLines: 2, min: 38, lh: 1.15 }) }] },
+      {
+        y: 470,
+        anchor: "center",
+        w: 900,
+        maxH: 420,
+        items: [
+          { k: "kicker", s: st(f.manrope, 30, "#e9c27a", { weight: 600, upper: true, ls: 0.14, min: 22 }) },
+          { k: "names", mode: "two", s: st(f.forum, 120, "#ffffff", { min: 72, lh: 1.05 }), gap: 30 },
+        ],
+      },
+      {
+        y: 1190,
+        anchor: "center",
+        w: 900,
+        maxH: 340,
+        items: [
+          { k: "date", s: st(f.forum, 56, "#ffffff", { min: 40, lh: 1.15 }) },
+          { k: "venue", s: st(f.manrope, 32, "#e9c27a", { maxLines: 2, min: 24, lh: 1.3 }), gap: 22 },
         ],
       },
     ],

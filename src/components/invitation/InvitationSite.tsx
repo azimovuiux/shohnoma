@@ -39,6 +39,7 @@ import { MarvaridSite } from "@/components/templates/marvarid/MarvaridSite";
 import { BiletSite } from "@/components/templates/bilet/BiletSite";
 import { TaqvimSite } from "@/components/templates/taqvim/TaqvimSite";
 import { SammitSite } from "@/components/templates/sammit/SammitSite";
+import { TongSite } from "@/components/templates/tong/TongSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -69,7 +70,7 @@ function useMusic(url: string | null, enabled: boolean) {
  * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
  */
 /** Kodda yozilgan dizaynlar — yangi shablon qo‘shilganda shu ro‘yxatga ham qo‘shiladi */
-const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit"] as const;
+const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong"] as const;
 
 export function InvitationSite(props: InvitationSiteProps) {
   const lang = inviteLang(props.data.extra, useLocale());
@@ -123,6 +124,8 @@ export function InvitationSite(props: InvitationSiteProps) {
         <TaqvimSite {...props} />
       ) : ds === "sammit" ? (
         <SammitSite {...props} />
+      ) : ds === "tong" ? (
+        <TongSite {...props} />
       ) : stale ? (
         <StaleReload slug={props.template.slug} />
       ) : (
