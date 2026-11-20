@@ -9,7 +9,7 @@ import { site } from "@/lib/site";
 import { ACCOUNT_SECTIONS, AccountAvatar, accountSubtitle, accountTitle, samePath, useLogout } from "@/components/Account";
 import { useLpath, useT } from "@/lib/i18n";
 
-type Props = { name: string | null; phone: string | null; telegramUser: string | null; orders: number; favorites: number };
+type Props = { name: string | null; phone: string | null; telegramUser: string | null; active: number; orders: number; favorites: number };
 
 // Bo‘limlar va ikonkalar — sarlavhadagi hisob menyusi bilan bir xil (Account.tsx)
 const items = ACCOUNT_SECTIONS;
@@ -21,10 +21,10 @@ export function CabinetShell({ children }: { children: ReactNode }) {
   const { user, loading } = useRequireUser();
   const { me } = useMe();
   if (loading || !user) return <PageLoading />;
-  const counts = me?.counts ?? { orders: 0, favorites: 0 };
+  const counts = me?.counts ?? { active: 0, orders: 0, favorites: 0 };
   return (
     <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-5 pb-20 pt-6 lg:flex-row lg:gap-10 lg:px-10 xl:px-[120px] lg:pb-[100px] lg:pt-10">
-      <CabinetNav name={user.name} phone={user.phone} telegramUser={user.telegramUser} orders={counts.orders} favorites={counts.favorites} />
+      <CabinetNav name={user.name} phone={user.phone} telegramUser={user.telegramUser} active={counts.active} orders={counts.orders} favorites={counts.favorites} />
       <div className="flex min-w-0 flex-1 flex-col gap-5">{children}</div>
     </div>
   );
@@ -79,8 +79,8 @@ export function CabinetNav(p: Props) {
         </button>
       </aside>
 
-      {/* Mobil: 4 ta katta bo‘lim — ikonka + nom (bosish maydoni ≥56px), son ikonka burchagida */}
-      <nav className="grid grid-cols-4 gap-0.5 rounded-[20px] bg-bg-soft p-1 lg:hidden" aria-label={t("Kabinet")}>
+      {/* Mobil: 5 ta katta bo‘lim — ikonka + nom (bosish maydoni ≥56px), son ikonka burchagida */}
+      <nav className="grid grid-cols-5 gap-0.5 rounded-[20px] bg-bg-soft p-1 lg:hidden" aria-label={t("Kabinet")}>
         {items.map((it) => {
           const active = samePath(path, lp(it.href));
           const Icon = it.icon;
@@ -90,7 +90,7 @@ export function CabinetNav(p: Props) {
               key={it.href}
               href={it.href}
               aria-current={active ? "page" : undefined}
-              className={`flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-2 text-[12px] tracking-[-0.01em] max-[374px]:text-[10.5px] max-[374px]:tracking-[-0.02em] font-medium leading-[1.15] transition-colors ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2 active:bg-bg-base/60"}`}
+              className={`flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-0.5 py-2 text-[11.5px] tracking-[-0.01em] max-[374px]:px-0 max-[374px]:text-[10px] max-[374px]:tracking-[-0.03em] font-medium leading-[1.15] transition-colors ${active ? "bg-bg-base text-maroon shadow-soft" : "text-ink-2 active:bg-bg-base/60"}`}
             >
               <span className="relative">
                 <Icon size={21} variant={active ? "Bold" : "Linear"} />

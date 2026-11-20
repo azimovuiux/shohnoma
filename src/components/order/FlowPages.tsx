@@ -329,7 +329,7 @@ export function ApprovedPageClient() {
                 className="btn btn-secondary"
               />
               <Link href={me?.user ? "/kabinet/" : `/kirish/?next=${encodeURIComponent(lp("/kabinet/"))}`} className="btn btn-secondary">
-                {t("Buyurtmalarimga o‘tish")}
+                {t("Faol taklifnomalarga o‘tish")}
               </Link>
             </div>
           </StatusScreen>

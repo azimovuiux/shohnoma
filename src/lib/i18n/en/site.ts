@@ -15,6 +15,7 @@ export const en: Record<string, string> = {
   "Har kuni 9:00 – 21:00": "Daily 9:00 – 21:00",
   Kabinet: "Account",
   Buyurtmalarim: "My orders",
+  "Faol taklifnomalar": "Active invitations",
   "Admin panel": "Admin panel",
   Yordam: "Help",
   Chiqish: "Log out",

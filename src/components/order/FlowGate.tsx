@@ -10,7 +10,7 @@ import { useLocalRouter } from "@/lib/useLocalRouter";
 import { useLpath, useT } from "@/lib/i18n";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { PageLoading, routeParam, useApi } from "@/lib/client";
-import type { Invitation, Order, Payment } from "@/lib/types";
+import type { Invitation, Order, OrderStatus, Payment } from "@/lib/types";
 import { isPaidStatus } from "@/lib/types";
 import { getTemplate, type Template } from "@/lib/templates";
 import type { FlowOrder } from "./types";
@@ -163,7 +163,7 @@ export function FlowGate({
   const no = stepNo[step];
   useFlowPage(
     ctx && !target && no
-      ? { kind: ctx.editing ? "edit" : "fill", orderId: ctx.order.id, step: ctx.editing ? null : no, templateSlug: ctx.order.templateSlug }
+      ? { kind: ctx.editing ? "edit" : "fill", orderId: ctx.order.id, step: ctx.editing ? null : no, templateSlug: ctx.order.templateSlug, paid: isPaidStatus(ctx.order.status as OrderStatus) }
       : null,
   );
 

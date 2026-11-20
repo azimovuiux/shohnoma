@@ -10,6 +10,7 @@ import {
   HambergerMenu,
   TickCircle,
   Receipt2,
+  Sms,
   Card,
   Heart,
   ProfileCircle,
@@ -317,6 +318,15 @@ function AccountMenu({
             className={item}
             onClick={() => setOpen(false)}
           >
+            <Sms size={18} /> <span className="flex-1">{t("Faol taklifnomalar")}</span>{" "}
+            <span className="t-body-s text-ink-2">{user.active}</span>
+          </Link>
+          <Link
+            role="menuitem"
+            href="/kabinet/buyurtmalar/"
+            className={item}
+            onClick={() => setOpen(false)}
+          >
             <Receipt2 size={18} /> <span className="flex-1">{t("Buyurtmalarim")}</span>{" "}
             <span className="t-body-s text-ink-2">{user.orders}</span>
           </Link>
@@ -392,6 +402,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
         name: me.user.name,
         phone: me.user.phone,
         telegramUser: me.user.telegramUser,
+        active: me.counts.active,
         orders: me.counts.orders,
         favorites: me.counts.favorites,
         isAdmin: me.user.isAdmin,

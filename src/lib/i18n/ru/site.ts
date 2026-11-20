@@ -15,6 +15,7 @@ export const ru: Record<string, string> = {
   "Har kuni 9:00 – 21:00": "Ежедневно 9:00 – 21:00",
   Kabinet: "Кабинет",
   Buyurtmalarim: "Мои заказы",
+  "Faol taklifnomalar": "Активные приглашения",
   "Admin panel": "Админ-панель",
   Yordam: "Помощь",
   Chiqish: "Выйти",

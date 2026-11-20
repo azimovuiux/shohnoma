@@ -20,7 +20,7 @@ export type FlowStep = 1 | 2 | 3 | 4;
 const STEP_SEG: Record<FlowStep, string> = { 1: "marosim", 2: "tafsilotlar", 3: "korib-chiqish", 4: "tolov" };
 
 /** Joriy sahifa: to‘ldirish bosqichi (fill) yoki kabinetdan tahrirlash (edit) */
-export type FlowPage = { kind: "fill" | "edit"; orderId: string; step: FlowStep | null; templateSlug: string };
+export type FlowPage = { kind: "fill" | "edit"; orderId: string; step: FlowStep | null; templateSlug: string; paid?: boolean };
 /** Formaning saqlovchisi (useAutosave ustida) */
 export type FlowSaver = { flush: () => Promise<boolean>; dirty: () => boolean; discard: () => void; hold?: () => void; resume?: () => void };
 
@@ -126,7 +126,8 @@ export function FlowGuardProvider({ children }: { children: ReactNode }) {
   }, []);
   const isDirty = () => !!saverRef.current?.dirty();
 
-  const exitHref = () => lpath(locale, "/kabinet/");
+  // To‘lanmagan buyurtma — «Buyurtmalarim»; to‘langan taklifnomani tahrirlash — «Faol taklifnomalar»
+  const exitHref = () => lpath(locale, pageRef.current?.paid ? "/kabinet/" : "/kabinet/buyurtmalar/");
   const backFallback = (p: FlowPage) => lpath(locale, p.kind === "edit" ? "/kabinet/" : `/shablonlar/${p.templateSlug}/`);
   const stepHref = (p: FlowPage, s: FlowStep) => lpath(locale, `/buyurtma/${p.orderId}/${STEP_SEG[s]}/`);
 

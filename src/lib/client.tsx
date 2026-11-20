@@ -82,7 +82,7 @@ export function useFirstSegment() {
 
 /* ── Joriy foydalanuvchi ── */
 
-export type Me = { user: User | null; counts: { orders: number; favorites: number } };
+export type Me = { user: User | null; counts: { active: number; orders: number; favorites: number } };
 const MeCtx = createContext<{ me: Me | null; loading: boolean; reload: () => Promise<void> }>({ me: null, loading: true, reload: async () => {} });
 
 export function MeProvider({ children }: { children: ReactNode }) {
@@ -93,7 +93,7 @@ export function MeProvider({ children }: { children: ReactNode }) {
       const r = await apiGet<Me & { ok: boolean }>("/api/me");
       setMe({ user: r.user, counts: r.counts });
     } catch {
-      setMe({ user: null, counts: { orders: 0, favorites: 0 } });
+      setMe({ user: null, counts: { active: 0, orders: 0, favorites: 0 } });
     } finally {
       setLoading(false);
     }

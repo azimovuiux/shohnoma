@@ -221,6 +221,7 @@ export const ru: Record<string, string> = {
   "Taklifnoma ishga tushadi": "Приглашение будет запущено",
   "Havola kabinetda va Telegramda": "Ссылка — в личном кабинете и в Telegram",
   "Buyurtmalarimga o‘tish": "Перейти к моим заказам",
+  "Faol taklifnomalarga o‘tish": "К активным приглашениям",
   "Chekingiz tasdiqlandi": "Ваш чек подтверждён",
   "O‘tkazmangiz qabul qilindi. Taklifnomangiz ishga tushdi, havola Telegram orqali ham yuborildi.":
     "Ваш перевод принят. Приглашение запущено, ссылка также отправлена в Telegram.",

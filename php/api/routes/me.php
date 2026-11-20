@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 route('GET', '/me', function () {
     $u = current_user();
-    if (!$u) json_out(['ok' => true, 'user' => null, 'counts' => ['orders' => 0, 'favorites' => 0]]);
+    if (!$u) json_out(['ok' => true, 'user' => null, 'counts' => ['active' => 0, 'orders' => 0, 'favorites' => 0]]);
     json_out([
         'ok' => true,
         'user' => user_out($u),
         'counts' => [
-            'orders' => (int)scalar('SELECT COUNT(*) FROM orders WHERE user_id = ?', [$u['id']]),
+            // «Faol taklifnomalar» — to‘langanlar (arxiv ham shu bo‘limda); «Buyurtmalar» — hali to‘lanmaganlar
+            'active' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND status IN ('paid','active','archived')", [$u['id']]),
+            'orders' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND status NOT IN ('paid','active','archived')", [$u['id']]),
             'favorites' => (int)scalar('SELECT COUNT(*) FROM favorites f JOIN templates t ON t.slug = f.template_slug AND t.is_active = 1 WHERE f.user_id = ?', [$u['id']]),
         ],
     ]);

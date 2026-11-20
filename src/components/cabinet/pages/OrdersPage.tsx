@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "@/components/LocalLink";
-import { PageLoading, useApi } from "@/lib/client";
+import { PageLoading, useApi, useMe } from "@/lib/client";
 import { isPaidStatus, type Invitation, type Order, type Payment, type Stats } from "@/lib/types";
 import { useSiteUrl } from "../data";
 import { Add, ArrowRight, Clock, Edit, Gallery, Profile2User, SearchNormal1, Trash } from "@/components/icons";
 import { StatusBadge, api, confirmDialog, useToast } from "@/components/ui";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { OrderStatus } from "@/lib/types";
 import { InvitationThumb } from "../InvitationThumb";
 import { LiveDevices } from "@/components/order/LiveDevices";
@@ -25,23 +25,30 @@ type Item = { order: Order; invitation: Invitation; stats: Stats; payment: Payme
 type Group = "all" | "active" | "unpaid" | "archived";
 const groupOf = (s: OrderStatus): Exclude<Group, "all"> =>
   s === "paid" || s === "active" ? "active" : s === "archived" ? "archived" : "unpaid";
+/** «Faol taklifnomalar» sahifasi — to‘langanlar (va arxiv); «Buyurtmalarim» — hali to‘lanmaganlar. To‘lov o‘tgach buyurtma o‘zi faollarga o‘tadi */
+export type OrdersKind = "active" | "orders";
+const inKind = (kind: OrdersKind, s: OrderStatus) => (groupOf(s) === "unpaid") === (kind === "orders");
 const GROUPS: [Group, string][] = [
   ["all", "Barchasi"],
   ["active", "Faol"],
-  ["unpaid", "To‘lov kutilmoqda"],
   ["archived", "Arxiv"],
 ];
 /** Mijoz o‘chira oladigan holatlar (to‘lanmagan, tekshiruvda emas) */
 const DELETABLE: OrderStatus[] = ["draft", "pending_payment", "payment_failed", "p2p_rejected"];
 
-export function OrdersPage() {
+export function OrdersPage({ kind = "active" }: { kind?: OrdersKind }) {
   const tr = useT();
+  const { reload: reloadMe } = useMe();
   const siteUrl = useSiteUrl();
   const toast = useToast();
   const { data, loading, error, reload } = useApi<{ ok: boolean; items: Item[] }>("/api/me/orders");
   const [group, setGroup] = useState<Group>("all");
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
+  // Menyudagi sonlar (faol / buyurtmalar) to‘lovdan keyin eskirib qolmasin
+  useEffect(() => {
+    if (data) void reloadMe();
+  }, [data, reloadMe]);
   if (loading && !data) return <PageLoading />;
   if (error || !data)
     return (
@@ -52,8 +59,10 @@ export function OrdersPage() {
         </button>
       </div>
     );
-  const all = data.items;
+  const all = data.items.filter((x) => inKind(kind, x.order.status));
+  const other = data.items.length - all.length;
   const count = (g: Group) => (g === "all" ? all.length : all.filter((x) => groupOf(x.order.status) === g).length);
+  const showGroups = kind === "active" && all.length > 1 && count("archived") > 0;
   const needle = q.trim().toLowerCase();
   const list = all.filter(
     (x) =>
@@ -78,16 +87,26 @@ export function OrdersPage() {
     <>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-col gap-1.5">
-          <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{tr("Buyurtmalarim")}</h1>
-          <p className="t-body-m text-ink-2">{tr("{n} ta taklifnoma", { n: all.length })}</p>
+          <h1 className="font-serif text-[34px] font-light leading-[1.04] tracking-[-0.005em] text-ink lg:text-[44px]">{tr(kind === "active" ? "Faol taklifnomalar" : "Buyurtmalarim")}</h1>
+          <p className="t-body-m text-ink-2">{tr(kind === "active" ? "{n} ta taklifnoma" : "{n} ta buyurtma", { n: all.length })}</p>
         </div>
         <Link href="/shablonlar/" className="btn btn-primary !py-[13px] !px-[22px]">
           <Add size={16} /> {tr("Yangi taklifnoma")}
         </Link>
       </div>
 
+      {kind === "active" && other > 0 && all.length > 0 && (
+        <Link href="/kabinet/buyurtmalar/" className="flex items-center justify-between gap-3 rounded-card bg-bg-soft px-4 py-3 t-body-s text-ink transition-colors hover:bg-gold-soft">
+          <span className="flex items-center gap-2">
+            <Clock size={16} className="shrink-0 text-maroon" /> {tr("To‘lov kutilayotgan buyurtmalar: {n} ta", { n: other })}
+          </span>
+          <ArrowRight size={16} className="shrink-0 text-maroon" />
+        </Link>
+      )}
+
       {all.length > 1 && (
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div className={`flex flex-col gap-3 lg:flex-row lg:items-center ${showGroups ? "lg:justify-between" : "lg:justify-end"}`}>
+          {showGroups && (
           <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:px-0" role="tablist" aria-label={tr("Filtr")}>
             {GROUPS.map(([g, l]) => (
               <button
@@ -102,6 +121,7 @@ export function OrdersPage() {
               </button>
             ))}
           </div>
+          )}
           <label className="flex h-[42px] items-center gap-2 rounded-full border border-line bg-bg-base px-4 lg:w-[280px]">
             <SearchNormal1 size={16} className="shrink-0 text-ink-2" />
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={tr("Ism yoki kod bo‘yicha qidirish")} className="min-w-0 flex-1 bg-transparent t-body-s text-ink outline-none placeholder:text-ink-2" />
@@ -116,10 +136,18 @@ export function OrdersPage() {
           <span className="flex size-14 items-center justify-center rounded-full bg-gold-soft text-maroon">
             <Gallery size={24} />
           </span>
-          <p className="font-serif text-[30px] font-light text-ink">{tr("Hali taklifnoma yo‘q")}</p>
-          <Link href="/shablonlar/" className="btn btn-primary">
-            {tr("Shablonlarni ko‘rish")} <ArrowRight size={16} />
-          </Link>
+          <p className="font-serif text-[30px] font-light text-ink">{tr(kind === "active" ? "Hali faol taklifnoma yo‘q" : "To‘lanmagan buyurtma yo‘q")}</p>
+          {kind === "active" && <p className="t-body-m max-w-[420px] text-ink-2">{tr("To‘lov qilingach taklifnomangiz shu yerda chiqadi.")}</p>}
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {other > 0 && (
+              <Link href={kind === "active" ? "/kabinet/buyurtmalar/" : "/kabinet/"} className="btn btn-primary">
+                {kind === "active" ? tr("To‘lanmagan buyurtmalar · {n}", { n: other }) : tr("Faol taklifnomalar · {n}", { n: other })} <ArrowRight size={16} />
+              </Link>
+            )}
+            <Link href="/shablonlar/" className={other > 0 ? "btn btn-secondary" : "btn btn-primary"}>
+              {tr("Shablonlarni ko‘rish")} {other > 0 ? null : <ArrowRight size={16} />}
+            </Link>
+          </div>
         </div>
       ) : (
         list.map(({ order, invitation: inv, stats, payment }) => {

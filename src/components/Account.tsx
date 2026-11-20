@@ -9,6 +9,7 @@ import {
   Card,
   CloseCircle,
   Heart,
+  Sms,
   LogoutCurve,
   MessageQuestion,
   ProfileCircle,
@@ -29,6 +30,7 @@ export type AccountUser = {
   name: string | null;
   phone: string | null;
   telegramUser: string | null;
+  active: number;
   orders: number;
   favorites: number;
   isAdmin: boolean;
@@ -36,7 +38,8 @@ export type AccountUser = {
 
 /** Kabinet bo‘limlari — barcha menyularda bir xil tartib va ikonka */
 export const ACCOUNT_SECTIONS = [
-  { href: "/kabinet/", label: "Buyurtmalarim", short: "Buyurtmalar", icon: Receipt2, count: "orders" as const },
+  { href: "/kabinet/", label: "Faol taklifnomalar", short: "Faol", icon: Sms, count: "active" as const },
+  { href: "/kabinet/buyurtmalar/", label: "Buyurtmalarim", short: "Buyurtma", icon: Receipt2, count: "orders" as const },
   { href: "/kabinet/sevimlilar/", label: "Sevimlilar", short: "Sevimlilar", icon: Heart, count: "favorites" as const },
   { href: "/kabinet/tolovlar/", label: "To‘lovlar", short: "To‘lovlar", icon: Card, count: null },
   { href: "/kabinet/profil/", label: "Profil", short: "Profil", icon: ProfileCircle, count: null },

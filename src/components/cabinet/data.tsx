@@ -50,7 +50,7 @@ export function NotFoundBox({ text = "Taklifnoma topilmadi" }: { text?: string }
       <p className="font-serif text-[30px] font-light text-ink">{t(text)}</p>
       <p className="t-body-m max-w-[380px] text-ink-2">{t("Havola noto‘g‘ri yoki bu taklifnoma boshqa akkauntga tegishli.")}</p>
       <Link href="/kabinet/" className="btn btn-primary">
-        <ArrowLeft size={16} /> {t("Buyurtmalarim")}
+        <ArrowLeft size={16} /> {t("Faol taklifnomalar")}
       </Link>
     </div>
   );

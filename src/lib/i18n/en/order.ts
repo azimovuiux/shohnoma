@@ -221,6 +221,7 @@ export const en: Record<string, string> = {
   "Taklifnoma ishga tushadi": "Invitation goes live",
   "Havola kabinetda va Telegramda": "Link in your account and on Telegram",
   "Buyurtmalarimga o‘tish": "Go to my orders",
+  "Faol taklifnomalarga o‘tish": "Go to active invitations",
   "Chekingiz tasdiqlandi": "Your receipt is confirmed",
   "O‘tkazmangiz qabul qilindi. Taklifnomangiz ishga tushdi, havola Telegram orqali ham yuborildi.":
     "Your transfer has been received. Your invitation is live, and the link was also sent on Telegram.",

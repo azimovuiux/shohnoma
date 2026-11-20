@@ -9,6 +9,7 @@ export function langAlternates(path: string, lang: "uz" | "ru" | "en" = "uz"): N
 /** /ru/ sahifalarining sarlavha va tavsiflari (server — metadata uchun) */
 export const RU_TITLES: Record<string, string> = {
   "Buyurtmalarim": "Мои заказы",
+  "Faol taklifnomalar": "Активные приглашения",
   "Profil": "Профиль",
   "Sevimlilar": "Избранное",
   "Mehmonlar javobi": "Ответы гостей",
@@ -61,6 +62,7 @@ export function ruMeta(m: Metadata | undefined, path: string): Metadata {
 /** /en/ sahifalarining sarlavha va tavsiflari */
 export const EN_TITLES: Record<string, string> = {
   "Buyurtmalarim": "My orders",
+  "Faol taklifnomalar": "Active invitations",
   "Profil": "Profile",
   "Sevimlilar": "Favourites",
   "Mehmonlar javobi": "Guest replies",
