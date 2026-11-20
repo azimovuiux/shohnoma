@@ -107,7 +107,7 @@ export function PayChoice({ order, template, providers, soon = [], p2pMode = "ca
         </div>
         <PromoBox orderId={order.id} state={promo} onChange={setPromo} />
       </div>
-      <StepNav back={`/buyurtma/${order.id}/korib-chiqish/`}>{button}</StepNav>
+      <StepNav back={`/buyurtma/${order.id}/korib-chiqish/`} />
 
       <MobileBar>
         <MobileActions back={`/buyurtma/${order.id}/korib-chiqish/`}>{button}</MobileActions>

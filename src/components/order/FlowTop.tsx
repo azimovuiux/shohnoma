@@ -91,7 +91,7 @@ export function SaveDraftButton({ className = "btn btn-secondary", short = false
 }
 
 /** Bosqich oxiridagi navigatsiya (katta ekran): ← Orqaga · Qoralamani saqlash · Davom etish */
-export function StepNav({ back, children }: { back: string; children: ReactNode }) {
+export function StepNav({ back, children }: { back: string; children?: ReactNode }) {
   const t = useT();
   return (
     <div className="mt-10 hidden items-center gap-3 border-t border-line pt-6 lg:flex">
@@ -100,7 +100,7 @@ export function StepNav({ back, children }: { back: string; children: ReactNode 
       </BackLink>
       <div className="ml-auto flex items-center gap-3">
         <SaveDraftButton />
-        <div className="w-[260px]">{children}</div>
+        {children && <div className="w-[260px]">{children}</div>}
       </div>
     </div>
   );
