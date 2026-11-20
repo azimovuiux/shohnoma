@@ -66,6 +66,7 @@ const FACES: Face[] = [
   { family: "sc-philosopher", weight: 400, style: "italic", files: subs(T("sandiq"), "philosopher", "400-italic") },
   { family: "sc-tenor", weight: 400, style: "normal", files: subs(T("sovga"), "tenor-sans", "400-normal") },
   { family: "sc-unbounded", weight: 500, style: "normal", files: subs(T("sham"), "unbounded", "500-normal") },
+  { family: "sc-unbounded", weight: 900, style: "normal", files: subs(T("koinot"), "unbounded", "900-normal") },
   // Bodoni Moda’da kirill yo‘q — riviera.module.css dagi kabi Playfair Display
   {
     family: "sc-bodoni",

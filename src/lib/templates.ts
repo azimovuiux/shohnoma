@@ -711,6 +711,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Qulay va bayramona — o‘zingizni erkin his qiladigan kiyim.", max: 160 },
     ],
   },
+  {
+    number: 18,
+    slug: "koinot",
+    name: "Koinot",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "O‘g‘il bolaning tug‘ilgan kuni uchun kosmik taklifnoma. Ranglari — tungi ko‘k, to‘q sariq va sut rang. Sahifani pastga surganingizda halqada 3, 2, 1 sanog‘i o‘tadi, raketa tutun ichidan uchib ketadi va ortidan bolangizning surati, ismi va yoshi chiqadi. Keyin taklif matni, sana va sanoq, bayram dasturi, manzil, kiyinish uslubi va mehmonlar javobi; oxirida raketa yana uchib keladi va kosmonavt qo‘l silkitadi.",
+    descriptionRu: "Космическое приглашение на день рождения мальчика. Цвета — ночной синий, оранжевый и молочный. Когда вы листаете страницу вниз, на кольце идёт отсчёт 3, 2, 1, ракета улетает из облака дыма, а за ней появляются фото, имя и возраст вашего сына. Дальше текст приглашения, дата и отсчёт, программа праздника, адрес, стиль одежды и ответы гостей; в конце ракета прилетает снова, а космонавт машет рукой.",
+    descriptionEn: "A space-themed birthday invitation for a boy. The colours are night blue, orange and milk white. As you scroll down, a ring counts down 3, 2, 1, the rocket lifts off through a cloud of smoke, and your son’s photo, name and age appear after it. Then the invitation text, the date and a countdown, the party schedule, the venue, what to wear and guest replies; at the end the rocket flies in again and an astronaut waves.",
+    palette: ["#0E1733", "#FF7A3D", "#6FB7FF", "#FFF4E2"],
+    sample: { a: "Samir", date: "12 · 12 · 2027", venue: "«Orbita» bolalar markazi", time: "15:00" },
+    theme: { bg: ["#16224a", "#090f24"], ink: "#fff4e2", accent: "#ff7a3d", soft: "#f6e7a8", script: "cormorant", color: "moviy" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "6", max: 3, hint: "Ixtiyoriy · katta to‘q sariq raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida «tug‘ilgan kunini nishonlaydi»" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Aziza va Jasur", max: 60, hint: "Ixtiyoriy · odatda ota-ona: taklif shu nomdan («O‘g‘limiz … taklif qilamiz»), imzo — shu; bo‘sh qolsa — bolaning o‘zi nomidan" },
+      {
+        key: "program",
+        type: "list",
+        label: "Bayram dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlar kelishi", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Fotozona va kosmik bezaklar", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Kosmik uslub", "Erkin va qulay", "Bayramona", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kosmonavt kostyumi, yulduzli futbolka yoki ko‘k-to‘q sariq ranglar — ixtiyoriy.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -943,6 +978,11 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Asosiy surat", where: "Katta yosh raqami yonidagi surat. Bo‘lmasa — ramkada yonib turgan sham" },
     { title: "Surat · 2", where: "«Yillar — xotira» bo‘limidagi kvadrat surat. Bo‘lmasa — shablonning tort surati" },
     { title: "Surat · 3", where: "«Manzil» — joy surati. Bo‘lmasa — shablonning terrassa surati" },
+  ],
+  /** Koinot (o‘g‘il bola tug‘ilgan kuni) — bo‘sh slotlar: hero illyuminatorida kosmonavt, 2-surat — shablonning bayram zali surati */
+  koinot: [
+    { title: "Asosiy surat", where: "Birinchi ekran — illyuminator (dumaloq oyna) ichidagi surat. Bo‘lmasa — illyuminatorda kosmonavt" },
+    { title: "Surat · 2", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

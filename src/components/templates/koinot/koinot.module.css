@@ -1,0 +1,1063 @@
+/*
+ * Koinot — o‘g‘il bola tug‘ilgan kuni taklifnomasi (kosmik sarguzasht): tungi ko‘k, sut, to‘q sariq, osmon ko‘k
+ * (Figma 526:18911 mobil, 530:12622 laptop; «18 · Koinot — Assets» 525:18911).
+ * Shriftlar: Unbounded 600/700/900 (sarlavhalar, ism, raqamlar) + Manrope 400–700 (matn) — lotin va kirill.
+ * Ranglar: navy #0e1733, navyD #090f24, cream #fff4e2, ink #171c33, orange #ff7a3d, blue #6fb7ff, yellow #f6e7a8, mute #6b738f.
+ * Birlik `--u`: kontent ustuni (mobil 390; laptopda ustun = mobil × 1.2). Ochilish va hero — o‘z kanvasi (390×844 / 1440×1013).
+ * Harakat («Motion — 18 · Koinot»), ochilish faqat scroll bilan (--o: 0…1; bosish talab qilinmaydi): halqada 3 → 2 → 1, tutun
+ * bo‘rtadi, raketa titraydi va to‘q sariq iz qoldirib uchib ketadi, kamera raketa ortidan hero’ga «ko‘tariladi» (qattiq chok —
+ * sharpa yo‘q); hero — illyuminator prujina bilan, orbita aylanadi, ism harfma-harf, yosh raqami sakrab chiqadi.
+ * Skrollda: yulduzlar ikki qatlamda miltillaydi, sayyoralar parallaks, oy va halqali sayyora chok ustida sekin aylanadi (±6°),
+ * kosmonavt suzadi, taymer flip, dastur trayektoriyasi chiziladi va bekatlar navbat bilan yonadi. Final (--fc) — raketa diagonal
+ * uchib keladi, uchar yulduzlar o‘tadi. Hamma rasmlar Normal blend.
+ */
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-cyrillic-600-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-latin-ext-600-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-cyrillic-700-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-latin-ext-700-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-cyrillic-900-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-latin-ext-900-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Koinot Unbounded";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/templates/koinot/fonts/unbounded-latin-900-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --navy: #0e1733;
+  --navyD: #090f24;
+  --cream: #fff4e2;
+  --ink: #171c33;
+  --orange: #ff7a3d;
+  --blue: #6fb7ff;
+  --yellow: #f6e7a8;
+  --mute: #6b738f;
+  --line: #dbd4c7;
+  --sh-loader-a: #16224a;
+  --sh-loader-b: #090f24;
+  --sh-ring: rgba(255, 122, 61, 0.5);
+  position: relative;
+  container-type: inline-size;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: "Manrope", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: var(--cream);
+}
+.ub6,
+.ub7,
+.ub9 {
+  font-family: "Koinot Unbounded", "Manrope", system-ui, sans-serif;
+  font-style: normal;
+}
+.ub6 {
+  font-weight: 600;
+}
+.ub7 {
+  font-weight: 700;
+}
+.ub9 {
+  font-weight: 900;
+}
+.ms,
+.ms5,
+.ms6,
+.ms7 {
+  font-family: "Manrope", system-ui, sans-serif;
+}
+.ms {
+  font-weight: 400;
+}
+.ms5 {
+  font-weight: 500;
+}
+.ms6 {
+  font-weight: 600;
+}
+.ms7 {
+  font-weight: 700;
+}
+.clamp2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.art {
+  position: absolute;
+  pointer-events: none;
+}
+.fill {
+  position: absolute;
+  inset: 0;
+}
+.svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.star {
+  position: absolute;
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ── Yulduz foni (Figma «Koinot / Yulduzlar» 390×420 — ikki yarmi alohida qatlam) ── */
+.sky {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.skyA,
+.skyB {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-size: var(--tw) var(--th);
+}
+.skyA {
+  background-image: url("/templates/koinot/yulduzlar-a.svg");
+}
+.skyB {
+  background-image: url("/templates/koinot/yulduzlar-b.svg");
+}
+/* ikki qatlam turli tezlikda miltillaydi */
+.twA {
+  animation: tw 3.4s ease-in-out infinite alternate;
+}
+.twB {
+  animation: tw 4.7s ease-in-out -2.1s infinite alternate;
+}
+@keyframes tw {
+  to {
+    opacity: 0.35;
+  }
+}
+.skyBox {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Suzish (kosmonavt, kichik raketa): y ±10, 4 s, sinus — `translate` (parallaks/paydo bo‘lish bilan to‘qnashmaydi) ── */
+.bob {
+  animation: bob 4s ease-in-out var(--bd, 0s) infinite alternate;
+}
+@keyframes bob {
+  from {
+    translate: 0 calc(var(--u) * -6);
+  }
+  to {
+    translate: 0 calc(var(--u) * 6);
+  }
+}
+.bobSoft {
+  animation: bob 3.2s ease-in-out infinite alternate;
+}
+/* kosmonavt «qo‘l silkitadi» — yengil chayqalish (`rotate`) */
+.wave {
+  transform-origin: 50% 60%;
+  animation:
+    bob 4s ease-in-out var(--bd, 0s) infinite alternate,
+    wave 2.6s ease-in-out infinite alternate;
+}
+@keyframes wave {
+  from {
+    rotate: -4deg;
+  }
+  to {
+    rotate: 5deg;
+  }
+}
+/* «Kela olmayman» — oy yengil chayqaladi */
+.wobble {
+  animation: wobble 0.9s var(--ease);
+}
+@keyframes wobble {
+  20% {
+    rotate: -9deg;
+  }
+  45% {
+    rotate: 7deg;
+  }
+  70% {
+    rotate: -4deg;
+  }
+  100% {
+    rotate: 0deg;
+  }
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.cream {
+  background: var(--cream);
+}
+.night {
+  background-color: var(--navy);
+  background-image: url("/templates/koinot/yulduzlar-a.svg"), url("/templates/koinot/yulduzlar-b.svg");
+  background-repeat: repeat;
+  background-size: var(--tw) var(--th);
+  background-position: 0 var(--sy, 0px);
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+}
+.deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* chok ustidagi bezak — qo‘shni bo‘lim ustiga chiqadi */
+.seam {
+  z-index: 4;
+}
+/* skroll parallaksi va aylanish (JS: --py, --pr) */
+.root [data-px] {
+  translate: 0 var(--py, 0px);
+}
+.root [data-px="r"] {
+  rotate: var(--pr, 0deg);
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 18));
+}
+.root [data-a="rise"] {
+  --t: 1.3s;
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 46));
+}
+.root [data-a="right"] {
+  --t: 0.9s;
+}
+.root [data-a="right"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(5px);
+  transform: translateX(calc(var(--u) * 22));
+}
+/* sayyora/oy/raketa — kichikdan prujina bilan */
+.root [data-a="pop"] {
+  --t: 1.2s;
+  --e: var(--spring);
+}
+.root [data-a="pop"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.6) translateY(calc(var(--u) * 20));
+}
+/* yulduzcha — aylanib yonadi */
+.root [data-a="star"] {
+  --t: 1s;
+  --e: var(--spring);
+}
+.root [data-a="star"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0) rotate(-120deg);
+}
+.root [data-a="zoom"] {
+  --t: 1.2s;
+}
+.root [data-a="zoom"]:not([data-in]) {
+  opacity: 0;
+}
+.zoomImg {
+  object-fit: cover;
+  transition: transform 1.8s var(--ease) var(--d, 0s);
+}
+.root [data-a]:not([data-in]) .zoomImg {
+  transform: scale(1.08);
+}
+/* katta sana — pastdan ko‘tariladi */
+.root [data-a="draw"] {
+  --t: 1.3s;
+  --e: var(--spring);
+}
+.root [data-a="draw"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 30)) scale(0.92);
+}
+/* taymer kartalari — flip (yuqori cheti atrofida) */
+.root [data-a="flip"] {
+  --t: 1s;
+  transform-origin: 50% 0;
+}
+.root [data-a="flip"]:not([data-in]) {
+  opacity: 0;
+  transform: perspective(calc(var(--u) * 400)) rotateX(-80deg);
+}
+/* dastur trayektoriyasi — yuqoridan pastga chiziladi */
+.root [data-a="line"] {
+  --t: 0.9s;
+  --e: linear;
+  transform-origin: 50% 0;
+}
+.root [data-a="line"]:not([data-in]) {
+  transform: scaleY(0);
+}
+/* bekat — yonadi */
+.root [data-a="dot"] {
+  --t: 0.8s;
+  --e: var(--spring);
+}
+.root [data-a="dot"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+/* ═════ 00 · Ochilish — raketa start maydonida (scroll bilan) ═════
+ * JS faqat --o (0…1, lerp) va --sk (titrash) ni `.opening` ga yozadi; qolgani shu yerda. Vaqt chizig‘i:
+ * sanoq 3 (0…0.09) → 2 (0.09…0.18) → 1 (0.18…0.27), halqa bo‘ylab yoy; halqa (0.28…0.34) va sarlavha (0.3…0.36) ketadi;
+ * start nuri (0.18…0.34), olov (0.25…0.35), tutun bo‘rtadi (0.2…0.42, 0.36…0.6), titrash (0.22…0.46);
+ * uchish (0.34…0.62, ease-in) + iz; kamera (0.5…0.8): start sahnasi pastga, hero tepadan (yulduzlar 0.35×);
+ * hero: sayyoralar (0.5…0.8), illyuminator (0.56…0.84), orbita (0.58…0.78), ism (0.64…0.84), yosh (0.72…0.92), sana (0.84…0.97). */
+.opening {
+  --o: 0;
+  --sk: 0;
+}
+.gateWrap,
+.gateHold {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  height: calc(100svh * 2.3);
+  margin-bottom: calc(100svh * -2.3);
+}
+.gateHold {
+  background: linear-gradient(180deg, var(--navyD), var(--navy));
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+/* kamera: start sahnasi butunligicha pastga ketadi (shaffoflik yo‘q) */
+.gLayer {
+  position: absolute;
+  inset: 0;
+  --pp: clamp(0, (var(--o) - 0.44) / 0.34, 1);
+  --pn: calc(var(--pp) * var(--pp) * (3 - 2 * var(--pp)));
+  transform: translateY(calc(var(--pn) * 100%));
+}
+.gBg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--navyD) 0%, var(--navy) 100%);
+}
+.gTop {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 40%;
+  background: linear-gradient(180deg, var(--navy) 0%, rgba(14, 23, 51, 0) 100%);
+  opacity: clamp(0, (var(--o) - 0.41) / 0.04, 1);
+}
+/* yulduzlar sahnadan sekinroq (0.35×) */
+.gStars {
+  top: 0;
+  height: 165%;
+  transform: translateY(calc(var(--pn) * -39.394%));
+}
+/* yuklanganda — sokin kirish (alohida qatlam: scroll transformlari bilan to‘qnashmaydi) */
+.gateWrap:not(.still) .gIn {
+  animation: gIn 1.2s var(--gd, 0s) var(--ease) both;
+}
+@keyframes gIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 14));
+  }
+}
+.gTitle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --te: clamp(0, (var(--o) - 0.32) / 0.06, 1);
+  opacity: calc(1 - var(--te));
+  transform: translateY(calc(var(--u) * -24 * var(--te)));
+}
+.count {
+  position: absolute;
+  --ce: clamp(0, (var(--o) - 0.3) / 0.06, 1);
+  opacity: calc(1 - var(--ce));
+  transform: translateY(calc(var(--u) * -20 * var(--ce))) scale(calc(1 + 0.25 * var(--ce)));
+}
+/* har raqam o‘z oralig‘ida (qattiq almashish — ikki raqam bir vaqtda ko‘rinmaydi); 2 va 1 — 1.4 → 1 */
+.digit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--orange);
+  --s: calc(var(--i) * 0.1);
+  --e: calc(var(--i) * 0.1 + 0.1);
+  --pp: clamp(0, (var(--o) - var(--s)) / 0.04, 1);
+  opacity: calc(clamp(0, (var(--o) - var(--s)) * 10000 + 1, 1) * clamp(0, (var(--e) - var(--o)) * 10000, 1));
+  transform: scale(calc(1.4 - 0.4 * (1 - (1 - var(--pp)) * (1 - var(--pp)))));
+}
+.digit:first-of-type {
+  --pp: 1;
+}
+.digit:last-of-type {
+  --e: 9;
+}
+/* halqa bo‘ylab sut rangli yoy — har raqam oralig‘ida 0 → 360° */
+.arc {
+  fill: none;
+  stroke: var(--cream);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transform-box: fill-box;
+  --s: calc(var(--i) * 0.1);
+  --e: calc(var(--i) * 0.1 + 0.1);
+  stroke-dashoffset: calc(1 - clamp(0, (var(--o) - var(--s)) / 0.1, 1));
+  opacity: calc(clamp(0, (var(--o) - var(--s)) * 10000, 1) * clamp(0, (var(--e) - var(--o)) * 10000, 1));
+}
+.arc:last-of-type {
+  --e: 9;
+}
+/* start nuri (Figma: to‘q sariq doiralar 14% / 18%) — olov yonganda kuchayadi, uchgach so‘nadi */
+.pad {
+  position: absolute;
+  border-radius: 50%;
+  --ig: clamp(0, (var(--o) - 0.2) / 0.16, 1);
+  --fo: clamp(0, (var(--o) - 0.44) / 0.14, 1);
+  transform: scale(calc(1 + 0.28 * var(--ig) - 0.15 * var(--fo)));
+}
+.pad1 {
+  background: rgba(255, 122, 61, 0.24);
+  opacity: calc((0.5833 + 0.4167 * var(--ig)) * (1 - var(--fo)));
+}
+.pad2 {
+  background: rgba(255, 150, 80, 0.34);
+  opacity: calc((0.5294 + 0.4706 * var(--ig)) * (1 - var(--fo)));
+}
+/* raketa: titrash (--sk) va uchish (ease-in, --tr) */
+.rocket {
+  position: absolute;
+  --lp: clamp(0, (var(--o) - 0.34) / 0.22, 1);
+  --le: calc(var(--lp) * var(--lp) * (0.4 + 0.6 * var(--lp)));
+  /* kamera bilan birga pastga ketmaydi — ekrandan chiqib ketgach qaytib ko‘rinmaydi */
+  transform: translate(calc(var(--sk) * var(--u)), calc(var(--le) * var(--tr) * -1 - var(--pn) * 100svh));
+}
+/* to‘q sariq iz — soplodan start maydonigacha (raketa bilan bir xil masofa) */
+.trail {
+  position: absolute;
+  height: var(--tr);
+  --lp: clamp(0, (var(--o) - 0.34) / 0.22, 1);
+  --le: calc(var(--lp) * var(--lp) * (0.4 + 0.6 * var(--lp)));
+  transform-origin: 50% 100%;
+  transform: translateY(-100%) scaleY(var(--le));
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffe2a6 0%, #ff9a52 12%, rgba(255, 122, 61, 0.55) 45%, rgba(255, 122, 61, 0) 100%);
+  filter: blur(1.5px);
+  /* iz — kamera ko‘tarila boshlaganda tarqaladi (hero ustida chiziq qolmaydi) */
+  opacity: calc(min(1, var(--lp) * 30) * (1 - clamp(0, (var(--o) - 0.47) / 0.08, 1)));
+}
+/* olov — soplodan pastga o‘sadi, uchishda cho‘ziladi */
+.flame {
+  position: absolute;
+  z-index: -1;
+  transform-origin: 50% 0;
+  --fl: clamp(0, (var(--o) - 0.27) / 0.1, 1);
+  transform: scale(var(--fl), calc(var(--fl) * (1 + 1.2 * var(--le, 0))));
+  opacity: min(1, calc(var(--fl) * 3));
+}
+.rocket > .flame {
+  z-index: 0;
+}
+.rocket > img {
+  position: relative;
+  z-index: 1;
+}
+.flameIn {
+  position: absolute;
+  inset: 0;
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  background: radial-gradient(ellipse 50% 60% at 50% 30%, #fff6d2 0%, #ffc15c 35%, #ff7a3d 70%, rgba(255, 122, 61, 0) 100%);
+  transform-origin: 50% 0;
+  animation: flick 0.14s ease-in-out infinite alternate;
+}
+@keyframes flick {
+  from {
+    transform: scale(0.92, 0.9);
+  }
+  to {
+    transform: scale(1.06, 1.08);
+  }
+}
+/* uchish tutuni — pastdan bo‘rtib kengayadi */
+.smoke {
+  --sm: clamp(0, (var(--o) - 0.22) / 0.22, 1);
+  --sme: calc(1 - (1 - var(--sm)) * (1 - var(--sm)));
+  --sm2: clamp(0, (var(--o) - 0.38) / 0.24, 1);
+  transform-origin: 50% 85%;
+  transform: scale(calc(1 + 0.15 * var(--sme) + 0.12 * var(--sm2)));
+}
+.smokeL {
+  transform: translateX(calc(var(--u) * -60 * var(--sme))) scale(calc(1 + 0.12 * var(--sme) + 0.1 * var(--sm2)));
+}
+.smokeR {
+  transform: translateX(calc(var(--u) * 60 * var(--sme))) scale(calc(1 + 0.12 * var(--sme) + 0.1 * var(--sm2)));
+}
+/* mokap/poster ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 01 · Hero — ochilish ostida (sticky), --o bilan: tepadan tushadi ═════ */
+.openWrap {
+  position: relative;
+}
+.openWrap > .hero {
+  position: sticky;
+  top: 0;
+}
+.openStill > .hero {
+  position: relative;
+}
+.openSpacer {
+  height: calc(100svh * 1.3);
+}
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+}
+.hLayer {
+  position: absolute;
+  inset: 0;
+  --pp: clamp(0, (var(--o) - 0.44) / 0.34, 1);
+  --pn: calc(var(--pp) * var(--pp) * (3 - 2 * var(--pp)));
+  transform: translateY(calc((var(--pn) - 1) * 100%));
+}
+.hBg {
+  position: absolute;
+  inset: 0;
+  background: var(--navy);
+}
+.hStars {
+  top: -65%;
+  height: 165%;
+  transform: translateY(calc((1 - var(--pn)) * 39.394%));
+}
+/* sayyoralar — kamera bilan kechroq keladi (uzoqroq) */
+.hPlanet {
+  transform: translateY(calc(((1 - var(--pn)) * -110 + (1 - var(--o)) * 30) * var(--u) * var(--pf, 1)));
+}
+.orbit {
+  opacity: clamp(0, (var(--o) - 0.64) / 0.3, 1);
+}
+.spin {
+  animation: spin 40s linear infinite;
+}
+.spinDot {
+  animation: spin 16s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.moonDot {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 calc(var(--u) * 8) rgba(255, 122, 61, 0.7);
+}
+/* illyuminator — 0.85 → 1, prujina (back-out) */
+.port {
+  position: absolute;
+  --ps: clamp(0, (var(--o) - 0.6) / 0.34, 1);
+  --pq: calc(var(--ps) - 1);
+  --pe: calc(1 + 2.70158 * var(--pq) * var(--pq) * var(--pq) + 1.70158 * var(--pq) * var(--pq));
+  transform: scale(calc(0.85 + 0.15 * var(--pe)));
+}
+.portIn {
+  position: absolute;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--cream);
+  isolation: isolate;
+}
+.portImg {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  object-fit: cover;
+}
+.portRim {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--cream);
+  pointer-events: none;
+}
+.portEmpty {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, #1b2a5c 0%, var(--navy) 70%);
+}
+.portStars {
+  top: 0;
+  bottom: 0;
+}
+/* ism harflari — birin-ketin pastdan ko‘tariladi */
+.letter {
+  display: inline-block;
+  --lp: clamp(0, (var(--o) - var(--li)) / 0.1, 1);
+  --lpE: calc(1 - (1 - var(--lp)) * (1 - var(--lp)));
+  opacity: var(--lp);
+  transform: translateY(calc((1 - var(--lpE)) * 0.5em));
+}
+/* yosh raqami — pastdan otilib chiqib ozgina sakraydi (overshoot) */
+.ageNum {
+  display: block;
+  --ap: clamp(0, (var(--o) - 0.53) / 0.15, 1);
+  --aq: calc(var(--ap) - 1);
+  --ae: calc(1 + 3.2 * var(--aq) * var(--aq) * var(--aq) + 2.2 * var(--aq) * var(--aq));
+  opacity: min(1, calc(var(--ap) * 4));
+  transform: translateY(calc((1 - var(--ae)) * var(--u) * 120));
+}
+.ageTxt {
+  display: block;
+  --at: clamp(0, (var(--o) - 0.56) / 0.12, 1);
+  opacity: var(--at);
+  transform: translateX(calc((1 - var(--at)) * var(--u) * -16));
+}
+.pill {
+  --pl: clamp(0, (var(--o) - 0.49) / 0.11, 1);
+  opacity: var(--pl);
+  transform: translateY(calc((1 - var(--pl)) * var(--u) * 14));
+}
+.pillIn {
+  display: inline-flex;
+  align-items: center;
+  border-style: solid;
+  border-color: rgba(255, 244, 226, 0.5);
+  color: var(--cream);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* ═════ 03 · Sana ═════ */
+.tbox {
+  background: var(--cream);
+}
+.digits {
+  display: inline-flex;
+}
+.slot {
+  display: inline-block;
+}
+/* o‘zgargan raqam — yuqoridan sekin tushadi; shaffoflik yo‘q, kesilmaydi (padded «0» hech qachon yo‘qolmaydi) */
+.tick {
+  display: inline-block;
+  animation: tick 0.5s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: translateY(-0.14em);
+  }
+}
+
+/* ═════ Tugmalar ═════ */
+.btnLine,
+.btnFill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease);
+}
+.btnLine {
+  border-style: solid;
+  border-color: rgba(255, 244, 226, 0.6);
+  color: var(--cream);
+  background: transparent;
+}
+.btnLine:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 244, 226, 0.08);
+}
+.btnFill {
+  background: var(--orange);
+  color: var(--navy);
+}
+.btnFill:hover {
+  transform: translateY(-2px);
+}
+
+/* ═════ 04 · Dastur ═════ */
+.route {
+  position: absolute;
+  background: repeating-linear-gradient(180deg, rgba(23, 28, 51, 0.25) 0 calc(var(--u) * 5.93), transparent calc(var(--u) * 5.93) calc(var(--u) * 13.83));
+}
+.stop {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border-style: solid;
+  border-color: var(--ink);
+}
+.root .stop[data-in] {
+  animation: glowOnce 1.4s var(--d, 0s) ease-out both;
+}
+@keyframes glowOnce {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 122, 61, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 calc(var(--u) * 14) rgba(255, 122, 61, 0);
+  }
+}
+
+/* ═════ 06 · Dress-kod ═════ */
+.dressCard {
+  background: var(--cream);
+}
+
+/* ═════ 07 · Anketa ═════ */
+.card {
+  background: #fff;
+  color: var(--ink);
+}
+.lbl {
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--cream);
+  transition: box-shadow 0.3s var(--ease);
+}
+.field:focus-within {
+  box-shadow: 0 0 0 2px rgba(255, 122, 61, 0.45);
+}
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.35;
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.input::placeholder {
+  color: var(--mute);
+  opacity: 1;
+}
+.choice {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: var(--line);
+  color: var(--ink);
+  background: transparent;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--navy);
+}
+/* «Kelaman» — tugmadan kichik raketa uchib chiqadi */
+.fly {
+  position: absolute;
+  left: 50%;
+  bottom: 55%;
+  pointer-events: none;
+  animation: fly 1.1s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+@keyframes fly {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * -170)) scale(1);
+  }
+}
+.step {
+  border-style: solid;
+  border-color: var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+  background: #fff;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.submit {
+  background: var(--navy);
+  color: var(--cream);
+  transition: transform 0.4s var(--spring);
+}
+.submit:hover {
+  transform: translateY(-2px);
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+
+/* ═════ 08 · Final — scroll bilan (--fc: 0 … 1 = Figma kadri; sahifa oxirigacha albatta tugaydi) ═════ */
+.finalWrap {
+  --fc: 0;
+}
+/* raketa — pastki chap burchakdan diagonal uchib keladi (ease-out), orqasidagi olov yetib kelganda o‘chadi */
+.fRocket {
+  --rf: clamp(0, (var(--fc) - 0.05) / 0.6, 1);
+  --re: calc(1 - (1 - var(--rf)) * (1 - var(--rf)) * (1 - var(--rf)));
+  transform: translate(calc((1 - var(--re)) * var(--u) * -230), calc((1 - var(--re)) * var(--u) * 300));
+}
+.fRocket img {
+  position: relative;
+  z-index: 1;
+}
+.fFlame {
+  position: absolute;
+  z-index: 0;
+  transform-origin: 50% 0;
+  opacity: calc((1 - var(--re)) * min(1, var(--rf) * 10));
+}
+/* uchar yulduzlar — diagonal o‘tib so‘nadi (oxirgi kadrda yo‘q) */
+.shoot {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255, 244, 226, 0) 0%, rgba(255, 244, 226, 0.9) 85%, #fff 100%);
+  transform-origin: 100% 50%;
+  --k: clamp(0, (var(--fc) - var(--s0)) / 0.3, 1);
+  opacity: calc(min(1, var(--k) * 6) * (1 - clamp(0, (var(--k) - 0.6) / 0.4, 1)));
+  transform: rotate(148deg) translateX(calc(var(--k) * var(--u) * 260));
+}
+
+/* ═════ Musiqa tugmasi (Figma: tungi doira 52, sut rang halqa, 4 ta to‘q sariq chiziq) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--navy);
+  border: 1.5px solid var(--cream);
+  box-shadow: 0 3px 12px rgba(5, 9, 22, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  animation: musicIn 0.8s 1.2s var(--ease) both;
+}
+@keyframes musicIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.musicEmbedded {
+  position: absolute;
+}
+.bar {
+  display: block;
+  width: 3px;
+  height: var(--h);
+  border-radius: 1.5px;
+  background: var(--orange);
+  transition:
+    height 0.3s var(--ease),
+    background 0.3s var(--ease);
+}
+.music:not(.playing) .bar {
+  height: 4px;
+  background: var(--cream);
+}
+.music.playing .bar {
+  animation: eq 0.9s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.27s);
+}
+@keyframes eq {
+  to {
+    transform: scaleY(0.45);
+  }
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--navyD);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* qo‘shni tungi bo‘limlar chokida kasr piksel tufayli ingichka och chiziq ko‘rinmasin */
+.night + .night {
+  box-shadow: 0 -1px 0 var(--navy);
+}

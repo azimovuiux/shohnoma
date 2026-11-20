@@ -491,4 +491,28 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+
+  /* Koinot (o‘g‘il bola tug‘ilgan kuni): tungi osmon, yulduzlar, start nuri, raketa va uchish tutuni (Figma 00) — fonda
+   * (sanoq halqasi va oy olib tashlangan — matn uchun joy); mehmon — eng tepada; taklif turi (Manrope, to‘q sariq),
+   * ism (Unbounded Black, sut rang; uzun bo‘lsa — 2 qator), sana va joy — raketa burnidan yuqorida */
+  koinot: {
+    fill: "#0e1733",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 74, anchor: "center", w: 900, maxH: 110, items: [{ k: "guest", s: st(f.manrope, 38, "#f6e7a8", { weight: 600, maxLines: 2, min: 28, lh: 1.2 }) }] },
+      {
+        y: 150,
+        anchor: "top",
+        w: 940,
+        maxH: 420,
+        items: [
+          { k: "kicker", s: st(f.manrope, 36, "#ff7a3d", { weight: 600, ls: 0.02, min: 26, lh: 1.2 }) },
+          { k: "names", mode: "two", s: st(f.unbounded, 112, "#fff4e2", { weight: 900, min: 58, lh: 1.12 }), gap: 18 },
+          { k: "date", s: st(f.manrope, 34, "#fff4e2", { weight: 600, ls: 0.04, min: 24 }), gap: 26 },
+          { k: "venue", s: st(f.manrope, 32, "rgba(255,244,226,.78)", { maxLines: 2, min: 24, lh: 1.25 }), gap: 12 },
+        ],
+      },
+    ],
+  },
 };
