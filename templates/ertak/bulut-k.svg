@@ -1,0 +1,19 @@
+<svg preserveAspectRatio="none" width="113.817" height="51" viewBox="0 0 113.817 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Bulut &#194;&#183; kichik">
+<g id="Vector" filter="url(#filter0_d_0_129)">
+<path d="M13 43C4 43 3 30 14 28C12 15 28 10 36 18C40 4 63 1 70 15C78 7 96 11 95 25C108 25 113 43 101 43H13Z" fill="#FFFDF8"/>
+</g>
+<path id="Vector_2" d="M26 43C20 43 20 35 27 34C28 27 38 25 43 30C48 22 62 23 64 31C73 28 81 34 78 43H26Z" fill="#F4EBDD"/>
+</g>
+<defs>
+<filter id="filter0_d_0_129" x="0" y="1.88037" width="113.817" height="49.1196" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.35 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.16 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_129"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_129" result="shape"/>
+</filter>
+</defs>
+</svg>
