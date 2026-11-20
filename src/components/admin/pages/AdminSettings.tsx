@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { apiGet } from "@/lib/client";
-import { Field, Input, Segment, api, confirmDialog, useToast } from "@/components/ui";
+import Link from "next/link";
+import { Field, Input, Segment, api, confirmDialog, useCopy, useToast } from "@/components/ui";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { TickCircle } from "@/components/icons";
 import { AdminError, AdminLoading, AdminTitle } from "../shared";
@@ -37,7 +38,7 @@ function Status({ ok, children }: { ok: boolean; children: ReactNode }) {
   );
 }
 
-export function AdminSettings() {
+export function AdminSettings({ section = "general" }: { section?: "general" | "payments" }) {
   const [data, setData] = useState<Resp | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const toast = useToast();
@@ -59,62 +60,117 @@ export function AdminSettings() {
     toast(msg);
   };
 
+  const ga = (
+    <FieldsCard
+      title="Google Analytics"
+      sub="Google Tag Manager ID (GTM-XXXXXXX) yoki GA4 Measurement ID (G-XXXXXXXXXX). Kiritilsa — sayt sahifalarida ishlay boshlaydi (admin paneldan tashqari). Bo‘sh qoldirilsa — o‘chadi."
+      fields={[["GA_MEASUREMENT_ID", "GTM yoki GA4 ID", "GTM-XXXXXXX"]]}
+      data={data}
+      save={save}
+    />
+  );
+
+  if (section === "payments")
+    return (
+      <>
+        <AdminTitle title="To‘lov sozlamalari" sub="To‘lov usullari, kassa kalitlari va karta ma’lumotlari. O‘zgarishlar darhol kuchga kiradi — serverdagi faylga tegish shart emas." />
+        <div className="grid gap-6 xl:grid-cols-2">
+          <div className="flex flex-col gap-6">
+            <PayMethodsCard data={data} save={save} />
+            <BankCardCard data={data} save={save} />
+            <CallbackCard />
+          </div>
+          <div className="flex flex-col gap-6">
+            <FieldsCard
+              title="Payme"
+              sub="Payme Business kabinetidagi kassa ma’lumotlari. Ikkalasi to‘ldirilsa — Payme to‘lov usuli yoqiladi."
+              fields={[
+                ["PAYME_MERCHANT_ID", "Merchant ID", ""],
+                ["PAYME_KEY", "Kalit (key)", ""],
+              ]}
+              data={data}
+              save={save}
+            />
+            <FieldsCard
+              title="Click"
+              sub="Click merchant kabinetidagi ma’lumotlar. Hammasi to‘ldirilsa — Click to‘lov usuli yoqiladi."
+              fields={[
+                ["CLICK_SERVICE_ID", "Service ID", ""],
+                ["CLICK_MERCHANT_ID", "Merchant ID", ""],
+                ["CLICK_MERCHANT_USER_ID", "Merchant user ID", ""],
+                ["CLICK_SECRET_KEY", "Secret key", ""],
+              ]}
+              data={data}
+              save={save}
+            />
+            <FieldsCard
+              title="Rahmat"
+              sub="Rahmat kassa kabinetidagi ma’lumotlar (pay.sunicode.uz). Kalitlar faqat shu yerda saqlanadi, chatga yoki kodga yozilmaydi. To‘lov API’si ulangach, usul «Faol» bo‘ladi."
+              fields={[
+                ["RAHMAT_KASSA_ID", "Kassa ID (X-Kassa-Id)", "tp_…"],
+                ["RAHMAT_KASSA_KEY", "Kassa kaliti (X-Kassa-Key)", "sk_…"],
+                ["RAHMAT_TEST_KEY", "Test kaliti (sandbox)", "sk_test_…"],
+                ["RAHMAT_API_URL", "API manzili", "https://pay.sunicode.uz/api/v1"],
+                ["RAHMAT_MXIK", "Standart MXIK (IKPU)", "17 ta raqam"],
+              ]}
+              data={data}
+              save={save}
+            />
+          </div>
+        </div>
+      </>
+    );
+
   return (
     <>
-      <AdminTitle title="Sozlamalar" sub="Ijtimoiy tarmoqlar, Telegram bot va to‘lov ma’lumotlari. O‘zgarishlar darhol kuchga kiradi — serverdagi faylga tegish shart emas." />
+      <AdminTitle
+        title="Sozlamalar"
+        sub={
+          <>
+            Ijtimoiy tarmoqlar, Telegram bot va analitika. To‘lov usullari va kalitlari —{" "}
+            <Link href="/admin/tolov-sozlamalari/" className="text-maroon hover:underline">
+              «To‘lov sozlamalari»
+            </Link>{" "}
+            bo‘limida.
+          </>
+        }
+      />
       <div className="mb-6">
         <AdminSocialCard />
       </div>
       <div className="grid gap-6 xl:grid-cols-2">
         <TelegramCard data={data} save={save} reload={load} />
-        <div className="flex flex-col gap-6">
-          <PayMethodsCard data={data} save={save} />
-          <BankCardCard data={data} save={save} />
-          <FieldsCard
-            title="Google Analytics"
-            sub="Google Tag Manager ID (GTM-XXXXXXX) yoki GA4 Measurement ID (G-XXXXXXXXXX). Kiritilsa — sayt sahifalarida ishlay boshlaydi (admin paneldan tashqari). Bo‘sh qoldirilsa — o‘chadi."
-            fields={[["GA_MEASUREMENT_ID", "GTM yoki GA4 ID", "GTM-XXXXXXX"]]}
-            data={data}
-            save={save}
-          />
-          <FieldsCard
-            title="Payme"
-            sub="Payme Business kabinetidagi kassa ma’lumotlari. Ikkalasi to‘ldirilsa — Payme to‘lov usuli yoqiladi."
-            fields={[
-              ["PAYME_MERCHANT_ID", "Merchant ID", ""],
-              ["PAYME_KEY", "Kalit (key)", ""],
-            ]}
-            data={data}
-            save={save}
-          />
-          <FieldsCard
-            title="Rahmat"
-            sub="Rahmat kassa kabinetidagi ma’lumotlar (pay.sunicode.uz). Kalitlar faqat shu yerda saqlanadi, chatga yoki kodga yozilmaydi. To‘lov API’si ulangach, usul «Faol» bo‘ladi."
-            fields={[
-              ["RAHMAT_KASSA_ID", "Kassa ID (X-Kassa-Id)", "tp_…"],
-              ["RAHMAT_KASSA_KEY", "Kassa kaliti (X-Kassa-Key)", "sk_…"],
-              ["RAHMAT_TEST_KEY", "Test kaliti (sandbox)", "sk_test_…"],
-              ["RAHMAT_API_URL", "API manzili", "https://pay.sunicode.uz/api/v1"],
-              ["RAHMAT_MXIK", "Standart MXIK (IKPU)", "17 ta raqam"],
-            ]}
-            data={data}
-            save={save}
-          />
-          <FieldsCard
-            title="Click"
-            sub="Click merchant kabinetidagi ma’lumotlar. Hammasi to‘ldirilsa — Click to‘lov usuli yoqiladi."
-            fields={[
-              ["CLICK_SERVICE_ID", "Service ID", ""],
-              ["CLICK_MERCHANT_ID", "Merchant ID", ""],
-              ["CLICK_MERCHANT_USER_ID", "Merchant user ID", ""],
-              ["CLICK_SECRET_KEY", "Secret key", ""],
-            ]}
-            data={data}
-            save={save}
-          />
-        </div>
+        <div className="flex flex-col gap-6">{ga}</div>
       </div>
     </>
+  );
+}
+
+/** To‘lov tizimlari kabinetlariga yoziladigan manzillar (nusxalash uchun) */
+function CallbackCard() {
+  const copy = useCopy();
+  const base = typeof window !== "undefined" ? window.location.origin : "https://shohnoma.uz";
+  const rows: [string, string][] = [
+    ["Payme — endpoint (Merchant API)", `${base}/api/payme`],
+    ["Click — Prepare URL", `${base}/api/click/prepare`],
+    ["Click — Complete URL", `${base}/api/click/complete`],
+  ];
+  return (
+    <Card title="Kabinetlarga yoziladigan manzillar" sub="Payme va Click kabinetidagi sozlamalarga shu manzillarni kiriting. Rahmat manzili API ulanganda shu yerda chiqadi.">
+      <ul className="flex flex-col divide-y divide-line">
+        {rows.map(([k, url]) => (
+          <li key={k} className="flex flex-col gap-1 py-2.5 first:pt-0 last:pb-0">
+            <span className="t-body-s text-ink-2">{k}</span>
+            <span className="flex items-center justify-between gap-2">
+              <code className="min-w-0 break-all t-body-s text-ink">{url}</code>
+              <button type="button" onClick={() => copy(url, "Manzil nusxalandi")} className="shrink-0 t-body-s text-maroon hover:underline">
+                Nusxalash
+              </button>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </Card>
   );
 }
 
@@ -190,7 +246,7 @@ function BankCardCard({ data, save }: { data: Resp; save: (p: Record<string, str
         title="Boshqa usul (karta / support)"
         sub={
           mode === "card"
-            ? "Mijoz to‘lov sahifasida karta raqamini ko‘radi, o‘tkazma qilib chekni yuklaydi. Chekni «Cheklar» bo‘limida tasdiqlaysiz."
+            ? "Mijoz to‘lov sahifasida karta raqamini ko‘radi, o‘tkazma qilib chekni yuklaydi. Chekni «Karta cheklari» bo‘limida tasdiqlaysiz."
             : "Mijoz to‘lov sahifasida support kontaktlarini ko‘radi va siz bilan bog‘lanadi. Sizga Telegram’da xabar keladi; to‘lovni olgach, Buyurtmalar’da holatini «To‘langan» qiling."
         }
       >

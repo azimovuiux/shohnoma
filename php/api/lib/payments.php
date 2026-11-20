@@ -5,7 +5,7 @@ const PROVIDER_LABEL = ['payme' => 'Payme', 'click' => 'Click', 'rahmat' => 'Rah
 
 /**
  * Rahmat (pay.sunicode.uz): to‘lov yaratish/callback API’si hali ulanmagan — hujjat kutilmoqda.
- * Ulanmaguncha usul «Tez kunda» bo‘lib ko‘rinadi (yoki admin yashiradi); kalitlar Admin → Sozlamalar’da saqlanadi.
+ * Ulanmaguncha usul «Tez kunda» bo‘lib ko‘rinadi (yoki admin yashiradi); kalitlar Admin → To‘lov sozlamalari’da saqlanadi.
  */
 const RAHMAT_API_READY = false;
 
