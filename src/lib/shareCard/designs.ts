@@ -40,6 +40,7 @@ const f = {
   nunito: '"sc-nunito", system-ui, sans-serif',
   philosopher: '"sc-philosopher", "sc-playfair", Georgia, serif',
   tenor: '"sc-tenor", "sc-manrope", system-ui, sans-serif',
+  unbounded: '"sc-unbounded", "sc-manrope", system-ui, sans-serif',
 };
 /** Malika: atlas burmalari ustidagi matn o‘qilishi uchun krem nur */
 const GLOW = { color: "rgba(255,249,247,.95)", blur: 22 };
@@ -454,6 +455,38 @@ export const DESIGNS: Record<string, Design> = {
           { k: "kicker", s: st(f.cormorant, 54, "#3a2a2e", { italic: true, min: 36, lh: 1.15, shadow: GLOW }) },
           { k: "date", s: st(f.manrope, 30, "#8c4a57", { weight: 600, ls: 0.24, min: 20, shadow: GLOW }), gap: 28 },
           { k: "venue", s: st(f.cormorant, 42, "#8c4a57", { italic: true, weight: 500, maxLines: 2, min: 30, lh: 1.15, shadow: GLOW }), gap: 16 },
+        ],
+      },
+    ],
+  },
+
+  /* Sham (universal tug‘ilgan kun): tungi ko‘k radial fon, sham nuri va yonib turgan oltin sham (Figma 00) — fonda;
+   * mehmon — eng tepada; taklif turi (Lora kursiv, oltin) + ism (Unbounded, sut rang) — sham ustida, nur ichida
+   * (ism 2 qatorga bo‘linsa — pastga, sham olovigacha o‘sadi); sana (oltin, keng harf oralig‘i) va joy — sham ostida */
+  sham: {
+    fill: "#1f253b",
+    bg: true,
+    date: "dots",
+    stacks: [
+      { y: 92, anchor: "center", w: 900, maxH: 120, items: [{ k: "guest", s: st(f.lora, 44, "#e3c891", { italic: true, maxLines: 2, min: 30, lh: 1.2 }) }] },
+      {
+        y: 168,
+        anchor: "top",
+        w: 900,
+        maxH: 400,
+        items: [
+          { k: "kicker", s: st(f.lora, 46, "#e3c891", { italic: true, min: 32, lh: 1.25 }) },
+          { k: "names", mode: "two", s: st(f.unbounded, 84, "#fbf7f0", { weight: 500, min: 46, lh: 1.15 }), gap: 18 },
+        ],
+      },
+      {
+        y: 1150,
+        anchor: "top",
+        w: 900,
+        maxH: 230,
+        items: [
+          { k: "date", s: st(f.manrope, 30, "#e3c891", { weight: 600, ls: 0.22, min: 20 }) },
+          { k: "venue", s: st(f.lora, 40, "rgba(251,247,240,.85)", { italic: true, maxLines: 2, min: 28, lh: 1.2 }), gap: 22 },
         ],
       },
     ],

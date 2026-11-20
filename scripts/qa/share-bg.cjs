@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -48,6 +48,9 @@ const CFG = {
   /* Malika: yopiq atlas pardalar, yorug‘lik, marvarid gerb va tiara (Figma 00; yaltiroq va «nafas» to‘xtatiladi);
    * ism (gerb ichida) / taklif turi / sana / joy kartada chiziladi */
   malika: { css: `nextjs-portal{display:none!important}[class*="_shine"]{display:none!important}[class*="_breath"]{animation:none!important}` },
+  /* Sham: tungi ko‘k fon, sham nuri va yonib turgan sham (Figma 00; olov tebranishi va nur «nafasi» to‘xtatiladi);
+   * «Yaqinda kimdir» o‘rnida taklif turi, yosh qatori o‘rnida ism, pastki qator o‘rnida sana va joy — kartada chiziladi */
+  sham: { css: `nextjs-portal{display:none!important}[class*="_flick"],[class*="_gGlow"]{animation:none!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;
 

@@ -21,6 +21,7 @@ export const en: Record<string, string> = {
   Pushti: "Pink",
   // Imkoniyatlar
   "To‘yga qadar sanoq": "Countdown",
+  "Bayramga qadar sanoq": "Countdown to the party",
   Fotogalereya: "Photo gallery",
   "Marosim dasturi": "Schedule",
   "Fon musiqasi": "Background music",

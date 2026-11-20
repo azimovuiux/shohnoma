@@ -5,7 +5,7 @@ import { useLocale, useT } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, CloseCircle, Eye, Messages, Mobile, Monitor, TickCircle } from "@/components/icons";
 import type { Template } from "@/lib/templates";
-import { ceremonyLabel, styleLabel, templateFeatures, tplCeremonies, type Ceremony } from "@/lib/templates";
+import { ceremonyLabel, styleLabel, featuresFor, tplCeremonies, type Ceremony } from "@/lib/templates";
 import { categoryName, getCategory } from "@/lib/categories";
 import { CategoryIcon } from "@/lib/categoryIcons";
 import { discountPercent, formatPrice } from "@/lib/format";
@@ -158,7 +158,7 @@ export function QuickView({
           <div className="flex flex-col gap-2.5">
             <p className="t-title text-ink">{tt("Saytda nimalar bor")}</p>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
-              {templateFeatures.map((f) => (
+              {featuresFor(t).map((f) => (
                 <li key={f} className="flex items-center gap-2 t-body-s text-ink">
                   <TickCircle size={15} color="var(--color-gold)" /> {tt(f)}
                 </li>

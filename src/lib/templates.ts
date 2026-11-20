@@ -676,6 +676,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki va bal libosi — nafis, yengil va bayramona.", max: 160 },
     ],
   },
+  {
+    number: 17,
+    slug: "sham",
+    name: "Sham",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Har qanday yoshga mos tug‘ilgan kun taklifnomasi: bolalikdan yubileygacha. Ranglari — tungi ko‘k, shampan oltin va sut rang. Sahifani pastga surganingizda qorong‘ida yonib turgan sham o‘chadi, tutun ko‘tariladi, konfetti sochiladi va ekran yorishib, katta oltin raqamda yoshingiz chiqadi. Keyin surat va ism, taklif matni, sana va sanoq, kecha dasturi, manzil, dress-kod va mehmonlar javobi; oxirida shamlar birin-ketin yonadi.",
+    descriptionRu: "Приглашение на день рождения для любого возраста: от детского праздника до юбилея. Цвета — ночной синий, золото шампань и молочный. Когда вы листаете страницу вниз, свеча в темноте гаснет, поднимается дымок, разлетается конфетти, экран светлеет и появляется ваш возраст большими золотыми цифрами. Дальше фото и имя, текст приглашения, дата и отсчёт, программа вечера, адрес, дресс-код и ответы гостей; в конце свечи загораются одна за другой.",
+    descriptionEn: "A birthday invitation for any age, from a child’s party to a big jubilee. The colours are night blue, champagne gold and milk white. As you scroll down, a candle burning in the dark goes out, a wisp of smoke rises, confetti bursts, the screen brightens and your age appears in large gold numbers. Then the photo and name, the invitation text, the date and a countdown, the evening’s schedule, the venue, the dress code and guest replies; at the end the candles light up one by one.",
+    palette: ["#1B2030", "#C9A46A", "#E3C891", "#FBF7F0"],
+    sample: { a: "Aziz", date: "14 · 08 · 2027", venue: "«Terrassa» restorani", time: "19:00" },
+    theme: { bg: ["#2a3150", "#141826"], ink: "#fbf7f0", accent: "#c9a46a", soft: "#e3c891", script: "cormorant", color: "moviy" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "30", max: 3, hint: "Ixtiyoriy · katta oltin raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida ismning birinchi harfi" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Karimovlar oilasi", max: 60, hint: "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), imzo — shu; bo‘sh qolsa — yubilyarning o‘zi nomidan" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Kutib olish", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Limonad va jonli musiqa", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Smart casual", "Kechki", "Bayramona", "Klassik", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Qulay va bayramona — o‘zingizni erkin his qiladigan kiyim.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -809,6 +844,9 @@ export const templateFeatures = [
   "Manzil va xarita",
   "Mehmonlar javobi",
 ];
+/** Shablon sahifasidagi imkoniyatlar: tug‘ilgan kun shablonlarida «to‘y» emas — «Bayramga qadar sanoq» */
+export const featuresFor = (t: Pick<Template, "ceremony" | "ceremonies">) =>
+  tplCeremonies(t).every((c) => c === "tugilgan-kun") ? templateFeatures.map((f) => (f === "To‘yga qadar sanoq" ? "Bayramga qadar sanoq" : f)) : templateFeatures;
 
 /** Har bir dizaynda suratlar qayerga tushadi (buyurtma formasida joy-joy ko‘rsatiladi) */
 export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
@@ -899,6 +937,12 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Asosiy surat", where: "Ochilishdan keyingi katta portret. Bo‘lmasa — ramkada marvarid gerb va ism harfi" },
     { title: "Surat · 2", where: "Kalendardan keyingi to‘liq enli surat. Bo‘lmasa — bu bo‘lim chiqmaydi" },
     { title: "Surat · 3", where: "«Manzil» — ravoqli surat. Bo‘lmasa — shablonning bal zali surati" },
+  ],
+  /** Sham (universal tug‘ilgan kun) — bo‘sh slotlar: hero’da ramkada yonib turgan sham, 2- va 3-surat — shablonning tort va terrassa suratlari */
+  sham: [
+    { title: "Asosiy surat", where: "Katta yosh raqami yonidagi surat. Bo‘lmasa — ramkada yonib turgan sham" },
+    { title: "Surat · 2", where: "«Yillar — xotira» bo‘limidagi kvadrat surat. Bo‘lmasa — shablonning tort surati" },
+    { title: "Surat · 3", where: "«Manzil» — joy surati. Bo‘lmasa — shablonning terrassa surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

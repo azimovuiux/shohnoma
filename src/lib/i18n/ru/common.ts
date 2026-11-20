@@ -21,6 +21,7 @@ export const ru: Record<string, string> = {
   Pushti: "Розовый",
   // Imkoniyatlar
   "To‘yga qadar sanoq": "Отсчёт до торжества",
+  "Bayramga qadar sanoq": "Отсчёт до праздника",
   Fotogalereya: "Фотогалерея",
   "Marosim dasturi": "Программа торжества",
   "Fon musiqasi": "Фоновая музыка",

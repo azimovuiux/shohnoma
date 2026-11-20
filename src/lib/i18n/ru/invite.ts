@@ -185,6 +185,7 @@ export const ru: Record<string, string> = {
   "Aziz mehmonlar! Hayotimizning eng baxtli kunida yonimizda bo‘lishingizni istaymiz.":
     "Дорогие гости! В самый счастливый день нашей жизни мы хотим, чтобы вы были рядом.",
   "Hayotimizning eng baxtli kunida yonimizda bo‘lishingizni istaymiz.": "В самый счастливый день нашей жизни мы хотим, чтобы вы были рядом.",
+  "Quvonchli kunimizda yonimizda bo‘lishingizni istaymiz.": "В этот радостный день мы хотим, чтобы вы были рядом.",
   "Bazm va tabriklar": "Праздник и поздравления",
   "Kelin-kuyov raqsi": "Танец жениха и невесты",
   "Fotiha marosimi": "Церемония фотиха",
@@ -431,7 +432,7 @@ export const ru: Record<string, string> = {
     "«Наш шахзода» — фото в круге. Если нет — руки с лепёшкой (если нет и основного фото — раздел не показывается)",
   "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati": "«Адрес» — фото тойханы. Если нет — фото айвана",
   // ── Sovg‘a (18 yosh tug‘ilgan kun) ──
-  "{n} yoshga to‘ladi": "отмечает {n}-летие",
+  "{n} yoshga to‘ladi": "празднует {n}-й день рождения",
   "tug‘ilgan kuni": "день рождения",
   "{words} — yangi bob boshlanishi.": "{words} — начало новой главы.",
   "Har bir yil — yangi bob boshlanishi.": "Каждый год — начало новой главы.",
@@ -454,7 +455,7 @@ export const ru: Record<string, string> = {
   "Hayotimdagi eng muhim sanalardan biri — tug‘ilgan kunimni siz bilan nishonlamoqchiman. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
     "Мой день рождения — особенный день, и я хочу отметить его вместе с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
   "{name} {age} yoshga to‘lmoqda — bu quvonchli sanani siz bilan nishonlamoqchimiz. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
-    "{name} отмечает {age}-летие — и мы хотим разделить эту радость с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
+    "{name} празднует {age}-й день рождения — и мы хотим разделить эту радость с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
   "{name}ning tug‘ilgan kunini siz bilan nishonlamoqchimiz. Kechamizga albatta keling: tort, musiqa va eng iliq tilaklar sizni kutmoqda.":
     "{name} празднует день рождения — и мы хотим отметить его вместе с вами. Обязательно приходите: вас ждут торт, музыка и самые тёплые пожелания.",
   Kokteyl: "Коктейль",
@@ -496,4 +497,28 @@ export const ru: Record<string, string> = {
   "Ochilishdan keyingi katta portret. Bo‘lmasa — ramkada marvarid gerb va ism harfi": "Большой портрет после открытия. Если нет — в рамке жемчужный герб и первая буква имени",
   "Kalendardan keyingi to‘liq enli surat. Bo‘lmasa — bu bo‘lim chiqmaydi": "Фото во всю ширину после календаря. Если нет — раздел не показывается",
   "«Manzil» — ravoqli surat. Bo‘lmasa — shablonning bal zali surati": "«Адрес» — фото в арке. Если нет — фото бального зала из шаблона",
+  // ── Sham (universal tug‘ilgan kun) ──
+  "Yaqinda kimdir": "Скоро кто-то",
+  "tug‘ilgan kunini nishonlaydi": "отмечает день рождения",
+  "tug‘ilgan kun kechasiga taklif": "приглашение на день рождения",
+  "Aziz do‘stlar!": "Дорогие друзья!",
+  "Yana bir yil — yana bir sahifa. Shu quvonchli kunni eng yaqin insonlarim bilan nishonlamoqchiman. Kechamizga marhamat!": "Ещё один год — ещё одна страница. Хочу отметить этот радостный день с самыми близкими людьми. Добро пожаловать на наш вечер!",
+  "Yana bir yil — yana bir sahifa. Shu quvonchli kunni eng yaqin insonlarimiz bilan nishonlamoqchimiz. Kechamizga marhamat!": "Ещё один год — ещё одна страница. Хотим отметить этот радостный день с самыми близкими людьми. Добро пожаловать на наш вечер!",
+  "Yana bir yil — yana bir sahifa. {name}ning tug‘ilgan kunini eng yaqin insonlarimiz bilan nishonlamoqchimiz. Kechamizga marhamat!": "Ещё один год — ещё одна страница. {name} отмечает день рождения, и мы хотим разделить этот радостный день с самыми близкими. Добро пожаловать на наш вечер!",
+  "Yillar — xotira,": "Годы — это память,",
+  "do‘stlar — boylik.": "друзья — богатство.",
+  "Har bir sham — bitta orzu. Uni birga tilaylik.": "Каждая свеча — одно желание. Загадаем его вместе.",
+  "Shamlarni birga puflaymiz.": "Задуем свечи вместе.",
+  "Tabrik va tilaklar…": "Поздравления и пожелания…",
+  "Smart casual": "Smart casual",
+  "Qulay va bayramona — o‘zingizni erkin his qiladigan kiyim.": "Удобно и празднично — одежда, в которой вам легко и свободно.",
+  "Kechki libos va kostyum — oqshom ruhida.": "Вечернее платье или костюм — в духе вечера.",
+  Aziz: "Азиз",
+  "«Terrassa» restorani": "Ресторан «Терраса»",
+  // buyurtma formasi (templates.ts → fields, PHOTO_SLOTS.sham)
+  "Ixtiyoriy · katta oltin raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida ismning birinchi harfi": "Необязательно · появится крупными золотыми цифрами; если пусто — вместо цифр первая буква имени",
+  "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), imzo — shu; bo‘sh qolsa — yubilyarning o‘zi nomidan": "Необязательно · если заполнено — приглашение от этого имени («мы») и с этой подписью; если пусто — от имени именинника",
+  "Katta yosh raqami yonidagi surat. Bo‘lmasa — ramkada yonib turgan sham": "Фото рядом с большими цифрами возраста. Если нет — в рамке горящая свеча",
+  "«Yillar — xotira» bo‘limidagi kvadrat surat. Bo‘lmasa — shablonning tort surati": "Квадратное фото в разделе «Годы — это память». Если нет — фото торта из шаблона",
+  "«Manzil» — joy surati. Bo‘lmasa — shablonning terrassa surati": "«Адрес» — фото места. Если нет — фото террасы из шаблона",
 };
