@@ -1,21 +1,20 @@
 "use client";
 
-import { Card, CardPos, Edit, Gallery, MoneySend, Mobile, Send2, WalletCheck } from "@/components/icons";
+import { Card, CardPos, Edit, Gallery, Mobile, Send2, WalletCheck } from "@/components/icons";
 import { SectionTitle } from "./SectionTitle";
 import { useT } from "@/lib/i18n";
 
 const steps = [
   { icon: <Gallery size={24} />, title: "Dizaynni tanlang", text: "Marosimingizga mos tayyor shablonni tanlang." },
   { icon: <Edit size={24} />, title: "Ma’lumotlarni kiriting", text: "Ismlar, sana, vaqt, manzil va rasmlarni qo‘shing." },
-  { icon: <Card size={24} />, title: "To‘lovni amalga oshiring", text: "Payme, Click yoki boshqa qulay usulda." },
+  { icon: <Card size={24} />, title: "To‘lovni amalga oshiring", text: "Karta, Payme, Click yoki Uzum orqali — Rahmat to‘lov sahifasida." },
   { icon: <Send2 size={24} />, title: "Havolani ulashing", text: "Tayyor sayt havolasini Telegram va Instagramda yuboring." },
 ];
 
 const methods = [
-  { icon: <Card size={16} />, label: "Payme" },
-  { icon: <CardPos size={16} />, label: "Click" },
-  { icon: <Mobile size={16} />, label: "Google Pay" },
-  { icon: <MoneySend size={16} />, label: "Boshqa usul" },
+  { icon: <Card size={16} />, label: "Uzcard · Humo" },
+  { icon: <CardPos size={16} />, label: "Visa" },
+  { icon: <Mobile size={16} />, label: "Payme · Click · Uzum" },
 ];
 
 /** Mehrob shaklidagi ikonka foni (64×80) */

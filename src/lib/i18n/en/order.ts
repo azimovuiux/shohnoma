@@ -233,6 +233,8 @@ export const en: Record<string, string> = {
   "Google Pay’ga o‘tmoqdasiz": "Redirecting to Google Pay",
   "Payme’ni ochish": "Open Payme",
   "Click’ni ochish": "Open Click",
+  "Rahmat’ga o‘tmoqdasiz": "Redirecting to Rahmat",
+  "Rahmat’ni ochish": "Open Rahmat",
   "Google Pay’ni ochish": "Open Google Pay",
   "To‘lovni {name} sahifasida yakunlang. Tugagach, avtomatik shu yerga qaytasiz — sahifani yopmang.":
     "Complete payment on the {name} page. You’ll return here automatically — don’t close this page.",
@@ -404,4 +406,13 @@ export const en: Record<string, string> = {
   "Assalomu alaykum! №{code} buyurtmani to‘lamoqchiman. Summa: {sum}.": "Hello! I'd like to pay for order №{code}. Amount: {sum}.",
   "Payme, Click yoki boshqa qulay usulda.": "Via Payme, Click or another convenient method.",
   "Payme, Click yoki boshqa qulay usulda. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "Payme, Click or another convenient method. Once payment is confirmed, your link is ready right away.",
+  "Karta, Payme, Click yoki Uzum orqali — Rahmat to‘lov sahifasida.": "By card, Payme, Click or Uzum — on the Rahmat payment page.",
+  "Rahmat to‘lov sahifasi orqali: Uzcard, Humo, Visa kartasi yoki Payme, Click, Uzum ilovasi bilan. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.": "On the Rahmat payment page: with an Uzcard, Humo or Visa card, or in the Payme, Click or Uzum app. Once payment is confirmed, your link is ready right away.",
+  "To‘lash": "Pay",
+  "To‘lov sahifasiga qaytish": "Back to payment",
+  "Uzcard, Humo, Visa kartasi yoki Payme, Click, Uzum ilovasi orqali — xavfsiz to‘lov sahifasida.": "With an Uzcard, Humo or Visa card, or via Payme, Click or Uzum — on a secure payment page.",
+  "Onlayn to‘lov vaqtincha ishlamayapti. Birozdan so‘ng urinib ko‘ring yoki biz bilan bog‘laning.": "Online payment is temporarily unavailable. Please try again shortly or contact us.",
+  "To‘lov vaqtincha mavjud emas": "Payment is temporarily unavailable",
+  "Uzcard · Humo": "Uzcard · Humo",
+  "Payme · Click · Uzum": "Payme · Click · Uzum",
 };

@@ -27,8 +27,8 @@ export function PrivacyContent() {
               <strong>От гостей:</strong> имя, количество человек, ответ и пожелание (по желанию).
             </li>
             <li>
-              <strong>По оплате:</strong> сумма заказа, способ оплаты, фото чека P2P. Данные карт у нас не хранятся — их обрабатывают Payme или
-              Click.
+              <strong>По оплате:</strong> сумма заказа, статус и номер платежа. Данные карт у нас не хранятся — их обрабатывает платёжный
+              шлюз Rahmat (TayyorPay) и платёжные системы.
             </li>
             <li>
               <strong>Технические:</strong> количество открытий приглашения (простой счётчик), cookie для сессии входа.
@@ -97,8 +97,8 @@ export function PrivacyContent() {
               <strong>From guests:</strong> name, number of people, reply and wishes (optional).
             </li>
             <li>
-              <strong>Payment data:</strong> order amount, payment method, photo of the P2P receipt. We do not store card details — they are processed
-              by Payme or Click.
+              <strong>Payment data:</strong> order amount, payment status and payment ID. We do not store card details — they are processed by
+              the Rahmat (TayyorPay) payment gateway and payment systems.
             </li>
             <li>
               <strong>Technical:</strong> number of times the invitation is opened (a simple counter), a cookie for the login session.
@@ -166,8 +166,8 @@ export function PrivacyContent() {
             <strong>Mehmonlardan:</strong> ism, kishi soni, javob va tilak (ixtiyoriy).
           </li>
           <li>
-            <strong>To‘lov bo‘yicha:</strong> buyurtma summasi, to‘lov usuli, P2P chek rasmi. Karta ma’lumotlari bizda saqlanmaydi — ular Payme yoki Click
-            tomonidan qayta ishlanadi.
+            <strong>To‘lov bo‘yicha:</strong> buyurtma summasi, to‘lov holati va raqami. Karta ma’lumotlari bizda saqlanmaydi — ularni Rahmat (TayyorPay)
+            to‘lov shlyuzi va to‘lov tizimlari qayta ishlaydi.
           </li>
           <li>
             <strong>Texnik:</strong> taklifnoma ochilishlar soni (oddiy hisoblagich), kirish sessiyasi uchun cookie.

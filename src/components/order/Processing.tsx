@@ -13,6 +13,7 @@ import { PAY_URL_KEY, type Provider } from "./PayChoice";
 const names: Record<string, { name: string; to: string; open: string }> = {
   payme: { name: "Payme", to: "Payme’ga", open: "Payme’ni ochish" },
   click: { name: "Click", to: "Click’ka", open: "Click’ni ochish" },
+  rahmat: { name: "Rahmat", to: "Rahmat’ga", open: "Rahmat’ni ochish" },
   google_pay: { name: "Google Pay", to: "Google Pay’ga", open: "Google Pay’ni ochish" },
 };
 
@@ -121,7 +122,7 @@ export function Processing({
           {t(n.open)} <ArrowRight size={16} />
         </button>
         <Link href={`${base}/tolov/`} className="btn btn-secondary">
-          {waitedLong ? t("Boshqa usulni tanlash") : t("Bekor qilish")}
+          {waitedLong ? t("To‘lov sahifasiga qaytish") : t("Bekor qilish")}
         </Link>
       </div>
       {error && (

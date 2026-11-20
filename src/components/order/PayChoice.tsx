@@ -29,7 +29,8 @@ export const PAY_URL_KEY = (id: string) => `shohnoma:pay:${id}`;
 export function PayChoice({ order, template, providers, soon = [], p2pMode = "card" }: { order: FlowOrder; template: Template; providers: Provider[]; soon?: Provider[]; p2pMode?: "card" | "support" }) {
   const router = useLocalRouter();
   const t = useT();
-  const [p, setP] = useState<Provider | null>(providers[0] ?? null);
+  // To‘lov faqat Rahmat orqali (u sahifasida karta, Payme, Click, Uzum) — tanlash yo‘q
+  const p: Provider | null = providers.includes("rahmat") ? "rahmat" : null;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const live = useMemo(() => liveTemplate(template, order), [template, order]);
@@ -48,7 +49,7 @@ export function PayChoice({ order, template, providers, soon = [], p2pMode = "ca
       });
       const data = (await res.json()) as { ok?: boolean; url?: string; error?: string };
       if (!res.ok || !data.url) throw new Error(data.error || "To‘lovni boshlab bo‘lmadi");
-      if (p === "p2p" || data.url.startsWith("/")) {
+      if (data.url.startsWith("/")) {
         router.push(data.url);
         return;
       }
@@ -63,7 +64,7 @@ export function PayChoice({ order, template, providers, soon = [], p2pMode = "ca
 
   const button = (
     <button type="button" onClick={pay} disabled={busy || !p} className="btn btn-primary w-full disabled:opacity-50">
-      {busy ? t("Kuting…") : p ? t(meta[p].cta) : t("To‘lov usuli tez kunda ishga tushadi")} {p && <ArrowRight size={16} />}
+      {busy ? t("Kuting…") : p ? t("To‘lash") : t("To‘lov vaqtincha mavjud emas")} {p && <ArrowRight size={16} />}
     </button>
   );
   const err = error && (
@@ -97,44 +98,12 @@ export function PayChoice({ order, template, providers, soon = [], p2pMode = "ca
     >
       <div className="flex flex-col gap-4">
         <MobileTemplateCard template={template} live={live} order={order} />
-        <SectionTitle>{t("Qanday to‘lamoqchisiz?")}</SectionTitle>
-        <div role="radiogroup" aria-label={t("To‘lov usuli")} className="flex flex-col gap-3">
-          {[...providers, ...soon.filter((k) => !providers.includes(k))].map((k) => {
-            const off = !providers.includes(k);
-            const active = !off && p === k;
-            return (
-              <button
-                key={k}
-                type="button"
-                role="radio"
-                aria-checked={active}
-                aria-disabled={off || undefined}
-                disabled={off}
-                onClick={() => setP(k)}
-                className={`flex items-center gap-3.5 rounded-xl border px-4 py-4 text-left transition-colors ${
-                  off ? "cursor-not-allowed border-line bg-bg-base" : active ? "border-maroon bg-bg-soft" : "border-line bg-bg-base hover:bg-bg-soft/60"
-                }`}
-              >
-                {!meta[k].logo && <span className={off ? "text-ink-2/50" : active ? "text-maroon" : "text-ink-2"}>{meta[k].icon}</span>}
-                <span className={`flex flex-1 flex-col gap-0.5 ${off ? "opacity-45 grayscale" : ""}`}>
-                  {meta[k].logo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={meta[k].logo} alt={meta[k].label} width={86} height={22} className="h-[22px] w-auto self-start" />
-                  ) : (
-                    <span className="t-title text-ink">{t(meta[k].label)}</span>
-                  )}
-                  <span className="t-body-s text-ink-2">{t(k === "p2p" && p2pMode === "support" ? "Operator bilan bog‘lanib to‘lash" : meta[k].text)}</span>
-                </span>
-                {off ? (
-                  <span className="shrink-0 rounded-full bg-bg-soft px-2.5 py-1 t-body-s font-medium text-ink-2">{t("Tez kunda")}</span>
-                ) : active ? (
-                  <TickCircle size={20} color="var(--color-maroon)" />
-                ) : (
-                  <span className="size-[18px] rounded-full border border-ink/70" />
-                )}
-              </button>
-            );
-          })}
+        <div className="flex items-center gap-3.5 rounded-xl border border-line bg-bg-base px-4 py-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/pay/rahmat.svg" alt="Rahmat" width={86} height={18} className="h-[18px] w-auto shrink-0" />
+          <span className="t-body-s text-ink-2">
+            {p ? t("Uzcard, Humo, Visa kartasi yoki Payme, Click, Uzum ilovasi orqali — xavfsiz to‘lov sahifasida.") : t("Onlayn to‘lov vaqtincha ishlamayapti. Birozdan so‘ng urinib ko‘ring yoki biz bilan bog‘laning.")}
+          </span>
         </div>
         <PromoBox orderId={order.id} state={promo} onChange={setPromo} />
       </div>

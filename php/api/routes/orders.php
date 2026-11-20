@@ -133,6 +133,12 @@ route('POST', '/orders/:id/p2p-receipt', function ($p) {
 route('GET', '/orders/:id/status', function ($p) {
     $b = owned_order_or_404($p['id']);
     $pay = latest_payment($b['order']['id']);
+    // Rahmat: callback hali kelmagan bo‘lsa — holatni API’dan so‘rab olamiz
+    if ($pay && $pay['provider'] === 'rahmat' && $pay['status'] === 'processing') {
+        try { rahmat_sync($pay); } catch (Throwable $e) { error_log('[rahmat sync] ' . $e->getMessage()); }
+        $b = owned_order_or_404($p['id']);
+        $pay = latest_payment($b['order']['id']);
+    }
     json_out(['ok' => true, 'status' => $b['order']['status'], 'slug' => $b['invitation']['slug'],
         'payment' => $pay ? ['provider' => $pay['provider'], 'status' => $pay['status'], 'note' => $pay['review_note']] : null]);
 });
@@ -141,7 +147,7 @@ route('POST', '/orders/:id/sandbox', function ($p) {
     if (env('PAYMENTS_SANDBOX') !== '1') fail('Not found', 404);
     $b = owned_order_or_404($p['id']);
     $body = body();
-    $provider = in_array($body['provider'] ?? '', ['payme', 'click', 'google_pay', 'p2p'], true) ? $body['provider'] : 'payme';
+    $provider = in_array($body['provider'] ?? '', ['payme', 'click', 'rahmat', 'google_pay', 'p2p'], true) ? $body['provider'] : 'payme';
     $pid = new_id();
     q("INSERT INTO payments (id, order_id, provider, amount, status, external_id) VALUES (?, ?, ?, ?, 'processing', ?)", [$pid, $b['order']['id'], $provider, (int)$b['order']['amount'], "sandbox-$pid"]);
     if (($body['result'] ?? '') === 'success') {

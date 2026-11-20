@@ -14,7 +14,7 @@ export const faqs = [
   },
   {
     q: "Qaysi to‘lov usullari mavjud?",
-    a: "Payme, Click yoki boshqa qulay usulda. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.",
+    a: "Rahmat to‘lov sahifasi orqali: Uzcard, Humo, Visa kartasi yoki Payme, Click, Uzum ilovasi bilan. To‘lov tasdiqlangach, havola darhol tayyor bo‘ladi.",
   },
   {
     q: "O‘z dizaynimni buyurtma qilsam bo‘ladimi?",

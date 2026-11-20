@@ -33,8 +33,7 @@ export function TermsContent() {
           <h2>3. Цены и оплата</h2>
           <ul>
             <li>Цены на сайте указаны в сумах. Акционные цены действуют в течение указанного срока.</li>
-            <li>Оплата принимается через Payme, Click, Google Pay или переводом с карты на карту (P2P).</li>
-            <li>При P2P-переводе необходимо указать код заказа в комментарии к платежу и загрузить чек. Чек обычно проверяется в течение 15 минут в рабочее время.</li>
+            <li>Оплата принимается онлайн через платёжный шлюз Rahmat (TayyorPay): картой Uzcard, Humo, Visa или через Payme, Click, Uzum.</li>
             <li>Сайт-приглашение становится общедоступным после подтверждения оплаты.</li>
           </ul>
         </section>
@@ -101,8 +100,7 @@ export function TermsContent() {
           <h2>3. Prices and payment</h2>
           <ul>
             <li>Prices on the website are shown in Uzbek soums. Promotional prices apply for the period stated.</li>
-            <li>Payment is accepted via Payme, Click, Google Pay or card-to-card (P2P) transfer.</li>
-            <li>For a P2P transfer, you must write the order code in the payment comment and upload the receipt. Receipts are usually checked within 15 minutes during working hours.</li>
+            <li>Payment is accepted online via the Rahmat (TayyorPay) payment gateway: by Uzcard, Humo or Visa card, or via Payme, Click or Uzum.</li>
             <li>The invitation website becomes publicly available once the payment is confirmed.</li>
           </ul>
         </section>
@@ -168,8 +166,7 @@ export function TermsContent() {
         <h2>3. Narx va to‘lov</h2>
         <ul>
           <li>Narxlar saytda so‘mda ko‘rsatilgan. Aksiya narxlari ko‘rsatilgan muddat davomida amal qiladi.</li>
-          <li>To‘lov Payme, Click, Google Pay yoki kartadan kartaga (P2P) o‘tkazma orqali qabul qilinadi.</li>
-          <li>P2P o‘tkazmada to‘lov izohiga buyurtma kodini yozish va chekni yuklash talab etiladi. Chek odatda 15 daqiqa ichida, ish vaqtida tekshiriladi.</li>
+          <li>To‘lov Rahmat (TayyorPay) to‘lov shlyuzi orqali onlayn qabul qilinadi: Uzcard, Humo, Visa kartasi yoki Payme, Click, Uzum orqali.</li>
           <li>Taklifnoma sayti to‘lov tasdiqlangandan so‘ng ommaga ochiladi.</li>
         </ul>
       </section>

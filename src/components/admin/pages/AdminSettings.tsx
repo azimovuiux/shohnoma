@@ -73,49 +73,25 @@ export function AdminSettings({ section = "general" }: { section?: "general" | "
   if (section === "payments")
     return (
       <>
-        <AdminTitle title="To‘lov sozlamalari" sub="To‘lov usullari, kassa kalitlari va karta ma’lumotlari. O‘zgarishlar darhol kuchga kiradi — serverdagi faylga tegish shart emas." />
+        <AdminTitle title="To‘lov sozlamalari" sub="To‘lov faqat Rahmat orqali: mijoz «To‘lash»ni bosadi va Rahmat sahifasida karta, Payme, Click yoki Uzum bilan to‘laydi. O‘zgarishlar darhol kuchga kiradi." />
         <div className="grid gap-6 xl:grid-cols-2">
           <div className="flex flex-col gap-6">
-            <PayMethodsCard data={data} save={save} />
-            <BankCardCard data={data} save={save} />
-            <CallbackCard />
-          </div>
-          <div className="flex flex-col gap-6">
             <FieldsCard
-              title="Payme"
-              sub="Payme Business kabinetidagi kassa ma’lumotlari. Ikkalasi to‘ldirilsa — Payme to‘lov usuli yoqiladi."
-              fields={[
-                ["PAYME_MERCHANT_ID", "Merchant ID", ""],
-                ["PAYME_KEY", "Kalit (key)", ""],
-              ]}
-              data={data}
-              save={save}
-            />
-            <FieldsCard
-              title="Click"
-              sub="Click merchant kabinetidagi ma’lumotlar. Hammasi to‘ldirilsa — Click to‘lov usuli yoqiladi."
-              fields={[
-                ["CLICK_SERVICE_ID", "Service ID", ""],
-                ["CLICK_MERCHANT_ID", "Merchant ID", ""],
-                ["CLICK_MERCHANT_USER_ID", "Merchant user ID", ""],
-                ["CLICK_SECRET_KEY", "Secret key", ""],
-              ]}
-              data={data}
-              save={save}
-            />
-            <FieldsCard
-              title="Rahmat"
-              sub="Rahmat kassa kabinetidagi ma’lumotlar (pay.sunicode.uz). Kalitlar faqat shu yerda saqlanadi, chatga yoki kodga yozilmaydi. To‘lov API’si ulangach, usul «Faol» bo‘ladi."
+              title="Rahmat — kalitlar"
+              sub="Rahmat (TayyorPay) kassa kabinetidagi «Integratsiya kalitlari». Kalitlar faqat shu yerda saqlanadi, chatga yoki kodga yozilmaydi. Chek (MXIK, qadoq kodi, QQS) kassa sozlamasidan olinadi."
               fields={[
                 ["RAHMAT_KASSA_ID", "Kassa ID (X-Kassa-Id)", "tp_…"],
                 ["RAHMAT_KASSA_KEY", "Kassa kaliti (X-Kassa-Key)", "sk_…"],
                 ["RAHMAT_TEST_KEY", "Test kaliti (sandbox)", "sk_test_…"],
                 ["RAHMAT_API_URL", "API manzili", "https://pay.sunicode.uz/api/v1"],
-                ["RAHMAT_MXIK", "Standart MXIK (IKPU)", "17 ta raqam"],
               ]}
               data={data}
               save={save}
             />
+          </div>
+          <div className="flex flex-col gap-6">
+            <RahmatCard data={data} save={save} />
+            <CallbackCard />
           </div>
         </div>
       </>
@@ -151,12 +127,11 @@ function CallbackCard() {
   const copy = useCopy();
   const base = typeof window !== "undefined" ? window.location.origin : "https://shohnoma.uz";
   const rows: [string, string][] = [
-    ["Payme — endpoint (Merchant API)", `${base}/api/payme`],
-    ["Click — Prepare URL", `${base}/api/click/prepare`],
-    ["Click — Complete URL", `${base}/api/click/complete`],
+    ["Callback URL", `${base}/api/rahmat/callback`],
+    ["Qaytish URL", `${base}/api/rahmat/return`],
   ];
   return (
-    <Card title="Kabinetlarga yoziladigan manzillar" sub="Payme va Click kabinetidagi sozlamalarga shu manzillarni kiriting. Rahmat manzili API ulanganda shu yerda chiqadi.">
+    <Card title="Rahmat kassasiga yoziladigan manzillar" sub="Rahmat kassasi sozlamasiga shu manzillarni kiriting (kassa domeni — shohnoma.uz). Avval yozilgan /api/click/complete va /api/click/prepare manzillari ham Rahmat uchun ishlaydi. Har bir to‘lovda manzillar so‘rov bilan ham yuboriladi.">
       <ul className="flex flex-col divide-y divide-line">
         {rows.map(([k, url]) => (
           <li key={k} className="flex flex-col gap-1 py-2.5 first:pt-0 last:pb-0">
@@ -174,127 +149,7 @@ function CallbackCard() {
   );
 }
 
-type PayState = "on" | "soon" | "off";
 
-/** To‘lov usullari: Faol / Tez kunda (ko‘rinadi, tanlab bo‘lmaydi) / Yashirin. Kalitlar o‘chirilmaydi. */
-function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void> }) {
-  const toast = useToast();
-  const [busy, setBusy] = useState<string | null>(null);
-  const v = (k: string) => data.settings[k]?.value === "1";
-  const p2pSupport = data.settings.P2P_MODE?.value === "support";
-  const rows: [prefix: string, label: string, ready: boolean, hint: string][] = [
-    ["PAYME", "Payme", !!(data.settings.PAYME_MERCHANT_ID?.set && data.settings.PAYME_KEY?.set), "Merchant ID va kalit kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
-    ["CLICK", "Click", !!(data.settings.CLICK_SERVICE_ID?.set && data.settings.CLICK_MERCHANT_ID?.set && data.settings.CLICK_SECRET_KEY?.set), "Service ID, Merchant ID va Secret key kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
-    [
-      "RAHMAT",
-      "Rahmat",
-      false,
-      data.settings.RAHMAT_KASSA_ID?.set && data.settings.RAHMAT_KASSA_KEY?.set
-        ? "Kalitlar saqlangan ✓. Saytdagi to‘lov kodi (to‘lov yaratish va tasdiqni qabul qilish) Rahmat API hujjati bo‘yicha hali yozilmagan — shungacha mijozga «Tez kunda» bo‘lib ko‘rinadi"
-        : "Kalitlar kiritilmagan va to‘lov kodi hali ulanmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi",
-    ],
-    ["P2P", "Boshqa usul", p2pSupport || !!data.settings.P2P_CARD?.set, "Karta raqami kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
-  ];
-  const set = async (prefix: string, label: string, st: PayState) => {
-    setBusy(prefix);
-    try {
-      await save({ [`${prefix}_DISABLED`]: st === "off" ? "1" : "", [`${prefix}_SOON`]: st === "soon" ? "1" : "" }, `${label}: ${st === "on" ? "faol" : st === "soon" ? "«Tez kunda»" : "yashirildi"}`);
-    } catch (e) {
-      toast((e as Error).message, "error");
-    } finally {
-      setBusy(null);
-    }
-  };
-  return (
-    <Card title="To‘lov usullari" sub="Mijoz to‘lov sahifasida ko‘radigan usullar. «Tez kunda» — usul ko‘rinadi, lekin tanlab bo‘lmaydi. «Yashirin» — umuman chiqmaydi.">
-      <ul className="flex flex-col divide-y divide-line">
-        {rows.map(([prefix, label, ready, hint]) => {
-          const st: PayState = v(`${prefix}_DISABLED`) ? "off" : v(`${prefix}_SOON`) ? "soon" : "on";
-          return (
-            <li key={prefix} className="flex flex-col gap-2.5 py-3.5">
-              <span className="flex flex-col gap-0.5">
-                <span className="t-title text-ink">{label}</span>
-                {!ready && st === "on" && <span className="t-body-s text-pending">{hint}</span>}
-              </span>
-              <span className={busy === prefix ? "pointer-events-none opacity-50" : ""}>
-                <Segment<PayState>
-                  value={st}
-                  onChange={(x) => x !== st && set(prefix, label, x)}
-                  options={[
-                    { value: "on", label: "Faol" },
-                    { value: "soon", label: "Tez kunda" },
-                    { value: "off", label: "Yashirin" },
-                  ]}
-                />
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-    </Card>
-  );
-}
-
-/** «Boshqa usul»: karta raqamini ko‘rsatish yoki support bilan bog‘lanib to‘lash */
-function BankCardCard({ data, save }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void> }) {
-  const toast = useToast();
-  const mode = data.settings.P2P_MODE?.value === "support" ? "support" : "card";
-  const setMode = async (m: "card" | "support") => {
-    if (m === mode) return;
-    try {
-      await save({ P2P_MODE: m === "support" ? "support" : "" }, m === "support" ? "Endi mijoz support bilan bog‘lanib to‘laydi" : "Endi mijozga karta raqami ko‘rsatiladi");
-    } catch (e) {
-      toast((e as Error).message, "error");
-    }
-  };
-  return (
-    <>
-      <Card
-        title="Boshqa usul (karta / support)"
-        sub={
-          mode === "card"
-            ? "Mijoz to‘lov sahifasida karta raqamini ko‘radi, o‘tkazma qilib chekni yuklaydi. Chekni «Karta cheklari» bo‘limida tasdiqlaysiz."
-            : "Mijoz to‘lov sahifasida support kontaktlarini ko‘radi va siz bilan bog‘lanadi. Sizga Telegram’da xabar keladi; to‘lovni olgach, Buyurtmalar’da holatini «To‘langan» qiling."
-        }
-      >
-        <Segment<"card" | "support">
-          value={mode}
-          onChange={setMode}
-          options={[
-            { value: "card", label: "Karta raqami" },
-            { value: "support", label: "Support orqali" },
-          ]}
-        />
-      </Card>
-      {mode === "card" ? (
-        <FieldsCard
-          key="card"
-          title="Karta ma’lumotlari"
-          sub="Mijoz to‘lov sahifasida ko‘radigan karta."
-          fields={[
-            ["P2P_CARD", "Karta raqami", "8600 1234 5678 9012"],
-            ["P2P_HOLDER", "Karta egasi", "ISM FAMILIYA"],
-            ["P2P_BANK", "Bank / tizim", "UZCARD"],
-          ]}
-          data={data}
-          save={save}
-        />
-      ) : (
-        <FieldsCard
-          key="support"
-          title="Support kontaktlari"
-          sub="To‘lov sahifasida ko‘rinadi. Bo‘sh qoldirilsa — saytdagi umumiy kontaktlar chiqadi."
-          fields={[
-            ["P2P_SUPPORT_TG", "Telegram username", "shohnoma_support"],
-            ["P2P_SUPPORT_PHONE", "Telefon", "+998 90 123 45 67"],
-          ]}
-          data={data}
-          save={save}
-        />
-      )}
-    </>
-  );
-}
 
 function TelegramCard({ data, save, reload }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void>; reload: () => void }) {
   const toast = useToast();
@@ -509,6 +364,50 @@ function FieldsCard({
           {busy ? "Saqlanmoqda…" : "Saqlash"}
         </button>
       </form>
+    </Card>
+  );
+}
+
+/** Rahmat: test/haqiqiy rejim va ulanishni tekshirish (GET /kassa) */
+function RahmatCard({ data, save }: { data: Resp; save: (p: Record<string, string>, m?: string) => Promise<void> }) {
+  const toast = useToast();
+  const [busy, setBusy] = useState(false);
+  const [res, setRes] = useState<string | null>(null);
+  const test = data.settings.RAHMAT_SANDBOX?.value === "1";
+  const check = async () => {
+    setBusy(true);
+    setRes(null);
+    try {
+      const r = await api<{ kassa: { name: string | null; domains: string[]; active: boolean; testMode: boolean; callbackUrl: string | null }; expectedCallback: string }>("/api/admin/rahmat/check");
+      const k = r.kassa;
+      // /api/click/complete ham Rahmat callback’ini qabul qiladi (kassada avval shunday yozilgan)
+      const cbOk = !k.callbackUrl || /\/api\/(rahmat\/callback|click\/complete)\/?$/.test(k.callbackUrl);
+      setRes(
+        `✓ Ulandi: «${k.name ?? "kassa"}»${k.active ? "" : " (kassa faol emas!)"} · ${k.testMode ? "test rejimi" : "haqiqiy rejim"} · domenlar: ${k.domains.join(", ") || "—"}` +
+          (cbOk ? "" : ` · Diqqat: kassadagi callback «${k.callbackUrl}», kerak: ${r.expectedCallback}`),
+      );
+    } catch (e) {
+      toast((e as Error).message, "error");
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <Card title="Rahmat — rejim va tekshiruv" sub="Test rejimida test kaliti ishlatiladi: haqiqiy pul yechilmaydi (test karta: 8600 5333 6409 8829, 28/06, SMS 111111).">
+      <Segment<"live" | "test">
+        value={test ? "test" : "live"}
+        onChange={(v) => save({ RAHMAT_SANDBOX: v === "test" ? "1" : "" }, v === "test" ? "Rahmat: test rejimi" : "Rahmat: haqiqiy rejim")}
+        options={[
+          { value: "live", label: "Haqiqiy to‘lov" },
+          { value: "test", label: "Test rejimi" },
+        ]}
+      />
+      <div className="flex flex-wrap items-center gap-3">
+        <button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={check}>
+          {busy ? "Tekshirilmoqda…" : "Ulanishni tekshirish"}
+        </button>
+        {res && <span className="t-body-s text-ink">{res}</span>}
+      </div>
     </Card>
   );
 }

@@ -226,7 +226,7 @@ export function FailedPageClient() {
             <div className="flex w-full flex-col flex-wrap justify-center gap-2.5 sm:w-auto sm:flex-row">
               <RetryPay orderId={order.id} provider={provider} />
               <Link href={`${base}/tolov/`} className="btn btn-secondary">
-                <Card size={16} /> {t("Boshqa usulni tanlash")}
+                <Card size={16} /> {t("To‘lov sahifasiga qaytish")}
               </Link>
             </div>
             <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 t-body-s text-maroon hover:underline">

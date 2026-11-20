@@ -99,7 +99,7 @@ export function Footer() {
       <div className="border-t border-ink-inverse/15">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 pb-7 pt-6 t-body-s opacity-60 sm:flex-row sm:justify-between lg:px-10 xl:px-[120px]">
           <span>© 2026 Shohnoma</span>
-          <span>Payme&nbsp; · &nbsp;Click</span>
+          <span>{t("To‘lov: Rahmat")}</span>
         </div>
       </div>
     </footer>
@@ -112,7 +112,7 @@ export function FooterCompact() {
   return (
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-6 t-body-s text-ink-2 lg:flex-row lg:items-center lg:justify-between lg:px-10 xl:px-[120px]">
-        <span>© 2026 Shohnoma · Payme · Click</span>
+        <span>© 2026 Shohnoma · {t("To‘lov: Rahmat")}</span>
       </div>
     </footer>
   );
