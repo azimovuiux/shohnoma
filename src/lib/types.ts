@@ -11,7 +11,7 @@ export type OrderStatus =
   | "active"
   | "archived";
 export type RsvpStatus = "coming" | "maybe" | "not_coming";
-export type PayProvider = "payme" | "click" | "google_pay" | "p2p";
+export type PayProvider = "payme" | "click" | "rahmat" | "google_pay" | "p2p";
 export type CeremonyKey = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun";
 
 export interface User {

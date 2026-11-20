@@ -125,9 +125,9 @@ export function useRequireUser(admin = false) {
 /* ── Sayt sozlamalari ── */
 
 export type SiteConfig = {
-  providers: ("payme" | "click" | "google_pay" | "p2p")[];
+  providers: ("payme" | "click" | "rahmat" | "google_pay" | "p2p")[];
   /** «Tez kunda» — ko‘rinadi, lekin tanlab bo‘lmaydi */
-  providersSoon?: ("payme" | "click" | "p2p")[];
+  providersSoon?: ("payme" | "click" | "rahmat" | "p2p")[];
   p2p: { mode?: "card" | "support"; card: string; holder: string; bank: string; supportTg?: string | null; supportPhone?: string | null };
   telegramBot: string | null;
   gaId?: string | null;

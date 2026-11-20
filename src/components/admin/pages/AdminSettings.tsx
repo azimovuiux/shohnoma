@@ -88,6 +88,19 @@ export function AdminSettings() {
             save={save}
           />
           <FieldsCard
+            title="Rahmat"
+            sub="Rahmat kassa kabinetidagi ma’lumotlar (pay.sunicode.uz). Kalitlar faqat shu yerda saqlanadi, chatga yoki kodga yozilmaydi. To‘lov API’si ulangach, usul «Faol» bo‘ladi."
+            fields={[
+              ["RAHMAT_KASSA_ID", "Kassa ID (X-Kassa-Id)", "tp_…"],
+              ["RAHMAT_KASSA_KEY", "Kassa kaliti (X-Kassa-Key)", "sk_…"],
+              ["RAHMAT_TEST_KEY", "Test kaliti (sandbox)", "sk_test_…"],
+              ["RAHMAT_API_URL", "API manzili", "https://pay.sunicode.uz/api/v1"],
+              ["RAHMAT_MXIK", "Standart MXIK (IKPU)", "17 ta raqam"],
+            ]}
+            data={data}
+            save={save}
+          />
+          <FieldsCard
             title="Click"
             sub="Click merchant kabinetidagi ma’lumotlar. Hammasi to‘ldirilsa — Click to‘lov usuli yoqiladi."
             fields={[
@@ -116,6 +129,7 @@ function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, s
   const rows: [prefix: string, label: string, ready: boolean, hint: string][] = [
     ["PAYME", "Payme", !!(data.settings.PAYME_MERCHANT_ID?.set && data.settings.PAYME_KEY?.set), "Merchant ID va kalit kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
     ["CLICK", "Click", !!(data.settings.CLICK_SERVICE_ID?.set && data.settings.CLICK_MERCHANT_ID?.set && data.settings.CLICK_SECRET_KEY?.set), "Service ID, Merchant ID va Secret key kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
+    ["RAHMAT", "Rahmat", false, "API ulanishi hali tayyor emas — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
     ["P2P", "Boshqa usul", p2pSupport || !!data.settings.P2P_CARD?.set, "Karta raqami kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
   ];
   const set = async (prefix: string, label: string, st: PayState) => {

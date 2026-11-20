@@ -36,6 +36,7 @@ export type FlowCtx = {
 export const providerLabel: Record<Payment["provider"], string> = {
   payme: "Payme",
   click: "Click",
+  rahmat: "Rahmat",
   google_pay: "Google Pay",
   p2p: "Boshqa usul",
 };

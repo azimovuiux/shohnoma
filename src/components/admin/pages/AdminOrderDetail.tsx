@@ -39,7 +39,7 @@ type Detail = {
   special: { name: string; opens: number; openedAt: string | null }[];
 };
 
-const providerLabel: Record<string, string> = { payme: "Payme", click: "Click", google_pay: "Google Pay", p2p: "Boshqa usul" };
+const providerLabel: Record<string, string> = { payme: "Payme", click: "Click", rahmat: "Rahmat", google_pay: "Google Pay", p2p: "Boshqa usul" };
 const payStatus: Record<Payment["status"], { label: string; tone: "success" | "pending" | "danger" | "muted" }> = {
   created: { label: "Yaratilgan", tone: "muted" },
   processing: { label: "Jarayonda", tone: "pending" },

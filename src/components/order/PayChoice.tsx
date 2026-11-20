@@ -14,11 +14,12 @@ import { liveTemplate, dayTime } from "./live";
 import { namesLabel, namesOf } from "./labels";
 import type { FlowOrder } from "./types";
 
-export type Provider = "payme" | "click" | "google_pay" | "p2p";
+export type Provider = "payme" | "click" | "rahmat" | "google_pay" | "p2p";
 
 const meta: Record<Provider, { label: string; text: string; icon: React.ReactNode; cta: string; logo?: string }> = {
   payme: { label: "Payme", text: "Payme ilovasi yoki karta orqali", icon: <Wallet size={20} />, cta: "Payme orqali to‘lash", logo: "/pay/payme.svg" },
   click: { label: "Click", text: "Click ilovasi yoki karta orqali", icon: <Card size={20} />, cta: "Click orqali to‘lash", logo: "/pay/click.svg" },
+  rahmat: { label: "Rahmat", text: "Uzcard, Humo yoki Visa karta orqali", icon: <Card size={20} />, cta: "Rahmat orqali to‘lash", logo: "/pay/rahmat.svg" },
   google_pay: { label: "Google Pay", text: "Telefon hamyoni orqali", icon: <Mobile size={20} />, cta: "Google Pay orqali to‘lash" },
   p2p: { label: "Boshqa usul", text: "Kartadan kartaga o‘tkazma", icon: <MoneySend size={20} />, cta: "Davom etish" },
 };

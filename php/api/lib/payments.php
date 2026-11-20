@@ -1,7 +1,13 @@
 <?php
 declare(strict_types=1);
 
-const PROVIDER_LABEL = ['payme' => 'Payme', 'click' => 'Click', 'google_pay' => 'Google Pay', 'p2p' => 'Boshqa usul'];
+const PROVIDER_LABEL = ['payme' => 'Payme', 'click' => 'Click', 'rahmat' => 'Rahmat', 'google_pay' => 'Google Pay', 'p2p' => 'Boshqa usul'];
+
+/**
+ * Rahmat (pay.sunicode.uz): to‘lov yaratish/callback API’si hali ulanmagan — hujjat kutilmoqda.
+ * Ulanmaguncha usul «Tez kunda» bo‘lib ko‘rinadi (yoki admin yashiradi); kalitlar Admin → Sozlamalar’da saqlanadi.
+ */
+const RAHMAT_API_READY = false;
 
 /** «Boshqa usul»: 'card' — karta raqami ko‘rsatiladi, 'support' — mijoz support bilan bog‘lanib to‘laydi */
 function p2p_mode(): string
@@ -22,6 +28,7 @@ function provider_state(string $p): string
         'payme' => (env('PAYME_MERCHANT_ID') && env('PAYME_KEY')) || $sandbox,
         'click' => (env('CLICK_SERVICE_ID') && env('CLICK_MERCHANT_ID') && env('CLICK_SECRET_KEY')) || $sandbox,
         'p2p' => p2p_mode() === 'support' || (bool)env('P2P_CARD'),
+        'rahmat' => RAHMAT_API_READY && env('RAHMAT_KASSA_ID') && (env('RAHMAT_SANDBOX') === '1' ? env('RAHMAT_TEST_KEY') : env('RAHMAT_KASSA_KEY')),
         default => false,
     };
     // sozlanmagan usul yashirilmagan bo‘lsa — «Tez kunda» bo‘lib ko‘rinadi
@@ -30,12 +37,12 @@ function provider_state(string $p): string
 
 function enabled_providers(): array
 {
-    return array_values(array_filter(['payme', 'click', 'google_pay', 'p2p'], fn($p) => provider_state($p) === 'on'));
+    return array_values(array_filter(['payme', 'click', 'rahmat', 'google_pay', 'p2p'], fn($p) => provider_state($p) === 'on'));
 }
 
 function soon_providers(): array
 {
-    return array_values(array_filter(['payme', 'click', 'p2p'], fn($p) => provider_state($p) === 'soon'));
+    return array_values(array_filter(['payme', 'click', 'rahmat', 'p2p'], fn($p) => provider_state($p) === 'soon'));
 }
 
 function start_payment(array $order, string $provider): string
