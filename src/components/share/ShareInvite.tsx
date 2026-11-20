@@ -34,7 +34,7 @@ export type ShareTarget = {
   guest?: string | null;
 };
 
-const CEREMONIES: Ceremony[] = ["nikoh", "fotiha", "sunnat", "tugilgan-kun"];
+const CEREMONIES: Ceremony[] = ["nikoh", "fotiha", "sunnat", "tugilgan-kun", "korporativ"];
 
 /** Taklifnoma → karta ma’lumoti (taklifnoma tilida) */
 export function cardInput(tpl: Template | undefined, templateSlug: string, inv: ShareInvitation, guest?: string | null): ShareCardInput {

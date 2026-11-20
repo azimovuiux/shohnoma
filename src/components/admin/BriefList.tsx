@@ -37,6 +37,7 @@ const ceremonyLabel: Record<string, string> = {
   fotiha: "Fotiha",
   sunnat: "Sunnat to‘yi",
   "tugilgan-kun": "Tug‘ilgan kun",
+  korporativ: "Korporativ tadbir",
   boshqa: "Boshqa",
 };
 const viaLabel: Record<string, string> = { telegram: "Telegram", call: "Qo‘ng‘iroq", sms: "SMS" };

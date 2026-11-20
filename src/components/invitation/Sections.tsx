@@ -40,7 +40,7 @@ export function Countdown({ date, p, ceremony }: { date: string; p: Palette; cer
   const v = left === null ? null : parts(left);
   const labels = timerUnits(lang);
   // tug‘ilgan kunda «to‘y» emas — «bayram»
-  const until = t(ceremony === "tugilgan-kun" ? "Bayramga qadar" : "To‘yga qadar");
+  const until = t(ceremony === "tugilgan-kun" ? "Bayramga qadar" : ceremony === "korporativ" ? "Tadbirgacha" : "To‘yga qadar");
   return (
     <section className="text-center" style={{ background: `linear-gradient(to bottom, ${p.deep}, ${p.deep2})`, padding: `${s(36)} ${s(24)} ${s(48)}` }} aria-label={until}>
       <p style={{ fontFamily: "var(--font-cormorant)", fontStyle: "italic", fontSize: s(26), color: p.onDeep }}>

@@ -13,6 +13,7 @@ const kindHint: Record<Ceremony, string> = {
   fotiha: "ikki ism",
   sunnat: "bitta ism",
   "tugilgan-kun": "bitta ism",
+  korporativ: "tadbir va kompaniya nomi",
 };
 const slugify = (s: string) =>
   s

@@ -67,11 +67,12 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
 
   const validate = () => {
     const e: Errors = {};
-    if (!o.personA.trim()) e.personA = t("Ismni kiriting");
-    if (needsPersonB(o.ceremony) && !o.personB.trim()) e.personB = t("Ismni kiriting");
+    const corp = o.ceremony === "korporativ";
+    if (!o.personA.trim()) e.personA = t(corp ? "Tadbir nomini kiriting" : "Ismni kiriting");
+    if (needsPersonB(o.ceremony) && !o.personB.trim()) e.personB = t(corp ? "Kompaniya nomini kiriting" : "Ismni kiriting");
     if (!o.day) e.day = t("Sanani kiriting");
     if (!o.time) e.time = t("Vaqtni kiriting");
-    if (!o.venueName.trim()) e.venueName = t("Marosim joyini kiriting");
+    if (!o.venueName.trim()) e.venueName = t(corp ? "Tadbir joyini kiriting" : "Marosim joyini kiriting");
     if (!o.address.trim()) e.address = t("Manzilni kiriting");
     if (o.mapUrl && !/^https?:\/\//.test(o.mapUrl)) e.mapUrl = t("Havola https:// bilan boshlansin");
     setErrors(e);
@@ -180,7 +181,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
               id="f-a"
               value={o.personA}
               onChange={(e) => set("personA", e.target.value)}
-              placeholder={o.ceremony === "sunnat" ? "Muhammadali" : o.ceremony === "tugilgan-kun" ? "Sevara" : "Jasur"}
+              placeholder={o.ceremony === "sunnat" ? "Muhammadali" : o.ceremony === "tugilgan-kun" ? "Sevara" : o.ceremony === "korporativ" ? t("Yillik hamkorlar kechasi") : "Jasur"}
               autoComplete="off"
               maxLength={80}
               aria-invalid={!!errors.personA}
@@ -193,7 +194,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
                 id="f-b"
                 value={o.personB}
                 onChange={(e) => set("personB", e.target.value)}
-                placeholder={o.ceremony === "sunnat" ? t("Jamshid va Nodira") : "Madina"}
+                placeholder={o.ceremony === "sunnat" ? t("Jamshid va Nodira") : o.ceremony === "korporativ" ? "NOVA GROUP" : "Madina"}
                 autoComplete="off"
                 maxLength={80}
                 aria-invalid={!!errors.personB}
@@ -226,13 +227,13 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
           </FlowField>
         </div>
 
-        <FlowField label={t("Marosim joyi")} required error={errors.venueName} htmlFor="f-venue">
+        <FlowField label={t(o.ceremony === "korporativ" ? "Tadbir joyi" : "Marosim joyi")} required error={errors.venueName} htmlFor="f-venue">
           <IconInput icon={<Location size={18} />} invalid={!!errors.venueName}>
             <input
               id="f-venue"
               value={o.venueName}
               onChange={(e) => set("venueName", e.target.value)}
-              placeholder={t(o.ceremony === "tugilgan-kun" ? "«Lumière» restorani" : "Oqsaroy to‘yxonasi")}
+              placeholder={t(o.ceremony === "tugilgan-kun" ? "«Lumière» restorani" : o.ceremony === "korporativ" ? "Hyatt Regency, Grand Ballroom" : "Oqsaroy to‘yxonasi")}
               maxLength={160}
               aria-invalid={!!errors.venueName}
               className={bareInput}

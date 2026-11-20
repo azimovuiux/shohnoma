@@ -112,7 +112,7 @@ export function RsvpForm({
     }
   };
 
-  const who = d.ceremony === "nikoh" || d.ceremony === "fotiha" ? "kelin-kuyov" : "taklif qiluvchi";
+  const who = d.ceremony === "nikoh" || d.ceremony === "fotiha" ? "kelin-kuyov" : d.ceremony === "korporativ" ? "tashkilotchilar" : "taklif qiluvchi";
 
   return (
     <form onSubmit={submit} className="relative flex flex-col gap-5 px-6 pb-7 pt-6 text-left" style={{ background: "#fffdf9" }} noValidate>

@@ -25,7 +25,7 @@ route('POST', '/briefs', function () {
     $d = json_decode((string)($_POST['data'] ?? '{}'), true);
     if (!is_array($d)) fail('Ma’lumot noto‘g‘ri', 422);
     $ceremony = $d['ceremony'] ?? '';
-    if (!in_array($ceremony, ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'boshqa'], true)) fail('Marosim turini tanlang', 422);
+    if (!in_array($ceremony, ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ', 'boshqa'], true)) fail('Marosim turini tanlang', 422);
     $date = (string)($d['date'] ?? '');
     if ($date !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) fail('Sana noto‘g‘ri', 422);
     $gc = $d['guestCount'] ?? null;

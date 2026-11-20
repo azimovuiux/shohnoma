@@ -45,12 +45,14 @@ const KICKER: Record<Ceremony, string> = {
   fotiha: "Fotiha to‘yiga taklif",
   sunnat: "Sunnat to‘yiga taklif",
   "tugilgan-kun": "Tug‘ilgan kunga taklif",
+  korporativ: "Tadbirga taklif",
 };
 const PHRASE: Record<Ceremony, string> = {
   nikoh: "nikoh to‘yiga taklif qilamiz",
   fotiha: "fotiha to‘yiga taklif qilamiz",
   sunnat: "sunnat to‘yiga taklif qilamiz",
   "tugilgan-kun": "tug‘ilgan kunga taklif qilamiz",
+  korporativ: "tadbirga taklif qilamiz",
 };
 
 export const hasShareDesign = (design: string) => design in DESIGNS;
@@ -95,13 +97,15 @@ export function cardTexts(input: ShareCardInput, design?: Design): Texts {
     amp,
     date: dateLine(input, design?.date ?? "long"),
     venue: clean(input.venue, 70),
+    // korporativ tadbir: ikkinchi maydon — kompaniya nomi (alohida qator)
+    org: input.ceremony === "korporativ" ? clean(input.personB, 60) : "",
   };
 }
 
 /** Rasm ostidagi matn (Telegram/WhatsApp): 2–3 qator + havola, taklifnoma tilida */
 export function shareCaption(input: ShareCardInput, url: string): string {
   const t = cardTexts(input);
-  const names = [t.a, t.b].filter(Boolean).join(" & ");
+  const names = input.ceremony === "korporativ" ? [t.org, t.a].filter(Boolean).join(" · ") : [t.a, t.b].filter(Boolean).join(" & ");
   const first = `${names} — ${tr(input.lang, PHRASE[input.ceremony] ?? PHRASE.nikoh)} 💌`;
   const meta = [dateLine(input, "long"), t.venue].filter(Boolean).join(" · ");
   return [t.guest ? `${t.guest}!` : "", first, meta, url].filter(Boolean).join("\n");
@@ -166,6 +170,7 @@ function genericStacks(th: TemplateTheme): Stack[] {
           amp: { family: cg, italic: true, weight: 500, size: 70, color: th.accent, lh: 0.95 },
           gap: 34,
         },
+        { k: "org", s: { family: jost, weight: 500, size: 32, color: th.soft, upper: true, ls: 0.12, min: 22, maxLines: 2 }, gap: 22 },
         { k: "rule", w: 90, h: 2, color: th.accent, gap: 40 },
         { k: "date", s: { family: jost, size: 34, color: th.ink, ls: 0.1, min: 24 }, gap: 40 },
         { k: "venue", s: { family: cg, italic: true, weight: 500, size: 42, color: th.soft, maxLines: 2, min: 30 }, gap: 12 },

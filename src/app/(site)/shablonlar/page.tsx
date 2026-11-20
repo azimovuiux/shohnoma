@@ -5,7 +5,7 @@ import { Catalog } from "@/components/catalog/Catalog";
 export const metadata = {
   alternates: langAlternates("/shablonlar/"),
   title: "Barcha shablonlar",
-  description: "Tayyor taklifnoma dizaynlari — nikoh, fotiha, sunnat to‘yi va tug‘ilgan kun uchun. Telefon va laptopda birdek chiroyli.",
+  description: "Tayyor taklifnoma dizaynlari — nikoh, fotiha, sunnat to‘yi, tug‘ilgan kun va korporativ tadbirlar uchun. Telefon va laptopda birdek chiroyli.",
 };
 
 export default function CatalogPage() {

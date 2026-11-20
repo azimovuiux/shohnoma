@@ -41,6 +41,8 @@ const f = {
   philosopher: '"sc-philosopher", "sc-playfair", Georgia, serif',
   tenor: '"sc-tenor", "sc-manrope", system-ui, sans-serif',
   unbounded: '"sc-unbounded", "sc-manrope", system-ui, sans-serif',
+  ssec: '"sc-ssec", "sc-sofia", system-ui, sans-serif',
+  sofia: '"sc-sofia", "sc-manrope", system-ui, sans-serif',
 };
 /** Malika: atlas burmalari ustidagi matn o‘qilishi uchun krem nur */
 const GLOW = { color: "rgba(255,249,247,.95)", blur: 22 };
@@ -543,6 +545,40 @@ export const DESIGNS: Record<string, Design> = {
         items: [
           { k: "date", s: st(f.manrope, 38, "#b5162b", { weight: 600, ls: 0.03, min: 26 }) },
           { k: "venue", s: st(f.manrope, 34, "rgba(42,26,31,.82)", { maxLines: 2, min: 24, lh: 1.25 }), gap: 18 },
+        ],
+      },
+    ],
+  },
+
+  /* Bilet (korporativ tadbir): sahna nuri, tirqishdan chiqib turgan oq chipta (yozuvsiz), ko‘k tirqish chizig‘i (Figma 00) — fonda;
+   * mehmon — sahna tepasida (kompaniya nomi o‘rnida); chipta ichida — taklif turi, kompaniya (Sofia Sans Extra Condensed, ko‘k) va
+   * tadbir nomi (shtrix-kod ostida, chok teshiklaridan yuqorida — uzun nom kichrayadi yoki 2 qatorga bo‘linadi); sana va joy —
+   * tirqish ostida, sahifadagi sana o‘rnida */
+  bilet: {
+    fill: "#050a2e",
+    bg: true,
+    date: "dots",
+    stacks: [
+      { y: 262, anchor: "center", w: 880, maxH: 290, items: [{ k: "guest", s: st(f.sofia, 46, "#ffffff", { weight: 600, maxLines: 2, min: 30, lh: 1.2 }) }] },
+      {
+        y: 768,
+        anchor: "center",
+        w: 500,
+        maxH: 380,
+        items: [
+          { k: "kicker", s: st(f.sofia, 28, "#6b759e", { weight: 600, upper: true, ls: 0.12, min: 20, lh: 1.2 }) },
+          { k: "org", s: st(f.ssec, 112, "#1f3bff", { weight: 900, upper: true, maxLines: 2, min: 58, lh: 0.95 }), gap: 18 },
+          { k: "names", mode: "two", s: st(f.sofia, 40, "#050a2e", { weight: 600, min: 26, lh: 1.18 }), gap: 18 },
+        ],
+      },
+      {
+        y: 1110,
+        anchor: "top",
+        w: 900,
+        maxH: 270,
+        items: [
+          { k: "date", s: st(f.ssec, 54, "#ffffff", { weight: 800, ls: 0.06, min: 36 }) },
+          { k: "venue", s: st(f.sofia, 34, "rgba(255,255,255,.75)", { weight: 500, maxLines: 2, min: 24, lh: 1.25 }), gap: 18 },
         ],
       },
     ],

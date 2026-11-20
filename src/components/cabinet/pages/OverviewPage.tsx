@@ -89,7 +89,7 @@ export function OverviewPage() {
   const flow = (step: "marosim" | "tafsilotlar") => `/buyurtma/${order.id}/${step}/?qaytish=kabinet`;
 
   const statCards = [
-    { icon: <Timer1 size={16} />, label: t(inv.ceremony === "tugilgan-kun" ? "Bayramga qadar" : "To‘yga qadar"), value: days === null ? "—" : days === 0 ? t("Bugun") : t("{n} kun", { n: days }), color: "text-gold" },
+    { icon: <Timer1 size={16} />, label: t(inv.ceremony === "tugilgan-kun" ? "Bayramga qadar" : inv.ceremony === "korporativ" ? "Tadbirgacha" : "To‘yga qadar"), value: days === null ? "—" : days === 0 ? t("Bugun") : t("{n} kun", { n: days }), color: "text-gold" },
     { icon: <TickCircle size={16} />, label: t("Boraman"), value: t("{n} kishi", { n: stats.coming }), color: "text-success" },
     { icon: <Clock size={16} />, label: t("Aniq emas"), value: String(stats.maybe), color: "text-gold" },
     { icon: <CloseCircle size={16} />, label: t("Kela olmaydi"), value: String(stats.notComing), color: "text-decline" },

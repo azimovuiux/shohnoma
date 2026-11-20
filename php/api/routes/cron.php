@@ -15,7 +15,11 @@ route('GET', '/cron/reminders', function () {
         $owner = $inv['user_id'] ? one('SELECT * FROM users WHERE id = ?', [$inv['user_id']]) : null;
         if ($owner && $owner['notify_day_before'] && $owner['telegram_id']) {
             $s = invitation_stats($inv['id']);
-            $what = ($inv['ceremony'] ?? '') === 'tugilgan-kun' ? 'tug‘ilgan kun bayrami' : 'to‘yingiz';
+            $what = match ($inv['ceremony'] ?? '') {
+                'tugilgan-kun' => 'tug‘ilgan kun bayrami',
+                'korporativ' => 'tadbiringiz',
+                default => 'to‘yingiz',
+            };
             notify_user($owner['telegram_id'], "🎉 Ertaga {$what}! Javoblar: {$s['coming']} boraman · {$s['maybe']} aniq emas · {$s['notComing']} kela olmaydi");
             $sent++;
         }

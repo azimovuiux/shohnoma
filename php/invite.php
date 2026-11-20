@@ -53,7 +53,7 @@ try {
         $page = tpl_page($tpl, $d, $inv['status'] === 'archived' ? 'archived' : 'live', $slug);
         $og = sprintf('<meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:url" content="%s">',
             // sunnat / tug‘ilgan kun: ikkinchi maydon — ota-ona (ism juftligi emas)
-            htmlspecialchars(trim($inv['person_a'] . ($inv['person_b'] && in_array($inv['ceremony'] ?? 'nikoh', ['nikoh', 'fotiha'], true) ? ' & ' . $inv['person_b'] : '')) . ' — taklifnoma', ENT_QUOTES), htmlspecialchars(site_url() . "/$slug/", ENT_QUOTES));
+            htmlspecialchars(trim(($inv['person_b'] && ($inv['ceremony'] ?? '') === 'korporativ' ? $inv['person_b'] . ' · ' : '') . $inv['person_a'] . ($inv['person_b'] && in_array($inv['ceremony'] ?? 'nikoh', ['nikoh', 'fotiha'], true) ? ' & ' . $inv['person_b'] : '')) . ' — taklifnoma', ENT_QUOTES), htmlspecialchars(site_url() . "/$slug/", ENT_QUOTES));
         $card = share_og($inv, $guestName);
         if ($card) $og .= sprintf('<meta property="og:image" content="%s"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="%d"><meta property="og:image:height" content="%d"><meta name="twitter:card" content="summary_large_image">', htmlspecialchars($card[0], ENT_QUOTES), $card[1], $card[2]);
         elseif (!empty($tpl['images']['phone'])) $og .= '<meta property="og:image" content="' . htmlspecialchars(site_url() . $tpl['images']['phone'], ENT_QUOTES) . '">';
@@ -69,6 +69,8 @@ $months = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust',
 // sunnat / tug‘ilgan kun: ikkinchi maydon — ota-ona (ism juftligi emas)
 $pair = in_array($inv['ceremony'] ?? 'nikoh', ['nikoh', 'fotiha'], true);
 $names = trim($inv['person_a'] . ($pair && $inv['person_b'] ? ' & ' . $inv['person_b'] : ''));
+// korporativ: kompaniya · tadbir nomi
+if (($inv['ceremony'] ?? '') === 'korporativ' && $inv['person_b']) $names = trim($inv['person_b'] . ' · ' . $inv['person_a'], ' ·');
 $date = '';
 if (preg_match('/^(\d{4})-(\d{2})-(\d{2})/', (string)$inv['date'], $m)) $date = (int)$m[3] . ' ' . $months[(int)$m[2] - 1] . ' ' . $m[1];
 $title = "$names — taklifnoma";

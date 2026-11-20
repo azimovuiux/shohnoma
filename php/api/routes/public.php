@@ -137,6 +137,8 @@ route('GET', '/i/:slug/calendar', function ($p) {
     // sunnat / tug‘ilgan kun: ikkinchi maydon — ota-ona (ism juftligi emas)
     $pair = in_array($inv['ceremony'] ?? 'nikoh', ['nikoh', 'fotiha'], true);
     $names = trim($inv['person_a'] . ($pair && $inv['person_b'] ? ' & ' . $inv['person_b'] : ''));
+    // korporativ: kompaniya · tadbir nomi
+    if (($inv['ceremony'] ?? '') === 'korporativ' && $inv['person_b']) $names = trim($inv['person_b'] . ' · ' . $inv['person_a'], ' ·');
     $title = $names . ' — ' . ceremony_label($inv['ceremony']);
     $url = site_url() . '/' . $inv['slug'] . '/';
     $ics = implode("\r\n", [

@@ -103,7 +103,7 @@ Cheklovlar:
 
 | Maydon | Qiymatlar |
 |---|---|
-| `ceremony` | `nikoh` · `fotiha` · `sunnat` · `tugilgan-kun` |
+| `ceremony` | `nikoh` · `fotiha` · `sunnat` · `tugilgan-kun` · `korporativ` |
 | `style` | `klassik` · `minimal` · `romantik` · `zamonaviy` · `milliy` |
 | `color` | `bordo` · `yashil` · `oltin` · `krem` · `moviy` · `qizil` · `pushti` (katalog filtri uchun) |
 | `slug` | lotin kichik harf, raqam, `-`; 3–60 belgi; takrorlanmas |

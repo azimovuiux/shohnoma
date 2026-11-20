@@ -96,8 +96,9 @@ const CATEGORY_DEFAULTS = [
     ['slug' => 'sunnat', 'name' => 'Sunnat to‘yi', 'nameRu' => 'Суннат-той', 'nameEn' => 'Sunnat celebration', 'icon' => 'Crown1', 'kind' => 'sunnat', 'builtin' => true],
     ['slug' => 'fotiha', 'name' => 'Fotiha to‘yi', 'nameRu' => 'Фотиха-той', 'nameEn' => 'Engagement (Fotiha)', 'icon' => 'Lovely', 'kind' => 'fotiha', 'builtin' => true],
     ['slug' => 'tugilgan-kun', 'name' => 'Tug‘ilgan kun', 'nameRu' => 'День рождения', 'nameEn' => 'Birthday', 'icon' => 'Cake', 'kind' => 'tugilgan-kun', 'builtin' => true],
+    ['slug' => 'korporativ', 'name' => 'Korporativ', 'nameRu' => 'Корпоратив', 'nameEn' => 'Corporate', 'icon' => 'Briefcase', 'kind' => 'korporativ', 'builtin' => true],
 ];
-const CATEGORY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun'];
+const CATEGORY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ'];
 
 /** Kategoriyalar ro‘yxati (admin tartibida); standartlari doim bor */
 function categories(): array
@@ -123,7 +124,7 @@ function category_kind(string $slug): ?string
     return null;
 }
 
-const CEREMONY_LABEL = ['nikoh' => 'Nikoh to‘yi', 'fotiha' => 'Fotiha to‘yi', 'sunnat' => 'Sunnat to‘yi', 'tugilgan-kun' => 'Tug‘ilgan kun', 'boshqa' => 'Boshqa'];
+const CEREMONY_LABEL = ['nikoh' => 'Nikoh to‘yi', 'fotiha' => 'Fotiha to‘yi', 'sunnat' => 'Sunnat to‘yi', 'tugilgan-kun' => 'Tug‘ilgan kun', 'korporativ' => 'Korporativ tadbir', 'boshqa' => 'Boshqa'];
 function ceremony_label(?string $c): string { return CEREMONY_LABEL[$c ?? ''] ?? '—'; }
 
 function format_price(int $n, bool $withCurrency = true): string

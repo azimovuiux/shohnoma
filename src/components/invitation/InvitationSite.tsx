@@ -36,6 +36,7 @@ import { MalikaSite } from "@/components/templates/malika/MalikaSite";
 import { ShamSite } from "@/components/templates/sham/ShamSite";
 import { KoinotSite } from "@/components/templates/koinot/KoinotSite";
 import { MarvaridSite } from "@/components/templates/marvarid/MarvaridSite";
+import { BiletSite } from "@/components/templates/bilet/BiletSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -66,7 +67,7 @@ function useMusic(url: string | null, enabled: boolean) {
  * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
  */
 /** Kodda yozilgan dizaynlar — yangi shablon qo‘shilganda shu ro‘yxatga ham qo‘shiladi */
-const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid"] as const;
+const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet"] as const;
 
 export function InvitationSite(props: InvitationSiteProps) {
   const lang = inviteLang(props.data.extra, useLocale());
@@ -114,6 +115,8 @@ export function InvitationSite(props: InvitationSiteProps) {
         <KoinotSite {...props} />
       ) : ds === "marvarid" ? (
         <MarvaridSite {...props} />
+      ) : ds === "bilet" ? (
+        <BiletSite {...props} />
       ) : stale ? (
         <StaleReload slug={props.template.slug} />
       ) : (
@@ -154,11 +157,12 @@ function StaleReload({ slug }: { slug: string }) {
 }
 
 /** Namuna (demo) matnlarini tarjima qilish — mijoz ma’lumotiga tegilmaydi */
-function useDemoData(data: InvitationData, demo: boolean): InvitationData {
+function useDemoData(raw: InvitationData, demo: boolean): InvitationData {
   const t = useT();
-  return useMemo(
-    () =>
-      demo
+  return useMemo(() => {
+    // korporativ tadbir: ikkinchi maydon — kompaniya nomi, ism juftligi emas (umumiy dizaynda faqat tadbir nomi)
+    const data = raw.ceremony === "korporativ" ? { ...raw, personB: null } : raw;
+    return demo
         ? {
             ...data,
             personA: t(data.personA),
@@ -168,9 +172,8 @@ function useDemoData(data: InvitationData, demo: boolean): InvitationData {
             message: data.message && t(data.message),
             program: data.program.map((x) => ({ ...x, title: t(x.title) })),
           }
-        : data,
-    [data, demo, t],
-  );
+        : data;
+  }, [raw, demo, t]);
 }
 
 function GenericSite({ template, data: raw, mode, embedded = false }: InvitationSiteProps) {

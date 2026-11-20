@@ -276,8 +276,8 @@ function tpl_import_zip(string $zipPath, ?string $replaceSlug): array
     foreach ($fields as $f) if (array_key_exists($f['key'], $s)) $sExtra[$f['key']] = $s[$f['key']];
     if (!isset($declared['program']) && isset($s['program']) && is_array($s['program'])) $sExtra['program'] = $s['program'];
     $sampleData = [
-        'personA' => mb_substr((string)($s['personA'] ?? 'Jasur'), 0, 40),
-        'personB' => mb_substr((string)($s['personB'] ?? ($ceremony === 'nikoh' || $ceremony === 'fotiha' ? 'Madina' : '')), 0, 40),
+        'personA' => mb_substr((string)($s['personA'] ?? ($ceremony === 'korporativ' ? 'Yillik hamkorlar kechasi' : 'Jasur')), 0, 40),
+        'personB' => mb_substr((string)($s['personB'] ?? ($ceremony === 'nikoh' || $ceremony === 'fotiha' ? 'Madina' : ($ceremony === 'korporativ' ? 'NOVA GROUP' : ''))), 0, 40),
         'date' => $sDate,
         'venueName' => mb_substr((string)($s['venueName'] ?? 'Oqsaroy to‘yxonasi'), 0, 80),
         'address' => mb_substr((string)($s['address'] ?? 'Toshkent sh.'), 0, 160),

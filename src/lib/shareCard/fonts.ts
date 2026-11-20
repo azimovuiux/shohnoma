@@ -67,6 +67,10 @@ const FACES: Face[] = [
   { family: "sc-tenor", weight: 400, style: "normal", files: subs(T("sovga"), "tenor-sans", "400-normal") },
   { family: "sc-unbounded", weight: 500, style: "normal", files: subs(T("sham"), "unbounded", "500-normal") },
   { family: "sc-unbounded", weight: 900, style: "normal", files: subs(T("koinot"), "unbounded", "900-normal") },
+  { family: "sc-ssec", weight: 900, style: "normal", files: subs(T("bilet"), "sofia-sans-extra-condensed", "900-normal") },
+  { family: "sc-ssec", weight: 800, style: "normal", files: subs(T("bilet"), "sofia-sans-extra-condensed", "800-normal") },
+  { family: "sc-sofia", weight: 500, style: "normal", files: subs(T("bilet"), "sofia-sans", "500-normal") },
+  { family: "sc-sofia", weight: 600, style: "normal", files: subs(T("bilet"), "sofia-sans", "600-normal") },
   // Bodoni Moda’da kirill yo‘q — riviera.module.css dagi kabi Playfair Display
   {
     family: "sc-bodoni",

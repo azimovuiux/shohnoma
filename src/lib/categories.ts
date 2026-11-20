@@ -1,7 +1,7 @@
 /**
  * Shablon kategoriyalari (katalog filtrlari) — admin qo‘shadi, nomlaydi va ikonka tanlaydi.
  * Har bir kategoriya taklifnoma turiga (`kind`) bog‘lanadi: buyurtma formasi (bir yoki ikki ism) shu turdan olinadi.
- * Ro‘yxat /api/templates.js orqali keladi (window.__SHOHNOMA_CATEGORIES__); bo‘lmasa — standart 4 tasi.
+ * Ro‘yxat /api/templates.js orqali keladi (window.__SHOHNOMA_CATEGORIES__); bo‘lmasa — standart 5 tasi.
  */
 import type { Ceremony } from "./templates";
 import type { Locale } from "./i18n";
@@ -24,6 +24,7 @@ export const defaultCategories: Category[] = [
   { slug: "sunnat", name: "Sunnat to‘yi", nameRu: "Суннат-той", nameEn: "Sunnat celebration", icon: "Crown1", kind: "sunnat", builtin: true },
   { slug: "fotiha", name: "Fotiha to‘yi", nameRu: "Фотиха-той", nameEn: "Engagement (Fotiha)", icon: "Lovely", kind: "fotiha", builtin: true },
   { slug: "tugilgan-kun", name: "Tug‘ilgan kun", nameRu: "День рождения", nameEn: "Birthday", icon: "Cake", kind: "tugilgan-kun", builtin: true },
+  { slug: "korporativ", name: "Korporativ", nameRu: "Корпоратив", nameEn: "Corporate", icon: "Briefcase", kind: "korporativ", builtin: true },
 ];
 
 declare global {

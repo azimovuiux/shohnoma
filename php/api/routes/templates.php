@@ -64,7 +64,7 @@ route('PUT', '/admin/categories', function () {
 });
 
 /* ── Admin: shablonlarni boshqarish ── */
-const TPL_CEREMONIES = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun'];
+const TPL_CEREMONIES = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ'];
 const TPL_STYLES = ['klassik', 'minimal', 'romantik', 'zamonaviy', 'milliy'];
 const TPL_SCRIPTS = ['pinyon', 'cinzel', 'cormorant'];
 const TPL_COLORS = ['bordo', 'yashil', 'oltin', 'krem', 'moviy', 'qizil', 'pushti'];

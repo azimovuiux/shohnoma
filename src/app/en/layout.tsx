@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s · Shohnoma",
   },
   description:
-    "Choose a ready-made design, add your details and, after payment, get a link to a finished invitation website for your guests. For weddings, engagements, sunnat celebrations and birthdays.",
+    "Choose a ready-made design, add your details and, after payment, get a link to a finished invitation website for your guests. For weddings, engagements, sunnat celebrations, birthdays and corporate events.",
   openGraph: { siteName: "Shohnoma", locale: "en_US", type: "website" },
   alternates: langAlternates("/", "en"),
 };

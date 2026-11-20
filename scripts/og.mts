@@ -33,6 +33,7 @@ const ceremonyLabel: Record<string, string> = {
   fotiha: "Fotiha to‘yi",
   sunnat: "Sunnat to‘yi",
   "tugilgan-kun": "Tug‘ilgan kun",
+  korporativ: "Korporativ tadbir",
 };
 
 const starUri = (color: string, r: number) =>

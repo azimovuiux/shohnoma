@@ -43,8 +43,8 @@ export const RU_DESCRIPTIONS: Record<string, string> = {
   "Shohnoma shaxsiy ma’lumotlarni qanday yig‘adi, saqlaydi va himoya qiladi.": "Как Shohnoma собирает, хранит и защищает персональные данные.",
   "Bir necha savolga javob bering — dizaynerimiz g‘oyangizni noldan chizib beradi. Brif bepul, to‘lov faqat eskizni tasdiqlaganingizdan keyin.":
     "Ответьте на несколько вопросов — наш дизайнер нарисует вашу идею с нуля. Бриф бесплатный, оплата — только после утверждения эскиза.",
-  "Tayyor taklifnoma dizaynlari — nikoh, fotiha, sunnat to‘yi va tug‘ilgan kun uchun. Telefon va laptopda birdek chiroyli.":
-    "Готовые дизайны приглашений — на никах, фотиху, суннат-той и день рождения. Одинаково красиво на телефоне и ноутбуке.",
+  "Tayyor taklifnoma dizaynlari — nikoh, fotiha, sunnat to‘yi, tug‘ilgan kun va korporativ tadbirlar uchun. Telefon va laptopda birdek chiroyli.":
+    "Готовые дизайны приглашений — на никах, фотиху, суннат-той, день рождения и корпоративные мероприятия. Одинаково красиво на телефоне и ноутбуке.",
   "Shohnoma taklifnoma saytlari xizmatidan foydalanish shartlari.": "Условия использования сервиса сайтов-приглашений Shohnoma.",
 };
 
@@ -96,8 +96,8 @@ export const EN_DESCRIPTIONS: Record<string, string> = {
   "Shohnoma shaxsiy ma’lumotlarni qanday yig‘adi, saqlaydi va himoya qiladi.": "How Shohnoma collects, stores and protects personal data.",
   "Bir necha savolga javob bering — dizaynerimiz g‘oyangizni noldan chizib beradi. Brif bepul, to‘lov faqat eskizni tasdiqlaganingizdan keyin.":
     "Answer a few questions and our designer will draw your idea from scratch. The brief is free; you pay only after approving the sketch.",
-  "Tayyor taklifnoma dizaynlari — nikoh, fotiha, sunnat to‘yi va tug‘ilgan kun uchun. Telefon va laptopda birdek chiroyli.":
-    "Ready-made invitation designs for weddings, engagements, sunnat celebrations and birthdays. Beautiful on phone and laptop.",
+  "Tayyor taklifnoma dizaynlari — nikoh, fotiha, sunnat to‘yi, tug‘ilgan kun va korporativ tadbirlar uchun. Telefon va laptopda birdek chiroyli.":
+    "Ready-made invitation designs for weddings, engagements, sunnat celebrations, birthdays and corporate events. Beautiful on phone and laptop.",
   "Shohnoma taklifnoma saytlari xizmatidan foydalanish shartlari.": "Terms of use of the Shohnoma invitation website service.",
 };
 

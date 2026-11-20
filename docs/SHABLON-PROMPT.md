@@ -14,7 +14,7 @@ Natija — mobil telefonda ochiladigan premium, nafis bitta sahifali taklifnoma.
 ## Shablon g‘oyasi
 - Nomi: [masalan: Oltin bog‘]
 - Slug: [masalan: oltin-bog]
-- Marosim: [nikoh | fotiha | sunnat | tugilgan-kun]
+- Marosim: [nikoh | fotiha | sunnat | tugilgan-kun | korporativ]
 - Uslub: [klassik | minimal | romantik | zamonaviy | milliy]
 - Rang guruhi: [bordo | yashil | oltin | krem | moviy | qizil | pushti]
 - Kayfiyat va tasvir: [masalan: krem fon, oltin ingichka naqshlar, burchaklarda atirgul shoxlari,

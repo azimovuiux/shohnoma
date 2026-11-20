@@ -7,7 +7,10 @@ const DEFAULT_PROGRAM = [
     'fotiha' => [['time' => '16:00', 'title' => 'Mehmonlarni kutib olish'], ['time' => '16:30', 'title' => 'Fotiha marosimi'], ['time' => '18:00', 'title' => 'Dasturxon va tabriklar']],
     'sunnat' => [['time' => '10:00', 'title' => 'Mehmonlarni kutib olish'], ['time' => '11:00', 'title' => 'Osh va tabriklar'], ['time' => '13:00', 'title' => 'Bazm']],
     'tugilgan-kun' => [['time' => '19:00', 'title' => 'Mehmonlarni kutib olish'], ['time' => '19:30', 'title' => 'Tabriklar va tort'], ['time' => '21:00', 'title' => 'Bazm']],
+    'korporativ' => [['time' => '18:30', 'title' => 'Ro‘yxatdan o‘tish'], ['time' => '19:00', 'title' => 'Ochilish so‘zi'], ['time' => '20:30', 'title' => 'Kechki ziyofat']],
 ];
+/** Barcha taklifnoma turlari (DB enum bilan bir xil — migratsiya 0023) */
+const CEREMONY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ'];
 const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', 'en', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite', 'maqolalar', 'article', 'sitemap-maqolalar-xml'];
 
 function is_paid_status(string $s): bool { return $s === 'paid' || $s === 'active'; }
@@ -91,7 +94,8 @@ function missing_fields(array $inv): array
 {
     $m = [];
     if (!$inv['person_a']) $m[] = 'personA';
-    if (in_array($inv['ceremony'], ['nikoh', 'fotiha'], true) && !$inv['person_b']) $m[] = 'personB';
+    // nikoh/fotiha — kelin ismi, korporativ — kompaniya nomi
+    if (in_array($inv['ceremony'], ['nikoh', 'fotiha', 'korporativ'], true) && !$inv['person_b']) $m[] = 'personB';
     if (!preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', (string)$inv['date'])) $m[] = 'date';
     if (!$inv['venue_name']) $m[] = 'venueName';
     if (!$inv['address']) $m[] = 'address';
@@ -133,7 +137,7 @@ function apply_invitation_patch(array $b, array $p, bool $draft = false): array
     $date = fn($v) => is_string($v) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $v);
 
     if (array_key_exists('ceremony', $p)) {
-        if (!in_array($p['ceremony'], ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun'], true)) fail('Marosim turini tanlang', 422);
+        if (!in_array($p['ceremony'], CEREMONY_KINDS, true)) fail('Marosim turini tanlang', 422);
         $set['ceremony'] = $p['ceremony'];
     }
     foreach (['personA' => ['person_a', 80], 'venueName' => ['venue_name', 160], 'address' => ['address', 200]] as $k => [$col, $max]) {

@@ -27,6 +27,7 @@ const columns = [
       { label: "Sunnat to‘yi", href: "/shablonlar/?marosim=sunnat" },
       { label: "Fotiha to‘yi", href: "/shablonlar/?marosim=fotiha" },
       { label: "Tug‘ilgan kun", href: "/shablonlar/?marosim=tugilgan-kun" },
+      { label: "Korporativ tadbir", href: "/shablonlar/?marosim=korporativ" },
     ],
   },
   {

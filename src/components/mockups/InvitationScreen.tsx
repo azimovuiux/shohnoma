@@ -218,7 +218,13 @@ export function InvitationScreen({ t }: { t: Template }) {
             marginTop: u(6),
           }}
         >
-          {tt(t.ceremony === "nikoh" || t.ceremony === "fotiha" ? "Hayotimizning eng baxtli kunida yonimizda bo‘lishingizni istaymiz." : "Quvonchli kunimizda yonimizda bo‘lishingizni istaymiz.")}
+          {tt(
+            t.ceremony === "nikoh" || t.ceremony === "fotiha"
+              ? "Hayotimizning eng baxtli kunida yonimizda bo‘lishingizni istaymiz."
+              : t.ceremony === "korporativ"
+                ? "Tadbirimizda sizni ko‘rishdan mamnun bo‘lamiz."
+                : "Quvonchli kunimizda yonimizda bo‘lishingizni istaymiz.",
+          )}
         </span>
         <span
           className="rounded-full"

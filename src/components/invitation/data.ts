@@ -37,7 +37,7 @@ type Row = {
 export const timerUnits = (lang: Locale) =>
   lang === "ru" ? ["дней", "часов", "минут", "секунд"] : lang === "en" ? ["days", "hours", "minutes", "seconds"] : ["kun", "soat", "daqiqa", "soniya"];
 
-const CEREMONIES = ["nikoh", "fotiha", "sunnat", "tugilgan-kun"] as const;
+const CEREMONIES = ["nikoh", "fotiha", "sunnat", "tugilgan-kun", "korporativ"] as const;
 
 /** DB'dagi invitation qatori → InvitationData */
 export function toInvitationData(r: Row): InvitationData {
@@ -82,6 +82,11 @@ const DEMO_PROGRAM: Record<InvitationData["ceremony"], { time: string; title: st
     { time: "19:00", title: "Mehmonlarni kutib olish" },
     { time: "19:30", title: "Tabriklar va tort" },
     { time: "21:00", title: "Bazm" },
+  ],
+  korporativ: [
+    { time: "18:30", title: "Ro‘yxatdan o‘tish" },
+    { time: "19:00", title: "Ochilish so‘zi" },
+    { time: "20:30", title: "Kechki ziyofat" },
   ],
 };
 

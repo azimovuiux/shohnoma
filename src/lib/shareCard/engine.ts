@@ -26,7 +26,7 @@ export type TextStyle = {
 };
 
 export type Item =
-  | { k: "guest" | "kicker" | "date" | "venue"; s: TextStyle; gap?: number }
+  | { k: "guest" | "kicker" | "date" | "venue" | "org"; s: TextStyle; gap?: number }
   | { k: "text"; text: string; s: TextStyle; gap?: number }
   | {
       k: "names";
@@ -74,6 +74,8 @@ export type Texts = {
   amp: string;
   date: string;
   venue: string;
+  /** korporativ tadbir: kompaniya / tashkilotchi nomi (boshqa marosimlarda — "") */
+  org: string;
 };
 
 type Line = { text: string; s: TextStyle; size: number; gap: number; h: number } | { rule: true; w: number; h: number; color: string; gap: number };
@@ -268,7 +270,7 @@ export function drawStack(ctx: CanvasRenderingContext2D, st: Stack, t: Texts) {
 /** Stacklardagi barcha shrift+matn juftlari (oldindan yuklash uchun) */
 export function fontNeeds(stacks: Stack[], t: Texts): { font: string; text: string }[] {
   const out: { font: string; text: string }[] = [];
-  const all = [t.guest, t.kicker, t.a, t.b, t.amp, t.date, t.venue].join(" ");
+  const all = [t.guest, t.kicker, t.a, t.b, t.amp, t.date, t.venue, t.org].join(" ");
   for (const st of stacks)
     for (const it of st.items) {
       if (it.k === "rule") continue;

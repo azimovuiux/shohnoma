@@ -24,7 +24,7 @@ import { star8Path } from "@/lib/ornament";
 import { site } from "@/lib/site";
 import { useSocial } from "@/lib/social";
 
-type Ceremony = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun" | "boshqa";
+type Ceremony = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun" | "korporativ" | "boshqa";
 type ContactVia = "telegram" | "call" | "sms";
 
 const ceremonies: { value: Ceremony; label: string }[] = [
@@ -32,6 +32,7 @@ const ceremonies: { value: Ceremony; label: string }[] = [
   { value: "fotiha", label: "Fotiha" },
   { value: "sunnat", label: "Sunnat to‘yi" },
   { value: "tugilgan-kun", label: "Tug‘ilgan kun" },
+  { value: "korporativ", label: "Korporativ tadbir" },
   { value: "boshqa", label: "Boshqa" },
 ];
 

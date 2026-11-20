@@ -11,6 +11,7 @@ export const invitePhrase: Record<InvitationData["ceremony"], string> = {
   fotiha: "sizni fotiha to‘yimizga taklif qiladi",
   sunnat: "sunnat to‘yi munosabati bilan sizni taklif qilamiz",
   "tugilgan-kun": "sizni tug‘ilgan kunimga taklif qilaman",
+  korporativ: "sizni tadbirimizga taklif qiladi",
 };
 
 function Star({ size, color, outline = false }: { size: string; color: string; outline?: boolean }) {

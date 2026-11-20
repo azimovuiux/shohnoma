@@ -3,7 +3,7 @@ import type { Template } from "@/lib/templates";
 /** Mehmon ko‘radigan taklifnoma sayti uchun ma’lumot (DB'dagi invitation'dan yoki namuna) */
 export interface InvitationData {
   slug: string;
-  ceremony: "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun";
+  ceremony: "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun" | "korporativ";
   personA: string;
   personB: string | null;
   /** "2026-09-12T18:00" (Toshkent) */

@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     template: "%s · Shohnoma",
   },
   description:
-    "Tayyor dizaynni tanlang, ma’lumotlaringizni kiriting va to‘lovdan so‘ng mehmonlarga yuboriladigan tayyor sayt havolasini oling. Nikoh, fotiha, sunnat to‘yi va tug‘ilgan kun uchun.",
+    "Tayyor dizaynni tanlang, ma’lumotlaringizni kiriting va to‘lovdan so‘ng mehmonlarga yuboriladigan tayyor sayt havolasini oling. Nikoh, fotiha, sunnat to‘yi, tug‘ilgan kun va korporativ tadbirlar uchun.",
   /* Tizim mavzusiga mos: yorug‘da to‘q bordo, qorong‘ida oq belgi (SVG ichida prefers-color-scheme; PNG — SVG’ni qo‘llamaydigan brauzerlar uchun) */
   icons: {
     icon: [

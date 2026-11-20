@@ -160,7 +160,8 @@ function EditDialog({ guest, invitationId, onClose, onSaved }: { guest: SpecialG
   const [name, setName] = useState(guest.name);
   const [note, setNote] = useState(guest.note ?? "");
   // izoh namunasi marosimga mos: to‘yda — «kelin tomondan», tug‘ilgan kun va sunnatda — «sinfdoshlar»
-  const wedding = ["nikoh", "fotiha"].includes(useInvitationData().data?.invitation.ceremony ?? "nikoh");
+  const cer = useInvitationData().data?.invitation.ceremony ?? "nikoh";
+  const wedding = ["nikoh", "fotiha"].includes(cer);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const save = async (e: React.FormEvent) => {
@@ -191,7 +192,7 @@ function EditDialog({ guest, invitationId, onClose, onSaved }: { guest: SpecialG
           <Input value={name} onChange={(e) => setName(e.target.value)} maxLength={NAME_MAX} autoFocus aria-invalid={!!err} />
         </Field>
         <Field label={t("Izoh (faqat sizga ko‘rinadi)")}>
-          <Input value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder={t(wedding ? "Masalan: kelin tomondan" : "Masalan: qarindoshlar")} />
+          <Input value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder={t(wedding ? "Masalan: kelin tomondan" : cer === "korporativ" ? "Masalan: hamkorlar" : "Masalan: qarindoshlar")} />
         </Field>
         <div className="flex flex-col-reverse gap-2.5 sm:flex-row sm:justify-end">
           <button type="button" onClick={onClose} className="btn btn-secondary">

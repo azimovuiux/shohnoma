@@ -15,6 +15,7 @@ const TPL_INVITE_PHRASE = [
     'fotiha' => 'sizni fotiha to‘yimizga taklif qiladi',
     'sunnat' => 'sunnat to‘yi munosabati bilan sizni taklif qilamiz',
     'tugilgan-kun' => 'sizni tug‘ilgan kunimga taklif qilaman',
+    'korporativ' => 'sizni tadbirimizga taklif qiladi',
 ];
 /** Majburiy (har shablonda bor) belgilar */
 const TPL_BASE_KEYS = ['personA', 'personB', 'names', 'initials', 'date', 'dateShort', 'day', 'month', 'monthName', 'year', 'weekday', 'time',

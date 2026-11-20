@@ -3,7 +3,7 @@ import { categoryName, getCategory } from "./categories.ts";
 import type { Locale } from "./i18n";
 /** Shablonlar ro‘yxati — spec §10.1 (narxlar namuna, [Ochiq]) */
 
-export type Ceremony = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun";
+export type Ceremony = "nikoh" | "fotiha" | "sunnat" | "tugilgan-kun" | "korporativ";
 export type Style = "klassik" | "minimal" | "romantik" | "zamonaviy" | "milliy";
 
 export const ceremonyLabel: Record<Ceremony, string> = {
@@ -11,6 +11,7 @@ export const ceremonyLabel: Record<Ceremony, string> = {
   fotiha: "Fotiha to‘yi",
   sunnat: "Sunnat to‘yi",
   "tugilgan-kun": "Tug‘ilgan kun",
+  korporativ: "Korporativ tadbir",
 };
 
 export const styleLabel: Record<Style, string> = {
@@ -781,6 +782,50 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Pushti, oq yoki sut rangidagi liboslar — bantlar bilan bo‘lsa, yanada yaxshi.", max: 160 },
     ],
   },
+  {
+    number: 20,
+    slug: "bilet",
+    name: "Bilet",
+    ceremony: "korporativ",
+    ceremonies: ["korporativ"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Korporativ tadbir uchun chipta ko‘rinishidagi taklifnoma. Ranglari — elektr ko‘k, to‘q ko‘k va oq. Sahifani pastga surganingizda sahna chiroqlari ostida tirqishdan chipta chiqadi: unda kompaniya nomi, sana va joy. So‘ng mehmonga shaxsiy murojaat, aeroport tablosidek sanoq, kecha dasturi, spikerlar, manzil, dress-kod va ishtirokni tasdiqlash anketasi; oxirida mehmon ismi yozilgan chipta qoldig‘i.",
+    descriptionRu: "Приглашение-билет для корпоративного мероприятия. Цвета — электрический синий, тёмно-синий и белый. Когда вы листаете страницу вниз, под светом сцены из щели выезжает билет с названием компании, датой и местом. Дальше — личное обращение к гостю, отсчёт в стиле табло аэропорта, программа вечера, спикеры, адрес, дресс-код и анкета для подтверждения участия; в конце — корешок билета с именем гостя.",
+    descriptionEn: "A ticket-style invitation for a corporate event. The colours are electric blue, deep navy and white. As you scroll down, a ticket slides out of a slot under the stage lights, showing the company name, date and venue. Then a personal greeting to the guest, a countdown in the style of an airport departure board, the evening’s schedule, speakers, the venue, the dress code and an RSVP form; at the end, a ticket stub with the guest’s name.",
+    palette: ["#1F3BFF", "#050A2E", "#F4F6FF", "#C76BFF"],
+    sample: { a: "Yillik hamkorlar kechasi", b: "NOVA GROUP", date: "23 · 01 · 2027", venue: "Hyatt Regency Tashkent Grand Ballroom", time: "19:00" },
+    theme: { bg: ["#0b1550", "#050a2e"], ink: "#ffffff", accent: "#1f3bff", soft: "#c3cbff", script: "cinzel", color: "moviy" },
+    fields: [
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Ochilish so‘zi", max: 40 },
+          note: { type: "text", label: "Joyi yoki izoh", placeholder: "Asosiy zal", max: 40 },
+        },
+      },
+      {
+        key: "speakers",
+        type: "list",
+        label: "Spikerlar",
+        min: 0,
+        max: 6,
+        item: {
+          name: { type: "text", label: "Ism va familiya", required: true, placeholder: "Rustam Aliyev", max: 40 },
+          role: { type: "text", label: "Lavozimi", placeholder: "Bosh direktor", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Business casual", "Black tie", "Smart casual", "Erkin uslub"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Klassik kostyum yoki business casual.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -914,9 +959,13 @@ export const templateFeatures = [
   "Manzil va xarita",
   "Mehmonlar javobi",
 ];
-/** Shablon sahifasidagi imkoniyatlar: tug‘ilgan kun shablonlarida «to‘y» emas — «Bayramga qadar sanoq» */
-export const featuresFor = (t: Pick<Template, "ceremony" | "ceremonies">) =>
-  tplCeremonies(t).every((c) => c === "tugilgan-kun") ? templateFeatures.map((f) => (f === "To‘yga qadar sanoq" ? "Bayramga qadar sanoq" : f)) : templateFeatures;
+/** Shablon sahifasidagi imkoniyatlar: tug‘ilgan kun shablonlarida «to‘y» emas — «Bayramga qadar sanoq»; korporativ tadbirda — «Tadbirgacha sanoq», «Tadbir dasturi» */
+export const featuresFor = (t: Pick<Template, "ceremony" | "ceremonies">) => {
+  const kinds = tplKinds(t);
+  if (kinds.every((c) => c === "korporativ"))
+    return templateFeatures.map((f) => (f === "To‘yga qadar sanoq" ? "Tadbirgacha sanoq" : f === "Marosim dasturi" ? "Tadbir dasturi" : f));
+  return tplCeremonies(t).every((c) => c === "tugilgan-kun") ? templateFeatures.map((f) => (f === "To‘yga qadar sanoq" ? "Bayramga qadar sanoq" : f)) : templateFeatures;
+};
 
 /** Har bir dizaynda suratlar qayerga tushadi (buyurtma formasida joy-joy ko‘rsatiladi) */
 export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
@@ -995,6 +1044,15 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Asosiy surat", where: "Ochilgan sandiq ortidagi ravoq ichida. Bo‘lmasa — non ushlagan qo‘llar surati" },
     { title: "Surat · 2", where: "«Bizning shahzoda» — doira ichidagi surat. Bo‘lmasa — non ushlagan qo‘llar (asosiy surat ham bo‘lmasa — bo‘lim chiqmaydi)" },
     { title: "Surat · 3", where: "«Manzil» — to‘yxona surati. Bo‘lmasa — ayvon surati" },
+  ],
+  /** Bilet (korporativ) — spikerlar suratlari tartib bilan (1-surat — 1-spiker…); surat bo‘lmasa — ism bosh harflari. Zal surati — shablonniki */
+  bilet: [
+    { title: "Spiker · 1", where: "«Spikerlar» — 1-spiker surati (bo‘lmasa — ism bosh harflari)" },
+    { title: "Spiker · 2", where: "«Spikerlar» — 2-spiker surati" },
+    { title: "Spiker · 3", where: "«Spikerlar» — 3-spiker surati" },
+    { title: "Spiker · 4", where: "«Spikerlar» — 4-spiker surati" },
+    { title: "Spiker · 5", where: "«Spikerlar» — 5-spiker surati" },
+    { title: "Spiker · 6", where: "«Spikerlar» — 6-spiker surati" },
   ],
   /** Sovg‘a (tug‘ilgan kun) — bo‘sh slotlar: hero’da ravoq ichida sovg‘a qutisi, «Yangi bob» — chiqmaydi, manzil — restoran surati */
   sovga: [
