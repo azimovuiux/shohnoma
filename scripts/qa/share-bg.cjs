@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -54,6 +54,9 @@ const CFG = {
   /* Koinot: tungi osmon, yulduzlar (miltillash to‘xtatiladi), start nuri, raketa va uchish tutuni (Figma 00); sanoq halqasi va oy
    * yashiriladi — ularning o‘rnida kartada mehmon / taklif turi / ism / sana / joy chiziladi */
   koinot: { css: `nextjs-portal{display:none!important}[class*="_tw"]{animation:none!important}[class*="_count"],[class*="_gIn"][class*="_art"]{display:none!important}` },
+  /* Marvarid: pudra-pushti fon, tepada marvarid shoda, atlas lenta va bant (Figma 00; shoda yaltirog‘i olib tashlanadi);
+   * mehmon (shoda ichida) / taklif turi / ism (ism o‘rnida) / sana va joy (sana o‘rnida) — kartada chiziladi */
+  marvarid: { css: `nextjs-portal{display:none!important}[class*="_shine"]{display:none!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;
 

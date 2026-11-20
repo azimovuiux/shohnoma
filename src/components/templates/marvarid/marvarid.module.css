@@ -1,0 +1,828 @@
+/*
+ * Marvarid — qizlar tug‘ilgan kuni taklifnomasi (coquette uslubi): pudra-pushti, sut rang, gilos-qizil
+ * (Figma 538:12617 mobil, 541:12636 laptop; «19 · Marvarid — Assets» 537:22408).
+ * Shriftlar: Playfair Display Italic (sarlavhalar, ism, raqamlar) + Manrope 400–700 (matn) — lotin va kirill (@fontsource).
+ * Ranglar: pink #f6d6da, cream #fff8f3, red #b5162b, ink #2a1a1f, mute #9a6f78, line #e5cccf; atlas lenta #c72136 → #9e0f24 → #bf1c30.
+ * Birlik `--u`: kontent ustuni (mobil 390; laptopda ustun = mobil × 1.2). Ochilish — o‘z kanvasi (390×844 / 1440×1013).
+ * Harakat («Motion — 19 · Marvarid»), ochilish faqat scroll bilan (--o: 0…1; bosish talab qilinmaydi): bant uchlari pastga
+ * sirg‘aladi, tugun kichrayib yo‘qoladi, yurakchalar uchadi, atlas lenta ikki bo‘lakka bo‘linib chap va o‘ngga tortiladi, yaltiroq
+ * yuguradi. Hero — arka chizig‘i chiziladi, surat 1.08 → 1, bant tushib «osiladi», ism harfma-harf. Skrollda: lola va bantlar
+ * parallaks (tebranmaydi), marvarid shodalar yaltiraydi, yurakchalar suzadi; kalendar kunlari navbat bilan, bayram kuni doirasi
+ * chiziladi va yurakcha «uradi»; final (--fc) — sham yonadi, marvarid shoda ko‘tariladi, bantchalar va yurakchalar yog‘iladi.
+ * Hamma rasmlar Normal blend.
+ */
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --pink: #f6d6da;
+  --cream: #fff8f3;
+  --red: #b5162b;
+  --ink: #2a1a1f;
+  --mute: #9a6f78;
+  --line: #e5cccf;
+  --sh-loader-a: #fbe4e7;
+  --sh-loader-b: #f2c6cc;
+  --sh-ring: rgba(181, 22, 43, 0.45);
+  position: relative;
+  container-type: inline-size;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: "Manrope", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.flow {
+  position: relative;
+  background: var(--cream);
+}
+.pf {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.ms,
+.ms5,
+.ms6,
+.ms7 {
+  font-family: "Manrope", system-ui, sans-serif;
+}
+.ms {
+  font-weight: 400;
+}
+.ms5 {
+  font-weight: 500;
+}
+.ms6 {
+  font-weight: 600;
+}
+.ms7 {
+  font-weight: 700;
+}
+.clamp2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.art {
+  position: absolute;
+  pointer-events: none;
+}
+.fill {
+  position: absolute;
+  inset: 0;
+}
+.svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.heart {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+/* ── Marvarid shoda yaltirog‘i: shoda rasmi niqob, ustidan oq nur o‘tadi ── */
+.shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: url("/templates/marvarid/shoda.webp") center / contain no-repeat;
+  mask: url("/templates/marvarid/shoda.webp") center / contain no-repeat;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 0.85) 50%, rgba(255, 255, 255, 0) 62%);
+  background-size: 260% 100%;
+  background-repeat: no-repeat;
+  animation: shine 5.2s ease-in-out infinite;
+}
+@keyframes shine {
+  0% {
+    background-position: 130% 0;
+  }
+  55%,
+  100% {
+    background-position: -30% 0;
+  }
+}
+/* yurakchalar sekin suzadi (y ±4) */
+.float {
+  animation: float 3.6s ease-in-out var(--fd, 0s) infinite alternate;
+}
+@keyframes float {
+  from {
+    translate: 0 calc(var(--u) * -3);
+  }
+  to {
+    translate: 0 calc(var(--u) * 3);
+  }
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.cream {
+  background: var(--cream);
+}
+.pink {
+  background: var(--pink);
+}
+.red {
+  background: var(--red);
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+}
+.deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* chok ustidagi bezak — qo‘shni bo‘lim ustiga chiqadi */
+.seam {
+  z-index: 4;
+}
+/* skroll parallaksi (JS: --py) */
+.root [data-px] {
+  translate: 0 var(--py, 0px);
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 18));
+}
+.root [data-a="rise"] {
+  --t: 1.3s;
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 46));
+}
+.root [data-a="left"] {
+  --t: 0.9s;
+}
+.root [data-a="left"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateX(calc(var(--u) * -24));
+}
+/* lola/bant — kichikdan prujina bilan */
+.root [data-a="pop"] {
+  --t: 1.2s;
+  --e: var(--spring);
+}
+.root [data-a="pop"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.7) translateY(calc(var(--u) * 20));
+}
+/* marvarid shoda — tepadan tushib o‘rnashadi */
+.root [data-a="hang"] {
+  --t: 1.3s;
+}
+.root [data-a="hang"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * -30));
+}
+/* yurakcha — kichikdan */
+.root [data-a="heart"] {
+  --t: 0.9s;
+  --e: var(--spring);
+}
+.root [data-a="heart"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.3);
+}
+.root [data-a="zoom"] {
+  --t: 1.2s;
+}
+.root [data-a="zoom"]:not([data-in]) {
+  opacity: 0;
+}
+.zoomImg {
+  object-fit: cover;
+  transition: transform 1.8s var(--ease) var(--d, 0s);
+}
+.root [data-a]:not([data-in]) .zoomImg {
+  transform: scale(1.08);
+}
+
+/* ═════ 00 · Ochilish — atlas lenta va bant (scroll bilan) ═════
+ * JS faqat --o (0…1, lerp) ni `.gateWrap` ga yozadi; qolgani shu yerda. Vaqt chizig‘i:
+ * bant uchlari pastga sirg‘aladi (0.02…0.24) va so‘nadi (0.12…0.24); tugun kichrayadi (0.12…0.34) va yo‘qoladi (0.24…0.34);
+ * yurakchalar tugundan uchadi (0.16…0.7); lenta yaltirog‘i (0.04…0.5); lenta ikki bo‘lakka bo‘linib tortiladi (0.22…1). */
+.gateWrap,
+.gateHold {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  height: calc(100svh * 1.85);
+  --o: 0;
+}
+.gateHold {
+  height: 100svh;
+  margin-bottom: calc(100svh * 0.85);
+  background: var(--pink);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.gBg {
+  position: absolute;
+  inset: 0;
+  background: var(--pink);
+}
+/* yuklanganda — sokin kirish (alohida qatlam: scroll transformlari bilan to‘qnashmaydi) */
+.gateWrap:not(.still) .gIn {
+  animation: gIn 1.2s var(--gd, 0s) var(--ease) both;
+}
+@keyframes gIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 14));
+  }
+}
+.gateWrap:not(.still) .gHang {
+  animation: gHang 1.4s var(--gd, 0s) var(--ease) both;
+}
+@keyframes gHang {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * -40));
+  }
+}
+/* atlas lenta — ikki yarmi (har biri o‘z gradienti bilan) */
+.ribbon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  --rp: clamp(0, (var(--o) - 0.2) / 0.8, 1);
+  --re: calc(var(--rp) * var(--rp) * (3 - 2 * var(--rp)));
+  --sp: clamp(0, (var(--o) - 0.04) / 0.46, 1);
+}
+.half {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.2%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #c72136 0%, #9e0f24 50%, #bf1c30 100%);
+  box-shadow: 0 calc(var(--u) * 6) calc(var(--u) * 14) rgba(110, 10, 24, calc(0.18 * var(--re)));
+}
+.halfL {
+  left: 0;
+  transform: translateX(calc(var(--re) * -102%));
+}
+.halfR {
+  right: 0;
+  transform: translateX(calc(var(--re) * 102%));
+}
+/* atlas yaltirog‘i — lenta bo‘ylab yuguradi */
+.sheen {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60%;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 210, 215, 0.45) 50%, rgba(255, 255, 255, 0) 100%);
+  opacity: calc(min(1, var(--sp) * 8) * (1 - clamp(0, (var(--sp) - 0.85) / 0.15, 1)));
+}
+.halfL .sheen {
+  left: 0;
+  transform: translateX(calc(170% - var(--sp) * 340%));
+}
+.halfR .sheen {
+  left: 0;
+  transform: translateX(calc(-170% + var(--sp) * 340%));
+}
+/* bant: uchlari va tugun — bitta rasm, uch qatlam (clip-path) */
+.tail {
+  --tl: clamp(0, (var(--o) - 0.02) / 0.24, 1);
+  --tc: calc(34.3% + var(--tl) * var(--tl) * 66%);
+}
+/* uchlar pastga sirg‘aladi va tugun ostidan «sirg‘alib chiqib» ketadi: yuqori qirqim pastga suriladi (shaffoflik yo‘q) */
+.tailL {
+  clip-path: polygon(0 var(--tc), 50.4% var(--tc), 50.4% 100%, 0 100%);
+  transform-origin: 46% 30%;
+  transform: translateY(calc(var(--tl) * var(--u) * 46)) rotate(calc(var(--tl) * 5deg));
+}
+.tailR {
+  clip-path: polygon(49.6% var(--tc), 100% var(--tc), 100% 100%, 49.6% 100%);
+  transform-origin: 54% 30%;
+  transform: translateY(calc(var(--tl) * var(--u) * 46)) rotate(calc(var(--tl) * -5deg));
+}
+/* tugun — kichrayib yo‘qoladi (shaffofliksiz; eng oxirgi kichik nuqtada o‘chadi) */
+.knot {
+  clip-path: polygon(0 0, 100% 0, 100% 35.3%, 0 35.3%);
+  --kn: clamp(0, (var(--o) - 0.14) / 0.18, 1);
+  transform-origin: 50% 24.4%;
+  transform: scale(calc(1 - var(--kn) * var(--kn)));
+  opacity: calc(1 - clamp(0, (var(--o) - 0.31) * 1000, 1));
+}
+/* tugundan uchib chiqadigan yurakchalar */
+.burst {
+  position: absolute;
+  pointer-events: none;
+  --bp: clamp(0, (var(--o) - 0.2 - var(--bd)) / 0.45, 1);
+  --be: calc(1 - (1 - var(--bp)) * (1 - var(--bp)));
+  transform: translate(calc(var(--bx) * var(--be)), calc(var(--by) * var(--be))) scale(calc(0.4 + 0.6 * var(--be)));
+  opacity: calc(min(1, var(--bp) * 8) * (1 - clamp(0, (var(--bp) - 0.5) / 0.5, 1)));
+}
+/* mokap/poster ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 01 · Hero ═════ */
+.heroSec {
+  z-index: 6;
+}
+.arch {
+  position: absolute;
+  overflow: hidden;
+  background: var(--pink);
+  isolation: isolate;
+}
+.archEmpty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 40%, #fbe7ea 0%, var(--pink) 70%);
+}
+/* arka chizig‘i — ikki yarmi tepadan pastga chiziladi */
+.archLine {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+.archLine path {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 1.2;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.4s var(--ease) var(--d, 0s);
+}
+.root [data-a="arch"]:not([data-in]) path {
+  stroke-dashoffset: 1;
+}
+/* kichik bant — tepadan tushib «osiladi» (prujina; keyin tebranmaydi) */
+.root [data-a="drop"] {
+  --t: 1.1s;
+  --e: cubic-bezier(0.34, 1.6, 0.6, 1);
+}
+.root [data-a="drop"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * -70));
+}
+/* ism harflari — birin-ketin pastdan ko‘tariladi (stagger 0.04 s) */
+.letter {
+  display: inline-block;
+  transition:
+    opacity 0.7s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: calc(0.35s + var(--li) * 0.04s);
+}
+.root [data-a="letters"]:not([data-in]) .letter {
+  opacity: 0;
+  transform: translateY(0.45em);
+}
+.root [data-a="age"] {
+  --t: 1s;
+}
+.root [data-a="age"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 20));
+}
+.ageNum {
+  display: block;
+  padding: 0.12em 0.04em 0.1em 0;
+  margin: -0.12em -0.04em -0.1em 0;
+}
+
+/* ═════ 03 · Sana ═════ */
+.root [data-a="day"] {
+  --t: 0.6s;
+}
+.root [data-a="day"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 8));
+}
+/* bayram kuni — sut rang doira «chiziladi» (qalin chiziq — doira to‘ladi) */
+.dayRing {
+  position: absolute;
+  pointer-events: none;
+}
+.dayRing circle {
+  fill: none;
+  stroke: var(--cream);
+  stroke-width: 20.2;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  transition: stroke-dashoffset 0.9s var(--ease) var(--d, 0s);
+}
+.root .dayRing:not([data-in]) circle {
+  stroke-dashoffset: 1;
+}
+/* yurakcha — paydo bo‘ladi va ikki marta «uradi» */
+.dayHeart {
+  position: absolute;
+  pointer-events: none;
+  --t: 0.5s;
+}
+.root .dayHeart:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.3);
+}
+.root .dayHeart[data-in] {
+  animation: beat 0.7s ease-in-out calc(var(--d, 0s) + 0.5s) 2;
+}
+@keyframes beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.2);
+  }
+}
+.tbox {
+  border-style: solid;
+  border-color: rgba(255, 248, 243, 0.7);
+}
+.root [data-a="flip"] {
+  --t: 1s;
+  transform-origin: 50% 0;
+}
+.root [data-a="flip"]:not([data-in]) {
+  opacity: 0;
+  transform: perspective(calc(var(--u) * 400)) rotateX(-80deg);
+}
+.digits {
+  display: inline-flex;
+  padding: 0.14em 0.06em 0.22em;
+  margin: -0.14em -0.06em -0.22em;
+}
+.slot {
+  display: inline-block;
+}
+/* o‘zgargan raqam — yuqoridan sekin tushadi; shaffoflik yo‘q, kesilmaydi (padded «0» hech qachon yo‘qolmaydi) */
+.tick {
+  display: inline-block;
+  animation: tick 0.5s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: translateY(-0.14em);
+  }
+}
+
+/* ═════ Tugmalar ═════ */
+.btnLine,
+.btnFill,
+.btnRed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease);
+}
+.btnLine {
+  border-style: solid;
+  border-color: rgba(255, 248, 243, 0.7);
+  color: var(--cream);
+  background: transparent;
+}
+.btnLine:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 248, 243, 0.1);
+}
+.btnFill {
+  background: var(--red);
+  color: var(--cream);
+}
+.btnRed {
+  border-style: solid;
+  border-color: rgba(181, 22, 43, 0.6);
+  color: var(--red);
+  background: transparent;
+}
+.btnFill:hover,
+.btnRed:hover {
+  transform: translateY(-2px);
+}
+
+/* ═════ 04 · Dastur ═════ */
+.rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(181, 22, 43, 0.35);
+  transform-origin: 0 50%;
+}
+.root [data-a="line"] {
+  --t: 1s;
+}
+.root [data-a="line"]:not([data-in]) {
+  transform: scaleX(0);
+}
+.ptime {
+  flex: none;
+  white-space: nowrap;
+}
+
+/* ═════ 06 · Dress-kod ═════ */
+.dressCard {
+  background: var(--cream);
+  border-style: solid;
+  border-color: var(--red);
+}
+
+/* ═════ 07 · Anketa ═════ */
+.card {
+  background: #fff;
+  color: var(--ink);
+  border-style: solid;
+  border-color: rgba(181, 22, 43, 0.25);
+}
+.lbl {
+  color: var(--mute);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: var(--cream);
+  border-style: solid;
+  border-color: var(--line);
+  transition: box-shadow 0.3s var(--ease);
+}
+.field:focus-within {
+  box-shadow: 0 0 0 2px rgba(181, 22, 43, 0.35);
+}
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  line-height: 1.35;
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.input::placeholder {
+  color: var(--mute);
+  opacity: 1;
+}
+.choice {
+  position: relative;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: var(--line);
+  color: var(--ink);
+  background: transparent;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--cream);
+}
+/* «Albatta kelaman» — tugmadan kichik yurakchalar uchib chiqadi */
+.fly {
+  position: absolute;
+  left: 50%;
+  bottom: 55%;
+  pointer-events: none;
+  opacity: 0;
+  animation: fly 1.2s cubic-bezier(0.3, 0.6, 0.5, 1) var(--fl, 0s) forwards;
+}
+@keyframes fly {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * -120)) scale(1.1);
+  }
+}
+.step {
+  border-style: solid;
+  border-color: #e6cccf;
+  border-radius: 50%;
+  color: var(--red);
+  background: #fff;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.step:disabled {
+  opacity: 0.4;
+}
+.submit {
+  background: var(--red);
+  color: var(--cream);
+  transition: transform 0.4s var(--spring);
+}
+.submit:hover {
+  transform: translateY(-2px);
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+
+/* ═════ 08 · Final — scroll bilan (--fc: 0 … 1 = Figma kadri; sahifa oxirigacha albatta tugaydi) ═════ */
+.finalWrap {
+  --fc: 0;
+}
+/* sham olovi — yonadi (0.15…0.45), keyin tebranadi; atrofida iliq nur */
+.fFlame {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+  --fl: clamp(0, (var(--fc) - 0.15) / 0.3, 1);
+  transform-origin: 50% 100%;
+  transform: scale(var(--fl));
+  opacity: min(1, calc(var(--fl) * 4));
+}
+.flameIn {
+  position: absolute;
+  inset: 0;
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse 50% 58% at 50% 68%, #fffbe8 0%, #ffe39a 38%, #ffb347 68%, rgba(255, 140, 50, 0) 100%);
+  transform-origin: 50% 100%;
+  animation: flick 0.16s ease-in-out infinite alternate;
+}
+@keyframes flick {
+  from {
+    transform: scale(0.94, 0.92) rotate(-2deg);
+  }
+  to {
+    transform: scale(1.04, 1.08) rotate(2deg);
+  }
+}
+.fGlow {
+  position: absolute;
+  left: -260%;
+  right: -260%;
+  top: -150%;
+  bottom: -110%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 150, 0.55) 0%, rgba(255, 214, 150, 0) 65%);
+}
+/* marvarid shoda — pastdan ko‘tariladi (footer ortidan) */
+.fPearl {
+  --pr: clamp(0, (var(--fc) - 0.08) / 0.62, 1);
+  --pe: calc(1 - (1 - var(--pr)) * (1 - var(--pr)) * (1 - var(--pr)));
+  transform: translateY(calc((1 - var(--pe)) * var(--u) * 150));
+}
+/* yog‘iladigan bantchalar va yurakchalar — tepadan mayin tushib, so‘nadi (oxirgi kadrda yo‘q) */
+.fall {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  --k: clamp(0, (var(--fc) - var(--s0)) / 0.5, 1);
+  opacity: calc(min(1, var(--k) * 8) * (1 - clamp(0, (var(--k) - 0.75) / 0.25, 1)));
+  transform: translateY(calc(var(--k) * var(--u) * 820)) rotate(calc(var(--k) * 140deg * var(--fr)));
+}
+
+/* ═════ Musiqa tugmasi (Figma: qizil doira 52, 4 ta sut rang chiziq) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--red);
+  border: 0;
+  box-shadow: 0 4px 14px rgba(120, 12, 28, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  animation: musicIn 0.8s 1.2s var(--ease) both;
+}
+@keyframes musicIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.musicEmbedded {
+  position: absolute;
+}
+.bar {
+  display: block;
+  width: 3px;
+  height: var(--h);
+  border-radius: 1.5px;
+  background: var(--cream);
+  transition: height 0.3s var(--ease);
+}
+.music:not(.playing) .bar {
+  height: 4px;
+}
+.music.playing .bar {
+  animation: eq 0.9s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.27s);
+}
+@keyframes eq {
+  to {
+    transform: scaleY(0.45);
+  }
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--red);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

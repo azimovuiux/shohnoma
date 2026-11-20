@@ -584,4 +584,27 @@ export const en: Record<string, string> = {
   "Fotozona va kosmik bezaklar": "Photo zone and space decorations",
   "Birinchi ekran — illyuminator (dumaloq oyna) ichidagi surat. Bo‘lmasa — illyuminatorda kosmonavt": "The photo in the porthole (round window) on the first screen. If none, an astronaut in the porthole",
   "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati": "“Venue” — a photo of the place. If none, the template’s party room photo",
+  // ── Marvarid (girl’s birthday) ──
+  Mohinur: "Mohinur",
+  "«Lumière» kafe": "Lumière Café",
+  "Azizlarim!": "My dears!",
+  "to‘lyapman": "old",
+  "tug‘ilgan kunimni nishonlayman": "celebrating my birthday",
+  "Tug‘ilgan kunimni eng yaqin dugonalarim va do‘stlarim bilan nishonlamoqchiman.": "I want to celebrate my birthday with my closest friends.",
+  "{name}ning tug‘ilgan kunini eng yaqin insonlarimiz bilan nishonlamoqchimiz.": "{name} is celebrating a birthday, and we want to share it with the people closest to us.",
+  "Tug‘ilgan kunni eng yaqin insonlarimiz bilan nishonlamoqchimiz.": "We want to celebrate the birthday with the people closest to us.",
+  "Shu kechada yonimda bo‘lsangiz, men uchun eng katta sovg‘a bo‘ladi.": "Having you with me that evening will be the best gift of all.",
+  "Shu kechada yonimizda bo‘lsangiz, biz uchun eng katta sovg‘a bo‘ladi.": "Having you with us that evening will be the best gift of all.",
+  "Pushti va oq": "Pink and white",
+  "Nafis kechki": "Elegant evening",
+  "Pushti, oq yoki sut rangidagi liboslar — bantlar bilan bo‘lsa, yanada yaxshi.": "Pink, white or milky outfits; even better with bows.",
+  "Nafis kechki libos yoki chiroyli ko‘ylak, qulay poyabzal.": "An elegant evening outfit or a pretty dress, and comfortable shoes.",
+  // order form (templates.ts → fields, PHOTO_SLOTS.marvarid)
+  "Ixtiyoriy · katta kursiv raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida «tug‘ilgan kunimni nishonlayman»":
+    "Optional · shown as a large italic number; if empty, “celebrating my birthday” is shown instead",
+  "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), imzo — shu; bo‘sh qolsa — bayram egasining o‘zi nomidan":
+    "Optional · if filled in, the invitation comes from this name (“we”) and is signed with it; if empty, from the birthday girl",
+  "Welcome drink va fotozona": "Welcome drinks and a photo corner",
+  "Birinchi bo‘lim — arka ichidagi surat. Bo‘lmasa — arkada ismning birinchi harfi": "The photo in the arch in the first section. If none, the arch shows the first letter of the name",
+  "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning kafe surati": "“Venue” — a photo of the place. If none, the template’s café photo",
 };

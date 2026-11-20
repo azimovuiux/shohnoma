@@ -515,4 +515,36 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+
+  /* Marvarid (qizlar tug‘ilgan kuni): pudra-pushti fon, tepada marvarid shoda, atlas lenta va bant (Figma 00) — fonda;
+   * mehmon — shoda ichida; taklif turi (Manrope) va ism (Playfair Display Italic, gilos-qizil; uzun bo‘lsa — 2 qator) — sahifadagi
+   * ism o‘rnida, bant ustida; sana (qizil) va joy — lenta ostida, sahifadagi sana o‘rnida */
+  marvarid: {
+    fill: "#f6d6da",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 150, anchor: "center", w: 470, maxH: 130, items: [{ k: "guest", s: st(f.manrope, 36, "#2a1a1f", { weight: 600, maxLines: 2, min: 26, lh: 1.22 }) }] },
+      {
+        y: 430,
+        anchor: "top",
+        w: 920,
+        maxH: 190,
+        items: [
+          { k: "kicker", s: st(f.manrope, 34, "#2a1a1f", { weight: 600, ls: 0.02, min: 24, lh: 1.2 }) },
+          { k: "names", mode: "two", s: st(f.playfair, 116, "#b5162b", { italic: true, min: 60, lh: 1.08 }), gap: 6 },
+        ],
+      },
+      {
+        y: 1090,
+        anchor: "top",
+        w: 900,
+        maxH: 270,
+        items: [
+          { k: "date", s: st(f.manrope, 38, "#b5162b", { weight: 600, ls: 0.03, min: 26 }) },
+          { k: "venue", s: st(f.manrope, 34, "rgba(42,26,31,.82)", { maxLines: 2, min: 24, lh: 1.25 }), gap: 18 },
+        ],
+      },
+    ],
+  },
 };

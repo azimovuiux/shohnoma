@@ -562,4 +562,27 @@ export const ru: Record<string, string> = {
   "Fotozona va kosmik bezaklar": "Фотозона и космический декор",
   "Birinchi ekran — illyuminator (dumaloq oyna) ichidagi surat. Bo‘lmasa — illyuminatorda kosmonavt": "Фото в иллюминаторе (круглом окне) на первом экране. Если нет — в иллюминаторе космонавт",
   "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati": "«Адрес» — фото места праздника. Если нет — фото праздничного зала из шаблона",
+  // ── Marvarid (qizlar tug‘ilgan kuni) ──
+  Mohinur: "Мохинур",
+  "«Lumière» kafe": "Кафе «Lumière»",
+  "Azizlarim!": "Мои дорогие!",
+  "to‘lyapman": "исполняется",
+  "tug‘ilgan kunimni nishonlayman": "отмечаю день рождения",
+  "Tug‘ilgan kunimni eng yaqin dugonalarim va do‘stlarim bilan nishonlamoqchiman.": "Хочу отметить свой день рождения с самыми близкими подругами и друзьями.",
+  "{name}ning tug‘ilgan kunini eng yaqin insonlarimiz bilan nishonlamoqchimiz.": "{name} празднует день рождения, и мы хотим отметить его с самыми близкими людьми.",
+  "Tug‘ilgan kunni eng yaqin insonlarimiz bilan nishonlamoqchimiz.": "Мы хотим отметить день рождения с самыми близкими людьми.",
+  "Shu kechada yonimda bo‘lsangiz, men uchun eng katta sovg‘a bo‘ladi.": "Если вы будете рядом в этот вечер — это будет для меня лучшим подарком.",
+  "Shu kechada yonimizda bo‘lsangiz, biz uchun eng katta sovg‘a bo‘ladi.": "Если вы будете рядом с нами в этот вечер — это будет для нас лучшим подарком.",
+  "Pushti va oq": "Розовый и белый",
+  "Nafis kechki": "Элегантный вечерний",
+  "Pushti, oq yoki sut rangidagi liboslar — bantlar bilan bo‘lsa, yanada yaxshi.": "Наряды розового, белого или молочного цвета — с бантами ещё лучше.",
+  "Nafis kechki libos yoki chiroyli ko‘ylak, qulay poyabzal.": "Элегантный вечерний наряд или красивое платье и удобная обувь.",
+  // buyurtma formasi (templates.ts → fields, PHOTO_SLOTS.marvarid)
+  "Ixtiyoriy · katta kursiv raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida «tug‘ilgan kunimni nishonlayman»":
+    "Необязательно · появится крупной курсивной цифрой; если пусто — вместо цифры «отмечаю день рождения»",
+  "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), imzo — shu; bo‘sh qolsa — bayram egasining o‘zi nomidan":
+    "Необязательно · если заполнено — приглашение от этого имени («мы») и с этой подписью; если пусто — от имени виновницы торжества",
+  "Welcome drink va fotozona": "Welcome drink и фотозона",
+  "Birinchi bo‘lim — arka ichidagi surat. Bo‘lmasa — arkada ismning birinchi harfi": "Фото в арке в первом разделе. Если нет — в арке первая буква имени",
+  "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning kafe surati": "«Адрес» — фото места праздника. Если нет — фото кафе из шаблона",
 };

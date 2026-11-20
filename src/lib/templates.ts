@@ -746,6 +746,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kosmonavt kostyumi, yulduzli futbolka yoki ko‘k-to‘q sariq ranglar — ixtiyoriy.", max: 160 },
     ],
   },
+  {
+    number: 19,
+    slug: "marvarid",
+    name: "Marvarid",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "romantik",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Qizlar uchun tug‘ilgan kun taklifnomasi. Ranglari — pudra-pushti, sut rang va gilos-qizil; bezaklari — marvarid shodalar, atlas bantlar va lolalar. Sahifani pastga surganingizda qizil atlas bant yechiladi, lenta ikki tomonga ochiladi, keyin arka ichidagi surat, ism va yosh chiqadi. So‘ng taklif matni, kalendar va sanoq, kecha dasturi, manzil, kiyinish uslubi va mehmonlar javobi; oxirida tortdagi sham yonadi.",
+    descriptionRu: "Приглашение на день рождения для девушки. Цвета — пудрово-розовый, молочный и вишнёво-красный; украшения — жемчужные нити, атласные банты и тюльпаны. Когда вы листаете страницу вниз, красный атласный бант развязывается, лента расходится в стороны, а затем появляются фото в арке, имя и возраст. Дальше текст приглашения, календарь и отсчёт, программа вечера, адрес, стиль одежды и ответы гостей; в конце на торте загорается свеча.",
+    descriptionEn: "A birthday invitation for a girl. The colours are powder pink, milk white and cherry red, decorated with strings of pearls, satin bows and tulips. As you scroll down, a red satin bow comes untied and the ribbon parts to the sides, then the photo in an arch, the name and the age appear. Then the invitation text, a calendar and countdown, the evening’s schedule, the venue, what to wear and guest replies; at the end the candle on the cake lights up.",
+    palette: ["#F6D6DA", "#B5162B", "#FFF8F3", "#2A1A1F"],
+    sample: { a: "Mohinur", date: "19 · 12 · 2026", venue: "«Lumière» kafe", time: "18:00" },
+    theme: { bg: ["#fbe4e7", "#f6d6da"], ink: "#2a1a1f", accent: "#b5162b", soft: "#9a6f78", script: "cormorant", color: "pushti" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "20", max: 3, hint: "Ixtiyoriy · katta kursiv raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida «tug‘ilgan kunimni nishonlayman»" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Karimovlar oilasi", max: 60, hint: "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), imzo — shu; bo‘sh qolsa — bayram egasining o‘zi nomidan" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Kutib olish", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Welcome drink va fotozona", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Pushti va oq", "Nafis kechki", "Bayramona", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Pushti, oq yoki sut rangidagi liboslar — bantlar bilan bo‘lsa, yanada yaxshi.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -983,6 +1018,11 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   koinot: [
     { title: "Asosiy surat", where: "Birinchi ekran — illyuminator (dumaloq oyna) ichidagi surat. Bo‘lmasa — illyuminatorda kosmonavt" },
     { title: "Surat · 2", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
+  ],
+  /** Marvarid (qizlar tug‘ilgan kuni) — bo‘sh slotlar: hero arkasida ismning birinchi harfi, 2-surat — shablonning kafe surati */
+  marvarid: [
+    { title: "Asosiy surat", where: "Birinchi bo‘lim — arka ichidagi surat. Bo‘lmasa — arkada ismning birinchi harfi" },
+    { title: "Surat · 2", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning kafe surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
