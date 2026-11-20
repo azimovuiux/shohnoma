@@ -138,7 +138,7 @@ export const ru: Record<string, string> = {
   "Tadbirgacha sanoq": "Отсчёт до мероприятия",
   "Tadbir dasturi": "Программа мероприятия",
   "Tadbir nomi": "Название мероприятия",
-  "Kompaniya / tashkilotchi": "Компания / организатор",
+  Tashkilotchi: "Организатор",
   "Tadbir": "Мероприятие",
   "Tadbir nomini kiriting": "Введите название мероприятия",
   "Kompaniya nomini kiriting": "Введите название компании",

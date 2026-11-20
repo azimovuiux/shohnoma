@@ -583,4 +583,36 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+  /* Taqvim (forum / korporativ): qorong‘i fon, lime nur, shisha plitkalar va ochilishdagidek kattalashgan lime panel (Figma 00) — fonda;
+   * mehmon — panel tepasida (shisha plitkalardan yuqorida); panel ichida — taklif turi, kompaniya va tadbir nomi (to‘q matn);
+   * sana (lime) va joy — panel ostida. Uzun nom kichrayadi yoki 2 qatorga bo‘linadi; matn bezakka tegmaydi (ustun chegaralari) */
+  taqvim: {
+    fill: "#0a1214",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 140, anchor: "center", w: 880, maxH: 210, items: [{ k: "guest", s: st(f.manrope, 46, "#f4f7f6", { weight: 600, maxLines: 2, min: 30, lh: 1.2 }) }] },
+      {
+        y: 697,
+        anchor: "center",
+        w: 470,
+        maxH: 620,
+        items: [
+          { k: "kicker", s: st(f.manrope, 28, "rgba(15,20,23,.62)", { weight: 600, ls: 0.02, min: 20, lh: 1.25 }) },
+          { k: "org", s: st(f.manrope, 76, "#0f1417", { weight: 600, ls: -0.03, maxLines: 2, min: 44, lh: 1.08 }), gap: 26 },
+          { k: "names", mode: "two", s: st(f.manrope, 40, "#0f1417", { weight: 400, min: 26, lh: 1.2 }), gap: 22 },
+        ],
+      },
+      {
+        y: 1124,
+        anchor: "top",
+        w: 900,
+        maxH: 270,
+        items: [
+          { k: "date", s: st(f.manrope, 46, "#e4ff3a", { weight: 600, min: 32 }) },
+          { k: "venue", s: st(f.manrope, 34, "rgba(244,247,246,.75)", { maxLines: 2, min: 24, lh: 1.25 }), gap: 16 },
+        ],
+      },
+    ],
+  },
 };

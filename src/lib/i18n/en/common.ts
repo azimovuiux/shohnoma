@@ -138,7 +138,7 @@ export const en: Record<string, string> = {
   "Tadbirgacha sanoq": "Countdown to the event",
   "Tadbir dasturi": "Event schedule",
   "Tadbir nomi": "Event name",
-  "Kompaniya / tashkilotchi": "Company / host",
+  Tashkilotchi: "Organiser",
   "Tadbir": "Event",
   "Tadbir nomini kiriting": "Enter the event name",
   "Kompaniya nomini kiriting": "Enter the company name",

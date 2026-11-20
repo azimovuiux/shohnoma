@@ -826,6 +826,64 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Klassik kostyum yoki business casual.", max: 160 },
     ],
   },
+  {
+    number: 21,
+    slug: "taqvim",
+    name: "Taqvim",
+    ceremony: "korporativ",
+    ceremonies: ["korporativ"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Forum, konferensiya yoki bir-ikki kunlik tadbir uchun taklifnoma. Ranglari — to‘q yashil-ko‘kish va lime, bezaklari — shisha plitkalar. Sahifani pastga surganingizda lime rangli sana plitkasi butun ekranga yoyiladi, ostidan kalendar ko‘rinishidagi birinchi ekran chiqadi: unda sessiyalar kun va vaqti bilan. So‘ng mehmonga shaxsiy murojaat, sanoq, kunlarga bo‘lingan dastur, spikerlar, manzil, dress-kod va ishtirokni tasdiqlash anketasi (mehmon qaysi kunlari kelishini belgilaydi).",
+    descriptionRu: "Приглашение на форум, конференцию или мероприятие на один-два дня. Цвета — тёмный сине-зелёный и лайм, украшения — стеклянные плитки. Когда вы листаете страницу вниз, лаймовая плитка с датой раскрывается на весь экран, а под ней появляется первый экран в виде календаря с сессиями по дням и времени. Дальше — личное обращение к гостю, отсчёт, программа по дням, спикеры, адрес, дресс-код и анкета для подтверждения участия (гость отмечает, в какие дни придёт).",
+    descriptionEn: "An invitation for a forum, conference or one- or two-day event. The colours are deep teal and lime, with glass tiles as decoration. As you scroll down, a lime date tile expands to fill the screen and reveals a calendar-style first screen with the sessions by day and time. Then a personal greeting to the guest, a countdown, the schedule split by day, speakers, the venue, the dress code and an RSVP form where guests mark which days they will attend.",
+    palette: ["#E4FF3A", "#0A1214", "#0F1B1E", "#F2F5F4"],
+    sample: { a: "Kelajak forumi 2027", b: "Nexa Hub", date: "18 · 02 · 2027", venue: "Nexa Hub", time: "10:00" },
+    theme: { bg: ["#13232a", "#0a1214"], ink: "#f4f7f6", accent: "#e4ff3a", soft: "#8fa3a6", script: "cinzel", color: "yashil" },
+    fields: [
+      { key: "kind", type: "select", label: "Tadbir turi", options: ["forum", "konferensiya", "sammit", "seminar", "ko‘rgazma", "tadbir"], hint: "Birinchi ekrandagi katta so‘z va sanoq sarlavhasi («forumgacha»); tanlanmasa — «forum»" },
+      { key: "dateEnd", type: "date", label: "Ikkinchi kun sanasi", hint: "Ixtiyoriy · ikki kunlik tadbir bo‘lsa: sanalar «18–19 fevral» bo‘lib chiqadi, dastur kunlarga bo‘linadi, mehmon anketada kunlarni tanlaydi" },
+      {
+        key: "program",
+        type: "list",
+        label: "Dastur — birinchi kun",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Ochilish va asosiy nutq", max: 40 },
+          note: { type: "text", label: "Joyi yoki izoh", placeholder: "Katta zal", max: 40 },
+        },
+      },
+      {
+        key: "program2",
+        type: "list",
+        label: "Dastur — ikkinchi kun",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Master-klasslar", max: 40 },
+          note: { type: "text", label: "Joyi yoki izoh", placeholder: "Kichik zallar", max: 40 },
+        },
+      },
+      {
+        key: "speakers",
+        type: "list",
+        label: "Spikerlar",
+        min: 0,
+        max: 6,
+        item: {
+          name: { type: "text", label: "Ism va familiya", required: true, placeholder: "Sardor Rahimov", max: 40 },
+          role: { type: "text", label: "Lavozimi", placeholder: "Nexa Hub asoschisi", max: 60 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Smart casual", "Business", "Black tie", "Erkin uslub"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Qulay, lekin tartibli kiyim: jemper, ko‘ylak yoki blazer.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1047,6 +1105,15 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   ],
   /** Bilet (korporativ) — spikerlar suratlari tartib bilan (1-surat — 1-spiker…); surat bo‘lmasa — ism bosh harflari. Zal surati — shablonniki */
   bilet: [
+    { title: "Spiker · 1", where: "«Spikerlar» — 1-spiker surati (bo‘lmasa — ism bosh harflari)" },
+    { title: "Spiker · 2", where: "«Spikerlar» — 2-spiker surati" },
+    { title: "Spiker · 3", where: "«Spikerlar» — 3-spiker surati" },
+    { title: "Spiker · 4", where: "«Spikerlar» — 4-spiker surati" },
+    { title: "Spiker · 5", where: "«Spikerlar» — 5-spiker surati" },
+    { title: "Spiker · 6", where: "«Spikerlar» — 6-spiker surati" },
+  ],
+  /** Taqvim (korporativ forum) — spikerlar suratlari tartib bilan (1-surat — 1-spiker…); surat bo‘lmasa — ism bosh harflari. Zal va fon suratlari — shablonniki */
+  taqvim: [
     { title: "Spiker · 1", where: "«Spikerlar» — 1-spiker surati (bo‘lmasa — ism bosh harflari)" },
     { title: "Spiker · 2", where: "«Spikerlar» — 2-spiker surati" },
     { title: "Spiker · 3", where: "«Spikerlar» — 3-spiker surati" },

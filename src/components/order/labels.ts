@@ -8,7 +8,7 @@ export function personLabels(c: Ceremony): { a: string; b: string | null; bOptio
     case "tugilgan-kun":
       return { a: "Kimning tug‘ilgan kuni", b: null };
     case "korporativ":
-      return { a: "Tadbir nomi", b: "Kompaniya / tashkilotchi" };
+      return { a: "Tadbir nomi", b: "Tashkilotchi" };
     default:
       return { a: "Kuyovning ismi", b: "Kelinning ismi" };
   }
