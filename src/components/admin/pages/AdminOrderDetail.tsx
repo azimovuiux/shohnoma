@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useApi } from "@/lib/client";
+import { useApi, useMe } from "@/lib/client";
 import type { Guest, Invitation, Order, Payment } from "@/lib/types";
 import { AdminError, AdminLoading, AdminRefreshProvider, Empty, fmtDateTime } from "../shared";
 import { StatusSelect } from "../StatusSelect";
 import { useReloadCounts } from "../AdminShell";
-import { DeleteOrder, MusicToggle, PriceEdit, orderStatuses, priceEditable, statusLabel } from "../orderBits";
+import { DeleteOrder, IncomeEdit, MusicToggle, PriceEdit, orderStatuses, priceEditable, statusLabel } from "../orderBits";
 import { StatusBadge, api, confirmDialog, useToast } from "@/components/ui";
 import { ArrowLeft, Edit, ExportSquare, People, SearchNormal1 } from "@/components/icons";
 import { formatPrice } from "@/lib/format";
@@ -29,7 +29,7 @@ type Owner = {
 type Stats = { coming: number; maybe: number; notComing: number; total: number; responses: number };
 type Detail = {
   ok: boolean;
-  order: Order & { priceLocked?: boolean };
+  order: Order & { priceLocked?: boolean; income?: number | null };
   invitation: Invitation | null;
   owner: Owner | null;
   contactPhone: string | null;
@@ -54,6 +54,7 @@ export function AdminOrderDetail() {
   const sp = useSearchParams();
   const id = (sp.get("id") ?? "").trim();
   const reloadCounts = useReloadCounts();
+  const { me } = useMe();
   const { data, loading, error, reload } = useApi<Detail>(id ? `/api/admin/orders/${encodeURIComponent(id)}` : null);
   const refresh = () => (reload(true), reloadCounts());
 
@@ -136,6 +137,12 @@ export function AdminOrderDetail() {
                 <PriceEdit key={order.amount} orderId={order.id} initial={order.amount} editable={priceEditable(order.status)} />
                 {order.priceLocked && <span className="ml-1.5 t-body-s text-ink-2">(admin o‘rnatgan)</span>}
               </Row>
+              {["paid", "active", "archived"].includes(order.status) && (
+                <Row k="Tushum">
+                  <IncomeEdit key={`${order.id}-${order.income}`} orderId={order.id} initial={order.income ?? order.amount} editable={!!me?.user?.isSuperadmin} />
+                  {!me?.user?.isSuperadmin && <span className="ml-1.5 t-body-s text-ink-2">(tuzatish — super admin)</span>}
+                </Row>
+              )}
               {order.promoCode && (
                 <Row k="Promokod">
                   {order.promoCode} · −{formatPrice(order.promoDiscount ?? 0)}

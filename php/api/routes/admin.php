@@ -42,9 +42,11 @@ route('GET', '/admin/dashboard', function () {
     json_out([
         'ok' => true,
         'todayOrders' => (int)scalar('SELECT COUNT(*) FROM orders WHERE created_at >= ?', [$todayStart]),
-        'todayPaid' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active')", [$todayStart]),
-        'monthRevenue' => (int)scalar("SELECT COALESCE(SUM(amount),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$monthStart]),
-        'monthPaidCount' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$monthStart]),
+        // Tushum — haqiqiy kelib tushgan pul (orders.income; eski yozuvlarda — narx). Qo‘lda faollashtirilganlar 0
+        'todayPaid' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND COALESCE(income, amount) > 0", [$todayStart]),
+        'todayRevenue' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$todayStart]),
+        'monthRevenue' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$monthStart]),
+        'monthPaidCount' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND COALESCE(income, amount) > 0", [$monthStart]),
         'activeInvitations' => (int)scalar("SELECT COUNT(*) FROM orders WHERE status IN ('paid','active')"),
         'pendingP2p' => (int)scalar("SELECT COUNT(*) FROM payments WHERE provider = 'p2p' AND status = 'review'"),
         'newBriefs' => (int)scalar("SELECT COUNT(*) FROM briefs WHERE status = 'new'"),
@@ -87,7 +89,7 @@ route('GET', '/admin/orders/:id', function ($p) {
     $special = $i ? all('SELECT name, open_count, first_opened_at FROM special_guests WHERE invitation_id = ? ORDER BY pos, created_at', [$i['id']]) : [];
     json_out([
         'ok' => true,
-        'order' => order_out($o) + ['priceLocked' => !empty($o['price_locked'])],
+        'order' => order_out($o) + ['priceLocked' => !empty($o['price_locked']), 'income' => $o['income'] === null ? null : (int)$o['income']],
         'invitation' => $i ? invitation_out($i) : null,
         'owner' => $owner ? admin_user_out($owner) : null,
         'contactPhone' => $i['contact_phone'] ?? null,
@@ -106,6 +108,16 @@ route('PATCH', '/admin/orders/:id', function ($p) {
         $o = one('SELECT id FROM orders WHERE id = ?', [$p['id']]) ?? fail('Buyurtma topilmadi', 404);
         q('UPDATE invitations SET music_enabled = ? WHERE order_id = ?', [$b['musicEnabled'] ? 1 : 0, $o['id']]);
         json_out(['ok' => true]);
+    }
+    // Tushumni tuzatish (haqiqiy kelib tushgan pul) — faqat super admin, faqat to‘langan buyurtmada
+    if (array_key_exists('income', $b)) {
+        require_superadmin();
+        $o = one('SELECT id, status FROM orders WHERE id = ?', [$p['id']]) ?? fail('Buyurtma topilmadi', 404);
+        if (!in_array($o['status'], ['paid', 'active', 'archived'], true)) fail('Tushum faqat to‘langan buyurtmada tuzatiladi', 409);
+        $income = filter_var($b['income'], FILTER_VALIDATE_INT);
+        if ($income === false || $income < 0 || $income > 100000000) fail('Tushum 0 dan 100 000 000 so‘mgacha bo‘lishi kerak');
+        q('UPDATE orders SET income = ? WHERE id = ?', [$income, $o['id']]);
+        json_out(['ok' => true, 'income' => $income]);
     }
     // Narxni o‘zgartirish — faqat hali to‘lanmagan va to‘lov jarayonida bo‘lmagan buyurtmada
     if (array_key_exists('amount', $b)) {

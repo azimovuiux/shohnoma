@@ -55,7 +55,7 @@ export function AdminUserDetail() {
           <div>
             <h1 className="font-serif text-[34px] font-light leading-none text-ink">{userTitle(u)}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-2 t-body-s text-ink-2">
-              {u.isAdmin && <StatusBadge tone="maroon">Admin</StatusBadge>}
+              {u.isAdmin && <StatusBadge tone="maroon">{u.isSuperadmin ? "Super admin" : "Admin"}</StatusBadge>}
               {u.isBlocked && <StatusBadge tone="danger">Bloklangan</StatusBadge>}
               <span>Ro‘yxatdan o‘tgan: {fmtDateTime(u.createdAt)}</span>
               {u.lastSeen && <span>· Oxirgi kirish: {fmtDateTime(u.lastSeen)}</span>}
@@ -210,6 +210,15 @@ function Access({ u, onSaved }: { u: AdminUser; onSaved: () => void }) {
         </span>
         <Toggle checked={u.isAdmin} onChange={(x) => !self && !busy && patch({ isAdmin: x }, x ? "Admin huquqi berildi" : "Admin huquqi olindi")} label="Admin" />
       </label>
+      {me?.user?.isSuperadmin && (
+        <label className="flex items-center justify-between gap-3 t-body-m text-ink">
+          <span>
+            Super admin
+            <span className="block t-body-s text-ink-2">Tushumni tuzatish va super admin rolini berish</span>
+          </span>
+          <Toggle checked={!!u.isSuperadmin} onChange={(x) => !self && !busy && patch({ isSuperadmin: x }, x ? "Super admin roli berildi" : "Super admin roli olindi")} label="Super admin" />
+        </label>
+      )}
       <label className="flex items-center justify-between gap-3 t-body-m text-ink">
         <span>
           Bloklash

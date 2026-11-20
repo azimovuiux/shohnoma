@@ -233,7 +233,14 @@ function mark_order_paid(string $orderId, string $provider, ?string $paymentId =
     $slug = $inv['slug'];
     if (str_starts_with($slug, 'qoralama-')) $slug = unique_slug(implode('-', array_filter([$inv['person_a'], $inv['person_b']])), $inv['id']);
 
-    q("UPDATE orders SET status = 'active', paid_at = UTC_TIMESTAMP() WHERE id = ?", [$orderId]);
+    // Tushum — faqat haqiqiy to‘lovdan; qo‘lda faollashtirish, sandbox va Rahmat test rejimi → 0 (super admin keyin tuzata oladi)
+    $income = 0;
+    if ($paymentId) {
+        $pay = one('SELECT amount, external_id, meta FROM payments WHERE id = ?', [$paymentId]);
+        $pm = json_decode((string)($pay['meta'] ?? ''), true) ?: [];
+        if ($pay && !str_starts_with((string)$pay['external_id'], 'sandbox-') && empty($pm['test'])) $income = (int)$pay['amount'];
+    }
+    q("UPDATE orders SET status = 'active', paid_at = UTC_TIMESTAMP(), income = ? WHERE id = ?", [$income, $orderId]);
     if (!empty($b['order']['promo_code'])) q('UPDATE promo_codes SET used = used + 1 WHERE code = ?', [$b['order']['promo_code']]);
     q('UPDATE invitations SET slug = ? WHERE id = ?', [$slug, $inv['id']]);
     if ($paymentId) q("UPDATE payments SET status = 'paid', paid_at = UTC_TIMESTAMP() WHERE id = ?", [$paymentId]);

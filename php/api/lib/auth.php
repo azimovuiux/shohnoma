@@ -33,6 +33,7 @@ function user_out(array $u): array
         'telegramId' => $u['telegram_id'],
         'telegramUser' => $u['telegram_user'],
         'isAdmin' => (bool)$u['is_admin'],
+        'isSuperadmin' => (bool)($u['is_superadmin'] ?? false),
         'notifyRsvpTelegram' => (bool)$u['notify_rsvp_telegram'],
         'notifyRsvpSms' => (bool)$u['notify_rsvp_sms'],
         'notifyDayBefore' => (bool)$u['notify_day_before'],
@@ -55,6 +56,8 @@ function current_user(): ?array
 }
 function require_user(): array { return current_user() ?? fail('Kirilmagan', 401); }
 function require_admin(): array { $u = require_user(); if (!$u['is_admin']) fail('Ruxsat yo‘q', 403); return $u; }
+/** Super admin: tushumni tuzatish, super admin rolini berish */
+function require_superadmin(): array { $u = require_admin(); if (empty($u['is_superadmin'])) fail('Bu amal faqat super admin uchun', 403); return $u; }
 
 function create_session(string $userId): void
 {

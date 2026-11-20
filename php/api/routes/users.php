@@ -12,7 +12,7 @@ function admin_user_out(array $u): array
         'note' => $u['note'] ?? null,
         'orders' => (int)scalar('SELECT COUNT(*) FROM orders WHERE user_id = ?', [$u['id']]),
         'activeOrders' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND status IN ('paid','active')", [$u['id']]),
-        'spent' => (int)scalar("SELECT COALESCE(SUM(amount),0) FROM orders WHERE user_id = ? AND status IN ('paid','active')", [$u['id']]),
+        'spent' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE user_id = ? AND status IN ('paid','active','archived')", [$u['id']]),
         'lastSeen' => iso(scalar('SELECT MAX(created_at) FROM sessions WHERE user_id = ?', [$u['id']]) ?: null),
     ];
 }
@@ -104,7 +104,19 @@ route('POST', '/admin/users', function () {
 route('PATCH', '/admin/users/:id', function ($p) {
     $me = require_admin();
     $u = admin_user_or_404($p['id']);
-    $f = admin_user_fields(body(), $u);
+    $b = body();
+    // Super admin hisobini faqat super admin o‘zgartira oladi
+    if (!empty($u['is_superadmin']) && empty($me['is_superadmin'])) fail('Super admin hisobini faqat super admin o‘zgartira oladi', 403);
+    $f = admin_user_fields($b, $u);
+    if (array_key_exists('isSuperadmin', $b)) {
+        if (empty($me['is_superadmin'])) fail('Bu amal faqat super admin uchun', 403);
+        $f['is_superadmin'] = !empty($b['isSuperadmin']) ? 1 : 0;
+        if ($f['is_superadmin']) $f['is_admin'] = 1;
+        if ($u['id'] === $me['id'] && !$f['is_superadmin']) fail('O‘zingizdan super admin rolini ola olmaysiz', 422);
+    }
+    if (isset($f['is_admin']) && !$f['is_admin']) $f['is_superadmin'] = 0;
+    if (isset($f['is_superadmin']) && !$f['is_superadmin'] && !empty($u['is_superadmin'])
+        && (int)scalar('SELECT COUNT(*) FROM users WHERE is_superadmin = 1 AND id <> ?', [$u['id']]) === 0) fail('Kamida bitta super admin qolishi kerak', 422);
     if ($u['id'] === $me['id'] && ((isset($f['is_admin']) && !$f['is_admin']) || !empty($f['is_blocked']))) fail('O‘zingizni admindan chiqara yoki bloklay olmaysiz', 422);
     if (isset($f['is_admin']) && !$f['is_admin'] && (int)scalar('SELECT COUNT(*) FROM users WHERE is_admin = 1 AND id <> ?', [$u['id']]) === 0) fail('Kamida bitta admin qolishi kerak', 422);
     if (!empty($f['login']) && empty($u['password_hash']) && empty($f['password_hash'])) fail('Login uchun parol ham kiriting', 422);
@@ -119,6 +131,7 @@ route('DELETE', '/admin/users/:id', function ($p) {
     $me = require_admin();
     $u = admin_user_or_404($p['id']);
     if ($u['id'] === $me['id']) fail('O‘zingizni o‘chira olmaysiz', 422);
+    if (!empty($u['is_superadmin'])) fail('Super adminni o‘chirib bo‘lmaydi — avval rolini oling', 422);
     if ($u['is_admin'] && (int)scalar('SELECT COUNT(*) FROM users WHERE is_admin = 1') <= 1) fail('Oxirgi adminni o‘chirib bo‘lmaydi', 422);
     // Buyurtmalar saqlanadi (egasiz qoladi), sessiya va sevimlilar o‘chadi
     q('UPDATE orders SET user_id = NULL WHERE user_id = ?', [$u['id']]);
@@ -154,8 +167,9 @@ route('POST', '/admin/users/:id/enroll', function ($p) {
 
 /** Foydalanuvchi sifatida kirish (uning kabinetini ko‘rish/tahrirlash uchun) */
 route('POST', '/admin/users/:id/impersonate', function ($p) {
-    require_admin();
+    $me = require_admin();
     $u = admin_user_or_404($p['id']);
+    if (!empty($u['is_superadmin']) && empty($me['is_superadmin'])) fail('Super admin hisobiga kira olmaysiz', 403);
     if ($u['is_blocked']) fail('Bloklangan foydalanuvchi', 422);
     destroy_session();
     create_session($u['id']);

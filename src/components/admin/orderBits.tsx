@@ -78,6 +78,65 @@ export function PriceEdit({ orderId, initial, editable }: { orderId: string; ini
   );
 }
 
+/**
+ * Tushum — haqiqiy kelib tushgan pul (narxdan farqli). Qo‘lda faollashtirilgan / test buyurtmalarda 0.
+ * Tuzatish faqat super admin uchun.
+ */
+export function IncomeEdit({ orderId, initial, editable }: { orderId: string; initial: number; editable: boolean }) {
+  const toast = useToast();
+  const [income, setIncome] = useState(initial);
+  const [edit, setEdit] = useState(false);
+  const [val, setVal] = useState(String(initial));
+  const [busy, setBusy] = useState(false);
+  const shown = <span className={income === 0 ? "text-ink-2" : ""}>{formatPrice(income)}</span>;
+  if (!editable) return shown;
+  if (!edit)
+    return (
+      <button type="button" onClick={() => (setVal(String(income)), setEdit(true))} className="group inline-flex items-center gap-1.5 hover:text-maroon" title="Tushumni tuzatish">
+        {shown} <Edit size={14} className="opacity-50 group-hover:opacity-100" />
+      </button>
+    );
+  const save = async (n: number) => {
+    if (n === income) return setEdit(false);
+    if (!(await confirmDialog({ title: "Tushumni tuzatasizmi?", text: `${formatPrice(income)} → ${formatPrice(n)}. Hisobotdagi tushum shunga qarab o‘zgaradi.`, ok: "Tuzatish" }))) return;
+    setBusy(true);
+    try {
+      await api(`/api/admin/orders/${orderId}`, { method: "PATCH", json: { income: n } });
+      setIncome(n);
+      setEdit(false);
+      toast("Tushum tuzatildi");
+    } catch (e) {
+      toast((e as Error).message, "error");
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <form
+      className={`flex flex-wrap items-center gap-1.5 ${busy ? "pointer-events-none opacity-60" : ""}`}
+      onSubmit={(e) => {
+        e.preventDefault();
+        void save(Number(val.replace(/\D/g, "") || 0));
+      }}
+    >
+      <input
+        autoFocus
+        inputMode="numeric"
+        value={val.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
+        onChange={(e) => setVal(e.target.value)}
+        onKeyDown={(e) => e.key === "Escape" && setEdit(false)}
+        aria-label="Tushum (so‘m)"
+        className="h-9 w-[110px] rounded-lg border border-line bg-bg-base px-2.5 text-[14px] outline-none focus:border-maroon"
+      />
+      <button type="submit" className="btn btn-primary !h-9 !px-3 !py-0 text-[13px]">Saqlash</button>
+      {income !== 0 && (
+        <button type="button" onClick={() => void save(0)} className="btn btn-secondary !h-9 !px-3 !py-0 text-[13px]">0 qilish</button>
+      )}
+      <button type="button" onClick={() => setEdit(false)} className="px-1 text-[13px] text-ink-2 hover:text-ink">Bekor</button>
+    </form>
+  );
+}
+
 export function MusicToggle({ orderId, initial }: { orderId: string; initial: boolean }) {
   const toast = useToast();
   const [on, setOn] = useState(initial);

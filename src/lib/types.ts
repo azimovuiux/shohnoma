@@ -21,6 +21,7 @@ export interface User {
   telegramId: string | null;
   telegramUser: string | null;
   isAdmin: boolean;
+  isSuperadmin?: boolean;
   notifyRsvpTelegram: boolean;
   notifyRsvpSms: boolean;
   notifyDayBefore: boolean;

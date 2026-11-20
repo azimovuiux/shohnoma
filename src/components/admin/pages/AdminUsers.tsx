@@ -17,6 +17,7 @@ export type AdminUser = {
   telegramId: string | null;
   telegramUser: string | null;
   isAdmin: boolean;
+  isSuperadmin?: boolean;
   isBlocked: boolean;
   login: string | null;
   hasPassword: boolean;
@@ -110,7 +111,7 @@ export function AdminUsers() {
                       <span className="flex flex-col">
                         <span className="t-title text-ink hover:text-maroon">{userTitle(u)}</span>
                         <span className="flex gap-1.5">
-                          {u.isAdmin && <StatusBadge tone="maroon">Admin</StatusBadge>}
+                          {u.isAdmin && <StatusBadge tone="maroon">{u.isSuperadmin ? "Super admin" : "Admin"}</StatusBadge>}
                           {u.isBlocked && <StatusBadge tone="danger">Bloklangan</StatusBadge>}
                         </span>
                       </span>
