@@ -185,7 +185,14 @@ function PayMethodsCard({ data, save }: { data: Resp; save: (p: Record<string, s
   const rows: [prefix: string, label: string, ready: boolean, hint: string][] = [
     ["PAYME", "Payme", !!(data.settings.PAYME_MERCHANT_ID?.set && data.settings.PAYME_KEY?.set), "Merchant ID va kalit kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
     ["CLICK", "Click", !!(data.settings.CLICK_SERVICE_ID?.set && data.settings.CLICK_MERCHANT_ID?.set && data.settings.CLICK_SECRET_KEY?.set), "Service ID, Merchant ID va Secret key kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
-    ["RAHMAT", "Rahmat", false, "API ulanishi hali tayyor emas — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
+    [
+      "RAHMAT",
+      "Rahmat",
+      false,
+      data.settings.RAHMAT_KASSA_ID?.set && data.settings.RAHMAT_KASSA_KEY?.set
+        ? "Kalitlar saqlangan ✓. Saytdagi to‘lov kodi (to‘lov yaratish va tasdiqni qabul qilish) Rahmat API hujjati bo‘yicha hali yozilmagan — shungacha mijozga «Tez kunda» bo‘lib ko‘rinadi"
+        : "Kalitlar kiritilmagan va to‘lov kodi hali ulanmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi",
+    ],
     ["P2P", "Boshqa usul", p2pSupport || !!data.settings.P2P_CARD?.set, "Karta raqami kiritilmagan — «Faol» tanlansa ham «Tez kunda» bo‘lib ko‘rinadi"],
   ];
   const set = async (prefix: string, label: string, st: PayState) => {
