@@ -213,7 +213,7 @@ export function MarosimForm({ order, template, editing }: { order: FlowOrder; te
               invalid={!!errors.day}
               label={t("Sana")}
               locale={locale}
-              onChange={(v) => set("day", v, { day: v, time: o.time || "18:00" })}
+              onChange={(v) => set("day", v, { day: v, time: o.time || template.defaultTime || "18:00" })}
             />
           </FlowField>
           <FlowField label={t("Boshlanishi")} required error={errors.time} htmlFor="f-time">

@@ -676,4 +676,29 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+  /* Qozon (sunnat to‘yi nahorgi oshi): qorong‘i ko‘mir fon, pastda qopqoqli qozon va chokdagi guruch donlari (Figma 00; bug‘ fonda
+   * yashiriladi — o‘rnida matn): mehmon — tepada; «Nahorgi oshga taklif», bola ismi (Unbounded Black, bosh harflarda), sana va joy —
+   * qopqoqdan yuqorida (≤ 720; qopqoq 750 dan boshlanadi). Uzun matn kichrayadi yoki 2 qatorga bo‘linadi; matn qozon va qopqoqqa tegmaydi */
+  qozon: {
+    fill: "#2b2522",
+    bg: true,
+    date: "long",
+    kicker: "Nahorgi oshga taklif",
+    phrase: "nahorgi oshga taklif qilamiz",
+    stacks: [
+      { y: 64, anchor: "top", w: 920, maxH: 120, items: [{ k: "guest", s: st(f.golos, 42, "rgba(255,255,255,.86)", { weight: 500, maxLines: 2, min: 30, lh: 1.2 }) }] },
+      {
+        y: 236,
+        anchor: "top",
+        w: 940,
+        maxH: 470,
+        items: [
+          { k: "kicker", s: st(f.golos, 32, "#e3a33b", { weight: 500, upper: true, ls: 0.14, min: 22 }) },
+          { k: "names", mode: "two", s: st(f.unbounded, 118, "#ffffff", { weight: 900, upper: true, min: 64, lh: 1.06 }), gap: 28 },
+          { k: "date", s: st(f.golos, 42, "#ffffff", { weight: 500, min: 30, lh: 1.2 }), gap: 40 },
+          { k: "venue", s: st(f.golos, 32, "rgba(255,255,255,.75)", { maxLines: 2, min: 24, lh: 1.3 }), gap: 12 },
+        ],
+      },
+    ],
+  },
 };

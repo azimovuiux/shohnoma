@@ -53,6 +53,8 @@ export type TemplateField =
   | { key: string; type: "list"; label: string; min: number; max: number; item: Record<string, FieldSpec> };
 
 export interface Template {
+  /** Yangi buyurtmada boshlanish vaqti (standart 18:00; nahorgi osh — 06:00). Server: orders.php MORNING_TEMPLATES */
+  defaultTime?: string;
   number: number;
   slug: string;
   name: string;
@@ -942,6 +944,7 @@ const builtin: Template[] = [
   {
     number: 23,
     slug: "tong",
+    defaultTime: "06:00",
     name: "Tong",
     ceremony: "nikoh",
     ceremonies: ["nikoh"],
@@ -971,6 +974,41 @@ const builtin: Template[] = [
       },
       { key: "dressCode", type: "select", label: "Dress-kod", options: ["Milliy uslub", "Klassik", "Erkin"], hint: "Ixtiyoriy" },
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Do‘ppi yoki chopon bilan kelsangiz, dasturxon yanada fayzli bo‘ladi.", max: 160 },
+    ],
+  },
+  {
+    number: 24,
+    slug: "qozon",
+    defaultTime: "06:00",
+    name: "Qozon",
+    ceremony: "sunnat",
+    ceremonies: ["sunnat"],
+    style: "milliy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Sunnat to‘yi munosabati bilan beriladigan nahorgi osh uchun taklifnoma. Ranglari — terrakota, ko‘mir, za’faron va oq, yozuvlari yirik va qalin. Sahifani pastga surganingizda qorong‘ida turgan qozonning qopqog‘i ko‘tariladi va qozondan bug‘ chiqadi. Keyin osh vaqti, sana va osh surati tushirilgan plitkalar, taklif matni, tayyorgarlik suratlari, oshgacha sanoq, tong tartibi, manzil, dress-kod va mehmonlar javobi; oxirida yana bug‘ chiqib turgan qozon.",
+    descriptionRu: "Приглашение на утренний плов (нахорги ош) по случаю суннат-тоя. Цвета — терракота, угольный, шафран и белый, надписи крупные и жирные. Когда вы листаете страницу вниз, крышка казана, стоящего в темноте, поднимается, и из казана идёт пар. Дальше плитки со временем плова, датой и фото плова, текст приглашения, фото подготовки, отсчёт до плова, порядок утра, адрес, дресс-код и ответы гостей; в конце — снова казан с паром.",
+    descriptionEn: "An invitation to a morning plov (nahorgi osh) held for a sunnat celebration. The colours are terracotta, charcoal, saffron and white, with large bold lettering. As you scroll down, the lid of a kazan standing in the dark lifts and steam rises from it. Then tiles with the plov time, the date and a photo of the plov, the invitation text, photos of the preparation, a countdown to the plov, the morning schedule, the venue, the dress code and guest replies; at the end, the steaming kazan once more.",
+    palette: ["#B5532E", "#2B2522", "#E3A33B", "#FFFFFF"],
+    sample: { a: "Alisher", b: "Rahimovlar xonadoni", date: "21 · 12 · 2026", venue: "Rahimovlar hovlisi", time: "06:30" },
+    theme: { bg: ["#b5532e", "#2b2522"], ink: "#ffffff", accent: "#e3a33b", soft: "#f8f2ed", script: "cinzel", color: "qizil" },
+    fields: [
+      { key: "hosts", type: "text", label: "Mezbonlar", placeholder: "Rahimovlar xonadoni", max: 60, hint: "Ochilishda, «Hurmat bilan» imzosida va oxirida chiqadi; bo‘sh qolsa — ota-ona ismi" },
+      { key: "side", type: "select", label: "Taklif kim nomidan", options: ["Ota-onasi", "Bobosi va buvisi"], hint: "Taklif matni: «O‘g‘limiz …» yoki «Nabiramiz …»; tanlanmasa — ota-onasi" },
+      {
+        key: "program",
+        type: "list",
+        label: "Tong tartibi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Osh tortiladi", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Milliy", "Klassik", "Erkin"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Chopon, do‘ppi yoki milliy naqshli kiyim — tong dasturxoniga yarashadi.", max: 160 },
     ],
   },
 ];
@@ -1225,6 +1263,13 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Surat · 2", where: "«Tong dasturxoni» — chapdagi kichik surat. Bo‘lmasa — sabzi surati" },
     { title: "Surat · 3", where: "«Tong dasturxoni» — o‘ngdagi kichik surat. Bo‘lmasa — choy va non surati" },
     { title: "Surat · 4", where: "«Manzil» — osh beriladigan joy surati. Bo‘lmasa — choyxona zali surati" },
+  ],
+  /** Qozon (sunnat to‘yi nahorgi oshi) — bo‘sh slotlar o‘rnida shablonning o‘z suratlari (olovdagi qozon, ziravorlar, guruch, hovli); plitkadagi osh surati — shablonniki */
+  qozon: [
+    { title: "Surat · 1", where: "«Tayyorgarlik» — katta surat. Bo‘lmasa — olovdagi qozon surati" },
+    { title: "Surat · 2", where: "«Tayyorgarlik» — chapdagi kichik surat. Bo‘lmasa — ziravorlar surati" },
+    { title: "Surat · 3", where: "«Tayyorgarlik» — o‘ngdagi kichik surat. Bo‘lmasa — qozondagi guruch surati" },
+    { title: "Surat · 4", where: "«Manzil» — osh beriladigan joy surati. Bo‘lmasa — hovli surati" },
   ],
   /** Sovg‘a (tug‘ilgan kun) — bo‘sh slotlar: hero’da ravoq ichida sovg‘a qutisi, «Yangi bob» — chiqmaydi, manzil — restoran surati */
   sovga: [

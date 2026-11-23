@@ -10,6 +10,11 @@ const DEFAULT_PROGRAM = [
     'korporativ' => [['time' => '18:30', 'title' => 'Ro‘yxatdan o‘tish'], ['time' => '19:00', 'title' => 'Ochilish so‘zi'], ['time' => '20:30', 'title' => 'Kechki ziyofat']],
 ];
 /** Barcha taklifnoma turlari (DB enum bilan bir xil — migratsiya 0023) */
+/** Ertalabki marosim shablonlari (nahorgi osh): yangi buyurtmada tong dasturi va boshlanish vaqti — kechki standart emas */
+const MORNING_PROGRAM = [['time' => '06:00', 'title' => 'Mehmonlarni kutib olish'], ['time' => '06:30', 'title' => 'Nahorgi osh'], ['time' => '07:00', 'title' => 'Duo va tabriklar'], ['time' => '07:30', 'title' => 'Choy va suhbat']];
+const MORNING_TEMPLATES = ['tong', 'qozon'];
+function template_default_time(string $slug): string { return in_array($slug, MORNING_TEMPLATES, true) ? '06:00' : '18:00'; }
+
 const CEREMONY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ'];
 const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', 'en', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite', 'maqolalar', 'article', 'sitemap-maqolalar-xml'];
 
@@ -52,7 +57,7 @@ function create_draft_order(string $templateSlug, ?array $owner = null, ?int $am
             ]);
             q('INSERT INTO invitations (id, order_id, slug, ceremony, message, program, photos, contact_phone, contact_tg) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
                 new_id(), $id, 'qoralama-' . substr($id, 0, 10), $t['ceremony'], DEFAULT_MESSAGE,
-                json_encode(DEFAULT_PROGRAM[$t['ceremony']] ?? [], JSON_UNESCAPED_UNICODE), '[]', $user['phone'] ?? null, $user['telegram_user'] ?? null,
+                json_encode(in_array($templateSlug, MORNING_TEMPLATES, true) ? MORNING_PROGRAM : (DEFAULT_PROGRAM[$t['ceremony']] ?? []), JSON_UNESCAPED_UNICODE), '[]', $user['phone'] ?? null, $user['telegram_user'] ?? null,
             ]);
             db()->commit();
             return $id;
@@ -156,7 +161,7 @@ function apply_invitation_patch(array $b, array $p, bool $draft = false): array
         $parts = explode('T', (string)($inv['date'] ?: 'T'));
         $d0 = $parts[0] ?? '';
         $t0 = $parts[1] ?? '';
-        $set['date'] = ($p['day'] ?? $d0) . 'T' . ($p['time'] ?? ($t0 ?: '18:00'));
+        $set['date'] = ($p['day'] ?? $d0) . 'T' . ($p['time'] ?? ($t0 ?: template_default_time((string)($b['order']['template_slug'] ?? ''))));
     }
     if (array_key_exists('mapUrl', $p)) {
         $v = trim((string)($p['mapUrl'] ?? ''));
