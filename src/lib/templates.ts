@@ -1011,6 +1011,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Chopon, do‘ppi yoki milliy naqshli kiyim — tong dasturxoniga yarashadi.", max: 160 },
     ],
   },
+  {
+    number: 25,
+    slug: "lagan",
+    defaultTime: "06:00",
+    name: "Lagan",
+    ceremony: "nikoh",
+    ceremonies: ["nikoh"],
+    style: "milliy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "To‘y munosabati bilan beriladigan nahorgi osh uchun taklifnoma. Ranglari — kobalt, firuza, oq va oxra, bezaklari — Rishton naqshli lagan va koshin chiziqlar. Ochilishda oq fonda lagan aylanib chiqadi; sahifani pastga surganingizda u ekranni to‘ldirib kattalashadi, fon kobaltga o‘tadi va lagan markazida osh paydo bo‘ladi. Keyin taklif matni, «Dasturxon» suratlari, kichik laganlar ichida oshgacha sanoq, tong tartibi, manzil, dress-kod va mehmonlar javobi; oxirida yana aylanib turgan lagan.",
+    descriptionRu: "Приглашение на утренний плов (нахорги ош) по случаю свадьбы. Цвета — кобальт, бирюза, белый и охра, украшения — риштанское блюдо-ляган с узором и полосы изразцов. На первом экране на белом фоне вращается ляган; когда вы листаете вниз, он увеличивается на весь экран, фон становится кобальтовым, а в центре блюда появляется плов. Дальше текст приглашения, фото «Дастархана», отсчёт до плова в маленьких ляганах, порядок утра, адрес, дресс-код и ответы гостей; в конце — снова вращающийся ляган.",
+    descriptionEn: "An invitation to a wedding morning plov (nahorgi osh). The colours are cobalt, turquoise, white and ochre, with a patterned Rishton platter (lagan) and tile stripes as decoration. On the first screen the platter spins on a white background; as you scroll down it grows to fill the screen, the background turns cobalt and plov appears in the middle of the platter. Then the invitation text, photos of the table, a countdown to the plov inside small platters, the morning schedule, the venue, the dress code and guest replies; at the end, the spinning platter once more.",
+    palette: ["#1E4FA3", "#2BA3B8", "#F7F9FC", "#D9A441"],
+    sample: { a: "Sardor", b: "Nilufar", date: "28 · 12 · 2026", venue: "Yo‘ldoshevlar xonadoni", time: "06:00" },
+    theme: { bg: ["#1e4fa3", "#13224a"], ink: "#ffffff", accent: "#d9a441", soft: "#e7f4f7", script: "cormorant", color: "moviy" },
+    fields: [
+      { key: "hosts", type: "text", label: "Mezbonlar", placeholder: "Yo‘ldoshevlar oilasi", max: 60, hint: "Ochilishda, «Hurmat bilan» imzosida va oxirida chiqadi; bo‘sh qolsa — kuyov va kelin ismlari" },
+      { key: "side", type: "select", label: "Taklif kim nomidan", options: ["Kuyov tomoni", "Kelin tomoni"], hint: "Taklif matni: «O‘g‘limiz …» yoki «Qizimiz …»; tanlanmasa — kuyov tomoni" },
+      {
+        key: "program",
+        type: "list",
+        label: "Tong tartibi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Xatmi Qur’on va duo", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Milliy uslub", "Klassik", "Erkin"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Do‘ppi, chopon yoki milliy naqshli kiyim bilan kelsangiz, dasturxon yanada chiroyli bo‘ladi.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1270,6 +1305,13 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Surat · 2", where: "«Tayyorgarlik» — chapdagi kichik surat. Bo‘lmasa — ziravorlar surati" },
     { title: "Surat · 3", where: "«Tayyorgarlik» — o‘ngdagi kichik surat. Bo‘lmasa — qozondagi guruch surati" },
     { title: "Surat · 4", where: "«Manzil» — osh beriladigan joy surati. Bo‘lmasa — hovli surati" },
+  ],
+  /** Lagan (nikoh to‘yi nahorgi oshi) — bo‘sh slotlar o‘rnida shablonning o‘z suratlari (Rishton sopollari, choynak, non, dasturxon); lagan markazidagi osh surati — shablonniki */
+  lagan: [
+    { title: "Surat · 1", where: "«Dasturxon» — katta surat. Bo‘lmasa — Rishton sopollari surati" },
+    { title: "Surat · 2", where: "«Dasturxon» — chapdagi kichik surat. Bo‘lmasa — choynak va piyola surati" },
+    { title: "Surat · 3", where: "«Dasturxon» — o‘ngdagi kichik surat. Bo‘lmasa — non surati" },
+    { title: "Surat · 4", where: "«Manzil» — osh beriladigan joy surati. Bo‘lmasa — dasturxon surati" },
   ],
   /** Sovg‘a (tug‘ilgan kun) — bo‘sh slotlar: hero’da ravoq ichida sovg‘a qutisi, «Yangi bob» — chiqmaydi, manzil — restoran surati */
   sovga: [

@@ -12,7 +12,7 @@ const DEFAULT_PROGRAM = [
 /** Barcha taklifnoma turlari (DB enum bilan bir xil — migratsiya 0023) */
 /** Ertalabki marosim shablonlari (nahorgi osh): yangi buyurtmada tong dasturi va boshlanish vaqti — kechki standart emas */
 const MORNING_PROGRAM = [['time' => '06:00', 'title' => 'Mehmonlarni kutib olish'], ['time' => '06:30', 'title' => 'Nahorgi osh'], ['time' => '07:00', 'title' => 'Duo va tabriklar'], ['time' => '07:30', 'title' => 'Choy va suhbat']];
-const MORNING_TEMPLATES = ['tong', 'qozon'];
+const MORNING_TEMPLATES = ['tong', 'qozon', 'lagan'];
 function template_default_time(string $slug): string { return in_array($slug, MORNING_TEMPLATES, true) ? '06:00' : '18:00'; }
 
 const CEREMONY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ'];

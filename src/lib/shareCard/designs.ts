@@ -701,4 +701,37 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+  /* Lagan (nikoh to‘yi nahorgi oshi): oq fonda Rishton naqshli lagan (324…836) va ikki koshin chiziq (70…114, 1326…1370) — Figma 00:
+   * mehmon va «Nahorgi oshga taklif» — lagan bilan yuqori koshin orasida (≈145…295); ismlar (Prata), sana va joy — lagandan pastda
+   * (880…1280). Uzun matn kichrayadi yoki 2 qatorga bo‘linadi; matn lagan va koshin chiziqlarga tegmaydi */
+  lagan: {
+    fill: "#f7f9fc",
+    bg: true,
+    date: "long",
+    kicker: "Nahorgi oshga taklif",
+    phrase: "nahorgi oshga taklif qilamiz",
+    stacks: [
+      {
+        y: 220,
+        anchor: "center",
+        w: 900,
+        maxH: 150,
+        items: [
+          { k: "guest", s: st(f.manrope, 36, "#13224a", { weight: 600, maxLines: 2, min: 26, lh: 1.2 }) },
+          { k: "kicker", s: st(f.manrope, 28, "#2ba3b8", { weight: 600, upper: true, ls: 0.14, min: 20 }), gap: 16 },
+        ],
+      },
+      {
+        y: 880,
+        anchor: "top",
+        w: 920,
+        maxH: 400,
+        items: [
+          { k: "names", mode: "two", s: st(f.prata, 104, "#1e4fa3", { min: 62, lh: 1.1 }) },
+          { k: "date", s: st(f.manrope, 38, "#13224a", { weight: 600, min: 28, lh: 1.2 }), gap: 34 },
+          { k: "venue", s: st(f.manrope, 30, "rgba(19,34,74,.72)", { maxLines: 2, min: 22, lh: 1.3 }), gap: 12 },
+        ],
+      },
+    ],
+  },
 };

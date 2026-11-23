@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -71,6 +71,9 @@ const CFG = {
   /* Qozon: qorong‘i ko‘mir fon, qopqoqli qozon va chokdagi guruch donlari (Figma 00); bug‘ yashiriladi — uning o‘rnida kartada
    * mehmon / taklif turi / bola ismi / sana va joy chiziladi (matn qopqoq va qozonga tegmaydi) */
   qozon: { css: `nextjs-portal{display:none!important}[class*="_gSteam"]{display:none!important}` },
+  /* Lagan: oq fonda naqshli lagan va ikki koshin chiziq (Figma 00; marquee to‘xtatiladi) — mehmon va taklif turi lagandan yuqorida,
+   * ismlar, sana va joy lagandan pastda chiziladi (matn lagan va koshin chiziqlarga tegmaydi) */
+  lagan: { css: `nextjs-portal{display:none!important}[class*="_kTrack"],[class*="_spin"]{animation:none!important}` },
   sammit: { css: `nextjs-portal{display:none!important}[class*="_gFlyL"]>img{transform:translate(calc(var(--u)*-200),calc(var(--u)*40))!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;
