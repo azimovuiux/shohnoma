@@ -47,6 +47,7 @@ const f = {
   unbounded: '"sc-unbounded", "sc-manrope", system-ui, sans-serif',
   ssec: '"sc-ssec", "sc-sofia", system-ui, sans-serif',
   sofia: '"sc-sofia", "sc-manrope", system-ui, sans-serif',
+  spectral: '"sc-spectral", "sc-playfair", Georgia, serif',
 };
 /** Malika: atlas burmalari ustidagi matn o‘qilishi uchun krem nur */
 const GLOW = { color: "rgba(255,249,247,.95)", blur: 22 };
@@ -753,6 +754,30 @@ export const DESIGNS: Record<string, Design> = {
         items: [
           { k: "date", s: st(f.manrope, 36, "#d9b066", { weight: 600, ls: 0.03, min: 26 }) },
           { k: "venue", s: st(f.manrope, 32, "rgba(255,255,255,.78)", { maxLines: 2, min: 24, lh: 1.25 }), gap: 16 },
+        ],
+      },
+    ],
+  },
+  /* Xotira (yubiley va tug‘ilgan kun): kulrang fonda uchta oq rom taxlami (rom ichi — bo‘sh surat qog‘ozi; yuqoridagi rom 324…723 ×
+   * 662…932) — Figma 00 («70» yashirilgan): mehmon — eng tepada; taklif turi (bordo, keng harf oralig‘i) — taxlam ustida; ism (Spectral
+   * Light Italic, bordo; uzun bo‘lsa — 2 qator, kichrayadi) — yuqoridagi rom ichida (350 kenglikda — romga tegmaydi); sana (bordo kursiv)
+   * va joy — taxlam ostida, «70» o‘rnida */
+  xotira: {
+    fill: "#efeff1",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 150, anchor: "center", w: 900, maxH: 170, items: [{ k: "guest", s: st(f.golos, 36, "#1f1c1c", { weight: 500, maxLines: 2, min: 26, lh: 1.22 }) }] },
+      { y: 287, anchor: "center", w: 860, maxH: 56, items: [{ k: "kicker", s: st(f.golos, 26, "#5a1e2a", { weight: 600, upper: true, ls: 0.14, min: 18 }) }] },
+      { x: 523, y: 797, anchor: "center", w: 350, maxH: 230, items: [{ k: "names", mode: "two", s: st(f.spectral, 66, "#5a1e2a", { weight: 300, italic: true, min: 40, lh: 1.1 }) }] },
+      {
+        y: 1020,
+        anchor: "top",
+        w: 900,
+        maxH: 330,
+        items: [
+          { k: "date", s: st(f.spectral, 60, "#5a1e2a", { weight: 300, italic: true, min: 40 }) },
+          { k: "venue", s: st(f.golos, 32, "#1f1c1c", { weight: 500, maxLines: 2, min: 24, lh: 1.3 }), gap: 22 },
         ],
       },
     ],

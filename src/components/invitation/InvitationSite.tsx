@@ -43,6 +43,7 @@ import { TongSite } from "@/components/templates/tong/TongSite";
 import { QozonSite } from "@/components/templates/qozon/QozonSite";
 import { LaganSite } from "@/components/templates/lagan/LaganSite";
 import { OltinSite } from "@/components/templates/oltin/OltinSite";
+import { XotiraSite } from "@/components/templates/xotira/XotiraSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -73,7 +74,7 @@ function useMusic(url: string | null, enabled: boolean) {
  * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
  */
 /** Kodda yozilgan dizaynlar — yangi shablon qo‘shilganda shu ro‘yxatga ham qo‘shiladi */
-const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin"] as const;
+const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira"] as const;
 
 export function InvitationSite(props: InvitationSiteProps) {
   const lang = inviteLang(props.data.extra, useLocale());
@@ -135,6 +136,8 @@ export function InvitationSite(props: InvitationSiteProps) {
         <LaganSite {...props} />
       ) : ds === "oltin" ? (
         <OltinSite {...props} />
+      ) : ds === "xotira" ? (
+        <XotiraSite {...props} />
       ) : stale ? (
         <StaleReload slug={props.template.slug} />
       ) : (

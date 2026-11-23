@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -77,6 +77,10 @@ const CFG = {
   /* Oltin: qorong‘ida oltin halqa (Figma 00); «60» / «yubiley» / oila nomi yashiriladi (yosh mijozga qarab o‘zgaradi), barglar burchaklarga
    * suriladi — kartada mehmon (tepada), taklif turi (halqa ustida), ism (halqa ichida), sana va joy (halqa ostida) chiziladi */
   oltin: { css: `nextjs-portal{display:none!important}[class*="_gNum"],[class*="_gFam"]{display:none!important}[data-leaf="a"]{translate:calc(var(--u)*-126) calc(var(--u)*83)}[data-leaf="b"]{translate:calc(var(--u)*127) calc(var(--u)*213)}` },
+  /* Xotira: kulrang fonda uchta oq rom taxlami (Figma 00) — namuna suratlari o‘rnida bo‘sh surat qog‘ozi (mijozga begona suratlar
+   * chiqmaydi); «70» va «yillik yubiley» yashiriladi — kartada mehmon, taklif turi (taxlam ustida), ism (yuqoridagi rom ichida),
+   * sana va joy (taxlam ostida) chiziladi */
+  xotira: { css: `nextjs-portal{display:none!important}[class*="_sImg"]{visibility:hidden!important}[class*="_sIn"]{background:linear-gradient(160deg,#f6f6f7 0%,#e6e6e9 100%)!important}[class*="_gNum"],[class*="_gWord"],[class*="_copy"]{display:none!important}` },
   sammit: { css: `nextjs-portal{display:none!important}[class*="_gFlyL"]>img{transform:translate(calc(var(--u)*-200),calc(var(--u)*40))!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;

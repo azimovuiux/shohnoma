@@ -958,7 +958,7 @@ function Program({ d, z }: { d: D; z: number }) {
                 {it.time}
               </Fit>
             </p>
-            <p data-a="left" className={cx(st.ms6, st.clamp2, "min-w-0 flex-1")} style={vars({ marginTop: U(8), fontSize: U(16), lineHeight: `${U(20.8)}`, color: INK, "--d": `${0.2 + i * 0.12}s` })}>
+            <p data-a="left" className={cx(st.ms6, st.clamp2, "min-w-0 flex-1 self-start")} style={vars({ marginTop: U(8), fontSize: U(16), lineHeight: `${U(20.8)}`, color: INK, "--d": `${0.2 + i * 0.12}s` })}>
               {it.title}
             </p>
           </div>

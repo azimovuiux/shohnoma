@@ -1095,6 +1095,52 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar uchun kostyum, ayollar uchun kechki ko‘ylak. Oltin rangli aksent — ayni muddao.", max: 160 },
     ],
   },
+  {
+    number: 27,
+    slug: "xotira",
+    name: "Xotira",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "minimal",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Yubiley va tug‘ilgan kun uchun suratlarga boy taklifnoma. Ranglari — oq, kulrang, ko‘mir va bordo. Ochilishda eski suratlar birin-ketin stol ustiga tushib, taxlam bo‘ladi va ostida yosh raqami yoziladi; sahifani pastga surganingizda yuqoridagi surat kattalashib, yubilyarning portretiga aylanadi. Keyin ism, taklif matni, «Yillar» — har yilning surati qora-oqdan rangliga o‘tadi, sanoq, kecha dasturi, manzil, dress-kod va mehmonlar javobi; oxirida butun ekranda katta oila surati.",
+    descriptionRu: "Приглашение на юбилей и день рождения с большим количеством фотографий. Цвета — белый, серый, графит и бордо. На первом экране старые фотографии одна за другой ложатся стопкой, а под ними пишется число лет; когда вы листаете страницу вниз, верхнее фото увеличивается и превращается в портрет юбиляра. Дальше имя, текст приглашения, «Годы» — фото каждого года из чёрно-белого становится цветным, отсчёт, программа вечера, адрес, дресс-код и ответы гостей; в конце — большое семейное фото на весь экран.",
+    descriptionEn: "A photo-rich invitation for a jubilee or birthday. The colours are white, grey, charcoal and burgundy. On the first screen old photos drop one by one into a stack and the age is written beneath them; as you scroll down, the top photo grows and turns into a portrait of the guest of honour. Then the name, the invitation text, “Years” — each year’s photo turns from black-and-white to colour, a countdown, the evening’s schedule, the venue, the dress code and guest replies; at the end a full-screen photo of the whole family.",
+    palette: ["#FFFFFF", "#EFEFF1", "#1F1C1C", "#5A1E2A"],
+    sample: { a: "Saodat Yusupova", date: "22 · 03 · 2027", venue: "«Bahor» restorani", time: "18:00" },
+    theme: { bg: ["#ffffff", "#efeff1"], ink: "#1f1c1c", accent: "#5a1e2a", soft: "#736e6e", script: "cormorant", color: "bordo" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "70", max: 3, hint: "Ixtiyoriy · katta bordo raqam va muhrlarda chiqadi; bo‘sh qolsa — raqam o‘rnida ismning birinchi harfi" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Yusupovlar oilasi", max: 60, hint: "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), oxirida chiqadi; bo‘sh qolsa — yubilyarning o‘zi nomidan" },
+      { key: "sign", type: "text", label: "Imzo", placeholder: "farzandlari va nabiralari", max: 60, hint: "Ixtiyoriy · taklif matni ostida «Hurmat bilan,» dan keyin; bo‘sh qolsa — taklif qiluvchi yoki yubilyar ismi" },
+      {
+        key: "life",
+        type: "list",
+        label: "Yillar",
+        min: 0,
+        max: 4,
+        item: {
+          year: { type: "text", label: "Yil", required: true, placeholder: "1956", max: 12 },
+          text: { type: "text", label: "Voqea", required: true, placeholder: "Toshkentda tavallud topdi", max: 50 },
+        },
+      },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Bordo aksent", "Klassik", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Bordo yoki to‘q qizil rangli libos, ro‘mol yoki galstuk — umumiy suratlar chiroyli chiqadi.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1399,6 +1445,17 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Xotira · 3", where: "«Xotiralar» — kichik surat" },
     { title: "Surat · 5", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
     { title: "Oila surati", where: "Oxirgi bo‘lim — «Sizni kutamiz!» ustida. Bo‘lmasa — suratsiz" },
+  ],
+  /** Xotira (yubiley) — suratlar ketma-ket: portret, «Yillar» (4 ta, yillar tartibida), manzil, final. Bo‘sh slotlar: portret — kulrang
+   * panel, «Yillar» — suratsiz qator (yil va voqea), manzil — shablonning bayram zali, final — suratsiz (muhr bilan) */
+  xotira: [
+    { title: "Portret", where: "Birinchi bo‘lim — katta raqam ostidagi portret; ochilishda taxlamdagi surat shunga aylanadi. Bo‘lmasa — kulrang panel" },
+    { title: "Yillar · 1", where: "«Yillar» — birinchi yil surati (ochilishdagi taxlamda ham). Bo‘lmasa — qator suratsiz" },
+    { title: "Yillar · 2", where: "«Yillar» — ikkinchi yil surati" },
+    { title: "Yillar · 3", where: "«Yillar» — uchinchi yil surati" },
+    { title: "Yillar · 4", where: "«Yillar» — to‘rtinchi yil surati" },
+    { title: "Surat · 6", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
+    { title: "Katta oila", where: "Oxirgi bo‘lim — butun ekranda, «Sizni kutamiz!» ostida. Bo‘lmasa — suratsiz" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>
