@@ -745,4 +745,64 @@ export const ru: Record<string, string> = {
   "«Dasturxon» — chapdagi kichik surat. Bo‘lmasa — choynak va piyola surati": "«Дастархан» — маленькое фото слева. Если нет — фото чайника и пиалы",
   "«Dasturxon» — o‘ngdagi kichik surat. Bo‘lmasa — non surati": "«Дастархан» — маленькое фото справа. Если нет — фото лепёшки",
   "«Manzil» — osh beriladigan joy surati. Bo‘lmasa — dasturxon surati": "«Адрес» — фото места, где подают плов. Если нет — фото дастархана",
+  // ── Oltin (yubiley va tug‘ilgan kun) ──
+  "Abdulla Karimov": "Абдулла Каримов",
+  "«Grand Palace» to‘yxonasi": "Банкетный зал «Grand Palace»",
+  yubiley: "юбилей",
+  "oltin::tug‘ilgan kun": "день рождения",
+  "{age} yillik yubiley": "{age}-летний юбилей",
+  "{age} yoshlik tug‘ilgan kun": "{age}-й день рождения",
+  Yubileygacha: "До юбилея",
+  "Hayot yo‘li": "Жизненный путь",
+  Xotiralar: "Воспоминания",
+  "Tabrik va tilaklaringiz": "Поздравления и пожелания",
+  "Otamiz {name}ning {age} yoshlik yubileyi munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "Наш отец {name} празднует {age}-летний юбилей. Приглашаем вас на торжественный вечер в его честь — нам хочется провести этот вечер в кругу близких.",
+  "{name}ning {age} yoshlik yubileyi munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "{name} празднует {age}-летний юбилей. Приглашаем вас на торжественный вечер в честь этого события — нам хочется провести его в кругу близких.",
+  "{name}ning {age} yoshga to‘lishi munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "{name} празднует {age}-й день рождения. Приглашаем вас на торжественный вечер в честь этого события — нам хочется провести его в кругу близких.",
+  "{name}ning tug‘ilgan kuni munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "{name} празднует день рождения. Приглашаем вас на торжественный вечер в честь этого события — нам хочется провести его в кругу близких.",
+  "{age} yoshlik yubiley munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "Приглашаем вас на торжественный вечер по случаю {age}-летнего юбилея. Нам хочется провести этот вечер в кругу близких.",
+  "{age} yoshga to‘lish munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "Приглашаем вас на торжественный вечер по случаю {age}-го дня рождения. Нам хочется провести этот вечер в кругу близких.",
+  "Tug‘ilgan kun munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "Приглашаем вас на торжественный вечер по случаю дня рождения. Нам хочется провести этот вечер в кругу близких.",
+  "{age} yoshlik yubileyim munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilaman. Bu oqshomni yaqinlarim davrasida o‘tkazishni istayman.":
+    "По случаю моего {age}-летнего юбилея приглашаю вас на торжественный вечер. Хочу провести этот вечер в кругу близких.",
+  "{age} yoshga to‘lishim munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilaman. Bu oqshomni yaqinlarim davrasida o‘tkazishni istayman.":
+    "По случаю моего {age}-го дня рождения приглашаю вас на торжественный вечер. Хочу провести этот вечер в кругу близких.",
+  "Tug‘ilgan kunim munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilaman. Bu oqshomni yaqinlarim davrasida o‘tkazishni istayman.":
+    "По случаю моего дня рождения приглашаю вас на торжественный вечер. Хочу провести этот вечер в кругу близких.",
+  "Erkaklar uchun kostyum, ayollar uchun kechki ko‘ylak. Oltin rangli aksent — ayni muddao.": "Для мужчин — костюм, для женщин — вечернее платье. Золотой акцент будет как нельзя кстати.",
+  "Klassik kostyum va nafis ko‘ylak.": "Классический костюм и элегантное платье.",
+  "Milliy liboslar — atlas, adras va chopon kechamizga yarashadi.": "Национальные наряды — атлас, адрас и чапан украсят наш вечер.",
+  // buyurtma formasi (templates.ts → fields, PHOTO_SLOTS.oltin)
+  "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), ochilishda va oxirida chiqadi; bo‘sh qolsa — yubilyarning o‘zi nomidan":
+    "Необязательно · если заполнено — приглашение от этого имени («мы»), имя появится в начале и в конце; если пусто — от имени самого юбиляра",
+  Imzo: "Подпись",
+  "farzandlari va nabiralari": "дети и внуки",
+  "Ixtiyoriy · taklif matni ostida «Hurmat bilan,» dan keyin; bo‘sh qolsa — taklif qiluvchi yoki yubilyar ismi":
+    "Необязательно · под текстом приглашения после «С уважением,»; если пусто — имя приглашающего или юбиляра",
+  Voqea: "Событие",
+  "Samarqandda tavallud topdi": "Родился в Самарканде",
+  "Xotira · 1 izohi": "Подпись к воспоминанию · 1",
+  "Xotira · 2 izohi": "Подпись к воспоминанию · 2",
+  "Xotira · 3 izohi": "Подпись к воспоминанию · 3",
+  "1991 · To‘y kuni": "1991 · День свадьбы",
+  "1998 · Farzandlar bilan": "1998 · С детьми",
+  "2024 · Nabiralar davrasida": "2024 · В кругу внуков",
+  "Ixtiyoriy · «Xotiralar» bo‘limidagi 2-surat ostida": "Необязательно · под 2-м фото в разделе «Воспоминания»",
+  "Ixtiyoriy · 3-surat ostida": "Необязательно · под 3-м фото",
+  "Ixtiyoriy · 4-surat ostida": "Необязательно · под 4-м фото",
+  "Xotira · 1": "Воспоминание · 1",
+  "Xotira · 2": "Воспоминание · 2",
+  "Xotira · 3": "Воспоминание · 3",
+  "Oila surati": "Семейное фото",
+  "Birinchi bo‘lim — katta raqam ostidagi arka ichida. Bo‘lmasa — arkada oltin barglar": "Первый раздел — в арке под большой цифрой. Если нет — в арке золотые листья",
+  "«Xotiralar» — katta surat. Xotira suratlari bo‘lmasa, bo‘lim ko‘rinmaydi": "«Воспоминания» — большое фото. Если фото-воспоминаний нет, раздел не показывается",
+  "«Xotiralar» — kichik surat": "«Воспоминания» — маленькое фото",
+  "Oxirgi bo‘lim — «Sizni kutamiz!» ustida. Bo‘lmasa — suratsiz": "Последний раздел — над «Ждём вас!». Если нет — без фото",
 };

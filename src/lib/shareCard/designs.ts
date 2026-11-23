@@ -734,4 +734,27 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+  /* Oltin (yubiley va tug‘ilgan kun): qorong‘ida oltin halqa (309…770 × 375…836) va burchaklardagi oltin barglar — Figma 00 (raqam
+   * yashirilgan): mehmon — eng tepada; taklif turi (oltin, keng harf oralig‘i) — halqa ustida; ism (Playfair Display, oq; uzun bo‘lsa —
+   * 2 qator, kichrayadi) — halqa ichida (390 kenglikda, chiziqqa tegmaydi); sana (oltin) va joy — halqa ostida, barglardan yuqorida */
+  oltin: {
+    fill: "#0b0b0c",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 120, anchor: "center", w: 900, maxH: 130, items: [{ k: "guest", s: st(f.manrope, 36, "rgba(255,255,255,.88)", { weight: 500, maxLines: 2, min: 26, lh: 1.22 }) }] },
+      { y: 300, anchor: "center", w: 520, maxH: 60, items: [{ k: "kicker", s: st(f.manrope, 28, "#d9b066", { weight: 600, upper: true, ls: 0.14, min: 18 }) }] },
+      { y: 605, anchor: "center", w: 390, maxH: 260, items: [{ k: "names", mode: "two", s: st(f.playfair, 76, "#ffffff", { min: 60, lh: 1.12 }) }] },
+      {
+        y: 900,
+        anchor: "top",
+        w: 900,
+        maxH: 300,
+        items: [
+          { k: "date", s: st(f.manrope, 36, "#d9b066", { weight: 600, ls: 0.03, min: 26 }) },
+          { k: "venue", s: st(f.manrope, 32, "rgba(255,255,255,.78)", { maxLines: 2, min: 24, lh: 1.25 }), gap: 16 },
+        ],
+      },
+    ],
+  },
 };

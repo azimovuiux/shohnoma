@@ -1046,6 +1046,55 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Do‘ppi, chopon yoki milliy naqshli kiyim bilan kelsangiz, dasturxon yanada chiroyli bo‘ladi.", max: 160 },
     ],
   },
+  {
+    number: 26,
+    slug: "oltin",
+    name: "Oltin",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "klassik",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Yubiley va tug‘ilgan kun uchun taklifnoma. Ranglari — qora, oltin va oq. Ochilishda qorong‘ida oltin halqa chiziladi va ichida yosh raqami chiqadi; sahifani pastga surganingizda halqa kengayadi, oltin barglar sochiladi. Keyin katta oltin raqam, arka ichidagi surat va ism, taklif matni, «Hayot yo‘li» — muhim yillar, xotira suratlari, sanoq, kecha dasturi, manzil, dress-kod va mehmonlar javobi; oxirida oila surati va yana yaltiragan raqam.",
+    descriptionRu: "Приглашение на юбилей и день рождения. Цвета — чёрный, золото и белый. На первом экране в темноте рисуется золотое кольцо, а внутри появляется число лет; когда вы листаете страницу вниз, кольцо расходится, золотые листья разлетаются. Дальше большая золотая цифра, фото в арке и имя, текст приглашения, «Жизненный путь» — важные годы, фото-воспоминания, отсчёт, программа вечера, адрес, дресс-код и ответы гостей; в конце семейное фото и снова сияющая цифра.",
+    descriptionEn: "An invitation for a jubilee or birthday. The colours are black, gold and white. On the first screen a gold ring is drawn in the dark and the age appears inside it; as you scroll down, the ring widens and gold leaves scatter. Then a large gold number, the photo in an arch and the name, the invitation text, a “Life story” of key years, memory photos, a countdown, the evening’s schedule, the venue, the dress code and guest replies; at the end a family photo and the number shining again.",
+    palette: ["#0B0B0C", "#C7943D", "#FADB8C", "#FFFFFF"],
+    sample: { a: "Abdulla Karimov", date: "15 · 03 · 2027", venue: "«Grand Palace» to‘yxonasi", time: "18:00" },
+    theme: { bg: ["#1a1714", "#0b0b0c"], ink: "#ffffff", accent: "#d9b066", soft: "#fadb8c", script: "cormorant", color: "oltin" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "60", max: 3, hint: "Ixtiyoriy · katta oltin raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida ismning birinchi harfi" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Karimovlar oilasi", max: 60, hint: "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), ochilishda va oxirida chiqadi; bo‘sh qolsa — yubilyarning o‘zi nomidan" },
+      { key: "sign", type: "text", label: "Imzo", placeholder: "farzandlari va nabiralari", max: 60, hint: "Ixtiyoriy · taklif matni ostida «Hurmat bilan,» dan keyin; bo‘sh qolsa — taklif qiluvchi yoki yubilyar ismi" },
+      {
+        key: "life",
+        type: "list",
+        label: "Hayot yo‘li",
+        min: 0,
+        max: 6,
+        item: {
+          year: { type: "text", label: "Yil", required: true, placeholder: "1966", max: 12 },
+          text: { type: "text", label: "Voqea", required: true, placeholder: "Samarqandda tavallud topdi", max: 50 },
+        },
+      },
+      { key: "cap1", type: "text", label: "Xotira · 1 izohi", placeholder: "1991 · To‘y kuni", max: 40, hint: "Ixtiyoriy · «Xotiralar» bo‘limidagi 2-surat ostida" },
+      { key: "cap2", type: "text", label: "Xotira · 2 izohi", placeholder: "1998 · Farzandlar bilan", max: 40, hint: "Ixtiyoriy · 3-surat ostida" },
+      { key: "cap3", type: "text", label: "Xotira · 3 izohi", placeholder: "2024 · Nabiralar davrasida", max: 40, hint: "Ixtiyoriy · 4-surat ostida" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Kechki libos", "Klassik", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Erkaklar uchun kostyum, ayollar uchun kechki ko‘ylak. Oltin rangli aksent — ayni muddao.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1340,6 +1389,16 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
   marvarid: [
     { title: "Asosiy surat", where: "Birinchi bo‘lim — arka ichidagi surat. Bo‘lmasa — arkada ismning birinchi harfi" },
     { title: "Surat · 2", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning kafe surati" },
+  ],
+  /** Oltin (yubiley) — suratlar ketma-ket: arka, uchta xotira, manzil, final. Bo‘sh slotlar: arkada oltin barglar, «Xotiralar» — bo‘lim
+   * yo‘qoladi, manzil — shablonning bayram zali, final — suratsiz */
+  oltin: [
+    { title: "Asosiy surat", where: "Birinchi bo‘lim — katta raqam ostidagi arka ichida. Bo‘lmasa — arkada oltin barglar" },
+    { title: "Xotira · 1", where: "«Xotiralar» — katta surat. Xotira suratlari bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Xotira · 2", where: "«Xotiralar» — kichik surat" },
+    { title: "Xotira · 3", where: "«Xotiralar» — kichik surat" },
+    { title: "Surat · 5", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
+    { title: "Oila surati", where: "Oxirgi bo‘lim — «Sizni kutamiz!» ustida. Bo‘lmasa — suratsiz" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

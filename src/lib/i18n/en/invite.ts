@@ -765,4 +765,64 @@ export const en: Record<string, string> = {
   "«Dasturxon» — chapdagi kichik surat. Bo‘lmasa — choynak va piyola surati": "“Our table” — small photo on the left. If none — a photo of a teapot and a cup",
   "«Dasturxon» — o‘ngdagi kichik surat. Bo‘lmasa — non surati": "“Our table” — small photo on the right. If none — a photo of bread",
   "«Manzil» — osh beriladigan joy surati. Bo‘lmasa — dasturxon surati": "“Venue” — a photo of the place where the plov is served. If none — a photo of the table",
+  // ── Oltin (jubilee and birthday) ──
+  "Abdulla Karimov": "Abdulla Karimov",
+  "«Grand Palace» to‘yxonasi": "Grand Palace banquet hall",
+  yubiley: "jubilee",
+  "oltin::tug‘ilgan kun": "birthday",
+  "{age} yillik yubiley": "{nth} birthday jubilee",
+  "{age} yoshlik tug‘ilgan kun": "{nth} birthday",
+  Yubileygacha: "Until the jubilee",
+  "Hayot yo‘li": "Life story",
+  Xotiralar: "Memories",
+  "Tabrik va tilaklaringiz": "Your congratulations and wishes",
+  "Otamiz {name}ning {age} yoshlik yubileyi munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "Our father {name} is celebrating his {nth} birthday. We invite you to a festive evening in his honour — we would love to spend it among those dear to us.",
+  "{name}ning {age} yoshlik yubileyi munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "{name} is celebrating a {nth} birthday jubilee. We invite you to a festive evening in honour of the occasion — we would love to spend it among those dear to us.",
+  "{name}ning {age} yoshga to‘lishi munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "{name} is turning {age}. We invite you to a festive evening in honour of the occasion — we would love to spend it among those dear to us.",
+  "{name}ning tug‘ilgan kuni munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "{name} is celebrating a birthday. We invite you to a festive evening in honour of the occasion — we would love to spend it among those dear to us.",
+  "{age} yoshlik yubiley munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "We invite you to a festive evening to celebrate a {nth} birthday jubilee. We would love to spend it among those dear to us.",
+  "{age} yoshga to‘lish munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "We invite you to a festive evening to celebrate a {nth} birthday. We would love to spend it among those dear to us.",
+  "Tug‘ilgan kun munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilamiz. Bu oqshomni yaqinlarimiz davrasida o‘tkazishni istaymiz.":
+    "We invite you to a festive birthday evening. We would love to spend it among those dear to us.",
+  "{age} yoshlik yubileyim munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilaman. Bu oqshomni yaqinlarim davrasida o‘tkazishni istayman.":
+    "I am celebrating my {nth} birthday jubilee and would like to invite you to a festive evening. I would love to spend it among those dear to me.",
+  "{age} yoshga to‘lishim munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilaman. Bu oqshomni yaqinlarim davrasida o‘tkazishni istayman.":
+    "I am turning {age} and would like to invite you to a festive evening. I would love to spend it among those dear to me.",
+  "Tug‘ilgan kunim munosabati bilan tashkil etiladigan tantanali kechaga sizni taklif qilaman. Bu oqshomni yaqinlarim davrasida o‘tkazishni istayman.":
+    "I am celebrating my birthday and would like to invite you to a festive evening. I would love to spend it among those dear to me.",
+  "Erkaklar uchun kostyum, ayollar uchun kechki ko‘ylak. Oltin rangli aksent — ayni muddao.": "A suit for men, an evening dress for women. A touch of gold would be just right.",
+  "Klassik kostyum va nafis ko‘ylak.": "A classic suit or an elegant dress.",
+  "Milliy liboslar — atlas, adras va chopon kechamizga yarashadi.": "National dress — atlas, adras and chapan — will suit our evening beautifully.",
+  // order form (templates.ts → fields, PHOTO_SLOTS.oltin)
+  "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), ochilishda va oxirida chiqadi; bo‘sh qolsa — yubilyarning o‘zi nomidan":
+    "Optional · if filled in, the invitation is sent from this name (“we”), shown at the start and at the end; if empty, from the guest of honour",
+  Imzo: "Signature",
+  "farzandlari va nabiralari": "his children and grandchildren",
+  "Ixtiyoriy · taklif matni ostida «Hurmat bilan,» dan keyin; bo‘sh qolsa — taklif qiluvchi yoki yubilyar ismi":
+    "Optional · under the invitation text after “With respect,”; if empty — the host’s or the guest of honour’s name",
+  Voqea: "Event",
+  "Samarqandda tavallud topdi": "Born in Samarkand",
+  "Xotira · 1 izohi": "Memory · 1 caption",
+  "Xotira · 2 izohi": "Memory · 2 caption",
+  "Xotira · 3 izohi": "Memory · 3 caption",
+  "1991 · To‘y kuni": "1991 · Wedding day",
+  "1998 · Farzandlar bilan": "1998 · With the children",
+  "2024 · Nabiralar davrasida": "2024 · With the grandchildren",
+  "Ixtiyoriy · «Xotiralar» bo‘limidagi 2-surat ostida": "Optional · under photo 2 in “Memories”",
+  "Ixtiyoriy · 3-surat ostida": "Optional · under photo 3",
+  "Ixtiyoriy · 4-surat ostida": "Optional · under photo 4",
+  "Xotira · 1": "Memory · 1",
+  "Xotira · 2": "Memory · 2",
+  "Xotira · 3": "Memory · 3",
+  "Oila surati": "Family photo",
+  "Birinchi bo‘lim — katta raqam ostidagi arka ichida. Bo‘lmasa — arkada oltin barglar": "First section — in the arch under the large number. If none — gold leaves in the arch",
+  "«Xotiralar» — katta surat. Xotira suratlari bo‘lmasa, bo‘lim ko‘rinmaydi": "“Memories” — large photo. Without memory photos the section is hidden",
+  "«Xotiralar» — kichik surat": "“Memories” — small photo",
+  "Oxirgi bo‘lim — «Sizni kutamiz!» ustida. Bo‘lmasa — suratsiz": "Last section — above “See you there!”. If none — no photo",
 };
