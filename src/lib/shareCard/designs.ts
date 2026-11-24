@@ -782,4 +782,27 @@ export const DESIGNS: Record<string, Design> = {
       },
     ],
   },
+  /* Gulshan (yubiley va tug‘ilgan kun): zumrad fonda gul to‘dasi (Figma 00; gul — 315…770 × 335…785, medalyon va «55» yashirilgan):
+   * mehmon (Cormorant kursiv, oq) — eng tepada, gulga tegmaydi; taklif turi (pushti, keng harf oralig‘i) — gul ostida; ism (Cormorant
+   * Medium, oq; uzun bo‘lsa — 2 qator, kichrayadi); sana (oltin kursiv) va joy — pastda */
+  gulshan: {
+    fill: "#0f4d3a",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 150, anchor: "center", w: 900, maxH: 170, items: [{ k: "guest", s: st(f.cormorant, 46, "#ffffff", { italic: true, weight: 500, maxLines: 2, min: 30, lh: 1.15 }) }] },
+      { y: 868, anchor: "center", w: 860, maxH: 56, items: [{ k: "kicker", s: st(f.manrope, 26, "#e8b4a0", { weight: 600, upper: true, ls: 0.14, min: 18 }) }] },
+      { y: 990, anchor: "center", w: 900, maxH: 200, items: [{ k: "names", mode: "two", s: st(f.cormorant, 92, "#ffffff", { weight: 500, min: 54, lh: 1.05 }) }] },
+      {
+        y: 1118,
+        anchor: "top",
+        w: 900,
+        maxH: 270,
+        items: [
+          { k: "date", s: st(f.cormorant, 58, "#c9a45c", { weight: 500, italic: true, min: 40 }) },
+          { k: "venue", s: st(f.manrope, 30, "rgba(255,255,255,.85)", { maxLines: 2, min: 22, lh: 1.3 }), gap: 18 },
+        ],
+      },
+    ],
+  },
 };

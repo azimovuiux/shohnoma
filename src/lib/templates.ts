@@ -1141,6 +1141,41 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Bordo yoki to‘q qizil rangli libos, ro‘mol yoki galstuk — umumiy suratlar chiroyli chiqadi.", max: 160 },
     ],
   },
+  {
+    number: 28,
+    slug: "gulshan",
+    name: "Gulshan",
+    ceremony: "tugilgan-kun",
+    ceremonies: ["tugilgan-kun"],
+    style: "romantik",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Yubiley va tug‘ilgan kun uchun gulli taklifnoma. Ranglari — zumrad yashil, oq, oltin va pushti gullar. Ochilishda gul to‘dasi ochiladi, ostida oltin halqa chiziladi va ichida yosh raqami chiqadi; sahifani pastga surganingizda halqa kattalashib, ichida yubilyarning portreti doira bo‘lib ochiladi. Keyin katta oltin raqam, ism, taklif matni, «Baxtli lahzalar» suratlari, sanoq, kecha dasturi, manzil, dress-kod va mehmonlar javobi; oxirida yana gul to‘dasi va «Sizni kutamiz!».",
+    descriptionRu: "Цветочное приглашение на юбилей и день рождения. Цвета — изумрудно-зелёный, белый, золото и розовые цветы. На первом экране распускается букет, под ним рисуется золотое кольцо с числом лет; когда вы листаете страницу вниз, кольцо увеличивается и внутри кругом открывается портрет юбиляра. Дальше большая золотая цифра, имя, текст приглашения, фото «Счастливые моменты», отсчёт, программа вечера, адрес, дресс-код и ответы гостей; в конце снова букет и «Ждём вас!».",
+    descriptionEn: "A floral invitation for a jubilee or birthday. The colours are emerald green, white, gold and pink flowers. On the first screen a bouquet blooms, a gold ring is drawn beneath it with the age inside; as you scroll down, the ring grows and a portrait of the guest of honour opens inside it as a circle. Then a large gold number, the name, the invitation text, “Happy moments” photos, a countdown, the evening’s schedule, the venue, the dress code and guest replies; at the end the bouquet again and “We look forward to seeing you!”.",
+    palette: ["#0F4D3A", "#FFFFFF", "#C9A45C", "#E8B4A0"],
+    sample: { a: "Malika Ahmedova", date: "05 · 04 · 2027", venue: "«Gulshan» restorani", time: "18:00" },
+    theme: { bg: ["#0f4d3a", "#093528"], ink: "#ffffff", accent: "#c9a45c", soft: "#e8b4a0", script: "cormorant", color: "yashil" },
+    fields: [
+      { key: "age", type: "number", label: "Nechanchi yosh", placeholder: "55", max: 3, hint: "Ixtiyoriy · oltin medalyonda va katta oltin raqam bo‘lib chiqadi; bo‘sh qolsa — raqam o‘rnida ismning birinchi harfi" },
+      { key: "host", type: "text", label: "Taklif qiluvchi", placeholder: "Ahmedovlar oilasi", max: 60, hint: "Ixtiyoriy · to‘ldirilsa — taklif shu nomdan («biz»), oxirida chiqadi; bo‘sh qolsa — yubilyarning o‘zi nomidan" },
+      { key: "sign", type: "text", label: "Imzo", placeholder: "farzandlari", max: 60, hint: "Ixtiyoriy · taklif matni ostida «Hurmat bilan,» dan keyin; bo‘sh qolsa — taklif qiluvchi yoki yubilyar ismi" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Mehmonlarni kutib olish", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Zumrad va pushti", "Klassik", "Milliy", "Ixtiyoriy"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Yashil yoki pushti rangdagi kechki libos — gullar bilan uyg‘un.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1456,6 +1491,15 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Yillar · 4", where: "«Yillar» — to‘rtinchi yil surati" },
     { title: "Surat · 6", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
     { title: "Katta oila", where: "Oxirgi bo‘lim — butun ekranda, «Sizni kutamiz!» ostida. Bo‘lmasa — suratsiz" },
+  ],
+  /** Gulshan (yubiley) — suratlar: portret (medalyon), «Baxtli lahzalar» (3 ta), manzil. Bo‘sh slotlar: portret — medalyon ichida
+   * gul to‘dasi, lahzalar — bo‘lim yo‘qoladi (1 ta — katta, 2 ta — ikkita ark), manzil — shablonning bayram zali */
+  gulshan: [
+    { title: "Portret", where: "Birinchi bo‘lim — oltin medalyon ichida (ochilishda doira bo‘lib ochiladi). Bo‘lmasa — medalyonda gul to‘dasi" },
+    { title: "Lahza · 1", where: "«Baxtli lahzalar» — katta surat. Lahza suratlari bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Lahza · 2", where: "«Baxtli lahzalar» — kichik surat (ark)" },
+    { title: "Lahza · 3", where: "«Baxtli lahzalar» — kichik surat (ark)" },
+    { title: "Surat · 5", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira", "gulshan"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -81,6 +81,9 @@ const CFG = {
    * chiqmaydi); «70» va «yillik yubiley» yashiriladi — kartada mehmon, taklif turi (taxlam ustida), ism (yuqoridagi rom ichida),
    * sana va joy (taxlam ostida) chiziladi */
   xotira: { css: `nextjs-portal{display:none!important}[class*="_sImg"]{visibility:hidden!important}[class*="_sIn"]{background:linear-gradient(160deg,#f6f6f7 0%,#e6e6e9 100%)!important}[class*="_gNum"],[class*="_gWord"],[class*="_copy"]{display:none!important}` },
+  /* Gulshan: zumrad fonda gul to‘dasi (Figma 00); medalyon, «55» va «yubiley» yashiriladi (yosh mijozga qarab o‘zgaradi, uzun ism
+   * medalyonga sig‘maydi) — kartada mehmon (tepada), taklif turi va ism (gul ostida), oltin chiziq o‘rnida sana va joy chiziladi */
+  gulshan: { css: `nextjs-portal{display:none!important}[class*="_morph"],[class*="_gNum"],[class*="_gWord"]{display:none!important}` },
   sammit: { css: `nextjs-portal{display:none!important}[class*="_gFlyL"]>img{transform:translate(calc(var(--u)*-200),calc(var(--u)*40))!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;

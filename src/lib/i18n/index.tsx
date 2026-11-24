@@ -30,11 +30,19 @@ const DICT_EN: Record<string, string> = { ...commonEn, ...siteEn, ...orderEn, ..
  * Bir xil o‘zbekcha so‘z turli ma’noda kelsa — kontekst bilan: t("oqim::Chiqish") (buyurtmadan chiqish, «Sign out» emas).
  * Lug‘at kaliti to‘liq ("oqim::Chiqish"), o‘zbekchada va topilmaganda — "::" dan keyingi qism.
  */
+/** 1 → «1st», 22 → «22nd», 13 → «13th» */
+function ordinalEn(n: number) {
+  const b = n % 100;
+  return `${n}${b >= 11 && b <= 13 ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th"}`;
+}
+
 export function tr(locale: Locale, s: string, vars?: Record<string, string | number>): string {
   const ctx = s.indexOf("::");
   const plain = ctx > 0 ? s.slice(ctx + 2) : s;
   let out = locale === "ru" ? (DICT[s] ?? plain) : locale === "en" ? (DICT_EN[s] ?? plain) : plain;
   if (vars) for (const [k, v] of Object.entries(vars)) out = out.split(`{${k}}`).join(String(v));
+  // inglizcha tartib son («{nth} birthday» → «55th birthday»): shablon `nth` bermasa — `age` dan
+  if (vars && out.includes("{nth}") && Number(vars.age) > 0) out = out.split("{nth}").join(ordinalEn(Number(vars.age)));
   return out;
 }
 
