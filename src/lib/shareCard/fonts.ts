@@ -54,10 +54,18 @@ const FACES: Face[] = [
   { family: "sc-golos", weight: 500, style: "normal", files: subs(T("shato"), "golos-text", "500-normal") },
   { family: "sc-golos", weight: 600, style: "normal", files: subs(T("xotira"), "golos-text", "600-normal") },
   { family: "sc-spectral", weight: 300, style: "italic", files: subs(T("xotira"), "spectral", "300-italic") },
+  // Poyezd: Old Standard TT (sarlavha, kursiv) + Raleway
+  { family: "sc-oldstd", weight: 400, style: "normal", files: subs(T("poyezd"), "old-standard-tt", "400-normal") },
+  { family: "sc-oldstd", weight: 400, style: "italic", files: subs(T("poyezd"), "old-standard-tt", "400-italic") },
+  { family: "sc-raleway", weight: 500, style: "normal", files: subs(T("poyezd"), "raleway", "500-normal") },
+  { family: "sc-raleway", weight: 600, style: "normal", files: subs(T("poyezd"), "raleway", "600-normal") },
   { family: "sc-spectral", weight: 400, style: "normal", files: subs(T("xotira"), "spectral", "400-normal") },
   { family: "sc-montserrat", weight: 300, style: "normal", files: subs(T("kalit"), "montserrat", "300-normal") },
   { family: "sc-montserrat", weight: 400, style: "normal", files: subs(T("savsan"), "montserrat", "400-normal") },
   { family: "sc-montserrat", weight: 500, style: "normal", files: subs(T("savsan"), "montserrat", "500-normal") },
+  // Qirmiz: Montserrat 600 va Oranienbaum (lotin + kirill)
+  { family: "sc-montserrat", weight: 600, style: "normal", files: subs(T("qirmiz"), "montserrat", "600-normal") },
+  { family: "sc-oranienbaum", weight: 400, style: "normal", files: subs(T("qirmiz"), "oranienbaum", "400-normal") },
   { family: "sc-lora", weight: 400, style: "italic", files: subs(T("savsan"), "lora", "400-italic") },
   { family: "sc-prata", weight: 400, style: "normal", files: subs(T("savsan"), "prata", "400-normal", ["latin", "cyrillic"]) },
   // Gloock’da kirill yo‘q — shablondagi kabi Prata kirilli (lino.module.css)

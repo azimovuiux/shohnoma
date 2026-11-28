@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira", "gulshan", "archa"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira", "gulshan", "archa", "qirmiz", "ayoz", "poyezd"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -87,7 +87,18 @@ const CFG = {
   /* Archa: to‘q ko‘k fonda ipda osilgan sharlar va qor uchqunlari (Figma 00); yog‘ayotgan qor zarralari, pastdagi hero ipi va o‘rtadagi
    * uchta qor uchquni yashiriladi (matn ustidan o‘tmasin) — kartada mehmon, taklif turi, tadbir nomi, kompaniya, sana va joy chiziladi */
   archa: { css: `nextjs-portal{display:none!important}[class*="_fall_"]{display:none!important}[class*="_gate__"]>span.absolute,[class*="_gate__"]>[class*="_gSnow"]:nth-child(4),[class*="_gate__"]>[class*="_gSnow"]:nth-child(5),[class*="_gate__"]>[class*="_gSnow"]:nth-child(6){display:none!important}` },
+  /* Poyezd: qishki ertak qishlog‘i (Figma 00) — sarlavha, sana pilyulasi va qisqa izoh yashiriladi (oltin gradient matn foni ham);
+   * yog‘ayotgan qor, archa chiroqlari, osma yo‘l va vagon ko‘rinmaydi (matnga joy) — kartada mehmon, «Tadbirga taklif», tadbir nomi, kompaniya, sana va joy osmonda chiziladi */
+  poyezd: { css: `nextjs-portal{display:none!important}[class*="_fall_"],[class*="_lights_"],[class*="_pill_"],[class*="_rope_"],[class*="_gCar_"]{display:none!important}[class*="_gold_"]{background:none!important}` },
   sammit: { css: `nextjs-portal{display:none!important}[class*="_gFlyL"]>img{transform:translate(calc(var(--u)*-200),calc(var(--u)*40))!important}` },
+  /* Qirmiz: qizil fonda gulchambar, oq qog‘oz karta, Shchelkunchik, sovg‘a va oltin sharlar (Figma hero, `--o:1`); kartadagi oltin chiziqlar
+   * yashiriladi (matn joyi o‘zgaradi), chiroqlar miltillashi to‘xtatiladi — kartada mehmon, «Tadbirga taklif», tadbir nomi, kompaniya, sana va joy */
+  qirmiz: { css: `nextjs-portal{display:none!important}[class*="gateWrap"]{--o:1!important}[class*="_tw1"],[class*="_tw2"]{animation:none!important}[class*="_rule__"],[class*="_vRule__"]{display:none!important}` },
+  /* Ayoz: binafsha tungi osmon, yulduzlar (miltillash to‘xtatiladi), archalar, qorli uycha, qor tepaliklari va chokdagi shisha shar
+   * (Figma 00); sarlavha, jamoa va shardagi logotip yozuvi yashiriladi, chana, yog‘ayotgan qor va matn ustuniga tushadigan 7 ta yulduz
+   * ko‘rinmaydi (tepadagi 3 tasi qoladi) — kartada
+   * mehmon, «Tadbirga taklif», tadbir nomi, kompaniya, sana va joy osmonda chiziladi */
+  ayoz: { css: `nextjs-portal{display:none!important}[class*="_fall_"],[class*="_gSleigh_"],[class*="_gSky_"]>span:nth-child(n+4){display:none!important}[class*="_tw_"]{animation:none!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;
 

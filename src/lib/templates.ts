@@ -1213,6 +1213,116 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki kiyim: kumush yoki qizil rangdagi bitta aksent bilan.", max: 160 },
     ],
   },
+  {
+    number: 30,
+    slug: "qirmiz",
+    name: "Qirmiz",
+    ceremony: "korporativ",
+    ceremonies: ["korporativ"],
+    style: "klassik",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Kompaniyaning yil yakuni bazmi uchun taklifnoma. Ranglari — qirmizi qizil, oq va oltin, bezaklari — archa gulchambari, Shchelkunchik o‘yinchog‘i, sovg‘a qutisi va oltin sharlar. Sahifa ochilganda gulchambar yuqoridan tushadi va oq karta chiqadi; pastga surganingizda karta tekislanadi, sana va vaqt ko‘rinadi, bezaklar chetdan kirib keladi. Keyin hamkasblarga murojaat va jamoa surati, kecha dasturi, «Bir yillik lahzalar» suratlari, bazmgacha sanoq, manzil, dress-kod va ishtirokni tasdiqlash anketasi; oxirida «Sizni kutamiz!».",
+    descriptionRu: "Приглашение на итоговый вечер года в компании. Цвета — алый, белый и золото, украшения — еловая гирлянда, Щелкунчик, подарочная коробка и золотые шары. При открытии страницы сверху опускается гирлянда и появляется белая карточка; когда вы листаете вниз, карточка выравнивается, появляются дата и время, а украшения входят с краёв. Дальше — обращение к коллегам и фото команды, программа вечера, фото «Моменты года», отсчёт до праздника, адрес, дресс-код и анкета для подтверждения участия; в конце — «Ждём вас!».",
+    descriptionEn: "An invitation to a company year-end party. The colours are crimson, white and gold, with a fir garland, a Nutcracker, a gift box and gold baubles as decoration. When the page opens, a garland comes down from the top and a white card appears; as you scroll down, the card straightens, the date and time appear and the decorations come in from the edges. Then a greeting to colleagues with a team photo, the evening’s schedule, “Moments of the year” photos, a countdown to the party, the venue, the dress code and an RSVP form; at the end, “See you there!”.",
+    palette: ["#A3141F", "#780D14", "#C9A35C", "#FFFFFF"],
+    sample: { a: "Yil yakuni bazmi", b: "Atlas Group", date: "27 · 12 · 2026", venue: "«Oq saroy» banket zali", time: "19:00" },
+    theme: { bg: ["#b81a26", "#780d14"], ink: "#ffffff", accent: "#c9a35c", soft: "#f2dfc4", script: "cormorant", color: "qizil" },
+    fields: [
+      { key: "lead", type: "text", label: "Kartadagi qisqa matn", placeholder: "Bir yil davomida yonma-yon ishlagan jamoamiz bilan yil yakunini birga nishonlaylik.", max: 110, hint: "Ixtiyoriy · birinchi ekrandagi oq kartada, tadbir nomi ostida; bo‘sh qolsa — namunadagi matn" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Taqdirlash va lotereya", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Qizil va oltin", "Klassik", "Smart casual", "Erkin uslub"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki libos: qizil, qora yoki oltin rangdagi aksent bilan.", max: 160 },
+    ],
+  },
+  {
+    number: 31,
+    slug: "ayoz",
+    name: "Ayoz",
+    ceremony: "korporativ",
+    ceremonies: ["korporativ"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Kompaniyaning Yangi yil bazmi uchun taklifnoma. Ranglari — binafsha, oq va pushti, bezaklari — yulduzli tungi osmon, qorli tepaliklar, archalar va kompaniya logotipi tushirilgan shisha archa shari. Sahifa ochilganda Ayoz bobo chanasi osmonga uchib kiradi va qor yog‘a boshlaydi; pastga surganingizda chana uzoqlashadi. Keyin hamkasblarga murojaat, sana va vaqt, jamoa surati, kecha dasturi, «Bir yillik lahzalar» suratlari, bazmgacha sanoq, manzil, dress-kod va ishtirokni tasdiqlash anketasi; oxirida shisha shar qorga tushadi.",
+    descriptionRu: "Приглашение на новогодний корпоратив компании. Цвета — фиолетовый, белый и розовый, украшения — звёздное ночное небо, снежные холмы, ёлки и стеклянный ёлочный шар с логотипом компании. При открытии страницы в небо влетают сани Деда Мороза и начинает идти снег; когда вы листаете вниз, сани улетают вдаль. Дальше — обращение к коллегам, дата и время, фото команды, программа вечера, фото «Моменты года», отсчёт до праздника, адрес, дресс-код и анкета для подтверждения участия; в конце стеклянный шар опускается в снег.",
+    descriptionEn: "An invitation to a company New Year party. The colours are purple, white and pink, with a starry night sky, snowy hills, fir trees and a glass Christmas bauble with the company logo as decoration. When the page opens, Father Frost’s sleigh flies into the sky and snow starts to fall; as you scroll down, the sleigh flies off into the distance. Then a greeting to colleagues, the date and time, a team photo, the evening’s schedule, “Moments of the year” photos, a countdown to the party, the venue, the dress code and an RSVP form; at the end the glass bauble drops into the snow.",
+    palette: ["#3B2185", "#241052", "#E0245E", "#F3F0FB"],
+    sample: { a: "Yangi yil bazmi", b: "Orion Soft", date: "30 · 12 · 2026", venue: "«Orion Hall» tadbirlar zali", time: "18:30" },
+    theme: { bg: ["#5b3fa6", "#241052"], ink: "#ffffff", accent: "#e0245e", soft: "#cfc3ee", script: "cormorant", color: "moviy" },
+    fields: [
+      { key: "sign", type: "text", label: "Imzo", placeholder: "Orion Soft rahbariyati", max: 60, hint: "Ixtiyoriy · taklif matni ostida; bo‘sh qolsa — «<kompaniya> rahbariyati»" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Jamoaviy viktorina", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Oq va binafsha", "Smart casual", "Black tie", "Erkin uslub"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki kiyim: oq, kumush yoki binafsha rangda.", max: 160 },
+    ],
+  },
+  {
+    number: 32,
+    slug: "poyezd",
+    name: "Poyezd",
+    ceremony: "korporativ",
+    ceremonies: ["korporativ"],
+    style: "klassik",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Kompaniyaning Yangi yil bazmi uchun «qishki ertak» taklifnomasi. Ranglari — tungi ko‘k, oq va oltin, bezaklari — oltin archa, qorli uychalar, osma vagon va o‘yinchoq poyezd. Ochilishda qor sekin yog‘adi, oltin sarlavha ustidan yorug‘lik o‘tadi; pastga surganingizda qishloq qatlamlari har xil tezlikda ko‘tariladi va o‘yinchoq poyezd kirib keladi. Keyin hamkasblarga murojaat, jamoa surati, kecha dasturi, «Bir yillik lahzalar» suratlari, bazmgacha sanoq, manzil, dress-kod va ishtirokni tasdiqlash anketasi; oxirida «Sizni kutamiz!».",
+    descriptionRu: "Приглашение «зимняя сказка» на новогодний корпоратив компании. Цвета — ночной синий, белый и золото, украшения — золотая ёлка, заснеженные домики, канатная кабинка и игрушечный поезд. При открытии медленно идёт снег, по золотому заголовку пробегает блик; когда вы листаете вниз, слои деревни поднимаются с разной скоростью и въезжает игрушечный поезд. Дальше — обращение к коллегам, фото команды, программа вечера, фото «Моменты года», отсчёт до праздника, адрес, дресс-код и анкета для подтверждения участия; в конце — «Ждём вас!».",
+    descriptionEn: "A “winter fairy tale” invitation to a company New Year party. The colours are night blue, white and gold, with a golden fir tree, snowy cottages, a cable car and a toy train as decoration. When the page opens, snow falls slowly and a gleam runs across the gold title; as you scroll down, the layers of the village rise at different speeds and a toy train rolls in. Then a greeting to colleagues, a team photo, the evening’s schedule, “Moments of the year” photos, a countdown to the party, the venue, the dress code and an RSVP form; at the end, “We look forward to seeing you!”.",
+    palette: ["#2B4087", "#172452", "#D9B26B", "#EDF2FC"],
+    sample: { a: "Qishki ertak", b: "Lumen Group", date: "28 · 12 · 2026", venue: "«Bog‘i Eram» banket zali", time: "18:00" },
+    theme: { bg: ["#2b4087", "#172452"], ink: "#ffffff", accent: "#d9b26b", soft: "#edf2fc", script: "cormorant", color: "moviy" },
+    fields: [
+      { key: "tagline", type: "text", label: "Qisqa izoh", placeholder: "Lumen Group yil yakuni bazmi", max: 60, hint: "Ixtiyoriy · birinchi ekranda sana ostida; bo‘sh qolsa — «<kompaniya> yil yakuni bazmi»" },
+      {
+        key: "highlights",
+        type: "list",
+        label: "Kecha mazmuni",
+        min: 0,
+        max: 3,
+        item: {
+          text: { type: "text", label: "Nima bo‘ladi", required: true, placeholder: "Jamoaviy o‘yinlar", max: 22 },
+        },
+      },
+      { key: "sign", type: "text", label: "Imzo", placeholder: "Lumen Group rahbariyati", max: 60, hint: "Ixtiyoriy · taklif matni ostida; bo‘sh qolsa — «<kompaniya> rahbariyati»" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kecha dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Kutib olish va issiq choy", max: 40 },
+        },
+      },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Qishki nafislik", "Issiq sviter", "Smart casual", "Erkin uslub"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Oq, kumush yoki oltin rangdagi kechki kiyim.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1545,6 +1655,35 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Galereya · 1", where: "«Jamoamiz bilan bir yil» — katta surat. Galereya suratlari bo‘lmasa, bo‘lim ko‘rinmaydi" },
     { title: "Galereya · 2", where: "«Jamoamiz bilan bir yil» — kichik tik surat" },
     { title: "Galereya · 3", where: "«Jamoamiz bilan bir yil» — kichik tik surat" },
+    { title: "Surat · 5", where: "«Manzil» — bazm joyi surati. Bo‘lmasa — shablonning bazm zali surati" },
+  ],
+  /** Qirmiz (korporativ yil yakuni bazmi) — suratlar: jamoa surati (bosma rasm), «Bir yillik lahzalar» (3 ta), manzil. Bo‘sh slotlar:
+   * jamoa — bosma kartochkada sovg‘a qutisi va yil; lahzalar — bo‘lim yo‘qoladi (1 ta — katta, 2 ta — ikkita kichik); manzil — shablonning bazm zali */
+  qirmiz: [
+    { title: "Jamoaviy surat", where: "«Hurmatli hamkasblar!» ostidagi bosma rasm. Bo‘lmasa — kartochkada sovg‘a qutisi va yil" },
+    { title: "Lahza · 1", where: "«Bir yillik lahzalar» — katta surat. Bu suratlar bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Lahza · 2", where: "«Bir yillik lahzalar» — kichik surat" },
+    { title: "Lahza · 3", where: "«Bir yillik lahzalar» — kichik surat (o‘ngda)" },
+    { title: "Surat · 5", where: "«Manzil» — bazm zali surati. Bo‘lmasa — shablonning bazm zali surati" },
+  ],
+  /** Ayoz (korporativ Yangi yil bazmi) — suratlar (ketma-ket yuklanadi, muhimlari oldinda): jamoa surati (arka), «Bir yillik lahzalar»
+   * (3 ta), manzil, logotip (shisha shar ichida). Bo‘sh slotlar: jamoa / lahzalar — bo‘lim yo‘qoladi (1 ta — katta, 2 ta — ikkita ark);
+   * manzil — shablonning bazm zali; logotip — kompaniya nomi */
+  ayoz: [
+    { title: "Jamoa surati", where: "Arka ichidagi katta surat. Bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Lahza · 1", where: "«Bir yillik lahzalar» — katta surat. Lahza suratlari bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Lahza · 2", where: "«Bir yillik lahzalar» — kichik surat (ark)" },
+    { title: "Lahza · 3", where: "«Bir yillik lahzalar» — kichik surat (ark)" },
+    { title: "Surat · 5", where: "«Manzil» — bazm joyi surati. Bo‘lmasa — shablonning bazm zali surati" },
+    { title: "Logotip", where: "Shisha shar ichida. Bo‘lmasa — kompaniya nomi" },
+  ],
+  /** Poyezd (korporativ Yangi yil bazmi, «qishki ertak») — suratlar: jamoa surati (oltin ramkada), «Bir yillik lahzalar» (3 ta), manzil.
+   * Bo‘sh slotlar: jamoa / lahzalar — bo‘lim yo‘qoladi (1 ta — katta, 2 ta — ikkita tik); manzil — shablonning bazm zali */
+  poyezd: [
+    { title: "Jamoa surati", where: "Taklif matnidan keyingi oltin ramkadagi katta surat. Bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Lahza · 1", where: "«Bir yillik lahzalar» — katta surat. Lahza suratlari bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Lahza · 2", where: "«Bir yillik lahzalar» — kichik tik surat" },
+    { title: "Lahza · 3", where: "«Bir yillik lahzalar» — kichik tik surat" },
     { title: "Surat · 5", where: "«Manzil» — bazm joyi surati. Bo‘lmasa — shablonning bazm zali surati" },
   ],
 };

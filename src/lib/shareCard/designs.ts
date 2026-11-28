@@ -35,6 +35,7 @@ const f = {
   mono: '"sc-mono", ui-monospace, monospace',
   golos: '"sc-golos", system-ui, sans-serif',
   montserrat: '"sc-montserrat", system-ui, sans-serif',
+  oranienbaum: '"sc-oranienbaum", Georgia, serif',
   lora: '"sc-lora", Georgia, serif',
   prata: '"sc-prata", Georgia, serif',
   gloock: '"sc-gloock", "sc-prata", Georgia, serif',
@@ -49,6 +50,8 @@ const f = {
   ssec: '"sc-ssec", "sc-sofia", system-ui, sans-serif',
   sofia: '"sc-sofia", "sc-manrope", system-ui, sans-serif',
   spectral: '"sc-spectral", "sc-playfair", Georgia, serif',
+  oldstd: '"sc-oldstd", "sc-playfair", Georgia, serif',
+  raleway: '"sc-raleway", "sc-manrope", system-ui, sans-serif',
 };
 /** Malika: atlas burmalari ustidagi matn o‘qilishi uchun krem nur */
 const GLOW = { color: "rgba(255,249,247,.95)", blur: 22 };
@@ -786,6 +789,30 @@ export const DESIGNS: Record<string, Design> = {
   /* Gulshan (yubiley va tug‘ilgan kun): zumrad fonda gul to‘dasi (Figma 00; gul — 315…770 × 335…785, medalyon va «55» yashirilgan):
    * mehmon (Cormorant kursiv, oq) — eng tepada, gulga tegmaydi; taklif turi (pushti, keng harf oralig‘i) — gul ostida; ism (Cormorant
    * Medium, oq; uzun bo‘lsa — 2 qator, kichrayadi); sana (oltin kursiv) va joy — pastda */
+  /* Poyezd (korporativ Yangi yil bazmi, «qishki ertak»): tungi ko‘k osmon, oltin archa, qorli uychalar va tepaliklar (Figma 00; sarlavha,
+   * sana pilyulasi, osma yo‘l va vagon yashirilgan). Osmonda (≤ 850): mehmon, «Tadbirga taklif» (oltin), tadbir nomi (Old Standard kursiv,
+   * oltin; uzun bo‘lsa — 2 qator), kompaniya, sana va joy — matn uychalar va archaga tegmaydi */
+  poyezd: {
+    fill: "#2b4087",
+    bg: true,
+    date: "long",
+    stacks: [
+      {
+        y: 450,
+        anchor: "center",
+        w: 900,
+        maxH: 740,
+        items: [
+          { k: "guest", s: st(f.raleway, 42, "#ffffff", { weight: 500, maxLines: 2, min: 28, lh: 1.2 }) },
+          { k: "kicker", s: st(f.raleway, 28, "#f7e5bd", { weight: 600, upper: true, ls: 0.14, min: 20 }), gap: 34 },
+          { k: "names", mode: "two", s: st(f.oldstd, 118, "#efd39b", { italic: true, min: 56, lh: 1.04 }), gap: 26 },
+          { k: "org", s: st(f.raleway, 40, "#ffffff", { weight: 600, maxLines: 2, min: 26, lh: 1.2 }), gap: 22 },
+          { k: "date", s: st(f.oldstd, 50, "#f7e5bd", { min: 34 }), gap: 40 },
+          { k: "venue", s: st(f.raleway, 32, "rgba(255,255,255,.85)", { weight: 500, maxLines: 2, min: 22, lh: 1.3 }), gap: 14 },
+        ],
+      },
+    ],
+  },
   gulshan: {
     fill: "#0f4d3a",
     bg: true,
@@ -826,6 +853,54 @@ export const DESIGNS: Record<string, Design> = {
           { k: "org", s: st(f.dela, 58, "#e0383f", { maxLines: 2, min: 30, lh: 1.15 }), gap: 20 },
           { k: "date", s: st(f.onest, 46, "#ffffff", { weight: 600, min: 30 }), gap: 52 },
           { k: "venue", s: st(f.onest, 34, "rgba(201,209,222,.9)", { maxLines: 2, min: 24, lh: 1.3 }), gap: 16 },
+        ],
+      },
+    ],
+  },
+  /* Qirmiz (korporativ yil yakuni bazmi): qizil fonda gulchambar, oq qog‘oz karta, Shchelkunchik, sovg‘a va oltin sharlar (Figma hero;
+   * kartadagi matn va oltin chiziqlar yashirilgan). Hamma matn — oq karta ichida (286…794 × 272…1248): mehmon, «Tadbirga taklif» (oxra),
+   * tadbir nomi (Oranienbaum, jigarrang; uzun bo‘lsa — 2 qator, kichrayadi), kompaniya, sana va joy */
+  qirmiz: {
+    fill: "#a3141f",
+    bg: true,
+    date: "long",
+    stacks: [
+      {
+        y: 752,
+        anchor: "center",
+        w: 440,
+        maxH: 900,
+        items: [
+          { k: "guest", s: st(f.montserrat, 36, "#853d21", { weight: 500, maxLines: 2, min: 24, lh: 1.25 }) },
+          { k: "kicker", s: st(f.montserrat, 26, "#997538", { weight: 600, upper: true, ls: 0.14, min: 17 }), gap: 34 },
+          { k: "names", mode: "two", s: st(f.oranienbaum, 108, "#853d21", { min: 86, lh: 1.0 }), gap: 24 },
+          { k: "org", s: st(f.montserrat, 36, "#997538", { weight: 600, maxLines: 2, min: 24, lh: 1.2 }), gap: 26 },
+          { k: "date", s: st(f.montserrat, 40, "#853d21", { weight: 600, min: 26 }), gap: 60 },
+          { k: "venue", s: st(f.montserrat, 32, "#853d21", { maxLines: 2, min: 22, lh: 1.3 }), gap: 16 },
+        ],
+      },
+    ],
+  },
+  /* Ayoz (korporativ Yangi yil bazmi): binafsha tungi osmon, yulduzlar, archalar, qor tepaliklari va chokdagi shisha shar (Figma 00;
+   * sarlavha, jamoa, shar yozuvi va chana yashirilgan). Mehmon — osmon tepasida; «Tadbirga taklif» (oltin), tadbir nomi (Yeseva, oq;
+   * uzun bo‘lsa — 2 qator, kichrayadi), kompaniya, sana va joy — osmonda. Matn archa va sharga tegmaydi (ustun ≤ 910) */
+  ayoz: {
+    fill: "#241052",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 185, anchor: "center", w: 900, maxH: 120, items: [{ k: "guest", s: st(f.nunito, 44, "#ffffff", { weight: 600, maxLines: 2, min: 30, lh: 1.2 }) }] },
+      {
+        y: 300,
+        anchor: "top",
+        w: 900,
+        maxH: 620,
+        items: [
+          { k: "kicker", s: st(f.nunito, 34, "#ffd98a", { weight: 700, upper: true, ls: 0.14, min: 20 }) },
+          { k: "names", mode: "two", s: st(f.yeseva, 140, "#ffffff", { min: 60, lh: 1.04 }), gap: 34 },
+          { k: "org", s: st(f.nunito, 50, "#cfc3ee", { weight: 600, maxLines: 2, min: 30, lh: 1.2 }), gap: 26 },
+          { k: "date", s: st(f.nunito, 46, "#ffffff", { weight: 700, min: 30 }), gap: 60 },
+          { k: "venue", s: st(f.nunito, 36, "rgba(207,195,238,.92)", { maxLines: 2, min: 24, lh: 1.3 }), gap: 16 },
         ],
       },
     ],
