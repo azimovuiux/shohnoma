@@ -51,6 +51,7 @@ RewriteRule ^files/(.*)$ api/index.php [QSA,L]
 
 # Maqolalar — server tomonda yig‘iladi (SEO: to‘liq matn va meta JS’siz ham), php/article.php
 RewriteRule ^sitemap-maqolalar\.xml$ article.php?sitemap=1 [L]
+RewriteRule ^sitemap-vizitka\.xml$ card.php?sitemap=1 [L]
 RewriteRule ^(?:(ru|en)/)?maqolalar/$ article.php?lang=$1 [QSA,L]
 RewriteRule ^(?:(ru|en)/)?maqolalar/([^/]+)/$ article.php?lang=$1&slug=$2 [QSA,L]
 # Brauzerdagi o‘tishlar (Next RSC) uchun — maqola qobig‘i

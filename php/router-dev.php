@@ -6,6 +6,7 @@ $root = __DIR__;
 function serve_rsc(string $f): void { header('Content-Type: text/plain; charset=utf-8'); readfile($f); }
 if (preg_match('#^/(api(/|$)|files/)#', $uri)) { require $root . '/api/index.php'; return true; }
 if ($uri !== '/' && is_file($root . $uri)) return false;
+if ($uri === '/sitemap-vizitka.xml') { $_GET['sitemap'] = '1'; require $root . '/card.php'; return true; }
 if ($uri === '/sitemap-maqolalar.xml') { $_GET['sitemap'] = '1'; require $root . '/article.php'; return true; }
 if (preg_match('#^/(?:(ru|en)/)?maqolalar/(?:([^/]+)/)?$#', $uri, $m)) { $_GET['lang'] = $m[1] ?? ''; if (!empty($m[2])) $_GET['slug'] = $m[2]; require $root . '/article.php'; return true; }
 if (preg_match('#^/((?:ru/|en/)?)maqolalar/[a-z0-9-]+/index\.txt$#', $uri, $m)) { serve_rsc($root . '/' . $m[1] . 'maqolalar/_/index.txt'); return true; }

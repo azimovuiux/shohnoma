@@ -87,8 +87,6 @@ function DemoQr({ className = "" }: { className?: string }) {
 
 function Hero() {
   const t = useT();
-  const locale = useLocale();
-  const off = discountPercent(PRICE_OLD, PRICE);
   const [noir, lumen] = [CARD_DESIGNS[0], CARD_DESIGNS[1] ?? CARD_DESIGNS[0]];
   return (
     <section className="relative overflow-hidden bg-bg-base px-5 pb-16 pt-10 lg:px-10 xl:px-[120px] lg:pb-24 lg:pt-16">
@@ -104,11 +102,6 @@ function Hero() {
           <p className="t-body-l max-w-[520px] text-ink-2">
             {t("Ism, lavozim, telefon, ijtimoiy tarmoqlar va kompaniyangiz — bitta chiroyli sahifada. Uchrashuvda QR kodni ko‘rsatasiz, suhbatdoshingiz kontaktingizni bir bosishda telefoniga saqlaydi.")}
           </p>
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="font-serif text-[36px] font-medium leading-none text-maroon">{formatPrice(PRICE, true, locale)}</span>
-            {off > 0 && <s className="t-body-l text-ink-2">{formatPrice(PRICE_OLD, true, locale)}</s>}
-            <span className="w-full t-body-m text-ink-2 sm:w-auto">{t("bir marta to‘lanadi — muddatsiz ishlaydi")}</span>
-          </div>
           <div className="flex flex-col gap-2.5 sm:flex-row">
             <a href="#dizaynlar" className="btn btn-primary">
               {t("Dizaynni tanlash")} <ArrowDown size={16} />

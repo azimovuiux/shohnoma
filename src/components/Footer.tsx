@@ -18,7 +18,7 @@ const columns = [
       { label: "Imkoniyatlar", href: "/#imkoniyatlar" },
       { label: "Savollar", href: "/#savollar" },
       { label: "Maqolalar", href: "/maqolalar/" },
-      { label: "Aloqa", href: "/#aloqa" },
+      { label: "Aloqa", href: "/aloqa/" },
     ],
   },
   {

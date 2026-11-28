@@ -8,6 +8,26 @@ declare(strict_types=1);
 require __DIR__ . '/api/lib/bootstrap.php';
 foreach (glob(__DIR__ . '/api/lib/*.php') as $f) require_once $f;
 
+// /sitemap-vizitka.xml — to‘langan (ochiq) vizitkalar ro‘yxati (Google uchun)
+if (isset($_GET['sitemap'])) {
+    $rows = [];
+    try {
+        $rows = all("SELECT c.slug, c.updated_at FROM cards c JOIN orders o ON o.id = c.order_id WHERE o.status IN ('paid','active') AND c.slug IS NOT NULL AND c.slug <> '' ORDER BY c.updated_at DESC LIMIT 45000");
+    } catch (Throwable $e) {
+        error_log('[card sitemap] ' . $e->getMessage());
+    }
+    header('Content-Type: application/xml; charset=utf-8');
+    header('Cache-Control: public, max-age=3600');
+    $x = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($rows as $r) {
+        if (!preg_match(CARD_SLUG_RE, (string)$r['slug'])) continue;
+        $x .= '<url><loc>' . htmlspecialchars(site_url() . '/v/' . $r['slug'] . '/', ENT_XML1, 'UTF-8') . '</loc>'
+            . ($r['updated_at'] ? '<lastmod>' . substr((string)$r['updated_at'], 0, 10) . '</lastmod>' : '') . "</url>\n";
+    }
+    echo $x . '</urlset>';
+    exit;
+}
+
 $slug = (string)($_GET['slug'] ?? '');
 $lang = in_array($_GET['lang'] ?? '', ['ru', 'en'], true) ? $_GET['lang'] : 'uz';
 $shell = __DIR__ . '/v/_/index.html';
@@ -44,13 +64,15 @@ $designOg = '/og/' . preg_replace('/[^a-z0-9-]/', '', (string)$r['order']['templ
 if (!$image && is_file(__DIR__ . $designOg)) $image = site_url() . $designOg;
 
 $h = fn(string $s) => htmlspecialchars($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-$meta = sprintf('<meta property="og:type" content="profile"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta name="description" content="%s"><meta name="robots" content="noindex">',
-    $h($title), $h($desc), $h($url), $h($desc));
+$meta = sprintf('<meta property="og:type" content="profile"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta name="description" content="%s"><link rel="canonical" href="%s">',
+    $h($title), $h($desc), $h($url), $h($desc), $h($url));
 if ($image) $meta .= sprintf('<meta property="og:image" content="%s"><meta name="twitter:card" content="summary_large_image">', $h($image));
 
 $html = (string)file_get_contents($shell);
 $html = preg_replace('#<title>.*?</title>#s', '<title>' . $h($title) . '</title>', $html, 1);
-$html = preg_replace('#<meta (property|name)="(og:[^"]+|twitter:[^"]+|description)"[^>]*>#', '', $html);
+// Qobiqdagi noindex (/v/_/ uchun) va eski canonical olib tashlanadi — to‘langan vizitka Google’da ochiq
+$html = preg_replace('#<meta (property|name)="(og:[^"]+|twitter:[^"]+|description|robots)"[^>]*>#', '', $html);
+$html = preg_replace('#<link rel="canonical"[^>]*>#', '', $html);
 $html = str_replace('</head>', $meta . '</head>', $html);
 
 header('Content-Type: text/html; charset=utf-8');

@@ -35,11 +35,13 @@ export const RU_TITLES: Record<string, string> = {
   "Test to‘lov": "Тестовая оплата",
   "To‘lov o‘tmadi": "Оплата не прошла",
   "Maxfiylik siyosati": "Политика конфиденциальности",
+  "Aloqa — biz bilan bog‘lanish": "Контакты",
   "Maxsus dizayn — o‘zingizga xos taklifnoma": "Индивидуальный дизайн — приглашение только для вас",
   "Barcha shablonlar": "Все шаблоны",
   "Foydalanish shartlari": "Условия использования",
 };
 export const RU_DESCRIPTIONS: Record<string, string> = {
+  "Telegram, telefon yoki forma orqali yozing — taklifnoma, vizitka yoki to‘lov bo‘yicha savollaringizga tez javob beramiz.": "Напишите в Telegram, позвоните или оставьте заявку — быстро ответим на вопросы о приглашениях, визитках и оплате.",
   "Shohnoma shaxsiy ma’lumotlarni qanday yig‘adi, saqlaydi va himoya qiladi.": "Как Shohnoma собирает, хранит и защищает персональные данные.",
   "Bir necha savolga javob bering — dizaynerimiz g‘oyangizni noldan chizib beradi. Brif bepul, to‘lov faqat eskizni tasdiqlaganingizdan keyin.":
     "Ответьте на несколько вопросов — наш дизайнер нарисует вашу идею с нуля. Бриф бесплатный, оплата — только после утверждения эскиза.",
@@ -88,11 +90,13 @@ export const EN_TITLES: Record<string, string> = {
   "Test to‘lov": "Test payment",
   "To‘lov o‘tmadi": "Payment failed",
   "Maxfiylik siyosati": "Privacy policy",
+  "Aloqa — biz bilan bog‘lanish": "Contact us",
   "Maxsus dizayn — o‘zingizga xos taklifnoma": "Custom design — an invitation made just for you",
   "Barcha shablonlar": "All templates",
   "Foydalanish shartlari": "Terms of use",
 };
 export const EN_DESCRIPTIONS: Record<string, string> = {
+  "Telegram, telefon yoki forma orqali yozing — taklifnoma, vizitka yoki to‘lov bo‘yicha savollaringizga tez javob beramiz.": "Message us on Telegram, call, or use the form — we reply quickly to questions about invitations, business cards and payment.",
   "Shohnoma shaxsiy ma’lumotlarni qanday yig‘adi, saqlaydi va himoya qiladi.": "How Shohnoma collects, stores and protects personal data.",
   "Bir necha savolga javob bering — dizaynerimiz g‘oyangizni noldan chizib beradi. Brif bepul, to‘lov faqat eskizni tasdiqlaganingizdan keyin.":
     "Answer a few questions and our designer will draw your idea from scratch. The brief is free; you pay only after approving the sketch.",

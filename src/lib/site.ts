@@ -14,9 +14,6 @@ export const site = {
 export const mainNav: { label: string; href: string; from?: "xl" | "1440" }[] = [
   { label: "Shablonlar", href: "/shablonlar/" },
   { label: "Vizitka", href: "/vizitka/" },
-  { label: "Qanday ishlaydi", href: "/#qanday-ishlaydi" },
-  { label: "Imkoniyatlar", href: "/#imkoniyatlar", from: "1440" },
-  { label: "Savollar", href: "/#savollar" },
   { label: "Maqolalar", href: "/maqolalar/" },
-  { label: "Aloqa", href: "/#aloqa", from: "xl" },
+  { label: "Aloqa", href: "/aloqa/" },
 ];

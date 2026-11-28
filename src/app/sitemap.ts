@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/vizitka/", freq: "weekly", priority: 0.8 },
     ...CARD_DESIGNS.filter((d) => d.active).map((d) => ({ path: `/vizitka/${d.slug}/`, freq: "monthly" as const, priority: 0.7 })),
     { path: "/maxsus-dizayn/", freq: "monthly", priority: 0.6 },
+    { path: "/aloqa/", freq: "monthly", priority: 0.5 },
     { path: "/shartlar/", freq: "yearly", priority: 0.2 },
     { path: "/maxfiylik/", freq: "yearly", priority: 0.2 },
   ];

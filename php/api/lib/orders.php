@@ -16,7 +16,7 @@ const MORNING_TEMPLATES = ['tong', 'qozon', 'lagan'];
 function template_default_time(string $slug): string { return in_array($slug, MORNING_TEMPLATES, true) ? '06:00' : '18:00'; }
 
 const CEREMONY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ'];
-const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', 'en', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite', 'maqolalar', 'article', 'sitemap-maqolalar-xml', 'v', 'vizitka'];
+const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', 'en', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite', 'maqolalar', 'article', 'sitemap-maqolalar-xml', 'v', 'vizitka', 'aloqa', 'sitemap-vizitka-xml'];
 
 function is_paid_status(string $s): bool { return $s === 'paid' || $s === 'active'; }
 
