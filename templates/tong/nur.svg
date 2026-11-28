@@ -1,0 +1,12 @@
+<svg width="560" height="560" viewBox="0 0 560 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Quyosh &#194;&#183; nur" filter="url(#filter0_f_0_302)">
+<circle cx="280" cy="280" r="180" fill="#F2A65A" fill-opacity="0.35"/>
+</g>
+<defs>
+<filter id="filter0_f_0_302" x="0" y="0" width="560" height="560" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_0_302"/>
+</filter>
+</defs>
+</svg>

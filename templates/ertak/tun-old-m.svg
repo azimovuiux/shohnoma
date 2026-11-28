@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" width="418" height="108.854" viewBox="0 0 418 108.854" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Tepalik &#194;&#183; old" filter="url(#filter0_d_0_136)">
+<path d="M14 98.8538V28.6538C14 28.6538 18.6333 28.3205 27.9 27.6538C37.2333 26.9205 46.5333 26.4538 55.8 26.2538C65.0667 25.9872 74.3333 25.4872 83.6 24.7538C92.9333 24.0205 102.233 22.9872 111.5 21.6538C120.767 20.3872 130.067 19.3538 139.4 18.5538C148.667 17.7538 157.933 17.8205 167.2 18.7538C176.467 19.6872 185.767 21.4872 195.1 24.1538C204.367 26.8205 213.633 29.7205 222.9 32.8538C232.233 35.9205 241.533 38.4205 250.8 40.3538C260.067 42.2205 269.333 43.1538 278.6 43.1538C287.933 43.2205 297.233 42.6872 306.5 41.5538C315.767 40.4872 325.067 39.4872 334.4 38.5538C343.667 37.5538 352.933 36.9205 362.2 36.6538C371.467 36.3205 380.767 36.0205 390.1 35.7538L404 35.2538V98.8538H14Z" fill="#1E5C63"/>
+</g>
+<defs>
+<filter id="filter0_d_0_136" x="0" y="-4.4439e-08" width="418" height="108.854" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="-4"/>
+<feGaussianBlur stdDeviation="7"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.3 0 0 0 0 0.18 0 0 0 0 0.1 0 0 0 0.2 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_136"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_136" result="shape"/>
+</filter>
+</defs>
+</svg>

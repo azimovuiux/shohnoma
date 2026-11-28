@@ -1,0 +1,363 @@
+{
+  "designs": [
+    {
+      "slug": "v-noir",
+      "name": "Noir",
+      "number": 1,
+      "price": 199000,
+      "priceOld": 249000,
+      "description": {
+        "uz": "Qora fon, katta portret va gazeta uslubidagi tipografika. Hamkorlik yo‘nalishlari, raqamlar, kompaniyalar va «kontakt qoldiring» formasi — tadbirkor va rahbarlar uchun.",
+        "ru": "Тёмный фон, крупный портрет и типографика в журнальном стиле. Направления сотрудничества, цифры, компании и форма «оставьте контакт» — для предпринимателей и руководителей.",
+        "en": "Dark background, a large portrait and editorial typography. Partnership areas, key numbers, companies and a “leave your contact” form — for entrepreneurs and executives."
+      },
+      "palette": [
+        "#0E0D0B",
+        "#1A1814",
+        "#C9A36A",
+        "#F2EDE4"
+      ],
+      "dark": true,
+      "sections": [
+        "directions",
+        "stats",
+        "companies",
+        "leadForm",
+        "address"
+      ],
+      "photoSlots": 2,
+      "figma": {
+        "mobile": "552:13115",
+        "laptop": "559:12639",
+        "assets": "545:12620"
+      },
+      "active": true
+    },
+    {
+      "slug": "v-lumen",
+      "name": "Lumen",
+      "number": 2,
+      "price": 199000,
+      "priceOld": 249000,
+      "description": {
+        "uz": "Yorug‘ link sahifa: portret, tezkor tugmalar, ijtimoiy tarmoqlar bentosi va havolalar. Blogerlar, mentorlar va shaxsiy brend uchun.",
+        "ru": "Светлая link-страница: портрет, быстрые кнопки, бенто соцсетей и ссылки. Для блогеров, менторов и личного бренда.",
+        "en": "A bright link page: portrait, quick actions, a social bento grid and links. For creators, mentors and personal brands."
+      },
+      "palette": [
+        "#F6F1EA",
+        "#FFFFFF",
+        "#B4876B",
+        "#2A211C"
+      ],
+      "dark": false,
+      "sections": [
+        "socials",
+        "links"
+      ],
+      "photoSlots": 4,
+      "figma": {
+        "mobile": "570:12661",
+        "laptop": "572:12709",
+        "assets": "568:12666",
+        "motion": "573:12617"
+      },
+      "active": true
+    }
+  ],
+  "fields": [
+    {
+      "key": "fullName",
+      "type": "text",
+      "label": "Ism va familiya",
+      "required": true,
+      "max": 80,
+      "placeholder": "Aziz Karimov"
+    },
+    {
+      "key": "position",
+      "type": "text",
+      "label": "Lavozim",
+      "localized": true,
+      "required": true,
+      "max": 120,
+      "placeholder": "Asoschi va bosh direktor"
+    },
+    {
+      "key": "company",
+      "type": "text",
+      "label": "Kompaniya",
+      "localized": true,
+      "max": 120,
+      "placeholder": "Karimov Group"
+    },
+    {
+      "key": "bio",
+      "type": "textarea",
+      "label": "Qisqa tavsif",
+      "localized": true,
+      "max": 300,
+      "placeholder": "Qurilish, logistika va investitsiyalar.",
+      "hint": "Ism ostida chiqadi — 1–2 jumla"
+    },
+    {
+      "key": "phone",
+      "type": "tel",
+      "label": "Telefon",
+      "required": true,
+      "placeholder": "+998 90 123 45 67"
+    },
+    {
+      "key": "whatsapp",
+      "type": "tel",
+      "label": "WhatsApp",
+      "placeholder": "+998 90 123 45 67",
+      "hint": "Bo‘sh bo‘lsa — telefon raqami"
+    },
+    {
+      "key": "email",
+      "type": "email",
+      "label": "Email",
+      "max": 120,
+      "placeholder": "aziz@karimovgroup.uz"
+    },
+    {
+      "key": "telegram",
+      "type": "text",
+      "label": "Telegram",
+      "max": 64,
+      "placeholder": "@azizkarimov"
+    },
+    {
+      "key": "website",
+      "type": "url",
+      "label": "Veb-sayt",
+      "max": 500,
+      "placeholder": "https://karimovgroup.uz"
+    },
+    {
+      "key": "address",
+      "type": "text",
+      "label": "Manzil",
+      "localized": true,
+      "max": 200,
+      "section": "address",
+      "placeholder": "Toshkent, Amir Temur shoh ko‘chasi, 15"
+    },
+    {
+      "key": "mapUrl",
+      "type": "url",
+      "label": "Xarita havolasi",
+      "max": 500,
+      "section": "address",
+      "placeholder": "https://yandex.uz/maps/…"
+    },
+    {
+      "key": "photos",
+      "type": "image",
+      "label": "Rasmlar",
+      "hint": "Birinchisi — portret (kontakt kartada ham chiqadi)"
+    },
+    {
+      "key": "logo",
+      "type": "image",
+      "label": "Logotip"
+    },
+    {
+      "key": "leadForm",
+      "type": "toggle",
+      "label": "«Kontakt qoldiring» formasi",
+      "section": "leadForm",
+      "hint": "Mehmonlar ism va raqamini qoldiradi — sizga Telegram orqali keladi"
+    },
+    {
+      "key": "directions",
+      "type": "list",
+      "label": "Hamkorlik yo‘nalishlari",
+      "section": "directions",
+      "min": 0,
+      "max": 6,
+      "item": {
+        "title": {
+          "type": "text",
+          "label": "Yo‘nalish",
+          "localized": true,
+          "required": true,
+          "max": 60,
+          "placeholder": "Investitsiya"
+        },
+        "text": {
+          "type": "textarea",
+          "label": "Izoh",
+          "localized": true,
+          "max": 160,
+          "placeholder": "Qurilish va agro loyihalarga sheriklik"
+        }
+      }
+    },
+    {
+      "key": "stats",
+      "type": "list",
+      "label": "Raqamlar",
+      "section": "stats",
+      "min": 0,
+      "max": 6,
+      "item": {
+        "value": {
+          "type": "text",
+          "label": "Raqam",
+          "required": true,
+          "max": 12,
+          "placeholder": "$40M+"
+        },
+        "label": {
+          "type": "text",
+          "label": "Izoh",
+          "localized": true,
+          "required": true,
+          "max": 48,
+          "placeholder": "amalga oshirilgan loyihalar"
+        }
+      }
+    },
+    {
+      "key": "companies",
+      "type": "list",
+      "label": "Kompaniyalar",
+      "section": "companies",
+      "min": 0,
+      "max": 6,
+      "item": {
+        "name": {
+          "type": "text",
+          "label": "Nomi",
+          "required": true,
+          "max": 60,
+          "placeholder": "Karimov Group"
+        },
+        "period": {
+          "type": "text",
+          "label": "Davr va rol",
+          "localized": true,
+          "max": 60,
+          "placeholder": "2009 — hozir · Asoschi"
+        },
+        "text": {
+          "type": "textarea",
+          "label": "Tavsif",
+          "localized": true,
+          "max": 240
+        },
+        "url": {
+          "type": "url",
+          "label": "Sayt",
+          "max": 500
+        }
+      }
+    },
+    {
+      "key": "socials",
+      "type": "list",
+      "label": "Ijtimoiy tarmoqlar",
+      "section": "socials",
+      "min": 0,
+      "max": 10,
+      "item": {
+        "kind": {
+          "type": "select",
+          "label": "Tarmoq",
+          "required": true,
+          "options": [
+            "instagram",
+            "telegram",
+            "linkedin",
+            "facebook",
+            "youtube",
+            "tiktok",
+            "x",
+            "whatsapp",
+            "website"
+          ]
+        },
+        "url": {
+          "type": "url",
+          "label": "Havola",
+          "required": true,
+          "max": 500,
+          "placeholder": "https://instagram.com/…"
+        },
+        "handle": {
+          "type": "text",
+          "label": "Nik",
+          "max": 60,
+          "placeholder": "@madina.rahimova"
+        },
+        "title": {
+          "type": "text",
+          "label": "Sarlavha",
+          "localized": true,
+          "max": 120,
+          "hint": "Masalan, YouTube video nomi"
+        },
+        "note": {
+          "type": "text",
+          "label": "Izoh",
+          "localized": true,
+          "max": 60,
+          "placeholder": "48,2K obunachi"
+        }
+      }
+    },
+    {
+      "key": "links",
+      "type": "list",
+      "label": "Havolalar",
+      "section": "links",
+      "min": 0,
+      "max": 10,
+      "item": {
+        "title": {
+          "type": "text",
+          "label": "Sarlavha",
+          "localized": true,
+          "required": true,
+          "max": 80,
+          "placeholder": "Konsultatsiyaga yozilish"
+        },
+        "subtitle": {
+          "type": "text",
+          "label": "Izoh",
+          "localized": true,
+          "max": 120,
+          "placeholder": "45 daqiqalik onlayn uchrashuv"
+        },
+        "url": {
+          "type": "url",
+          "label": "Havola",
+          "required": true,
+          "max": 500
+        },
+        "icon": {
+          "type": "select",
+          "label": "Belgi",
+          "options": [
+            "arrow",
+            "calendar",
+            "book",
+            "globe",
+            "download",
+            "pin"
+          ]
+        }
+      }
+    }
+  ],
+  "limits": {
+    "photos": 6,
+    "leadName": 80,
+    "leadCompany": 120,
+    "leadContact": 120,
+    "leadPurpose": 40,
+    "leadMessage": 1000
+  }
+}
