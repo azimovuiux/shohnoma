@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "@/components/LocalLink";
-import { useLocale, useT } from "@/lib/i18n";
+import { useT } from "@/lib/i18n";
 import {
   Add,
   ArrowDown,
@@ -16,22 +16,18 @@ import {
   PlayCircle,
   Scan,
   Send2,
-  TickCircle,
   UserAdd,
   WalletCheck,
 } from "@/components/icons";
 import { TelegramIcon } from "@/components/TelegramIcon";
 import { site } from "@/lib/site";
 import { qrDataUrl } from "@/lib/qr";
-import { discountPercent, formatPrice } from "@/lib/format";
 import { CARD_DESIGNS } from "@/lib/cards";
 import { CARD_PAGES } from "@/lib/cardTypes";
 import { SectionTitle } from "@/components/home/SectionTitle";
 import { CardPhoneShot } from "./shared";
 import { DesignCard } from "./DesignCard";
 
-const PRICE = CARD_DESIGNS[0].price;
-const PRICE_OLD = CARD_DESIGNS[0].priceOld;
 
 const features = [
   { icon: Scan, title: "QR kod", text: "Har bir vizitkaga QR kod beriladi. Uni qog‘oz vizitkaga, stol ustidagi tablichkaga yoki taqdimot slaydiga qo‘ying — telefon kamerasi bilan skanerlash kifoya." },
@@ -208,47 +204,11 @@ function Designs() {
   );
 }
 
-function Pricing() {
-  const t = useT();
-  const locale = useLocale();
-  const off = discountPercent(PRICE_OLD, PRICE);
-  return (
-    <section id="narx" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[110px]">
-      <div data-reveal="up" className="mx-auto grid max-w-[1200px] overflow-hidden rounded-[28px] bg-maroon-deep text-ink-inverse lg:grid-cols-[1fr_1.1fr]">
-        <div className="flex flex-col gap-5 p-7 sm:p-10 lg:p-14">
-          <span className="t-nav text-[#e2c48c]">{t("Narxi")}</span>
-          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
-            <span className="font-serif text-[48px] font-light leading-none sm:text-[64px]">{formatPrice(PRICE, true, locale)}</span>
-            {off > 0 && (
-              <>
-                <s className="t-body-l opacity-70">{formatPrice(PRICE_OLD, true, locale)}</s>
-                <span className="rounded-full bg-[#e2c48c] px-2.5 py-1 t-body-s font-semibold text-maroon-deep">−{off}%</span>
-              </>
-            )}
-          </div>
-          <p className="t-body-l max-w-[420px] opacity-85">{t("Bir martalik to‘lov. Oylik obuna yo‘q — vizitka muddatsiz ishlaydi.")}</p>
-          <a href="#dizaynlar" className="btn mt-2 w-full bg-ink-inverse text-maroon-deep hover:bg-white sm:w-fit">
-            {t("Dizaynni tanlash")} <ArrowRight size={16} />
-          </a>
-        </div>
-        <ul className="flex flex-col gap-3.5 border-t border-white/10 p-7 sm:p-10 lg:border-l lg:border-t-0 lg:p-14">
-          {included.map((s) => (
-            <li key={s} className="flex items-start gap-3 t-body-l">
-              <TickCircle size={20} className="mt-0.5 shrink-0 text-[#e2c48c]" />
-              <span>{t(s)}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
 function Questions() {
   const [open, setOpen] = useState(0);
   const t = useT();
   return (
-    <section id="savollar" className="scroll-mt-20 bg-bg-soft px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[110px]">
+    <section id="savollar" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[110px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-10 lg:flex-row lg:gap-20">
         <div data-reveal="stagger" className="flex shrink-0 flex-col gap-[22px] lg:w-[400px]">
           <SectionTitle plain="Ko‘p so‘raladigan" italic="savollar" stacked />
@@ -289,7 +249,6 @@ export function VizitkaLanding() {
       <Designs />
       <Features />
       <Steps />
-      <Pricing />
       <Questions />
     </>
   );
