@@ -1,0 +1,1049 @@
+/*
+ * Poyezd — korporativ Yangi yil bazmi taklifnomasi («qishki ertak qishlog‘i»): tungi ko‘k #2b4087 (chuqur #172452), muzli #edf2fc,
+ * oltin #d9b26b (gradient #f7e5bd → #d9b26b), siyoh #1a2447 (Figma 652:27785 mobil, 653:27740 laptop; «32 · Ertak — Assets» 652:27714).
+ * Shriftlar: Old Standard TT 400 / 400 Italic + Raleway 400–700 — lotin va kirill (public/templates/poyezd/fonts, @fontsource woff2).
+ * Birlik `--u`: kontent ustuni (mobil 390; laptopda ustun = mobil × 1.2). Ochilish = hero (390×1040 / 1440×1248), faqat scroll bilan
+ * (--o: 0…1): qishloq qatlamlari parallaks bilan ko‘tariladi, tepaliklar scrollga yopishgan, keyingi bo‘lim ostidan chiqadi, poyezd kirib
+ * keladi. Bo‘limlar: har element alohida paydo bo‘ladi; ramka chiziladi; galereya maska bilan ochiladi; taymer plitkalari, raqamlar
+ * varaqlanadi; final (--fc) — vagon suzib keladi, archa o‘sadi, poyezd kiradi. Hamma rasmlar Normal blend (fonsiz PNG → webp).
+ */
+@font-face {
+  font-family: "Poyezd Old Standard";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/old-standard-tt-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Poyezd Old Standard";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/old-standard-tt-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Poyezd Old Standard";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/old-standard-tt-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Poyezd Old Standard";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/old-standard-tt-cyrillic-400-italic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Poyezd Old Standard";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/old-standard-tt-latin-ext-400-italic.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Poyezd Old Standard";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/old-standard-tt-latin-400-italic.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-cyrillic-400-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-ext-400-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-cyrillic-500-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-ext-500-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-500-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-cyrillic-600-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-ext-600-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-cyrillic-700-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-ext-700-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Poyezd Raleway";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/templates/poyezd/fonts/raleway-latin-700-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --navy: #2b4087;
+  --deep: #172452;
+  --top: #1c2e6b;
+  --low: #8fa3db;
+  --ice: #edf2fc;
+  --gold: #d9b26b;
+  --gold-hi: #f7e5bd;
+  --ink: #1a2447;
+  --muted: #6b7894;
+  --sh-loader-a: #2b4087;
+  --sh-loader-b: #172452;
+  --sh-ring: rgba(217, 178, 107, 0.55);
+  position: relative;
+  container-type: inline-size;
+  background: var(--deep);
+  color: #fff;
+  font-family: "Poyezd Raleway", system-ui, sans-serif;
+  overflow: clip;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+/* bo‘limlar orasidagi (ochilish choki) fon — oq: tepaliklar va keyingi bo‘lim oq foni bilan bir xil */
+.flow {
+  position: relative;
+  background: #fff;
+}
+.os,
+.osi {
+  font-family: "Poyezd Old Standard", Georgia, serif;
+  font-weight: 400;
+}
+.osi {
+  font-style: italic;
+}
+.r4,
+.r5,
+.r6,
+.r7 {
+  font-family: "Poyezd Raleway", system-ui, sans-serif;
+}
+.r4 {
+  font-weight: 400;
+}
+.r5 {
+  font-weight: 500;
+}
+.r6 {
+  font-weight: 600;
+}
+.r7 {
+  font-weight: 700;
+}
+.clamp2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.svg {
+  position: absolute;
+  display: block;
+  overflow: visible;
+}
+/* oltin gradient matn (Figma #F7E5BD → #D9B26B); `shimmer` — ustidan yorug‘lik bir marta o‘tadi */
+.gold {
+  display: inline-block;
+  padding: 0.1em 0.06em 0.18em;
+  margin: -0.1em -0.06em -0.18em;
+  background-image: linear-gradient(180deg, var(--gold-hi) 12%, var(--gold) 88%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.shimmer {
+  background-image:
+    linear-gradient(100deg, transparent 38%, rgba(255, 252, 240, 0.95) 50%, transparent 62%),
+    linear-gradient(180deg, var(--gold-hi) 12%, var(--gold) 88%);
+  background-size:
+    260% 100%,
+    100% 100%;
+  background-repeat: no-repeat;
+  background-position:
+    160% 0,
+    0 0;
+}
+.gateWrap:not(.still) .shimmer {
+  animation: shimmer 2.5s 1.1s cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+@keyframes shimmer {
+  from {
+    background-position:
+      160% 0,
+      0 0;
+  }
+  to {
+    background-position:
+      -60% 0,
+      0 0;
+  }
+}
+
+/* ── Bezaklar ── */
+.art {
+  position: absolute;
+  pointer-events: none;
+}
+.artMove {
+  position: absolute;
+  inset: 0;
+  translate: 0 var(--py, 0px);
+}
+.art .img {
+  object-fit: cover;
+}
+.sideLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.snow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.snowL {
+  transform: translateX(-100%) scaleX(-1);
+}
+.snowR {
+  transform: translateX(100%) scaleX(-1);
+}
+.snow > span {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+}
+.star {
+  position: absolute;
+  fill: #f7e6bd;
+  opacity: 0.9;
+  overflow: visible;
+}
+.rope {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+.hills {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.hills > span {
+  position: absolute;
+  border-radius: 50%;
+}
+.hills > i {
+  position: absolute;
+  left: -100cqw;
+  right: -100cqw;
+  background: #fff;
+}
+/* oltin archa chiroqlari — sekin miltillaydi (archa o‘zi tebranmaydi) */
+.lights {
+  position: absolute;
+  inset: 0;
+}
+.light {
+  position: absolute;
+  width: 6%;
+  aspect-ratio: 1;
+  margin: -3% 0 0 -3%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 246, 214, 0.95) 0%, rgba(255, 214, 130, 0.55) 35%, rgba(255, 200, 110, 0) 70%);
+  opacity: 0;
+  animation: twinkle 3.2s var(--ld, 0s) ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+}
+
+/* ── Bo‘lim: to‘liq enli fon, markazda kontent ustuni ── */
+.sec {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.white {
+  background: #fff;
+  color: var(--ink);
+}
+.navy {
+  background: var(--navy);
+  color: #fff;
+}
+.deep {
+  background: var(--deep);
+  color: #fff;
+}
+.ice {
+  background: var(--ice);
+  color: var(--ink);
+}
+/* Figma: #1C2E6B → #8FA3DB yuqoridan pastga (taymer va final) */
+.sky {
+  background: linear-gradient(180deg, var(--top) 0%, var(--low) 100%);
+  color: #fff;
+}
+.col {
+  position: relative;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+/* ── Reveal (har element alohida) ── */
+.root [data-a] {
+  transition-property: opacity, transform, filter, clip-path;
+  transition-duration: var(--t, 1s);
+  transition-timing-function: var(--e, var(--ease));
+  transition-delay: var(--d, 0s);
+}
+.root [data-a="up"]:not([data-in]) {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(calc(var(--u) * 18));
+}
+.root [data-a="rise"] {
+  --t: 1.3s;
+}
+.root [data-a="rise"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 40));
+}
+.root [data-a="star"] {
+  --t: 0.9s;
+  --e: var(--spring);
+}
+.root [data-a="star"]:not([data-in]) {
+  opacity: 0;
+  transform: scale(0.3) rotate(-45deg);
+}
+/* osma vagon — o‘ngdan suzib keladi (to‘xtaydi, tebranmaydi) */
+.root [data-a="glide"] {
+  --t: 1.6s;
+}
+.root [data-a="glide"]:not([data-in]) {
+  opacity: 0;
+  transform: translate(calc(var(--u) * 60), calc(var(--u) * -15));
+}
+.root [data-a="zoom"] {
+  --t: 1.2s;
+}
+.root [data-a="zoom"]:not([data-in]) {
+  opacity: 0;
+}
+.zoomImg {
+  transition: transform 1.8s var(--ease) var(--d, 0s);
+}
+.root [data-a]:not([data-in]) .zoomImg {
+  transform: scale(1.05);
+}
+
+/* ═════ 00 · Ochilish = Hero ═════
+ * JS faqat --o (0…1, scrollga yopishgan) ni `.gateWrap` ga va --go ni `.flow` ga yozadi. Vaqt chizig‘i — TSX’dagi izohda. */
+.gateWrap,
+.gateHold {
+  position: relative;
+  z-index: 20;
+  width: 100%;
+  --o: 0;
+}
+/* sahna (100svh) + hero balandligicha scroll; keyingi bo‘lim shu masofaga yuqoriga suriladi (chok doim tepaliklar ostida) */
+.gateWrap {
+  height: calc(100svh + var(--u) * var(--lift));
+  margin-bottom: calc(var(--u) * var(--lift) * -1);
+}
+.gateHold {
+  height: 100svh;
+  background: var(--top);
+}
+.gate {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform: translate3d(0, calc(var(--o) * var(--u) * var(--lift) * var(--k) * -1), 0);
+}
+.gSky {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: -100svh;
+  background: linear-gradient(180deg, var(--top) calc(100% - var(--hh)), var(--low) 100%);
+}
+.hTitle {
+  margin: 0;
+}
+.pill {
+  background: rgba(247, 229, 189, 0.92);
+  color: #172452;
+  text-align: center;
+  overflow: hidden;
+}
+.gIn {
+  display: block;
+}
+.gateWrap:not(.still) .gIn {
+  animation: gIn 1.1s var(--gd, 0s) var(--ease) both;
+}
+@keyframes gIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 14));
+  }
+}
+/* sana pilyulasi — kattalashib chiqadi */
+.gateWrap:not(.still) .gPop {
+  animation: gPop 0.9s 0.7s var(--spring) both;
+}
+@keyframes gPop {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+.gateWrap:not(.still) .gStar {
+  animation: gStar 1.2s calc(0.3s + var(--d, 0s)) var(--spring) both;
+}
+@keyframes gStar {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-45deg);
+  }
+}
+/* osma vagon: yuklanganda arqon bo‘ylab o‘ngdan suzib keladi; scrollda arqon bo‘ylab chapga suzadi */
+.gCar {
+  position: absolute;
+  inset: 0;
+  transform: translate(calc(var(--o) * var(--cx)), calc(var(--o) * var(--cy)));
+}
+.gateWrap:not(.still) .gCarIn {
+  animation: gCar 2.2s 0.4s cubic-bezier(0.25, 0.8, 0.3, 1) both;
+}
+@keyframes gCar {
+  from {
+    opacity: 0;
+    transform: translate(calc(var(--u) * 120), calc(var(--u) * -30));
+  }
+  25% {
+    opacity: 1;
+  }
+}
+/* uychalar va archalar — ko‘tariladi */
+.gateWrap:not(.still) .gRise {
+  animation: gRise 1.3s 0.35s var(--ease) both;
+}
+.gateWrap:not(.still) .gD1 {
+  animation-delay: 0.45s;
+}
+.gateWrap:not(.still) .gD2 {
+  animation-delay: 0.55s;
+}
+.gateWrap:not(.still) .gD3 {
+  animation-delay: 0.65s;
+}
+@keyframes gRise {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 26));
+  }
+}
+/* oltin archa — pastdan o‘sib chiqadi */
+.gateWrap:not(.still) .gTree {
+  animation: gTree 1.4s 0.2s var(--ease) both;
+}
+@keyframes gTree {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+    transform-origin: 50% 100%;
+  }
+  to {
+    transform-origin: 50% 100%;
+  }
+}
+/* yog‘ayotgan qor — juda yengil fon (3 qatlam: o‘lcham va tezlik har xil) */
+.fall {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.fall > span {
+  position: absolute;
+  top: -10px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  animation: fall var(--fd) var(--fdl) linear infinite;
+}
+@keyframes fall {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  8% {
+    opacity: var(--fo);
+  }
+  85% {
+    opacity: var(--fo);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--sw), 102svh);
+  }
+}
+/* mokap/poster ichida — harakatsiz birinchi kadr */
+.still * {
+  animation: none !important;
+}
+
+/* ═════ 01 · Taklif ═════ */
+/* o‘yinchoq poyezd — ochilishda chapdan kirib keladi (--go: 0…1, ochilish sahnasidan; mokapda — joyida) */
+.seamTrain {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  --gp: clamp(0, (var(--go, 1) - 0.12) / 0.7, 1);
+  --ge: calc(1 - (1 - var(--gp)) * (1 - var(--gp)) * (1 - var(--gp)));
+  transform: translateX(calc((1 - var(--ge)) * -110cqw));
+}
+.seamTrain .img {
+  object-fit: cover;
+}
+.hlBar {
+  display: inline-block;
+  vertical-align: -0.12em;
+  background: var(--gold);
+}
+.dateCard {
+  background: var(--ice);
+}
+
+/* ═════ 02 · Jamoa surati ═════ */
+.frame rect {
+  fill: none;
+  stroke: rgba(247, 229, 189, 0.6);
+  stroke-width: 1.2;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.8s cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0s);
+}
+.root [data-a="frame"]:not([data-in]) rect {
+  stroke-dashoffset: 1;
+}
+.photo {
+  position: absolute;
+  overflow: hidden;
+  background: var(--deep);
+  isolation: isolate;
+}
+.root [data-a="photo"] {
+  --t: 1.3s;
+  clip-path: inset(0 0 0 0 round calc(var(--u) * 26));
+}
+.root [data-a="photo"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 40));
+  clip-path: inset(100% 0 0 0 round calc(var(--u) * 26));
+}
+/* Figma: surat 345.8 × 438, x −19.9 (306 kenglikdagi qutida) */
+.teamImg {
+  position: absolute;
+  top: 0;
+  left: -6.5%;
+  width: 113%;
+  height: 100%;
+}
+
+/* ═════ 03 · Dastur ═════ */
+.pRow {
+  background: #fff;
+  gap: 0;
+}
+.ptime {
+  flex: none;
+  white-space: nowrap;
+}
+
+/* ═════ 04 · Bir yillik lahzalar ═════ */
+.gal {
+  position: relative;
+  overflow: hidden;
+  background: var(--deep);
+  isolation: isolate;
+  clip-path: inset(0 0 0 0);
+}
+.root [data-a="gal"] {
+  --t: 1.1s;
+}
+.root [data-a="gal"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 40));
+  clip-path: inset(0 0 100% 0);
+}
+.galImg {
+  position: absolute;
+  inset: 0;
+}
+/* Figma: kichik suratlar 198.5 × 250, x −16.3 (166 kenglikdagi qutida) */
+.galImgT {
+  left: -9.8%;
+  width: 119.6%;
+}
+
+/* ═════ 05 · Taymer — muzli plitkalar ═════ */
+.tile {
+  position: relative;
+  flex: none;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.14);
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.root [data-a="tile"] {
+  --t: 1.1s;
+}
+.root [data-a="tile"]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(calc(var(--u) * 24)) scale(0.94);
+}
+.digits {
+  display: inline-flex;
+  padding: 0.14em 0.06em 0.3em;
+  margin: -0.14em -0.06em -0.3em;
+}
+.slot {
+  display: inline-block;
+  perspective: 6em;
+}
+/* o‘zgargan raqam — yuqoridan varaqlanadi (rotateX −70° → 0); shaffoflik yo‘q, padded «0» hech qachon yo‘qolmaydi */
+.tick {
+  display: inline-block;
+  will-change: transform;
+  transform-origin: 50% 0;
+  animation: tick 0.55s var(--ease);
+}
+@keyframes tick {
+  from {
+    transform: rotateX(-70deg);
+  }
+}
+
+/* ═════ Tugmalar ═════ */
+.btnWhite,
+.btnNavy,
+.btnLine {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  transition:
+    transform 0.4s var(--spring),
+    background 0.3s var(--ease);
+}
+.btnWhite {
+  background: #fff;
+  color: var(--navy);
+}
+.btnNavy {
+  background: var(--navy);
+  color: #fff;
+}
+.btnWhite:hover,
+.btnNavy:hover {
+  transform: translateY(-2px);
+}
+.btnLine {
+  border-style: solid;
+  border-color: var(--navy);
+  color: var(--navy);
+  background: transparent;
+}
+.btnLine:hover {
+  transform: translateY(-2px);
+  background: rgba(43, 64, 135, 0.06);
+}
+
+/* ═════ 06 · Manzil ═════ */
+.seamCar {
+  z-index: 4;
+}
+
+/* ═════ 07 · Dress-kod ═════ */
+.dressCard {
+  background: #fff;
+}
+
+/* ═════ 08 · Anketa ═════ */
+.card {
+  background: var(--ice);
+  color: var(--ink);
+}
+.lbl {
+  color: var(--navy);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: box-shadow 0.3s var(--ease);
+}
+.field:focus-within {
+  box-shadow: inset 0 0 0 1px rgba(43, 64, 135, 0.45);
+}
+.input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--ink);
+  padding: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.input::placeholder {
+  color: rgba(26, 36, 71, 0.45);
+  opacity: 1;
+}
+.choice {
+  position: relative;
+  min-width: 0;
+  text-align: center;
+  border-style: solid;
+  border-color: var(--navy);
+  color: var(--navy);
+  background: transparent;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.choice[aria-checked="true"] {
+  background: var(--navy);
+  color: #fff;
+}
+/* «Kelaman» — oltin uchqunlar sochiladi */
+.sparks {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.spark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(var(--u) * 7);
+  height: calc(var(--u) * 7);
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  animation: spark 0.9s var(--pd, 0s) cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+.spark:nth-child(even) {
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(43, 64, 135, 0.25);
+}
+@keyframes spark {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--px) * var(--u) * 64), calc(-50% + var(--py) * var(--u) * 44)) scale(1);
+  }
+}
+.counter {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: #fff;
+}
+.step {
+  border: 0;
+  color: var(--navy);
+  background: transparent;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+/* Figma: «−» ham to‘liq rangda (1 dan kam bo‘lmaydi — bosilmaydi) */
+.step:disabled {
+  cursor: default;
+}
+.submit {
+  background: var(--gold);
+  color: #fff;
+  transition: transform 0.4s var(--spring);
+}
+.submit:hover {
+  transform: translateY(-2px);
+}
+.thanks {
+  animation: thanks 1s 0.1s var(--ease) both;
+}
+@keyframes thanks {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--u) * 12));
+  }
+}
+.thanksTree {
+  object-fit: contain;
+  animation: gTree 1.2s var(--ease) both;
+}
+
+/* ═════ 09 · Final — scroll bilan (--fc: 0 … 1 = Figma kadri; sahifa oxirigacha albatta tugaydi) ═════ */
+.finalWrap {
+  --fc: 0;
+}
+/* matn pastdan chiqadi */
+.fUp {
+  --fu: clamp(0, (var(--fc) - var(--fk) * 0.08) / 0.28, 1);
+  opacity: var(--fu);
+  transform: translateY(calc((1 - var(--fu)) * var(--u) * 30));
+}
+/* osma vagon — arqon bo‘ylab chapdan o‘ngga suzib keladi */
+.fCar {
+  position: absolute;
+  inset: 0;
+  --fv: clamp(0, (var(--fc) - 0.1) / 0.75, 1);
+  --fe: calc(1 - (1 - var(--fv)) * (1 - var(--fv)) * (1 - var(--fv)));
+  transform: translate(calc((1 - var(--fe)) * var(--cx)), calc((1 - var(--fe)) * var(--cy)));
+}
+/* uychalar va archalar — navbat bilan ko‘tariladi */
+.fRise {
+  position: absolute;
+  inset: 0;
+  --fr: clamp(0, (var(--fc) - 0.2 - var(--fk) * 0.06) / 0.45, 1);
+  --fe: calc(1 - (1 - var(--fr)) * (1 - var(--fr)));
+  opacity: clamp(0, var(--fr) * 4, 1);
+  transform: translateY(calc((1 - var(--fe)) * var(--u) * 40));
+}
+/* oltin archa — pastdan o‘sadi */
+.fTree {
+  position: absolute;
+  inset: 0;
+  --ft: clamp(0, (var(--fc) - 0.3) / 0.45, 1);
+  --fe: calc(1 - (1 - var(--ft)) * (1 - var(--ft)) * (1 - var(--ft)));
+}
+.fTree .art {
+  opacity: clamp(0, var(--ft) * 5, 1);
+  transform: scale(calc(0.8 + 0.2 * var(--fe)));
+  transform-origin: 50% 100%;
+}
+/* o‘yinchoq poyezd — archa oldidan chapdan kirib keladi */
+.fTrain {
+  position: absolute;
+  inset: 0;
+  --fp: clamp(0, (var(--fc) - 0.45) / 0.55, 1);
+  --fe: calc(1 - (1 - var(--fp)) * (1 - var(--fp)) * (1 - var(--fp)));
+  transform: translateX(calc((1 - var(--fe)) * -110cqw));
+}
+
+/* ═════ Musiqa tugmasi (Figma: oq doira 52, oltin hoshiya 1.5, 4 ta ko‘k chiziq) ═════ */
+.music {
+  position: fixed;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(23, 36, 82, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  animation: musicIn 0.8s 1.2s var(--ease) both;
+}
+@keyframes musicIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+.musicEmbedded {
+  position: absolute;
+}
+.bar {
+  display: block;
+  width: 3px;
+  height: var(--h);
+  border-radius: 1.5px;
+  background: var(--navy);
+  transition: height 0.3s var(--ease);
+}
+.music:not(.playing) .bar {
+  height: 4px;
+}
+.music.playing .bar {
+  animation: eq 0.9s ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.27s);
+}
+@keyframes eq {
+  to {
+    transform: scaleY(0.45);
+  }
+}
+
+.footer {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  background: var(--deep);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fall,
+  .lights {
+    display: none;
+  }
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

@@ -45,6 +45,10 @@ import { LaganSite } from "@/components/templates/lagan/LaganSite";
 import { OltinSite } from "@/components/templates/oltin/OltinSite";
 import { XotiraSite } from "@/components/templates/xotira/XotiraSite";
 import { GulshanSite } from "@/components/templates/gulshan/GulshanSite";
+import { ArchaSite } from "@/components/templates/archa/ArchaSite";
+import { QirmizSite } from "@/components/templates/qirmiz/QirmizSite";
+import { AyozSite } from "@/components/templates/ayoz/AyozSite";
+import { PoyezdSite } from "@/components/templates/poyezd/PoyezdSite";
 
 /* ── Fon musiqasi: avtomatik yoqilmaydi; trek bo‘lmasa tugma ko‘rinmaydi ── */
 function useMusic(url: string | null, enabled: boolean) {
@@ -75,7 +79,7 @@ function useMusic(url: string | null, enabled: boolean) {
  * Taklifnoma tili — mijoz tanlagan `extra.lang` (bo‘lmasa sahifa tili); ichidagi hamma komponent useT() bilan shu tilda.
  */
 /** Kodda yozilgan dizaynlar — yangi shablon qo‘shilganda shu ro‘yxatga ham qo‘shiladi */
-const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira", "gulshan"] as const;
+const CUSTOM = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira", "gulshan", "archa", "qirmiz", "ayoz", "poyezd"] as const;
 
 export function InvitationSite(props: InvitationSiteProps) {
   const lang = inviteLang(props.data.extra, useLocale());
@@ -141,6 +145,14 @@ export function InvitationSite(props: InvitationSiteProps) {
         <XotiraSite {...props} />
       ) : ds === "gulshan" ? (
         <GulshanSite {...props} />
+      ) : ds === "archa" ? (
+        <ArchaSite {...props} />
+      ) : ds === "qirmiz" ? (
+        <QirmizSite {...props} />
+      ) : ds === "ayoz" ? (
+        <AyozSite {...props} />
+      ) : ds === "poyezd" ? (
+        <PoyezdSite {...props} />
       ) : stale ? (
         <StaleReload slug={props.template.slug} />
       ) : (
