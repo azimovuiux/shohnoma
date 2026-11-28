@@ -133,7 +133,7 @@ function Hero() {
 function Features() {
   const t = useT();
   return (
-    <section id="imkoniyatlar" className="scroll-mt-20 bg-bg-soft px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[110px]">
+    <section id="imkoniyatlar" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[110px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:gap-16">
         <div data-reveal="stagger" className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
           <SectionTitle plain="Vizitkada" italic="nimalar bor" />
@@ -143,7 +143,7 @@ function Features() {
           {features.map((f) => {
             const Icon = f.icon;
             return (
-              <li key={f.title} className="flex flex-col gap-4 rounded-card bg-bg-base p-6 lg:p-7">
+              <li key={f.title} className="flex flex-col gap-4 rounded-card bg-bg-soft p-6 lg:p-7">
                 <span className="flex size-12 items-center justify-center rounded-full bg-gold-soft text-maroon">
                   <Icon size={22} />
                 </span>
@@ -161,7 +161,7 @@ function Features() {
 function Steps() {
   const t = useT();
   return (
-    <section id="qanday-ishlaydi" className="scroll-mt-20 bg-bg-base px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[110px]">
+    <section id="qanday-ishlaydi" className="scroll-mt-20 bg-bg-soft px-5 py-20 lg:px-10 xl:px-[120px] lg:py-[110px]">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:gap-16">
         <div data-reveal="stagger">
           <SectionTitle plain="Qanday" italic="ishlaydi" />
@@ -286,8 +286,8 @@ export function VizitkaLanding() {
   return (
     <>
       <Hero />
-      <Features />
       <Designs />
+      <Features />
       <Steps />
       <Pricing />
       <Questions />
