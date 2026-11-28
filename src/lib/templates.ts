@@ -1176,6 +1176,43 @@ const builtin: Template[] = [
       { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Yashil yoki pushti rangdagi kechki libos — gullar bilan uyg‘un.", max: 160 },
     ],
   },
+  {
+    number: 29,
+    slug: "archa",
+    name: "Archa",
+    ceremony: "korporativ",
+    ceremonies: ["korporativ"],
+    style: "zamonaviy",
+    priceOld: 249000,
+    price: 199000,
+    featured: false,
+    description: "Kompaniyaning Yangi yil bazmi uchun taklifnoma. Ranglari — to‘q ko‘k, oq, qizil va kumush, bezaklari — archa sharlari, qor uchqunlari, archa shoxi va sovg‘a qutilari. Sahifa ochilganda sharlar ipda yuqoridan tushib keladi va katta «2027» yozuvi chiqadi; pastga surganingizda sharlar yuqoriga tortib olinadi. Keyin jamoa surati, hamkasblarga murojaat, kun dasturi, «Jamoamiz bilan bir yil» suratlari, bazmgacha sanoq, sovg‘a almashinuvi, manzil, dress-kod va ishtirokni tasdiqlash anketasi; oxirida «Ko‘rishguncha, 2027!».",
+    descriptionRu: "Приглашение на новогодний корпоратив компании. Цвета — тёмно-синий, белый, красный и серебро, украшения — ёлочные шары, снежинки, еловая ветка и подарочные коробки. При открытии страницы шары спускаются сверху на нитях и появляется крупная надпись «2027»; когда вы листаете вниз, шары поднимаются обратно. Дальше — фото команды, обращение к коллегам, программа дня, фото «Год вместе с командой», отсчёт до праздника, обмен подарками, адрес, дресс-код и анкета для подтверждения участия; в конце — «До встречи в 2027!».",
+    descriptionEn: "An invitation to a company New Year party. The colours are deep navy, white, red and silver, with Christmas baubles, snowflakes, a fir branch and gift boxes as decoration. When the page opens, baubles drop down on their strings and a large “2027” appears; as you scroll down, the baubles are pulled back up. Then a team photo, a greeting to colleagues, the day’s schedule, “A year with our team” photos, a countdown to the party, the gift exchange, the venue, the dress code and an RSVP form; at the end, “See you in 2027!”.",
+    palette: ["#0C1633", "#D92F38", "#C9D1DE", "#FFFFFF"],
+    sample: { a: "Yangi yil bazmi", b: "Nova Tech", date: "26 · 12 · 2026", venue: "«Oq saroy» banket zali", time: "16:00" },
+    theme: { bg: ["#16244d", "#0c1633"], ink: "#ffffff", accent: "#d92f38", soft: "#c9d1de", script: "cinzel", color: "moviy" },
+    fields: [
+      { key: "tagline", type: "text", label: "Qisqa izoh", placeholder: "Nova Tech jamoasi uchun yil yakunidagi jamoaviy bayram", max: 80, hint: "Ixtiyoriy · jamoa surati ostida; bo‘sh qolsa — «<kompaniya> jamoasi uchun yil yakunidagi jamoaviy bayram»" },
+      { key: "sign", type: "text", label: "Imzo", placeholder: "Nova Tech rahbariyati", max: 60, hint: "Ixtiyoriy · taklif matni ostida; bo‘sh qolsa — «<kompaniya> rahbariyati»" },
+      {
+        key: "program",
+        type: "list",
+        label: "Kun dasturi",
+        min: 0,
+        max: 8,
+        item: {
+          time: { type: "time", label: "Vaqt", required: true },
+          title: { type: "text", label: "Nomi", required: true, placeholder: "Jamoaviy o‘yinlar", max: 40 },
+          note: { type: "text", label: "Izoh", placeholder: "Bo‘limlar o‘rtasida kvest", max: 50 },
+        },
+      },
+      { key: "giftLimit", type: "text", label: "Sovg‘a narxi", placeholder: "200 000 so‘mgacha", max: 30, hint: "Ixtiyoriy · «Sovg‘a almashinuvi» bo‘limi (Secret Santa); narx ham, izoh ham bo‘sh qolsa — bo‘lim chiqmaydi" },
+      { key: "giftNote", type: "textarea", label: "Sovg‘a almashinuvi izohi", placeholder: "Har bir ishtirokchi bitta sovg‘a olib keladi. Kimga sovg‘a berishingizni tadbirdan bir hafta oldin bilib olasiz.", max: 200 },
+      { key: "dressCode", type: "select", label: "Dress-kod", options: ["Kumush va qizil", "Smart casual", "Black tie", "Erkin uslub"], hint: "Ixtiyoriy" },
+      { key: "dressNote", type: "text", label: "Dress-kod izohi", placeholder: "Kechki kiyim: kumush yoki qizil rangdagi bitta aksent bilan.", max: 160 },
+    ],
+  },
 ];
 
 /** Mokap rasmi manzili + versiya (fayl xeshi): rasm yangilansa — brauzer keshidagi eskisi ishlatilmaydi */
@@ -1500,6 +1537,15 @@ export const PHOTO_SLOTS: Record<string, { title: string; where: string }[]> = {
     { title: "Lahza · 2", where: "«Baxtli lahzalar» — kichik surat (ark)" },
     { title: "Lahza · 3", where: "«Baxtli lahzalar» — kichik surat (ark)" },
     { title: "Surat · 5", where: "«Manzil» — bayram joyi surati. Bo‘lmasa — shablonning bayram zali surati" },
+  ],
+  /** Archa (korporativ Yangi yil bazmi) — suratlar: jamoa surati (hero), «Jamoamiz bilan bir yil» (3 ta), manzil. Bo‘sh slotlar:
+   * hero — to‘q ko‘k panelda yil, archa shoxi va sovg‘alar; galereya — bo‘lim yo‘qoladi (1 ta — katta, 2 ta — ikkita tik); manzil — shablonning bazm zali */
+  archa: [
+    { title: "Jamoa surati", where: "Birinchi bo‘lim — «Yangi yil bazmi» ustidagi katta surat. Bo‘lmasa — to‘q ko‘k panelda yil va archa bezaklari" },
+    { title: "Galereya · 1", where: "«Jamoamiz bilan bir yil» — katta surat. Galereya suratlari bo‘lmasa, bo‘lim ko‘rinmaydi" },
+    { title: "Galereya · 2", where: "«Jamoamiz bilan bir yil» — kichik tik surat" },
+    { title: "Galereya · 3", where: "«Jamoamiz bilan bir yil» — kichik tik surat" },
+    { title: "Surat · 5", where: "«Manzil» — bazm joyi surati. Bo‘lmasa — shablonning bazm zali surati" },
   ],
 };
 export const photoSlots = (t: Pick<Template, "slug" | "base">) =>

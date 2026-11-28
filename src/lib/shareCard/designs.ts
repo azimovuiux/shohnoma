@@ -31,6 +31,7 @@ const f = {
   jost: '"sc-jost", system-ui, sans-serif',
   manrope: '"sc-manrope", system-ui, sans-serif',
   onest: '"sc-onest", system-ui, sans-serif',
+  dela: '"sc-dela", "sc-onest", system-ui, sans-serif',
   mono: '"sc-mono", ui-monospace, monospace',
   golos: '"sc-golos", system-ui, sans-serif',
   montserrat: '"sc-montserrat", system-ui, sans-serif',
@@ -801,6 +802,30 @@ export const DESIGNS: Record<string, Design> = {
         items: [
           { k: "date", s: st(f.cormorant, 58, "#c9a45c", { weight: 500, italic: true, min: 40 }) },
           { k: "venue", s: st(f.manrope, 30, "rgba(255,255,255,.85)", { maxLines: 2, min: 22, lh: 1.3 }), gap: 18 },
+        ],
+      },
+    ],
+  },
+  /* Archa (korporativ Yangi yil bazmi): to‘q ko‘k fonda ipda osilgan uchta shar va qor uchqunlari (Figma 00; «2027», tadbir nomi va
+   * jamoa yashirilgan — yil sanaga qarab o‘zgaradi). Mehmon — sharlar ostida; «Tadbirga taklif» (kumush), tadbir nomi (Dela Gothic One,
+   * oq; uzun bo‘lsa — 2 qator, kichrayadi), kompaniya (qizil), sana va joy — pastda. Matn sharlarga tegmaydi (sharlar ≤ 590) */
+  archa: {
+    fill: "#0c1633",
+    bg: true,
+    date: "long",
+    stacks: [
+      { y: 690, anchor: "center", w: 900, maxH: 130, items: [{ k: "guest", s: st(f.onest, 44, "#ffffff", { weight: 600, maxLines: 2, min: 30, lh: 1.2 }) }] },
+      {
+        y: 790,
+        anchor: "top",
+        w: 900,
+        maxH: 620,
+        items: [
+          { k: "kicker", s: st(f.onest, 30, "#c9d1de", { weight: 600, upper: true, ls: 0.14, min: 20 }) },
+          { k: "names", mode: "two", s: st(f.dela, 96, "#ffffff", { min: 46, lh: 1.12 }), gap: 26 },
+          { k: "org", s: st(f.dela, 58, "#e0383f", { maxLines: 2, min: 30, lh: 1.15 }), gap: 20 },
+          { k: "date", s: st(f.onest, 46, "#ffffff", { weight: 600, min: 30 }), gap: 52 },
+          { k: "venue", s: st(f.onest, 34, "rgba(201,209,222,.9)", { maxLines: 2, min: 24, lh: 1.3 }), gap: 16 },
         ],
       },
     ],

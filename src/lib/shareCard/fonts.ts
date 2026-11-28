@@ -47,6 +47,8 @@ const FACES: Face[] = [
   { family: "sc-onest", weight: 400, style: "normal", files: subs(T("parvoz"), "onest", "400-normal") },
   { family: "sc-onest", weight: 500, style: "normal", files: subs(T("parvoz"), "onest", "500-normal") },
   { family: "sc-onest", weight: 600, style: "normal", files: subs(T("parvoz"), "onest", "600-normal") },
+  // Archa: Dela Gothic One (o‘zbek «ʻ» va kirill qo‘shimcha harflari yo‘q — sc-onest bilan chiziladi)
+  { family: "sc-dela", weight: 400, style: "normal", files: subs(T("archa"), "dela-gothic-one", "400-normal") },
   { family: "sc-mono", weight: 500, style: "normal", files: subs(T("parvoz"), "jetbrains-mono", "500-normal") },
   { family: "sc-golos", weight: 400, style: "normal", files: subs(T("shato"), "golos-text", "400-normal") },
   { family: "sc-golos", weight: 500, style: "normal", files: subs(T("shato"), "golos-text", "500-normal") },

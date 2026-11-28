@@ -13,7 +13,7 @@ const fs = require("fs");
 
 const args = process.argv.slice(2);
 const base = (args.find((a) => a.startsWith("--base=")) || "--base=http://localhost:8091").slice(7);
-const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira", "gulshan"];
+const ALL = ["anor", "zumrad", "parvoz", "shato", "savsan", "muhr", "kalit", "sayohat", "lino", "kumush", "riviera", "ertak", "farmon", "sandiq", "sovga", "malika", "sham", "koinot", "marvarid", "bilet", "taqvim", "sammit", "tong", "qozon", "lagan", "oltin", "xotira", "gulshan", "archa"];
 const slugs = args.filter((a) => !a.startsWith("--"));
 const OUT = path.join(__dirname, "out");
 fs.mkdirSync(OUT, { recursive: true });
@@ -84,6 +84,9 @@ const CFG = {
   /* Gulshan: zumrad fonda gul to‘dasi (Figma 00); medalyon, «55» va «yubiley» yashiriladi (yosh mijozga qarab o‘zgaradi, uzun ism
    * medalyonga sig‘maydi) — kartada mehmon (tepada), taklif turi va ism (gul ostida), oltin chiziq o‘rnida sana va joy chiziladi */
   gulshan: { css: `nextjs-portal{display:none!important}[class*="_morph"],[class*="_gNum"],[class*="_gWord"]{display:none!important}` },
+  /* Archa: to‘q ko‘k fonda ipda osilgan sharlar va qor uchqunlari (Figma 00); yog‘ayotgan qor zarralari, pastdagi hero ipi va o‘rtadagi
+   * uchta qor uchquni yashiriladi (matn ustidan o‘tmasin) — kartada mehmon, taklif turi, tadbir nomi, kompaniya, sana va joy chiziladi */
+  archa: { css: `nextjs-portal{display:none!important}[class*="_fall_"]{display:none!important}[class*="_gate__"]>span.absolute,[class*="_gate__"]>[class*="_gSnow"]:nth-child(4),[class*="_gate__"]>[class*="_gSnow"]:nth-child(5),[class*="_gate__"]>[class*="_gSnow"]:nth-child(6){display:none!important}` },
   sammit: { css: `nextjs-portal{display:none!important}[class*="_gFlyL"]>img{transform:translate(calc(var(--u)*-200),calc(var(--u)*40))!important}` },
 };
 const px = (c) => `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="${c}"/></svg>`)}`;
