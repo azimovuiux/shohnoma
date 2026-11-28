@@ -43,10 +43,32 @@ function redirectFor(step: CardStep, r: CardGetResponse): string | null {
   const s = r.order.status;
   if (step === "other") return null;
   if (s === "archived") return CARD_PAGES.cabinetList;
-  if (isPaidStatus(s)) return step === "tayyor" ? null : CARD_PAGES.ready(id);
+  // to‘langan vizitka: «Ma’lumotlar» — tahrirlash rejimi (kabinet/admin «Tahrirlash»); ko‘rib chiqish/to‘lov → tayyor
+  if (isPaidStatus(s)) return step === "tayyor" || step === "malumot" ? null : CARD_PAGES.ready(id);
   if (step === "tayyor") return `${base}malumot/`;
   if ((step === "korib-chiqish" || step === "tolov") && r.missing.length) return `${base}malumot/`;
   return null;
+}
+
+/** /vizitka/buyurtma/<id>/ — holatga mos bosqich */
+export function cardIndexTarget(r: CardGetResponse): string {
+  const id = r.order.id;
+  const base = CARD_PAGES.order(id);
+  const s = r.order.status;
+  if (s === "archived") return CARD_PAGES.cabinetList;
+  if (isPaidStatus(s)) return CARD_PAGES.ready(id);
+  if (s === "payment_processing" || s === "p2p_review") return CARD_PAGES.payProcessing(id);
+  if (r.missing.length) return `${base}malumot/`;
+  if (s === "pending_payment" || s === "payment_failed" || s === "p2p_rejected") return `${base}tolov/`;
+  return `${base}malumot/`;
+}
+
+/** To‘langan vizitkani tahrirlash: qayerga qaytiladi (kabinetdan kelgan bo‘lsa — kabinet sahifasi, aks holda «tayyor») */
+export function cardEditReturn(c: CardCtx): { href: string; label: string } | null {
+  if (!isPaidStatus(c.raw.order.status)) return null;
+  return c.search.get("qaytish") === "kabinet"
+    ? { href: CARD_PAGES.cabinetCard(c.id), label: "Kabinetga qaytish" }
+    : { href: CARD_PAGES.ready(c.id), label: "Orqaga" };
 }
 
 export function CardNotFound() {
@@ -61,7 +83,7 @@ export function CardNotFound() {
           {t("Kabinetga kirish")}
         </Link>
         <Link href={CARD_PAGES.catalog} className="btn btn-secondary">
-          {t("Vizitka dizaynlari")}
+          {t("Vizitka dizaynlari").replace("|", " ")}
         </Link>
       </div>
     </div>

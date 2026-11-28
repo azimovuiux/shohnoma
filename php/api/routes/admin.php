@@ -47,8 +47,9 @@ route('GET', '/admin/dashboard', function () {
         'ok' => true,
         'todayOrders' => (int)scalar("SELECT COUNT(*) FROM orders WHERE created_at >= ? AND product = 'taklifnoma'", [$todayStart]),
         // Tushum — haqiqiy kelib tushgan pul (orders.income; eski yozuvlarda — narx). Qo‘lda faollashtirilganlar 0
-        'todayPaid' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND COALESCE(income, amount) > 0", [$todayStart]),
-        'todayRevenue' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$todayStart]),
+        // «Bugun yangi buyurtmalar» kartasi — faqat taklifnomalar (vizitkalar alohida kartada)
+        'todayPaid' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND COALESCE(income, amount) > 0 AND product = 'taklifnoma'", [$todayStart]),
+        'todayRevenue' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND product = 'taklifnoma'", [$todayStart]),
         'monthRevenue' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$monthStart]),
         'monthPaidCount' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND COALESCE(income, amount) > 0", [$monthStart]),
         'activeInvitations' => (int)scalar("SELECT COUNT(*) FROM orders WHERE status IN ('paid','active') AND product = 'taklifnoma'"),

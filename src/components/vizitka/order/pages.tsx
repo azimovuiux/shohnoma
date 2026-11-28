@@ -4,10 +4,11 @@
  * Vizitka buyurtma oqimi sahifalari (statik eksport, brauzerda): malumot → korib-chiqish → tolov → (jarayonda | sandbox) →
  * qabul-qilindi | xato → tayyor. To‘lov Rahmat orqali; PAYMENTS_SANDBOX=1 bo‘lsa test to‘lov sahifasi ham bor.
  */
+import { useVT } from "./vt";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "@/components/LocalLink";
 import { useLocalRouter } from "@/lib/useLocalRouter";
-import { lpath, useLocale, useT } from "@/lib/i18n";
+import { lpath, useLocale } from "@/lib/i18n";
 import { formatPrice } from "@/lib/format";
 import { PageLoading, useConfig, useMe } from "@/lib/client";
 import { api, useCopy } from "@/components/ui";
@@ -20,7 +21,7 @@ import { tashkentStamp } from "@/components/order/time";
 import { site } from "@/lib/site";
 import { downloadQr, qrDataUrl } from "@/lib/qr";
 import { CARD_API, CARD_PAGES, loc, type CardLang, type CardPayResponse, type CardPromoResponse, type CardStatusResponse } from "@/lib/cardTypes";
-import { CardFlowGate, CardTop, type CardCtx } from "./gate";
+import { CardFlowGate, CardTop, cardEditReturn, cardIndexTarget, type CardCtx } from "./gate";
 import { CardForm, PHOTO_LABELS, pickContent } from "./CardForm";
 import { LaptopPreview, PhonePreview } from "./Preview";
 
@@ -29,32 +30,35 @@ const origin = () => (typeof window !== "undefined" ? window.location.origin : "
 
 /* /vizitka/buyurtma/<id>/ → malumot */
 export function CardOrderIndexClient() {
-  return <CardFlowGate step="other" guard={({ base }) => `${base}malumot/`}>{() => null}</CardFlowGate>;
+  return <CardFlowGate step="other" guard={({ raw }) => cardIndexTarget(raw)}>{() => null}</CardFlowGate>;
 }
 
 /* 1 — Ma’lumotlar */
 export function CardFormPageClient() {
-  const t = useT();
+  const t = useVT();
   return (
     <CardFlowGate step="malumot">
-      {(c) => (
-        <>
-          <CardTop
-            back={{ href: CARD_PAGES.design(c.design.slug), label: t("Dizaynga qaytish") }}
-            step="malumot"
-            title={t("Vizitka ma’lumotlari")}
-            sub={t("Matnlarni kiriting — o‘ng tomonda vizitkangiz qanday chiqishini ko‘rasiz.")}
-          />
-          <CardForm ctx={c} />
-        </>
-      )}
+      {(c) => {
+        const edit = cardEditReturn(c);
+        return (
+          <>
+            <CardTop
+              back={edit ? { href: edit.href, label: t(edit.label) } : { href: CARD_PAGES.design(c.design.slug), label: t("Dizaynga qaytish") }}
+              step={edit ? undefined : "malumot"}
+              title={t(edit ? "Vizitkani tahrirlash" : "Vizitka ma’lumotlari")}
+              sub={t(edit ? "O‘zgarishlar saqlangach vizitkangizda darhol ko‘rinadi." : "Matnlarni kiriting — o‘ng tomonda vizitkangiz qanday chiqishini ko‘rasiz.")}
+            />
+            <CardForm ctx={c} edit={edit} />
+          </>
+        );
+      }}
     </CardFlowGate>
   );
 }
 
 /** Kiritilgan ma’lumotlar ro‘yxati (ko‘rib chiqish) */
 function Summary({ c, lang }: { c: CardCtx; lang: CardLang }) {
-  const t = useT();
+  const t = useVT();
   const card = c.raw.card;
   const L = (v: Parameters<typeof loc>[0]) => loc(v, lang);
   const rows: [string, string][] = [
@@ -111,7 +115,7 @@ function Summary({ c, lang }: { c: CardCtx; lang: CardLang }) {
 
 /* 2 — Ko‘rib chiqish */
 export function CardReviewPageClient() {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   const router = useLocalRouter();
   const [lang, setLang] = useState<CardLang>(locale);
@@ -194,7 +198,7 @@ export function CardReviewPageClient() {
 type PromoState = { amount: number; code: string | null; discount: number };
 
 function PromoBox({ id, state, onChange }: { id: string; state: PromoState; onChange: (s: PromoState) => void }) {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState("");
@@ -276,7 +280,7 @@ function PromoBox({ id, state, onChange }: { id: string; state: PromoState; onCh
 
 /* 3 — To‘lov */
 export function CardPayPageClient() {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   const router = useLocalRouter();
   const cfg = useConfig();
@@ -419,7 +423,7 @@ export function CardProcessingPageClient() {
 }
 
 function Processing({ c }: { c: CardCtx }) {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   const router = useLocalRouter();
   const [error, setError] = useState<string | null>(null);
@@ -491,7 +495,7 @@ function Processing({ c }: { c: CardCtx }) {
 
 /* Test to‘lov (PAYMENTS_SANDBOX=1) */
 export function CardSandboxPageClient() {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   const router = useLocalRouter();
   const cfg = useConfig();
@@ -540,7 +544,7 @@ const publicUrl = (slug: string) => `${origin()}${CARD_PAGES.public(slug)}`;
 
 /* To‘lov qabul qilindi */
 export function CardPaidPageClient() {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   return (
     <CardFlowGate step="other" guard={({ raw }) => (raw.order.status === "active" || raw.order.status === "paid" ? null : CARD_PAGES.payProcessing(raw.order.id))}>
@@ -573,7 +577,7 @@ export function CardPaidPageClient() {
 
 /* To‘lov o‘tmadi */
 export function CardFailedPageClient() {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   const tips = [
     [<EmptyWallet key="1" size={16} />, "Kartada yetarli mablag‘ borligini tekshiring"],
@@ -614,7 +618,7 @@ export function CardReadyPageClient() {
 }
 
 function Ready({ c }: { c: CardCtx }) {
-  const t = useT();
+  const t = useVT();
   const locale = useLocale();
   const copy = useCopy();
   const { me } = useMe();

@@ -11,6 +11,7 @@ import { PageLoading, useApi } from "@/lib/client";
 import { tr, useLocale } from "@/lib/i18n";
 import { CardView, isDarkDesign, shareOrSheet, useCardChrome } from "./designs";
 import { ShareSheet } from "./designs/shared/ShareSheet";
+import { leadErrorKey } from "./designs/shared/labels";
 import { downloadUrl } from "./designs/shared/vcard";
 import { loc } from "@/lib/cardTypes";
 
@@ -85,9 +86,17 @@ export function CardPublicPage() {
           share: () => shareOrSheet(card.fullName, url, chrome.openSheet),
           qr: chrome.openSheet,
           lead: async (req) => {
-            // xato matni karta tilida bo‘lishi uchun — HTTP holati bo‘yicha (429 — juda ko‘p urinish)
-            const res = await fetch(CARD_API.publicLead(card.slug), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(req) });
-            if (!res.ok) throw new Error(String(res.status));
+            // xato matni karta tilida bo‘lishi uchun — holat/kod bo‘yicha yorliq kaliti (Error.message → ct(…, lang))
+            let res: Response;
+            try {
+              res = await fetch(CARD_API.publicLead(card.slug), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(req) });
+            } catch {
+              throw new Error(leadErrorKey(0));
+            }
+            if (!res.ok) {
+              const data = (await res.json().catch(() => ({}))) as { error?: string };
+              throw new Error(leadErrorKey(res.status, data.error ?? ""));
+            }
           },
         }}
       />

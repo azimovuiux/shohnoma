@@ -9,7 +9,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
 import { loc, type CardLang } from "@/lib/cardTypes";
 import { Icon } from "../shared/icons";
-import { ct, LANG_LABEL } from "../shared/labels";
+import { ct, LANG_LABEL, LEAD_ERROR_KEYS } from "../shared/labels";
 import {
   CountText,
   copyText,
@@ -468,7 +468,9 @@ function Lead({ T, wide, actions, still }: { T: (s: string) => string; wide: boo
       await actions.lead?.({ name: f.name.trim(), company: f.company.trim() || undefined, contact: f.contact.trim(), purpose: T(PURPOSES[purpose]), website: f.website });
       setState("done");
     } catch (e) {
-      setErr(T((e as Error).message === "429" ? "Juda ko‘p urinish. Birozdan so‘ng qayta yuboring." : "Yuborib bo‘lmadi. Qayta urinib ko‘ring."));
+      // actions.lead yorliq kalitini tashlaydi (labels.ts → leadErrorKey); noma’lum xato — umumiy matn
+      const m = (e as Error).message;
+      setErr(T(LEAD_ERROR_KEYS.includes(m) ? m : "Yuborib bo‘lmadi. Qayta urinib ko‘ring."));
       setState("idle");
     }
   };

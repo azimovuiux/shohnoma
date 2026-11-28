@@ -48,7 +48,12 @@ const RU: Record<string, string> = {
   Ofis: "Офис",
   "Til": "Язык",
   "Ochish": "Открыть",
-  "Yopish::acc": "Свернуть",
+  "Yopish::acc": "Свернуть",  "Ismingizni kiriting": "Укажите ваше имя",
+  "Telefon yoki email kiriting": "Укажите телефон или email",
+  "Telefon raqam, email yoki Telegram nomini kiriting": "Укажите номер телефона, email или ник в Telegram",
+  "Matn juda uzun — qisqartiring.": "Текст слишком длинный — сократите его.",
+  "Bu vizitkada murojaat formasi o‘chirilgan.": "Форма обращения на этой визитке отключена.",
+  "Vizitka topilmadi": "Визитка не найдена",
 };
 
 const EN: Record<string, string> = {
@@ -95,7 +100,12 @@ const EN: Record<string, string> = {
   Ofis: "Office",
   Til: "Language",
   Ochish: "Expand",
-  "Yopish::acc": "Collapse",
+  "Yopish::acc": "Collapse",  "Ismingizni kiriting": "Enter your name",
+  "Telefon yoki email kiriting": "Enter a phone or email",
+  "Telefon raqam, email yoki Telegram nomini kiriting": "Enter a phone number, email or Telegram username",
+  "Matn juda uzun — qisqartiring.": "The text is too long — please shorten it.",
+  "Bu vizitkada murojaat formasi o‘chirilgan.": "The contact form is turned off on this card.",
+  "Vizitka topilmadi": "Card not found",
 };
 
 /** Karta yorlig‘i: ct("Kontaktni saqlash", "ru") → «Сохранить контакт» */
@@ -104,6 +114,33 @@ export function ct(s: string, lang: CardLang): string {
   if (lang === "ru") return RU[s] ?? plain;
   if (lang === "en") return EN[s] ?? plain;
   return plain;
+}
+
+/**
+ * Lead forma: server javobi (HTTP holati + o‘zbekcha xato matni) → karta yorlig‘i kaliti (ct() bilan karta tilida chiqadi).
+ * Karta tili sayt (URL) tilidan farq qilishi mumkin, shuning uchun server matni to‘g‘ridan-to‘g‘ri ko‘rsatilmaydi.
+ */
+export const LEAD_ERROR_KEYS = [
+  "Juda ko‘p urinish. Birozdan so‘ng qayta yuboring.",
+  "Bu vizitkada murojaat formasi o‘chirilgan.",
+  "Vizitka topilmadi",
+  "Matn juda uzun — qisqartiring.",
+  "Ismingizni kiriting",
+  "Telefon raqam, email yoki Telegram nomini kiriting",
+  "Telefon yoki email kiriting",
+  "Yuborib bo‘lmadi. Qayta urinib ko‘ring.",
+];
+export function leadErrorKey(status: number, serverMsg = ""): string {
+  if (status === 429) return "Juda ko‘p urinish. Birozdan so‘ng qayta yuboring.";
+  if (status === 409) return "Bu vizitkada murojaat formasi o‘chirilgan.";
+  if (status === 404) return "Vizitka topilmadi";
+  if (status === 422) {
+    if (/juda uzun/i.test(serverMsg)) return "Matn juda uzun — qisqartiring.";
+    if (/^Ismingizni/.test(serverMsg)) return "Ismingizni kiriting";
+    if (/Telegram/.test(serverMsg)) return "Telefon raqam, email yoki Telegram nomini kiriting";
+    if (/^Telefon yoki email/.test(serverMsg)) return "Telefon yoki email kiriting";
+  }
+  return "Yuborib bo‘lmadi. Qayta urinib ko‘ring.";
 }
 
 export const LANG_LABEL: Record<CardLang, string> = { uz: "UZ", ru: "RU", en: "EN" };

@@ -57,6 +57,27 @@
 html {
   -webkit-text-size-adjust: 100%;
 }
+/* Fixed sayt sarlavhasining joriy ko‘rinadigan balandligi (Header → html[data-hdr]); sticky bloklar shu ostida turadi */
+:root {
+  --hdr-offset: 69px;
+}
+html[data-hdr="compact"] {
+  --hdr-offset: 55px;
+}
+html[data-hdr="hidden"] {
+  --hdr-offset: 0px;
+}
+@media (min-width: 1024px) {
+  :root {
+    --hdr-offset: 87px;
+  }
+  html[data-hdr="compact"] {
+    --hdr-offset: 70px;
+  }
+  html[data-hdr="hidden"] {
+    --hdr-offset: 0px;
+  }
+}
 /* Lenis yo‘q bo‘lsa (touch, reduced-motion) — native silliq anchor scroll */
 html:not(.lenis) {
   scroll-behavior: smooth;

@@ -5,9 +5,10 @@
  * Har o‘zgarish ~0.9 s dan keyin qoralama sifatida saqlanadi (PATCH _draft). «Davom etish» — qat’iy tekshiruv.
  * O‘ng tomonda (mobilda — «Ko‘rish» oynasida) vizitkaning o‘zi telefon ramkasida, joriy tab tilida.
  */
+import { useVT } from "./vt";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocalRouter } from "@/lib/useLocalRouter";
-import { useLocale, useT } from "@/lib/i18n";
+import { useLocale } from "@/lib/i18n";
 import { formatPrice } from "@/lib/format";
 import { ArrowRight, Eye, TickCircle } from "@/components/icons";
 import { Modal } from "@/components/ui";
@@ -56,8 +57,9 @@ async function prepare(file: File): Promise<Blob> {
 
 type SaveState = "idle" | "saving" | "saved" | "error";
 
-export function CardForm({ ctx }: { ctx: CardCtx }) {
-  const t = useT();
+/** edit — to‘langan vizitkani tahrirlash: «Saqlash» qat’iy tekshiruvdan so‘ng edit.href ga qaytadi (kabinet yoki «tayyor») */
+export function CardForm({ ctx, edit = null }: { ctx: CardCtx; edit?: { href: string; label: string } | null }) {
+  const t = useVT();
   const locale = useLocale();
   const router = useLocalRouter();
   const { design, id } = ctx;
@@ -105,9 +107,12 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
     return p;
   }, [id]);
 
+  // To‘langan vizitkada avtosaqlash yo‘q (chala/bo‘sh maydon jonli vizitkaga tushmasin) — faqat «Saqlash» (qat’iy tekshiruv)
+  const autosave = !edit;
   const set = <K extends keyof CardContent>(k: K, val: CardContent[K]) => {
     setV((s) => ({ ...s, [k]: val }));
     dirty.current.add(k);
+    if (!autosave) return;
     clearTimeout(timer.current);
     timer.current = setTimeout(() => void flush(), 900);
   };
@@ -115,7 +120,7 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
   // sahifadan chiqishda saqlanmagan o‘zgarish qolmasin
   useEffect(() => {
     const onHide = () => {
-      if (!dirty.current.size) return;
+      if (!autosave || !dirty.current.size) return;
       const body: Record<string, unknown> = { _draft: true };
       for (const k of dirty.current) body[k] = latest.current[k];
       dirty.current.clear();
@@ -123,18 +128,30 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
     };
     const onBefore = (e: BeforeUnloadEvent) => {
       if (dirty.current.size || inflight.current) {
-        void flush();
+        if (autosave) void flush();
         e.preventDefault();
+      }
+    };
+    // tahrirlash rejimi: saqlanmagan o‘zgarish bilan sayt ichidagi havolaga o‘tishdan oldin so‘raladi
+    const onClick = (e: MouseEvent) => {
+      if (autosave || !dirty.current.size || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      const a = (e.target as Element | null)?.closest?.("a[href]") as HTMLAnchorElement | null;
+      if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+      if (!window.confirm(t("Saqlanmagan o‘zgarishlar bor") + ". " + t("Sahifadan chiqasizmi?"))) {
+        e.preventDefault();
+        e.stopPropagation();
       }
     };
     window.addEventListener("beforeunload", onBefore);
     window.addEventListener("pagehide", onHide);
+    document.addEventListener("click", onClick, true);
     return () => {
       window.removeEventListener("beforeunload", onBefore);
       window.removeEventListener("pagehide", onHide);
+      document.removeEventListener("click", onClick, true);
       clearTimeout(timer.current);
     };
-  }, [id, flush]);
+  }, [id, flush, autosave, t]);
 
   const errs = useMemo(() => new Set(missing), [missing]);
   const topErr = (k: string) => (errs.has(k) ? "To‘ldiring" : null);
@@ -160,7 +177,7 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
     setBusy(true);
     setError(null);
     try {
-      await flush();
+      if (autosave) await flush();
       const body: Record<string, unknown> = {};
       for (const k of CONTENT_KEYS) if (k !== "photos" && k !== "logo") body[k] = latest.current[k];
       const res = await fetch(CARD_API.card(id), { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
@@ -168,6 +185,7 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
       if (!res.ok) throw new Error(data.error || "Saqlanmadi");
       const m = data.missing ?? [];
       setMissing(m);
+      if (!autosave) dirty.current.clear();
       if (m.length) {
         setLang("uz");
         setError("Belgilangan maydonlarni to‘ldiring");
@@ -175,7 +193,7 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
         setTimeout(() => document.getElementById(first.length > 1 ? `f-${first[0]}-${first[1]}-${first[2]}` : `f-${first[0]}`)?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
         return;
       }
-      router.push(`${ctx.base}korib-chiqish/`);
+      router.push(edit ? edit.href : `${ctx.base}korib-chiqish/`);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -207,7 +225,7 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
 
   const button = (
     <button type="button" onClick={next} disabled={busy} className="btn btn-primary w-full disabled:opacity-60">
-      {busy ? t("Kuting…") : t("Davom etish")} {!busy && <ArrowRight size={16} />}
+      {busy ? t("Kuting…") : t(edit ? "Saqlash" : "Davom etish")} {!busy && !edit && <ArrowRight size={16} />}
     </button>
   );
   const saveLine =
@@ -230,15 +248,16 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
     <FlowColumns
       aside={
         <div className="flex flex-col gap-5 rounded-[24px] bg-bg-soft p-6">
-          <div className="mx-auto w-full max-w-[290px]">
+          {/* sticky ustun ekranga sig‘sin: telefon kengligi ekran balandligiga qarab (pastki narx/tugma doim ko‘rinadi) */}
+          <div className="mx-auto w-full" style={{ maxWidth: "clamp(200px, calc((100vh - 400px) * 0.5), 290px)" }}>
             <PhonePreview design={design.slug} card={v} lang={lang} onLang={setLang} />
           </div>
           <div className="flex items-end justify-between gap-3">
             <div className="flex flex-col gap-0.5">
               <span className="font-serif text-[26px] font-medium leading-[1.2] text-ink">{design.name}</span>
-              <span className="t-body-s text-ink-2">{t("Raqamli vizitka · bir martalik to‘lov")}</span>
+              <span className="t-body-s text-ink-2">{edit ? `shohnoma.uz/v/${ctx.raw.card.slug}/` : t("Raqamli vizitka · bir martalik to‘lov")}</span>
             </div>
-            <span className="font-serif text-[24px] font-medium text-maroon">{formatPrice(ctx.raw.order.amount, true, locale)}</span>
+            {!edit && <span className="font-serif text-[24px] font-medium text-maroon">{formatPrice(ctx.raw.order.amount, true, locale)}</span>}
           </div>
           {button}
           {err}
@@ -247,7 +266,8 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
       }
     >
       <div className="flex flex-col gap-9">
-        <div className="sticky top-0 z-10 -mx-5 bg-bg-base/95 px-5 py-3 backdrop-blur lg:mx-0 lg:px-0">
+        {/* til tablari yopishqoq: sayt sarlavhasi ko‘ringanda uning ostida turadi (--hdr-offset) */}
+        <div className="sticky z-10 -mx-5 bg-bg-base/95 px-5 py-3 backdrop-blur transition-[top] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:mx-0 lg:px-0" style={{ top: "var(--hdr-offset, 0px)" }}>
           <LangTabs lang={lang} onLang={setLang} filled={filled} />
         </div>
 
@@ -325,7 +345,7 @@ export function CardForm({ ctx }: { ctx: CardCtx }) {
       </div>
 
       <MobileBar>
-        <MobileActions back={`/vizitka/${design.slug}/`}>
+        <MobileActions back={edit ? edit.href : `/vizitka/${design.slug}/`}>
           <div className="flex gap-2">
             <button type="button" onClick={() => setPreview(true)} className="btn btn-secondary shrink-0 !px-4" aria-label={t("Ko‘rish")}>
               <Eye size={16} /> {t("Ko‘rish")}

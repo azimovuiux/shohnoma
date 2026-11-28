@@ -4,12 +4,12 @@
  * Vizitka formasi bloklari: til tablari (UZ | RU | EN), ko‘p tilli maydon, ro‘yxat muharriri, rasm o‘rinlari.
  * Ko‘p tilli maydonda faqat tanlangan tilning qiymati tahrirlanadi; RU/EN bo‘sh bo‘lsa — kartada o‘zbekchasi chiqadi.
  */
+import { useVT } from "./vt";
 import { useRef, useState, type ReactNode } from "react";
 import { Add, ArrowDown2, Gallery, Trash } from "@/components/icons";
 import { PhoneInput, Toggle, formatPhone9, phoneToLocal } from "@/components/ui";
 import { SelectField } from "@/components/order/pickers";
 import { flowInput } from "@/components/order/fields";
-import { useT } from "@/lib/i18n";
 import { CARD_LANGS, type CardLang, type Localized } from "@/lib/cardTypes";
 import type { CardFieldSpec } from "@/lib/cards";
 
@@ -18,7 +18,7 @@ const LANG_SHORT: Record<CardLang, string> = { uz: "UZ", ru: "RU", en: "EN" };
 
 /** Til tablari: qaysi tilda matn kiritilayotgani; nuqta — shu tilda biror matn bor */
 export function LangTabs({ lang, onLang, filled }: { lang: CardLang; onLang: (l: CardLang) => void; filled: Record<CardLang, number> }) {
-  const t = useT();
+  const t = useVT();
   return (
     <div className="flex flex-col gap-2">
       <div role="tablist" aria-label={t("Matn tili")} className="inline-flex w-full rounded-full border border-line bg-bg-soft p-1 sm:w-fit">
@@ -48,7 +48,7 @@ export function LangTabs({ lang, onLang, filled }: { lang: CardLang; onLang: (l:
 
 /** Sarlavha + maydon + xato/izoh */
 export function CField({ id, label, required, hint, error, children, langBadge }: { id: string; label: string; required?: boolean; hint?: string; error?: string | null; children: ReactNode; langBadge?: CardLang }) {
-  const t = useT();
+  const t = useVT();
   return (
     <div id={id} className="flex min-w-0 scroll-mt-32 flex-col gap-2">
       <label htmlFor={`${id}-i`} className="flex items-center gap-2 text-[13px] font-semibold leading-[1.35] text-ink">
@@ -75,7 +75,7 @@ const SOCIAL_LABEL: Record<string, string> = { instagram: "Instagram", telegram:
 
 /** Bitta qiymat (spec turi bo‘yicha). Ko‘p tilli bo‘lsa — joriy til qiymati, placeholder sifatida o‘zbekchasi. */
 export function SpecInput({ id, spec, value, onChange, lang, invalid }: { id: string; spec: CardFieldSpec; value: unknown; onChange: (v: unknown) => void; lang: CardLang; invalid?: boolean }) {
-  const t = useT();
+  const t = useVT();
   if (spec.localized) {
     const v = (value as Localized | undefined) ?? { uz: "" };
     const cur = v[lang] ?? "";
@@ -135,7 +135,7 @@ export function ListEditor({
   onChange: (rows: Row[]) => void;
   errors: Set<string>;
 }) {
-  const t = useT();
+  const t = useVT();
   const blank = (): Row => Object.fromEntries(Object.entries(item).map(([k, s]) => [k, s.localized ? { uz: "", ru: "", en: "" } : s.type === "select" ? (s.options?.[0] ?? "") : ""]));
   const move = (i: number, d: -1 | 1) => {
     const j = i + d;
@@ -195,7 +195,7 @@ export function ListEditor({
 
 /** Rasm o‘rinlari: yuklash, almashtirish, o‘chirish (POST/DELETE /api/cards/:id/photos) */
 export function PhotoSlots({ labels, photos, onUpload, onRemove }: { labels: string[]; photos: string[]; onUpload: (file: File, slot: number) => Promise<void>; onRemove: (url: string) => Promise<void> }) {
-  const t = useT();
+  const t = useVT();
   const [busy, setBusy] = useState<number | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -275,7 +275,7 @@ export function PhotoSlots({ labels, photos, onUpload, onRemove }: { labels: str
 }
 
 export function ToggleRow({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
-  const t = useT();
+  const t = useVT();
   return (
     <div className="flex items-start justify-between gap-4 rounded-[16px] border border-line bg-bg-base p-4">
       <div className="flex flex-col gap-1">
