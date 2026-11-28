@@ -44,7 +44,7 @@ function soon_providers(): array
 function start_payment(array $order, string $provider): string
 {
     $id = $order['id'];
-    $returnUrl = site_url() . "/buyurtma/$id/tolov/jarayonda/?usul=$provider";
+    $returnUrl = site_url() . (is_card_order($order) ? '/vizitka' : '') . "/buyurtma/$id/tolov/jarayonda/?usul=$provider";
     if ($provider === 'rahmat') {
         $url = rahmat_start($order, $returnUrl); // xato bo‘lsa — buyurtma holati o‘zgarmaydi
         q("UPDATE orders SET status = 'payment_processing' WHERE id = ?", [$id]);

@@ -46,7 +46,7 @@ function rahmat_start(array $order, string $returnUrl): string
     $body = [
         'order_id' => $order['id'],
         'amount' => $amount,
-        'description' => 'Shohnoma taklifnomasi №' . $order['code'],
+        'description' => (is_card_order($order) ? 'Shohnoma raqamli vizitkasi №' : 'Shohnoma taklifnomasi №') . $order['code'],
         'return_url' => $returnUrl,
         'callback_url' => rahmat_callback_url(),
         'lang' => 'uz',

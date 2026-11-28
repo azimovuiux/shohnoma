@@ -178,11 +178,11 @@ export function TemplateCard({ t, onQuickView, reveal, delay = 0 }: { t: Templat
         </div>
       </div>
 
-      <div className="flex gap-2.5">
-        <Link href={`/namuna/${t.slug}/`} className="btn btn-secondary flex-1 !px-3 !py-3.5">
+      <div className="flex flex-wrap gap-2.5">
+        <Link href={`/namuna/${t.slug}/`} className="btn btn-secondary min-w-[128px] flex-1 !px-3 !py-3.5">
           <PlayCircle size={16} /> {tt("Jonli ko‘rish")}
         </Link>
-        <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary flex-1 !px-3 !py-3.5">
+        <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary min-w-[128px] flex-1 !px-3 !py-3.5">
           {tt("Tanlash")} <ArrowRight size={16} />
         </Link>
       </div>

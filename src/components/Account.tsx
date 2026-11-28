@@ -8,6 +8,7 @@ import {
   ArrowRight2,
   Card,
   CloseCircle,
+  Personalcard,
   Heart,
   Sms,
   LogoutCurve,
@@ -33,6 +34,8 @@ export type AccountUser = {
   active: number;
   orders: number;
   favorites: number;
+  /** Vizitkalar soni (to‘langan + to‘lanmagan) */
+  cards: number;
   isAdmin: boolean;
 };
 
@@ -40,12 +43,16 @@ export type AccountUser = {
 export const ACCOUNT_SECTIONS = [
   { href: "/kabinet/", label: "Faol taklifnomalar", short: "Faol", icon: Sms, count: "active" as const },
   { href: "/kabinet/buyurtmalar/", label: "Buyurtmalarim", short: "Buyurtma", icon: Receipt2, count: "orders" as const },
+  { href: "/kabinet/vizitkalar/", label: "Vizitkalarim", short: "Vizitka", icon: Personalcard, count: "cards" as const },
   { href: "/kabinet/sevimlilar/", label: "Sevimlilar", short: "Sevimlilar", icon: Heart, count: "favorites" as const },
   { href: "/kabinet/tolovlar/", label: "To‘lovlar", short: "To‘lovlar", icon: Card, count: null },
   { href: "/kabinet/profil/", label: "Profil", short: "Profil", icon: ProfileCircle, count: null },
 ];
 
 export const samePath = (a: string, b: string) => a.replace(/\/+$/, "") === b.replace(/\/+$/, "");
+/** Bo‘lim faolmi: aniq manzil yoki uning ichki sahifalari (Vizitkalarim → /kabinet/v/<id>/) */
+export const sectionActive = (path: string, href: string, lp: (h: string) => string) =>
+  samePath(path, lp(href)) || (href === "/kabinet/vizitkalar/" && path.startsWith(lp("/kabinet/v/")));
 
 /** Sarlavha: ism bo‘lmasa — telefon (noaniq «Mening kabinetim» o‘rniga) */
 export function accountTitle(u: Pick<AccountUser, "name" | "phone" | "telegramUser">, t: (s: string) => string) {
@@ -156,7 +163,7 @@ export function MobileAccountButton({ user }: { user: AccountUser }) {
             <nav className="flex flex-col gap-0.5 px-2" aria-label={t("Kabinet")}>
               {ACCOUNT_SECTIONS.map((s) => {
                 const Icon = s.icon;
-                const active = samePath(path, lp(s.href));
+                const active = sectionActive(path, s.href, lp);
                 return (
                   <Link
                     key={s.href}

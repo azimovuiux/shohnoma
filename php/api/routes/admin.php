@@ -9,7 +9,9 @@ function admin_order_rows(array $orders): array
     foreach ($orders as $o) {
         $i = one('SELECT * FROM invitations WHERE order_id = ?', [$o['id']]);
         $owner = $o['user_id'] ? one('SELECT phone, name FROM users WHERE id = ?', [$o['user_id']]) : null;
-        $out[] = ['order' => order_out($o), 'invitation' => $i ? invitation_out($i) : null, 'owner' => $owner ? ['phone' => $owner['phone'] ?? ($i['contact_phone'] ?? null), 'name' => $owner['name']] : ($i && $i['contact_phone'] ? ['phone' => $i['contact_phone'], 'name' => null] : null)];
+        $row = ['order' => order_out($o), 'invitation' => $i ? invitation_out($i) : null, 'owner' => $owner ? ['phone' => $owner['phone'] ?? ($i['contact_phone'] ?? null), 'name' => $owner['name']] : ($i && $i['contact_phone'] ? ['phone' => $i['contact_phone'], 'name' => null] : null)];
+        if (is_card_order($o)) $row += ['product' => 'vizitka', 'card' => card_brief($o['id'])];
+        $out[] = $row;
     }
     return $out;
 }
@@ -20,7 +22,9 @@ function payment_rows(array $payments): array
     foreach ($payments as $p) {
         $o = one('SELECT * FROM orders WHERE id = ?', [$p['order_id']]);
         $i = $o ? one('SELECT * FROM invitations WHERE order_id = ?', [$o['id']]) : null;
-        $out[] = ['payment' => payment_out($p), 'order' => $o ? order_out($o) : null, 'invitation' => $i ? invitation_out($i) : null];
+        $row = ['payment' => payment_out($p), 'order' => $o ? order_out($o) : null, 'invitation' => $i ? invitation_out($i) : null];
+        if (is_card_order($o)) $row += ['product' => 'vizitka', 'card' => card_brief($o['id'])];
+        $out[] = $row;
     }
     return $out;
 }
@@ -41,17 +45,22 @@ route('GET', '/admin/dashboard', function () {
     $monthStart = gmdate('Y-m-d H:i:s', strtotime(gmdate('Y-m-01', time() + 5 * 3600) . ' 00:00:00 UTC') - 5 * 3600);
     json_out([
         'ok' => true,
-        'todayOrders' => (int)scalar('SELECT COUNT(*) FROM orders WHERE created_at >= ?', [$todayStart]),
+        'todayOrders' => (int)scalar("SELECT COUNT(*) FROM orders WHERE created_at >= ? AND product = 'taklifnoma'", [$todayStart]),
         // Tushum — haqiqiy kelib tushgan pul (orders.income; eski yozuvlarda — narx). Qo‘lda faollashtirilganlar 0
         'todayPaid' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND COALESCE(income, amount) > 0", [$todayStart]),
         'todayRevenue' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$todayStart]),
         'monthRevenue' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived')", [$monthStart]),
         'monthPaidCount' => (int)scalar("SELECT COUNT(*) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND COALESCE(income, amount) > 0", [$monthStart]),
-        'activeInvitations' => (int)scalar("SELECT COUNT(*) FROM orders WHERE status IN ('paid','active')"),
+        'activeInvitations' => (int)scalar("SELECT COUNT(*) FROM orders WHERE status IN ('paid','active') AND product = 'taklifnoma'"),
+        // Vizitka (tushum yig‘indilari yuqorida — ikkala mahsulot birga; quyida vizitka ulushi)
+        'todayCards' => (int)scalar("SELECT COUNT(*) FROM orders WHERE created_at >= ? AND product = 'vizitka'", [$todayStart]),
+        'activeCards' => (int)scalar("SELECT COUNT(*) FROM orders WHERE status IN ('paid','active') AND product = 'vizitka'"),
+        'monthRevenueCards' => (int)scalar("SELECT COALESCE(SUM(COALESCE(income, amount)),0) FROM orders WHERE paid_at >= ? AND status IN ('paid','active','archived') AND product = 'vizitka'", [$monthStart]),
+        'newCardLeads' => (int)scalar("SELECT COUNT(*) FROM card_leads WHERE status = 'new'"),
         'pendingP2p' => (int)scalar("SELECT COUNT(*) FROM payments WHERE provider = 'p2p' AND status = 'review'"),
         'newBriefs' => (int)scalar("SELECT COUNT(*) FROM briefs WHERE status = 'new'"),
         'newLeads' => (int)scalar("SELECT COUNT(*) FROM leads WHERE status = 'new'"),
-        'recent' => array_map(fn($r) => ['order' => $r['order'], 'invitation' => $r['invitation']], admin_order_rows(all('SELECT * FROM orders ORDER BY created_at DESC, seq DESC LIMIT 8'))),
+        'recent' => array_map(fn($r) => ['order' => $r['order'], 'invitation' => $r['invitation']], admin_order_rows(all("SELECT * FROM orders WHERE product = 'taklifnoma' ORDER BY created_at DESC, seq DESC LIMIT 8"))),
     ]);
 });
 
@@ -173,7 +182,7 @@ route('POST', '/admin/payments/:id', function ($p) {
         $o = one('SELECT * FROM orders WHERE id = ?', [$pay['order_id']]);
         $i = one('SELECT * FROM invitations WHERE order_id = ?', [$pay['order_id']]);
         $owner = $o['user_id'] ? one('SELECT * FROM users WHERE id = ?', [$o['user_id']]) : null;
-        $phone = $owner['phone'] ?? $i['contact_phone'] ?? null;
+        $phone = $owner['phone'] ?? $i['contact_phone'] ?? (is_card_order($o) ? scalar('SELECT phone FROM cards WHERE order_id = ?', [$o['id']]) : null) ?: null;
         notif_add($o['user_id'], $i['id'] ?? null, 'pay_reject', $pay['id'], ['code' => $o['code'], 'reason' => $reason]);
         $text = "Shohnoma: {$o['code']} bo‘yicha chek qabul qilinmadi: $reason";
         try {

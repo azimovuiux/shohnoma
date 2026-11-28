@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 route('GET', '/me', function () {
     $u = current_user();
-    if (!$u) json_out(['ok' => true, 'user' => null, 'counts' => ['active' => 0, 'orders' => 0, 'favorites' => 0]]);
+    if (!$u) json_out(['ok' => true, 'user' => null, 'counts' => ['active' => 0, 'orders' => 0, 'favorites' => 0, 'cards' => 0]]);
     json_out([
         'ok' => true,
         'user' => user_out($u),
         'counts' => [
             // «Faol taklifnomalar» — to‘langanlar (arxiv ham shu bo‘limda); «Buyurtmalar» — hali to‘lanmaganlar
-            'active' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND status IN ('paid','active','archived')", [$u['id']]),
-            'orders' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND status NOT IN ('paid','active','archived')", [$u['id']]),
+            'active' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND product = 'taklifnoma' AND status IN ('paid','active','archived')", [$u['id']]),
+            'orders' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND product = 'taklifnoma' AND status NOT IN ('paid','active','archived')", [$u['id']]),
+            // «Vizitkalarim» — barcha vizitka buyurtmalari (to‘langan + qoralama)
+            'cards' => (int)scalar("SELECT COUNT(*) FROM orders WHERE user_id = ? AND product = 'vizitka'", [$u['id']]),
             'favorites' => (int)scalar('SELECT COUNT(*) FROM favorites f JOIN templates t ON t.slug = f.template_slug AND t.is_active = 1 WHERE f.user_id = ?', [$u['id']]),
         ],
     ]);
@@ -56,6 +58,7 @@ function order_purge(string $orderId): void
     if ($inv) q('DELETE FROM guest_responses WHERE invitation_id = ?', [$inv['id']]);
     if ($inv) q('DELETE FROM notifications WHERE invitation_id = ?', [$inv['id']]);
     q('DELETE FROM invitations WHERE order_id = ?', [$orderId]);
+    card_purge($orderId); // vizitka buyurtmasi bo‘lsa — cards, card_leads
     q('DELETE FROM payments WHERE order_id = ?', [$orderId]);
     q('DELETE FROM orders WHERE id = ?', [$orderId]);
 }
@@ -64,7 +67,7 @@ function order_purge(string $orderId): void
 route('DELETE', '/me/orders/:id', function ($p) {
     $u = require_user();
     $o = one('SELECT * FROM orders WHERE id = ? AND user_id = ?', [$p['id'], $u['id']]) ?? fail('Buyurtma topilmadi', 404);
-    if (in_array($o['status'], ['paid', 'active', 'archived'], true)) fail('To‘langan taklifnomani o‘chirib bo‘lmaydi', 422);
+    if (in_array($o['status'], ['paid', 'active', 'archived'], true)) fail(is_card_order($o) ? 'To‘langan vizitkani o‘chirib bo‘lmaydi' : 'To‘langan taklifnomani o‘chirib bo‘lmaydi', 422);
     if (in_array($o['status'], ['payment_processing', 'p2p_review'], true)) fail('To‘lov tekshirilayotgan buyurtmani o‘chirib bo‘lmaydi', 422);
     order_purge($o['id']);
     json_out(['ok' => true]);
@@ -78,7 +81,9 @@ route('GET', '/me/payments', function () {
         $p = one('SELECT * FROM payments WHERE id = ?', [$r['p_id']]);
         $o = one('SELECT * FROM orders WHERE id = ?', [$p['order_id']]);
         $i = one('SELECT * FROM invitations WHERE order_id = ?', [$o['id']]);
-        $items[] = ['payment' => payment_out($p), 'order' => order_out($o), 'invitation' => $i ? invitation_out($i) : null];
+        $item = ['payment' => payment_out($p), 'order' => order_out($o), 'invitation' => $i ? invitation_out($i) : null];
+        if (is_card_order($o)) $item += ['product' => 'vizitka', 'card' => card_brief($o['id'])];
+        $items[] = $item;
     }
     json_out(['ok' => true, 'items' => $items]);
 });

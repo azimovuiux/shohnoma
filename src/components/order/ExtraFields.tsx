@@ -42,8 +42,8 @@ function Input({ spec, value, onChange, label }: { spec: FieldSpec; value: strin
     return <SelectField label={label} value={value} onChange={onChange} options={(spec.options ?? []).map((o) => ({ value: o, label: cap(t(o)) }))} />;
   if (spec.type === "time") return <TimeField label={label} value={value} onChange={onChange} />;
   if (spec.type === "date") return <DateField label={label} value={value} onChange={onChange} />;
-  const type = spec.type === "number" ? "number" : "text";
-  return <input {...common} type={type} maxLength={spec.max ?? 160} className={flowInput} />;
+  const type = spec.type === "number" || spec.type === "url" || spec.type === "email" || spec.type === "tel" ? spec.type : "text";
+  return <input {...common} type={type} maxLength={spec.max ?? (spec.type === "url" || spec.type === "image" ? 500 : 160)} className={flowInput} />;
 }
 
 /** Ro‘yxat qatori ustunlari: birinchi ustun vaqt/son bo‘lsa — tor (124px), aks holda (masalan, spiker ismi) — teng */

@@ -38,7 +38,8 @@ export interface TemplateTheme {
   color: "bordo" | "yashil" | "oltin" | "krem" | "moviy" | "qizil" | "pushti";
 }
 
-export type FieldType = "text" | "textarea" | "time" | "date" | "number" | "select";
+/** url/email/tel/image — vizitka uchun qo‘shilgan (server: tpl_clean_extra) */
+export type FieldType = "text" | "textarea" | "time" | "date" | "number" | "select" | "url" | "email" | "tel" | "image";
 export interface FieldSpec {
   type: FieldType;
   label: string;

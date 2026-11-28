@@ -16,7 +16,7 @@ const MORNING_TEMPLATES = ['tong', 'qozon', 'lagan'];
 function template_default_time(string $slug): string { return in_array($slug, MORNING_TEMPLATES, true) ? '06:00' : '18:00'; }
 
 const CEREMONY_KINDS = ['nikoh', 'fotiha', 'sunnat', 'tugilgan-kun', 'korporativ'];
-const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', 'en', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite', 'maqolalar', 'article', 'sitemap-maqolalar-xml'];
+const RESERVED_SLUGS = ['shablonlar', 'buyurtma', 'kirish', 'kabinet', 'admin', 'api', 'maxsus-dizayn', 'files', 'i', 'ru', 'uz', 'en', '_next', 'robots-txt', 'sitemap-xml', 'favicon-ico', 'shartlar', 'maxfiylik', 'tolov', 'namuna', 'og', '404', 'music', 'invite', 'maqolalar', 'article', 'sitemap-maqolalar-xml', 'v', 'vizitka'];
 
 function is_paid_status(string $s): bool { return $s === 'paid' || $s === 'active'; }
 
@@ -236,6 +236,8 @@ function apply_invitation_patch(array $b, array $p, bool $draft = false): array
 /** To‘lov tasdiqlandi: havola, akkaunt, SMS/Telegram/admin xabari */
 function mark_order_paid(string $orderId, string $provider, ?string $paymentId = null): void
 {
+    // Vizitka buyurtmasi (invitations qatori yo‘q) — lib/cards.php
+    if (is_card_order(one('SELECT product FROM orders WHERE id = ?', [$orderId]))) { card_mark_paid($orderId, $provider, $paymentId); return; }
     $b = load_order($orderId);
     if (!$b || is_paid_status($b['order']['status'])) return;
     $inv = $b['invitation'];

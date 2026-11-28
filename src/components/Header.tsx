@@ -17,6 +17,7 @@ import {
   MessageQuestion,
   LogoutCurve,
   Setting2,
+  Personalcard,
 } from "@/components/icons";
 import { useMe } from "@/lib/client";
 import { switchPath, useLocale, useT } from "@/lib/i18n";
@@ -114,6 +115,7 @@ export function LangSwitcher({ compact = false, tight = false, navigate }: { com
 const appNav = [
   { label: "Bosh sahifa", href: "/" },
   { label: "Shablonlar", href: "/shablonlar/" },
+  { label: "Vizitka", href: "/vizitka/" },
 ];
 
 function MobileMenu({
@@ -332,6 +334,15 @@ function AccountMenu({
           </Link>
           <Link
             role="menuitem"
+            href="/kabinet/vizitkalar/"
+            className={item}
+            onClick={() => setOpen(false)}
+          >
+            <Personalcard size={18} /> <span className="flex-1">{t("Vizitkalarim")}</span>{" "}
+            <span className="t-body-s text-ink-2">{user.cards}</span>
+          </Link>
+          <Link
+            role="menuitem"
             href="/kabinet/sevimlilar/"
             className={item}
             onClick={() => setOpen(false)}
@@ -405,6 +416,7 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
         active: me.counts.active,
         orders: me.counts.orders,
         favorites: me.counts.favorites,
+        cards: me.counts.cards ?? 0,
         isAdmin: me.user.isAdmin,
       }
     : null;
@@ -433,14 +445,14 @@ export function Header({ variant = "site" }: { variant?: "site" | "app" }) {
 
           {!app && (
           <nav
-            className="hidden items-center gap-6 lg:flex xl:gap-8"
+            className="hidden items-center gap-5 lg:flex min-[1440px]:gap-8"
             aria-label={t("Asosiy")}
           >
             {mainNav.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="t-nav text-ink transition-colors hover:text-maroon"
+                className={`whitespace-nowrap t-nav text-ink transition-colors hover:text-maroon ${l.from === "xl" ? "max-xl:hidden" : l.from === "1440" ? "max-[1439px]:hidden" : ""}`}
               >
                 {t(l.label)}
               </Link>

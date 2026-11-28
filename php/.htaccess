@@ -8,9 +8,9 @@ ErrorDocument 404 /404.html
 <FilesMatch "^\.|\.(env|sql|md|lock|json\.dist)$">
   Require all denied
 </FilesMatch>
-<Files "templates.json">
+<FilesMatch "^(templates|cards)\.json$">
   Require all denied
-</Files>
+</FilesMatch>
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
@@ -69,6 +69,12 @@ RewriteRule ^(.*)$ /$1/ [R=301,L]
 # Dinamik sahifalar: bitta "_" qobiq sahifa, haqiqiy id brauzerda URL'dan o‘qiladi
 RewriteRule ^buyurtma/[^/]+/(.*)$ buyurtma/_/$1 [L]
 RewriteRule ^kabinet/t/[^/]+/(.*)$ kabinet/t/_/$1 [L]
+# Raqamli vizitka: /v/<slug>/ → card.php (OG meta; to‘lanmagan → 404). Brauzer o‘tishlari (RSC) uchun — qobiq
+RewriteRule ^v/[a-z0-9][a-z0-9-]{1,79}/index\.txt$ v/_/index.txt [L]
+RewriteRule ^v/([a-z0-9][a-z0-9-]{1,79})/$ card.php?slug=$1 [QSA,L]
+# Vizitka buyurtma oqimi va kabinet qobiqlari (uz/ru/en)
+RewriteRule ^(ru/|en/)?vizitka/buyurtma/[^/]+/(.*)$ $1vizitka/buyurtma/_/$2 [L]
+RewriteRule ^(ru/|en/)?kabinet/v/[^/]+/(.*)$ $1kabinet/v/_/$2 [L]
 # Admin qo‘shgan shablonlar (statik sahifasi yo‘q) → qobiq
 RewriteRule ^shablonlar/[a-z0-9-]+/$ shablonlar/_/index.html [L]
 RewriteRule ^shablonlar/[a-z0-9-]+/index\.txt$ shablonlar/_/index.txt [L]

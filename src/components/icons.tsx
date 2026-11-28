@@ -122,3 +122,7 @@ export const Magicpen = wrap(I.Magicpen);
 export const Verify = wrap(I.Verify);
 export const Printer = wrap(I.Printer);
 export const ReceiptText = wrap(I.ReceiptText);
+// Vizitka (C)
+export const Personalcard = wrap(I.Personalcard);
+export const DocumentDownload = wrap(I.DocumentDownload);
+export const UserAdd = wrap(I.UserAdd);

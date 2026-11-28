@@ -10,8 +10,17 @@ import { formatPrice } from "@/lib/format";
 import { useLocale, useT } from "@/lib/i18n";
 import { dateTimeTk, invTitle, providerLabel } from "../data";
 import { payStatus } from "./PaymentPage";
+import { cardDesign } from "@/lib/cards";
+import { CARD_PAGES } from "@/lib/cardTypes";
 
-type Row = { payment: Payment | null; order: Order; invitation: Invitation | null };
+type Row = {
+  payment: Payment | null;
+  order: Order;
+  invitation: Invitation | null;
+  /** Vizitka buyurtmasi (invitation yo‘q) */
+  product?: "vizitka";
+  card?: { slug: string; fullName: string; photo: string | null } | null;
+};
 
 /** Kabinet → To‘lovlar: mijozning barcha to‘lovlari (har bir buyurtma bo‘yicha), holati va cheki */
 export function PaymentsPage() {
@@ -60,11 +69,12 @@ export function PaymentsPage() {
             </Link>
           </div>
         ) : (
-          rows.map(({ order, invitation: inv, payment }) => {
+          rows.map(({ order, invitation: inv, payment, product, card }) => {
             const st = payment ? payStatus[payment.status] : { label: "To‘lanmagan", tone: "pending" as const };
-            const tpl = getTemplate(order.templateSlug);
+            const isCard = product === "vizitka";
+            const tplName = isCard ? (cardDesign(order.templateSlug)?.name ?? t("Vizitka")) : getTemplate(order.templateSlug)?.name;
             const isPaid = payment?.status === "paid";
-            const receipt = payment?.receiptUrl ?? `/buyurtma/${order.id}/tolov/qabul-qilindi/`;
+            const receipt = payment?.receiptUrl ?? (isCard ? CARD_PAGES.paySuccess(order.id) : `/buyurtma/${order.id}/tolov/qabul-qilindi/`);
             const canPay = !isPaid && ["draft", "pending_payment", "payment_failed", "p2p_rejected"].includes(order.status);
             return (
               <div key={`${order.id}-${payment?.id ?? "x"}`} className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line py-4 first:border-t-0 first:pt-0 last:pb-0">
@@ -72,9 +82,9 @@ export function PaymentsPage() {
                   <Receipt2 size={18} />
                 </span>
                 <div className="flex min-w-[180px] flex-1 flex-col gap-0.5">
-                  <span className="truncate t-title text-ink">{inv ? invTitle(inv, t) : order.code}</span>
+                  <span className="truncate t-title text-ink">{inv ? invTitle(inv, t) : isCard ? card?.fullName || t("Vizitka") : order.code}</span>
                   <span className="t-body-s text-ink-2">
-                    {[order.code, tpl?.name, payment ? t(providerLabel[payment.provider] ?? payment.provider) : null, dateTimeTk(payment?.paidAt ?? payment?.createdAt ?? order.createdAt)]
+                    {[order.code, tplName, payment ? t(providerLabel[payment.provider] ?? payment.provider) : null, dateTimeTk(payment?.paidAt ?? payment?.createdAt ?? order.createdAt)]
                       .filter(Boolean)
                       .join(" · ")}
                   </span>
@@ -91,7 +101,7 @@ export function PaymentsPage() {
                     {t("Chek")}
                   </Link>
                 ) : canPay ? (
-                  <Link href={`/buyurtma/${order.id}/tolov/`} className="t-nav text-maroon hover:underline">
+                  <Link href={isCard ? CARD_PAGES.order(order.id) : `/buyurtma/${order.id}/tolov/`} className="t-nav text-maroon hover:underline">
                     {t("To‘lash")}
                   </Link>
                 ) : null}

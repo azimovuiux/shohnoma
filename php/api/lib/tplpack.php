@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 const TPL_ZIP_MAX = 15 * 1024 * 1024;
 const TPL_ASSET_EXT = ['webp' => 1536000, 'png' => 1536000, 'jpg' => 1536000, 'jpeg' => 1536000, 'gif' => 1536000, 'svg' => 512000, 'woff2' => 307200, 'woff' => 307200, 'mp3' => 4194304];
-const TPL_FIELD_TYPES = ['text', 'textarea', 'time', 'date', 'number', 'select', 'list'];
+const TPL_FIELD_TYPES = ['text', 'textarea', 'time', 'date', 'number', 'select', 'list', 'url', 'email', 'tel'];
 const TPL_SH_TAGS = ['sh-open', 'sh-countdown', 'sh-map', 'sh-gallery', 'sh-rsvp', 'sh-music', 'sh-calendar', 'sh-share', 'sh-guest'];
 const TPL_ALLOWED_TAGS = ['a', 'abbr', 'address', 'article', 'aside', 'b', 'blockquote', 'br', 'button', 'caption', 'cite', 'code', 'dd', 'del', 'details', 'dfn', 'div', 'dl', 'dt',
     'em', 'figcaption', 'figure', 'footer', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'img', 'ins', 'kbd', 'li', 'main', 'mark', 'nav', 'ol', 'p', 'picture',
@@ -391,13 +391,18 @@ function tpl_clean_extra(mixed $in, array $fields, ?array $prev = null): array
     $lenient = $prev !== null;
     $one = function (mixed $v, array $f, string $label) {
         $v = is_scalar($v) ? trim((string)$v) : '';
-        $max = (int)($f['max'] ?? ($f['type'] === 'textarea' ? 1000 : 160));
+        $max = (int)($f['max'] ?? ($f['type'] === 'textarea' ? 1000 : (in_array($f['type'], ['url', 'image'], true) ? 500 : 160)));
         if ($v === '') return '';
         if (mb_strlen($v) > $max) fail("«{$label}»: ko‘pi bilan $max belgi", 422);
         if ($f['type'] === 'time' && !preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $v)) fail("«{$label}»: vaqt noto‘g‘ri", 422);
         if ($f['type'] === 'date' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $v)) fail("«{$label}»: sana noto‘g‘ri", 422);
         if ($f['type'] === 'number' && !is_numeric($v)) fail("«{$label}»: son kiriting", 422);
         if ($f['type'] === 'select' && !in_array($v, $f['options'] ?? [], true)) fail("«{$label}»: ro‘yxatdan tanlang", 422);
+        // Vizitka uchun qo‘shilgan turlar (taklifnoma shablonlarida ishlatilmagan — ularga ta’sir qilmaydi)
+        if ($f['type'] === 'url' && !preg_match('#^https?://[^\s<>"]+$#i', $v)) fail("«{$label}»: havola https:// bilan boshlansin", 422);
+        if ($f['type'] === 'email' && !filter_var($v, FILTER_VALIDATE_EMAIL)) fail("«{$label}»: email noto‘g‘ri", 422);
+        if ($f['type'] === 'tel') $v = normalize_phone($v) ?? fail("«{$label}»: telefon raqam to‘liq emas", 422);
+        if ($f['type'] === 'image' && !preg_match('#^/files/(photos|templates)/[a-z0-9/_-]+\.[a-z]+$#', $v)) fail("«{$label}»: rasm noto‘g‘ri", 422);
         return $v;
     };
     $out = [];

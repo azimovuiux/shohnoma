@@ -9,4 +9,5 @@ storage/
 .env
 dist/
 php/api/lib/templates.json
+php/api/lib/cards.json
 scripts/qa/out/

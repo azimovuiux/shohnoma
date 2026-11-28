@@ -1,6 +1,6 @@
 <?php
 // Faqat lokal sinov: `php -S localhost:8080 -t dist dist/router-dev.php` — .htaccess qoidalarini taqlid qiladi.
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = rawurldecode((string)parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); // _next chunk nomlaridagi [id] → %5Bid%5D
 $root = __DIR__;
 if (preg_match('#^/(api(/|$)|files/)#', $uri)) { require $root . '/api/index.php'; return true; }
 if ($uri !== '/' && is_file($root . $uri)) return false;
@@ -8,9 +8,16 @@ if ($uri === '/sitemap-maqolalar.xml') { $_GET['sitemap'] = '1'; require $root .
 if (preg_match('#^/(?:(ru|en)/)?maqolalar/(?:([^/]+)/)?$#', $uri, $m)) { $_GET['lang'] = $m[1] ?? ''; if (!empty($m[2])) $_GET['slug'] = $m[2]; require $root . '/article.php'; return true; }
 if (preg_match('#^/((?:ru/|en/)?)maqolalar/[a-z0-9-]+/index\.txt$#', $uri, $m)) { readfile($root . '/' . $m[1] . 'maqolalar/_/index.txt'); return true; }
 if (is_dir($root . $uri) && is_file(rtrim($root . $uri, '/') . '/index.html')) { readfile(rtrim($root . $uri, '/') . '/index.html'); return true; }
+// Vizitka: /v/<slug>/ → card.php; RSC qobig‘i
+if (preg_match('#^/v/[a-z0-9][a-z0-9-]{1,79}/index\.txt$#', $uri)) { readfile($root . '/v/_/index.txt'); return true; }
+if (preg_match('#^/v/([a-z0-9][a-z0-9-]{1,79})/?$#', $uri, $m)) { $_GET['slug'] = $m[1]; require $root . '/card.php'; return true; }
 $map = [
   '#^/buyurtma/[^/]+/(.*)$#' => '/buyurtma/_/$1',
   '#^/kabinet/t/[^/]+/(.*)$#' => '/kabinet/t/_/$1',
+  '#^/((?:ru/|en/)?)vizitka/buyurtma/[^/]+/(.*)$#' => '/$1vizitka/buyurtma/_/$2',
+  '#^/((?:ru/|en/)?)kabinet/v/[^/]+/(.*)$#' => '/$1kabinet/v/_/$2',
+  '#^/(ru|en)/buyurtma/[^/]+/(.*)$#' => '/$1/buyurtma/_/$2',
+  '#^/(ru|en)/kabinet/t/[^/]+/(.*)$#' => '/$1/kabinet/t/_/$2',
 ];
 foreach ($map as $re => $to) {
   if (preg_match($re, $uri)) { $p = $root . rtrim(preg_replace($re, $to, $uri), '/') . '/index.html'; if (is_file($p)) { readfile($p); return true; } }

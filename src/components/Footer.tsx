@@ -13,6 +13,7 @@ const columns = [
     title: "Sahifalar",
     links: [
       { label: "Shablonlar", href: "/shablonlar/" },
+      { label: "Raqamli vizitka", href: "/vizitka/" },
       { label: "Qanday ishlaydi", href: "/#qanday-ishlaydi" },
       { label: "Imkoniyatlar", href: "/#imkoniyatlar" },
       { label: "Savollar", href: "/#savollar" },

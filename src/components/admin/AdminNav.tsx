@@ -9,6 +9,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
     { href: "/admin/", label: "Umumiy", n: 0 },
     { href: "/admin/statistika/", label: "Statistika", n: 0 },
     { href: "/admin/buyurtmalar/", label: "Buyurtmalar", n: 0 },
+    { href: "/admin/vizitkalar/", label: "Vizitkalar", n: 0 },
     { href: "/admin/foydalanuvchilar/", label: "Foydalanuvchilar", n: 0 },
     { href: "/admin/shablonlar/", label: "Shablonlar", n: 0 },
     { href: "/admin/maqolalar/", label: "Maqolalar", n: 0 },
@@ -21,7 +22,7 @@ export function AdminNav({ counts }: { counts: { p2p: number; briefs: number; le
     { href: "/admin/sozlamalar/", label: "Sozlamalar", n: 0 },
   ];
   return (
-    <nav aria-label="Admin" className="no-scrollbar -mx-5 flex gap-1 overflow-x-auto px-5 lg:mx-0 lg:px-0">
+    <nav aria-label="Admin" className="no-scrollbar -mx-5 flex gap-1 overflow-x-auto px-5 max-[374px]:-mx-3 max-[374px]:px-3 lg:mx-0 lg:px-0">
       {tabs.map((t) => {
         const p = path.replace(/\/?$/, "/");
         const active = t.href === "/admin/" ? p === "/admin/" : p.startsWith(t.href);

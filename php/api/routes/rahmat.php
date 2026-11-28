@@ -9,8 +9,8 @@ route('GET', '/rahmat/return', fn() => rahmat_return_redirect());
 function rahmat_return_redirect(): never
 {
     $oid = (string)($_GET['order_id'] ?? $_POST['order_id'] ?? '');
-    $o = $oid !== '' && preg_match('/^[a-z0-9]{8,40}$/', $oid) ? one('SELECT id FROM orders WHERE id = ?', [$oid]) : null;
-    header('Location: ' . ($o ? "/buyurtma/{$o['id']}/tolov/jarayonda/?usul=rahmat" : '/kabinet/'), true, 302);
+    $o = $oid !== '' && preg_match('/^[a-z0-9]{8,40}$/', $oid) ? one('SELECT id, product FROM orders WHERE id = ?', [$oid]) : null;
+    header('Location: ' . ($o ? (is_card_order($o) ? '/vizitka' : '') . "/buyurtma/{$o['id']}/tolov/jarayonda/?usul=rahmat" : '/kabinet/'), true, 302);
     exit;
 }
 

@@ -25,6 +25,7 @@ import {
   TickCircle,
   Warning2,
   WalletCheck,
+  Send2,
 } from "@/components/icons";
 import { Modal } from "@/components/ui";
 import { apiGet, ApiError } from "@/lib/client";
@@ -38,7 +39,9 @@ export type NotifKind =
   | "rsvp_edit"
   | "guest_open"
   | "pay_ok"
-  | "pay_reject";
+  | "pay_reject"
+  /** Vizitkadan yangi murojaat (invitationId = null, data.orderId) */
+  | "card_lead";
 export type Notif = {
   id: number;
   kind: NotifKind;
@@ -55,6 +58,13 @@ export type Notif = {
     code?: string;
     amount?: number;
     reason?: string;
+    /** Vizitka bildirishnomalari: pay_ok da product = "vizitka"; card_lead da contact/purpose/card (egasining ismi) */
+    product?: "vizitka";
+    orderId?: string;
+    slug?: string;
+    contact?: string;
+    purpose?: string | null;
+    card?: string;
   };
   createdAt: string;
   read: boolean;
@@ -257,7 +267,14 @@ export type NotifState = ReturnType<typeof useNotifications>;
 
 /* ── Ko‘rinish ── */
 
+/** Vizitka bildirishnomasimi (murojaat yoki vizitka to‘lovi) */
+const isCardNotif = (n: Notif) => n.kind === "card_lead" || n.data.product === "vizitka";
+
 export function notifHref(n: Notif): string {
+  if (isCardNotif(n)) {
+    const id = n.data.orderId ?? n.orderId;
+    return id ? `/kabinet/v/${id}/` : "/kabinet/vizitkalar/";
+  }
   const inv = n.invitationId ? `/kabinet/t/${n.invitationId}` : null;
   if (n.kind === "pay_reject")
     return n.orderId ? `/buyurtma/${n.orderId}/tolov/` : "/kabinet/tolovlar/";
@@ -298,6 +315,9 @@ function NotifIcon({ n, size = 36 }: { n: Notif; size?: number }) {
   } else if (n.kind === "guest_open") {
     tone = "gold";
     icon = <Eye size={18} />;
+  } else if (n.kind === "card_lead") {
+    tone = "gold";
+    icon = <Send2 size={18} />;
   } else if (n.kind === "pay_ok") {
     icon = <WalletCheck size={18} />;
   } else {
@@ -380,10 +400,12 @@ function NotifText({ n }: { n: Notif }) {
   }
   if (n.kind === "guest_open")
     return <>{rich(t("{name} taklifnomani ochdi"), <Who n={n} />)}</>;
+  if (n.kind === "card_lead")
+    return <>{rich(t("{name} vizitkangiz orqali murojaat qoldirdi"), <b className="font-semibold text-ink">{n.data.name}</b>)}</>;
   if (n.kind === "pay_ok")
     return (
       <b className="font-semibold text-ink">
-        {t("To‘lov tasdiqlandi — taklifnoma faol")}
+        {n.data.product === "vizitka" ? t("To‘lov tasdiqlandi — vizitka faol") : t("To‘lov tasdiqlandi — taklifnoma faol")}
       </b>
     );
   return <b className="font-semibold text-ink">{t("Chek qabul qilinmadi")}</b>;
@@ -394,7 +416,7 @@ function NotifMeta({ n }: { n: Notif }) {
   const locale = useLocale();
   const bits = [
     n.kind === "rsvp_edit" ? t("Javob o‘zgartirildi") : null,
-    n.invitation,
+    n.invitation ?? (isCardNotif(n) ? n.data.card || t("Vizitka") : null),
     (n.kind === "pay_ok" || n.kind === "pay_reject") && n.data.code
       ? `№ ${n.data.code}`
       : null,
@@ -407,7 +429,9 @@ function NotifRow({ n, onOpen }: { n: Notif; onOpen: (n: Notif) => void }) {
   const t = useT();
   const sub = isRsvp(n.kind)
     ? n.data.wish
-    : n.kind === "pay_reject"
+    : n.kind === "card_lead"
+      ? [n.data.contact, n.data.purpose].filter(Boolean).join(" · ")
+      : n.kind === "pay_reject"
       ? t(n.data.reason || "Chek ma’lumotlari mos kelmadi")
       : null;
   return (

@@ -52,7 +52,7 @@ function tpl_public(array $t): array
 function order_reprice(array $o): array
 {
     if (!in_array($o['status'], ['draft', 'pending_payment', 'payment_failed', 'p2p_rejected'], true) || !empty($o['price_locked'])) return $o;
-    $t = template_get($o['template_slug']);
+    $t = is_card_order($o) ? card_design_get($o['template_slug']) : template_get($o['template_slug']);
     if (!$t) return $o;
     $base = tpl_price($t);
     if ($base === (int)$o['amount'] + (int)$o['promo_discount']) return $o;

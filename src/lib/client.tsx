@@ -82,7 +82,7 @@ export function useFirstSegment() {
 
 /* ── Joriy foydalanuvchi ── */
 
-export type Me = { user: User | null; counts: { active: number; orders: number; favorites: number } };
+export type Me = { user: User | null; counts: { active: number; orders: number; favorites: number; cards?: number } };
 const MeCtx = createContext<{ me: Me | null; loading: boolean; reload: () => Promise<void> }>({ me: null, loading: true, reload: async () => {} });
 
 export function MeProvider({ children }: { children: ReactNode }) {

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { builtinTemplates as templates } from "@/lib/templates";
+import { CARD_DESIGNS } from "@/lib/cards";
 
 export const dynamic = "force-static";
 
@@ -11,6 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/", freq: "weekly", priority: 1 },
     { path: "/shablonlar/", freq: "weekly", priority: 0.9 },
     ...templates.map((t) => ({ path: `/shablonlar/${t.slug}/`, freq: "monthly" as const, priority: 0.8 })),
+    { path: "/vizitka/", freq: "weekly", priority: 0.8 },
+    ...CARD_DESIGNS.filter((d) => d.active).map((d) => ({ path: `/vizitka/${d.slug}/`, freq: "monthly" as const, priority: 0.7 })),
     { path: "/maxsus-dizayn/", freq: "monthly", priority: 0.6 },
     { path: "/shartlar/", freq: "yearly", priority: 0.2 },
     { path: "/maxfiylik/", freq: "yearly", priority: 0.2 },

@@ -9,9 +9,11 @@ declare(strict_types=1);
  *   guest_open — maxsus mehmon birinchi marta ochdi (ref_id = special_guests.id)
  *   pay_ok     — to‘lov tasdiqlandi             (ref_id = payments.id | null)
  *   pay_reject — chek rad etildi                (ref_id = payments.id)
+ *   card_lead  — vizitkadan yangi murojaat       (ref_id = card_leads.id, invitation_id = NULL; payload.orderId)
+ * Vizitka bildirishnomalarida invitation_id = NULL, payload.product = 'vizitka' (pay_ok).
  * Yozish xatosi asosiy amalni (javob, to‘lov) hech qachon buzmaydi.
  */
-const NOTIF_KINDS = ['rsvp_new', 'rsvp_edit', 'guest_open', 'pay_ok', 'pay_reject'];
+const NOTIF_KINDS = ['rsvp_new', 'rsvp_edit', 'guest_open', 'pay_ok', 'pay_reject', 'card_lead'];
 const NOTIF_LIST = 30;
 /** O‘qilgan eski bildirishnomalar shu muddatdan keyin o‘chiriladi */
 const NOTIF_KEEP_DAYS = 180;

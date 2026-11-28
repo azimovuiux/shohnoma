@@ -22,7 +22,7 @@ export function TemplateDetail({ t }: { t: Template }) {
 
   return (
     <div className="mt-6 grid gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-14">
-      <div className="flex flex-col items-center gap-6 rounded-card bg-bg-soft p-5 lg:p-10">
+      <div className="flex min-w-0 flex-col items-center gap-6 rounded-card bg-bg-soft p-5 lg:p-10">
         <div className="flex w-full items-center justify-between">
           <DeviceToggle value={device} onChange={setDevice} />
           <button type="button" onClick={toggleFav} aria-pressed={fav} aria-label={fav ? tt("Sevimlilardan olib tashlash") : tt("Sevimlilarga qo‘shish")} className="icon-btn bg-bg-base text-maroon">
@@ -34,7 +34,7 @@ export function TemplateDetail({ t }: { t: Template }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-7 lg:pt-4">
+      <div className="flex min-w-0 flex-col gap-7 lg:pt-4">
         <div className="flex flex-col gap-3">
           <h1 className="font-serif text-[44px] font-light leading-none text-ink lg:text-[60px]">{t.name}</h1>
           <div className="flex flex-wrap gap-1.5">
@@ -80,11 +80,11 @@ export function TemplateDetail({ t }: { t: Template }) {
           <Link href={`/buyurtma/${t.slug}/marosim/`} className="btn btn-primary w-full">
             {tt("Shu shablonni tanlash")} <ArrowRight size={16} />
           </Link>
-          <div className="flex gap-2.5">
-            <Link href={`/namuna/${t.slug}/`} className="btn btn-secondary btn-sm flex-1">
+          <div className="flex flex-wrap gap-2.5">
+            <Link href={`/namuna/${t.slug}/`} className="btn btn-secondary btn-sm min-w-[136px] flex-1">
               <Eye size={15} /> {tt("Jonli demo")}
             </Link>
-            <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm flex-1">
+            <a href={site.telegram} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm min-w-[136px] flex-1">
               <Messages size={15} /> {tt("Savol berish")}
             </a>
           </div>

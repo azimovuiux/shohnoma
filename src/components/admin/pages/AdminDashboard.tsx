@@ -22,6 +22,11 @@ type Dash = {
   pendingP2p: number;
   newBriefs: number;
   newLeads: number;
+  /** Vizitka (alohida mahsulot) — taklifnoma sonlariga kirmaydi */
+  todayCards?: number;
+  activeCards?: number;
+  monthRevenueCards?: number;
+  newCardLeads?: number;
   recent: { order: Order; invitation: Invitation }[];
 };
 
@@ -39,6 +44,15 @@ export function AdminDashboard() {
         <StatCard label="Faol taklifnomalar" value={data.activeInvitations} />
         <StatCard label="Yangi briflar" value={data.newBriefs} hint={<Link href="/admin/briflar/" className="text-maroon hover:underline">Ko‘rish →</Link>} />
         <StatCard label="Yangi xabarlar" value={data.newLeads} hint={<Link href="/admin/xabarlar/" className="text-maroon hover:underline">Ko‘rish →</Link>} />
+        <StatCard
+          label="Faol vizitkalar"
+          value={data.activeCards ?? 0}
+          hint={
+            <Link href="/admin/vizitkalar/" className="text-maroon hover:underline">
+              Bugun {data.todayCards ?? 0} ta yangi · shu oy {formatPrice(data.monthRevenueCards ?? 0)} →
+            </Link>
+          }
+        />
       </div>
 
       <div className="mt-10 flex items-center justify-between">

@@ -13,6 +13,10 @@ import { en as orderEn } from "./en/order";
 import { en as cabinetEn } from "./en/cabinet";
 import { ru as articles } from "./ru/articles";
 import { en as articlesEn } from "./en/articles";
+import { ru as vizitka } from "./ru/vizitka";
+import { en as vizitkaEn } from "./en/vizitka";
+import { ru as vizitkaFlow } from "./ru/vizitkaFlow";
+import { en as vizitkaFlowEn } from "./en/vizitkaFlow";
 
 /**
  * Sayt tillari. O‘zbekcha — asosiy (manzil prefikssiz), ruscha — /ru/... ostida.
@@ -23,8 +27,8 @@ import { en as articlesEn } from "./en/articles";
 export type Locale = "uz" | "ru" | "en";
 export const LOCALES: Locale[] = ["uz", "ru", "en"];
 
-const DICT: Record<string, string> = { ...common, ...site, ...order, ...cabinet, ...invite, ...articles };
-const DICT_EN: Record<string, string> = { ...commonEn, ...siteEn, ...orderEn, ...cabinetEn, ...inviteEn, ...articlesEn };
+const DICT: Record<string, string> = { ...common, ...site, ...order, ...cabinet, ...invite, ...articles, ...vizitkaFlow, ...vizitka };
+const DICT_EN: Record<string, string> = { ...commonEn, ...siteEn, ...orderEn, ...cabinetEn, ...inviteEn, ...articlesEn, ...vizitkaFlowEn, ...vizitkaEn };
 
 /**
  * Bir xil o‘zbekcha so‘z turli ma’noda kelsa — kontekst bilan: t("oqim::Chiqish") (buyurtmadan chiqish, «Sign out» emas).
